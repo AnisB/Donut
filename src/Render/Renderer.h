@@ -23,7 +23,12 @@
  #include "MultiThread/UsualThreadSafeObjects.h"
  #include <string>
 
- #include <GLFW/glfw3.h>
+#ifdef MACOSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
+
+#include <GLFW/glfw3.h>
 
 
  namespace Donut

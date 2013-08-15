@@ -31,7 +31,7 @@ FIND_PATH(GLFW_INCLUDE_DIR GLFW/glfw3.h DOC "Path to GLFW include directory."
   /usr/include/GL
   /usr/local/include/GL
   ${GLFW_ROOT_DIR}/include/ # added by ptr
-  ${EXTERNAL_INCLUDES}/GLFW/ # added by ptr
+  ${EXTERNAL_INCLUDES} # added by ptr
 )
 MESSAGE(STATUS ${EXTERNAL_LIBS})
 

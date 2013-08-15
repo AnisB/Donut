@@ -19,15 +19,6 @@
 
 #include "Base/Common.h"
 
-#ifdef LINUX
-#include <GL/gl.h>
-#endif
-
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
-
  namespace Donut
  {
 
@@ -55,7 +46,7 @@
  			if (!glfwInit())
  			{
  				RENDER_DEBUG_NOARGS("Failed creating the window");
- 				exit(-1);
+ 				return ;
 
  			}
 

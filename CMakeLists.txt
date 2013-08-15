@@ -9,16 +9,18 @@ add_definitions( -DDEBUG )
 
 
 set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
-set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/")
-set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/")
 
-IF(WIN32)
-set(INCLUDES "${PROJECT_SOURCE_DIR}/src" "${PROJECT_SOURCE_DIR}/include")
-ELSE()
-set(INCLUDES "${PROJECT_SOURCE_DIR}/src")
+IF(UNIX AND NOT APPLE)
+set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/linux")
+set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/linux")
 ENDIF()
-set(TEST "${PROJECT_SOURCE_DIR}/test/")
 
+IF(APPLE)
+set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/mac")
+set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
+ENDIF()
+
+set(TEST "${PROJECT_SOURCE_DIR}/test/")
 
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
@@ -35,14 +37,16 @@ file(
 
 IF(UNIX AND NOT APPLE)
 add_definitions( -D__posix__ )
+add_definitions( -D LINUX )
 find_package(OpenGL REQUIRED)
-FIND_PACKAGE (glfw REQUIRED)
-set(CORELIBS ${GLUT_LIBRARY} ${OPENGL_LIBRARIES})
-include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR})
+FIND_PACKAGE (GLFW REQUIRED)
+FIND_PACKAGE (X11 REQUIRED)
+set(CORELIBS ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB})
+include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} )
 ENDIF()
 
 IF(APPLE)
-   FIND_PACKAGE (glfw REQUIRED)
+   FIND_PACKAGE (GLFW REQUIRED)
 	add_definitions( -D__posix__ )
 	add_definitions( -D MACOSX)
    INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
@@ -62,6 +66,7 @@ IF(WINDOWS)
 add_definitions( -DWIN32 )
 ENDIF()
 
+message(STATUS ${CORELIBS} )
 add_library(Donut ${Source_File})
  
 link_directories(${CMAKE_BINARY_DIR})
