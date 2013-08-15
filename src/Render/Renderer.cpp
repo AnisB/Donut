@@ -19,125 +19,116 @@
 
 #include "Base/Common.h"
 
-#include "GL/glut.h"
-#include "GL/gl.h"
+#ifdef LINUX
+#include <GL/gl.h>
+#endif
 
-namespace Donut
-{
+#ifdef MACOSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
+
+ namespace Donut
+ {
 
 	// Class TDonutRendererOpenGL
-	TDonutRendererOpenGL::TDonutRendererOpenGL()
-		: FWindowSize(float2())
-		, FIsFullScreen(false)
-		, FWindowName(-1)
-		, FIsRendering(false)
-		, FInitDone(false)
-	{
+ 	TDonutRendererOpenGL::TDonutRendererOpenGL()
+ 	: FWindowSize(float2())
+ 	, FIsFullScreen(false)
+ 	, FWindow(NULL)
+ 	, FIsRendering(false)
+ 	, FInitDone(false)
+ 	{
 
-	}
-	TDonutRendererOpenGL::~TDonutRendererOpenGL()
-	{
+ 	}
+ 	TDonutRendererOpenGL::~TDonutRendererOpenGL()
+ 	{
 
-	}
+ 	}
 
-	void TDonutRendererOpenGL::CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen)
-	{
-		if(!FInitDone)
-		{
-	 		RENDER_DEBUG_NOARGS("Creating window");
+ 	void TDonutRendererOpenGL::CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen)
+ 	{
+ 		if(!FInitDone)
+ 		{
 
-		  	int argc = 1;
-		  	char *argv[1] = {(char*)"Donuts are fucking awesome"};
 			// Init
-		 	glutInit(&argc, argv);
+ 			if (!glfwInit())
+ 			{
+ 				RENDER_DEBUG_NOARGS("Failed creating the window");
+ 				exit(-1);
 
-		 	//DisplayMode
-			glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+ 			}
 
 			// Window size
-			
-			glutInitWindowSize(FWindowSize.x, FWindowSize.y);
+ 			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
-			//CreateWindow
-			FWindowName = glutCreateWindow(parWindowName.c_str());
+ 			FIsRendering.SetValue(true);
+ 			glfwShowWindow(FWindow);
+ 			RENDER_DEBUG_NOARGS("Window created");
 
-			if(FIsFullScreen)
-			{
-				glutFullScreen();
-			}
-			FIsRendering.SetValue(true);
-	 		RENDER_DEBUG_NOARGS("Window created");
-
-		}
-		else
-		{
-	 		RENDER_DEBUG_NOARGS("This window has already been created.");
-			AssertRelease(FWindowName != -1);
-			glutShowWindow();
-		}
-	}
-	void TDonutRendererOpenGL::HideRenderWindow()
-	{
+ 		}
+ 		else
+ 		{
+ 			RENDER_DEBUG_NOARGS("This window has already been created.");
+ 			AssertRelease(FWindow != NULL);
+ 			glfwShowWindow(FWindow);
+ 		}
+ 	}
+ 	void TDonutRendererOpenGL::HideRenderWindow()
+ 	{
  		RENDER_DEBUG_NOARGS("Hiding window.");	
-		AssertRelease(FWindowName != -1);
-		glutHideWindow();
-	}	
+ 		AssertRelease(FWindow != NULL);
+ 		glfwHideWindow(FWindow);
+ 	}	
 
-	void TDonutRendererOpenGL::ShowRenderWindow()
-	{
+ 	void TDonutRendererOpenGL::ShowRenderWindow()
+ 	{
  		RENDER_DEBUG_NOARGS("Showing window.");	
-		AssertRelease(FWindowName != -1);
-		glutShowWindow();
-	}	
+ 		AssertRelease(FWindow != NULL);
+ 		glfwShowWindow(FWindow);
+ 	}	
 
-	void TDonutRendererOpenGL::DestroyRenderWindow()
-	{
+ 	void TDonutRendererOpenGL::DestroyRenderWindow()
+ 	{
  		RENDER_DEBUG_NOARGS("Destroying window.");	
-		AssertRelease(FWindowName != -1);
-		glutHideWindow();
-		glutDestroyWindow(FWindowName);
-		FWindowName = -1;
-		FInitDone = false;
+ 		AssertRelease(FWindow != NULL);
+ 		glfwTerminate();
+ 		FWindow = NULL;
+ 		FInitDone = false;
 
-	}	
+ 	}	
 
-	void TDonutRendererOpenGL::Draw()
-	{ 	 	
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 	//Efface le frame buffer et le Z-buffer
-		glMatrixMode(GL_MODELVIEW); 	//Choisit la matrice MODELVIEW
-		glLoadIdentity(); 	//Réinitialise la matrice
-		gluLookAt(0,0,-10,0,0,0,0,1,0);
-
-		glEnd(); 
-
-		glutSwapBuffers();
-
-		glutPostRedisplay();
-			//Demande de recalculer la scène
-
+ 	void TDonutRendererOpenGL::Draw()
+ 	{ 	 	
+		glfwSwapBuffers(FWindow);
 	}
 
 
-	void TDonutRendererOpenGL::Reshape(int width, int height)
+	void TDonutRendererOpenGL::Reshape()
 	{ 	 
-	  	glViewport(0,0,width,height);
-	  	glMatrixMode(GL_PROJECTION);
-	  	glLoadIdentity();
-	  	gluPerspective(45,float(width)/float(height),0.1,100); 	
-	  	glMatrixMode(GL_MODELVIEW);
 	}
 
 
+		bool TDonutRendererOpenGL::IsRendering()
+		{
+			return FIsRendering.GetValue();
+		}
+
+		void TDonutRendererOpenGL::SetRendering(bool parVal)
+		{
+			FIsRendering.SetValue(parVal);
+		}
 
 		// END CLASS DECLARATION
 	void *CreateRenderingThread(void* parGraphicRenderer)
- 	{
- 		TDonutRendererOpenGL * realGraphicRenderer = (TDonutRendererOpenGL*) parGraphicRenderer;
- 		while(realGraphicRenderer->IsRendering())
- 		{
- 	    	realGraphicRenderer->Draw();
- 	    }
- 		pthread_exit(0);
- 	}
- 	 
+	{
+		TDonutRendererOpenGL * realGraphicRenderer = (TDonutRendererOpenGL*) parGraphicRenderer;
+		while(realGraphicRenderer->IsRendering())
+		{
+			realGraphicRenderer->Draw();
+			realGraphicRenderer->Reshape();
+		}
+		pthread_exit(0);
+	}
+
 }

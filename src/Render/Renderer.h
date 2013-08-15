@@ -23,6 +23,9 @@
  #include "MultiThread/UsualThreadSafeObjects.h"
  #include <string>
 
+ #include <GLFW/glfw3.h>
+
+
  namespace Donut
  {
 	class TDonutRendererOpenGL
@@ -39,27 +42,28 @@
 
 
 		void Draw();
-		void Reshape(int, int);
+		void Reshape();
 
-		bool IsRendering()
-		{
-			return FIsRendering.GetValue();
-		}
-
-		void SetRendering(bool parVal)
-		{
-			FIsRendering.SetValue(parVal);
-		}
+		// Rendering activation and disable
+		bool IsRendering();
+		void SetRendering(bool parVal);
 
 	protected:
+
+		// Window Infos
 		bool FInitDone;
-		int FWindowName;
+		GLFWwindow * FWindow;
 		bool FIsFullScreen;
 		float2 FWindowSize;
+
+		// Is Rendering member
 		TThreadSafeBolean FIsRendering;
 
 	};
 	// END CLASS DECLARATION
+
+
+
 	void *CreateRenderingThread(void* parGraphicRenderer);
  }
  #endif // DONUT_GRAPHIC_RENDERER
