@@ -30,7 +30,7 @@ namespace Donut
 
 		void Lock();
 
-		void Unlock();
+		void UnLock();
 
 		#ifdef __posix__
 		pthread_mutex_t FMutex;

@@ -14,38 +14,20 @@
  *
  **/
 
+#include <iostream>
+#include <Engine/Engine.h>
+#include <unistd.h>
 
- #ifndef DONUT_ENGINE
- #define DONUT_ENGINE
+int main()
+{
+	Donut::Engine::Instance().LaunchRendering();
+	sleep(2);
+	Donut::Engine::Instance().PauseRendering();
+	sleep(2);
+	Donut::Engine::Instance().ResumeRendering();
+	sleep(2);
+	Donut::Engine::Instance().StopRendering();
+	sleep(2);
+	return 0;
 
-
-
-#ifdef __posix__
-#include <pthread.h>
-#endif
-
-#include <Base/Singleton.h>
-#include <Render/Renderer.h>
-
-
-
- namespace Donut{
- 	class Engine : public Singleton<Engine>
- 	{
- 	public:
- 		Engine();
- 		~Engine();
-
- 		void LaunchRendering();
- 		void StopRendering();
-
- 		void PauseRendering();
- 		void ResumeRendering();
-
- 	protected:
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
- 	};
- }
- #endif // DONUT_ENGINE
+}

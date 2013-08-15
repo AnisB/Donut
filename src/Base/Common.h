@@ -16,13 +16,16 @@
 
 
 
-	#ifndef DONUT_COMMON
-	#define DONUT_COMMON
+#ifndef DONUT_COMMON
+#define DONUT_COMMON
 
-	#include <assert.h>
+#include <assert.h>
 
- #include <iostream>
- #include <cstdio>
+#include <iostream>
+#include <cstdio>
+
+#include "DebugPrinters.h"
+
 
  namespace Donut
  {
@@ -34,32 +37,6 @@
 #endif
 
 #define AssertRelease(Enonce) assert(Enonce)
-
-
-#ifdef DEBUG
-#define STATE_ENGINE_DEBUG(Enonce,...)\
- 	{\
- 		std::string msg = "[STATE ENGINE]";\
- 		msg += Enonce;\
- 		msg += "\n";\
-		fprintf(stderr, msg.c_str(),##__VA_ARGS__);\
- 	}
-#else
-#define STATE_ENGINE_DEBUG(Enonce,...) {}
-#endif
-
-
-#ifdef DEBUG
-#define STATE_ENGINE_DEBUG_NOARGS(Enonce)\
- 	{\
- 		std::string msg = "[STATE ENGINE]";\
- 		msg += Enonce;\
- 		msg += "\n";\
-		fprintf(stderr,"%s", msg.c_str());\
- 	}
-#else
-#define STATE_ENGINE_DEBUG_NOARGS(Enonce,...) {}
-#endif
 
 #ifdef DEBUG
 #define AssertNoReleasePrint(Enonce, Msg) std::cout<< Msg <<std::endl; assert(Enonce)
@@ -76,6 +53,7 @@ template<class T> inline void checked_delete(T * x)
  		delete x;
  	}
 #endif
+ 	
 #ifdef RELEASE
 template<class T> inline void checked_delete(T * x)
  	{

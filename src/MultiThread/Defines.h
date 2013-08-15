@@ -19,14 +19,49 @@
 #ifndef DONUT_MULTI_THREAD
 #define DONUT_MULTI_THREAD
 
-#define CRITICAL_SECTION_BEGIN() this->Lock();
-#define CRITICAL_SECTION_END() this->UnLock();
+
+#ifdef __posix__
+#define THREAD_ID pthread_t
+#endif
+
+#ifdef WIN32
+#define THREAD_ID int
+#endif
+
+#define CRITICAL_SECTION_BEGIN() this->Lock()
+#define CRITICAL_SECTION_END() this->UnLock()
 
 
-#define CRITICAL_SECTION_OBJ_BEGIN(OBJ) OBJ.Lock();
-#define CRITICAL_SECTION_OBJ_END(OBJ) OBJ.UnLock();
+#define CRITICAL_SECTION_OBJ_BEGIN(OBJ) OBJ.Lock()
+#define CRITICAL_SECTION_OBJ_END(OBJ) OBJ.UnLock()
 
-#define CRITICAL_SECTION_PTR_BEGIN(OBJ) ptr->Lock();
-#define CRITICAL_SECTION_PTR_END(OBJ) ptr->UnLock();
+#define CRITICAL_SECTION_PTR_BEGIN(OBJ) ptr->Lock()
+#define CRITICAL_SECTION_PTR_END(OBJ) ptr->UnLock()
+
+
+#ifdef __posix__
+#define CREATE_THREAD(THREADID, FUNCTION, ARGUMENT) pthread_create(&THREADID, NULL, &FUNCTION, (void*)ARGUMENT)
+#endif
+
+#ifdef WIN32
+#define CREATE_THREAD(THREADID, FUNCTION, ARGUMENT) CreateThread( NULL, 0,FUNCTION,&ARGUMENT, NULL)
+#endif
+
+#ifdef __posix__
+#define THREAD_JOIN(THREADID, DATA, RETURN) pthread_join(THREADID, RETURN)
+#endif
+
+#ifdef WIN32
+#define THREAD_JOIN(THREADID, DATA, ARGUMENT) WaitForSingleObject(DATA, INFINITE);
+#endif
+
+#ifdef __posix__
+#define THREAD_DATA int
+#endif
+
+#ifdef WIN32
+#define THREAD_DATA HANDLE
+#endif
+
 
 #endif

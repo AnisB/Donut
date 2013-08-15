@@ -35,9 +35,9 @@ namespace Donut
 		pthread_mutex_lock( &FMutex );
 	}
 
-	void TThreadSharedObject::Unlock()
+	void TThreadSharedObject::UnLock()
 	{
-		pthread_mutex_lock( &FMutex );
+		pthread_mutex_unlock( &FMutex );
 
 	}
 }

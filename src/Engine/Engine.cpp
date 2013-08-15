@@ -14,28 +14,52 @@
  *
  **/
 
+// ----------------------------------------
+//  Includes
+// ----------------------------------------
 
- #include "Engine.h"
+#include "Engine.h"
 
-namespace Donut{
+// ----------------------------------------
+//  Implementation
+// ----------------------------------------
+
+ namespace Donut
+ {
  	Engine::Engine()
  	{
-
+ 		FOpenGLRenderer = new Donut::TDonutRendererOpenGL();
  	}
+ 	
  	Engine::~Engine()
- 	{
-
+ 	{	
+ 		delete FOpenGLRenderer;
  	}
 
  	void Engine::LaunchRendering()
  	{
-#ifdef __posix__
- 		pthread_create(&FTRenderingThread, NULL, &CreateRenderingThread, NULL);
-#endif
+ 		FOpenGLRenderer->CreateRenderWindow(float2(DEFAULTW,DEFAULTL),DEFAULTNAME, DEFAULTFULLSCREEN);
+ 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
  	}
 
  	void Engine::StopRendering()
  	{
+ 		FOpenGLRenderer->SetRendering(false);
+ 		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
+ 		FOpenGLRenderer->DestroyRenderWindow();
+ 	}
 
+ 	void Engine::PauseRendering()
+ 	{
+ 		FOpenGLRenderer->SetRendering(false);
+ 		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
+ 		FOpenGLRenderer->HideRenderWindow();
+ 	}
+
+ 	void Engine::ResumeRendering()
+ 	{
+ 		FOpenGLRenderer->ShowRenderWindow();
+ 		FOpenGLRenderer->SetRendering(true);
+ 		CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
  	}
  }

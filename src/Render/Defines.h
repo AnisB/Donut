@@ -27,5 +27,12 @@ struct TColorFilter
 	float b;
 	float a;
 };
+
+#define DEFAULTW 640 
+#define DEFAULTL 480
+
+#define DEFAULTNAME "Donut"
+#define DEFAULTFULLSCREEN false
+
 }
 #endif //DONUT_RENDER

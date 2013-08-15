@@ -19,31 +19,47 @@
  #define DONUT_GRAPHIC_RENDERER
 
  #include "Defines.h"
+ #include "Math/FloatN.h"
+ #include "MultiThread/UsualThreadSafeObjects.h"
+ #include <string>
 
- namespace Donut{
+ namespace Donut
+ {
+	class TDonutRendererOpenGL
+	{
+	public:
+		TDonutRendererOpenGL();
+		~TDonutRendererOpenGL();
 
- 	class GraphicRenderer
- 	{
- 	public:
- 		GraphicRenderer()
- 		{
+		void CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen);
+		void DestroyRenderWindow();
 
- 		}
- 		~GraphicRenderer()
- 		{
+		void HideRenderWindow();
+		void ShowRenderWindow();
 
- 		}
 
- 		void Loop()
- 		{
+		void Draw();
+		void Reshape(int, int);
 
- 		}
- 	};
+		bool IsRendering()
+		{
+			return FIsRendering.GetValue();
+		}
 
-	void *CreateRenderingThread(void* parGraphicRenderer)
- 	{
- 		GraphicRenderer * realGraphicRenderer = (GraphicRenderer*) parGraphicRenderer;
- 	    realGraphicRenderer->Loop();	
- 	}
+		void SetRendering(bool parVal)
+		{
+			FIsRendering.SetValue(parVal);
+		}
+
+	protected:
+		bool FInitDone;
+		int FWindowName;
+		bool FIsFullScreen;
+		float2 FWindowSize;
+		TThreadSafeBolean FIsRendering;
+
+	};
+	// END CLASS DECLARATION
+	void *CreateRenderingThread(void* parGraphicRenderer);
  }
  #endif // DONUT_GRAPHIC_RENDERER
