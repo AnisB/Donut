@@ -18,9 +18,17 @@
 #include "Renderer.h"
 
 #include "Base/Common.h"
-
+ 	#include <stdlib.h>
+#include <stdio.h>
+ 
  namespace Donut
  {
+
+static void error_callback(int error, const char* description)
+{
+    fputs(description, stderr);
+}
+
 
 	// Class TDonutRendererOpenGL
  	TDonutRendererOpenGL::TDonutRendererOpenGL()
@@ -49,12 +57,15 @@
  				return ;
 
  			}
+ 			glfwSetErrorCallback(error_callback);
 
 			// Window size
  			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
  			FIsRendering.SetValue(true);
  			glfwShowWindow(FWindow);
+ 			glEnable(GL_DEPTH_TEST);
+ 			glfwMakeContextCurrent(FWindow);
  			RENDER_DEBUG_NOARGS("Window created");
 
  		}
@@ -90,9 +101,30 @@
  	}	
 
  	void TDonutRendererOpenGL::Draw()
- 	{ 	 	
-		glfwSwapBuffers(FWindow);
-	}
+ 	{ 	 
+
+        float ratio;
+        int width, height;
+        glfwGetFramebufferSize(FWindow, &width, &height);
+        ratio = width / (float) height;
+        glViewport(0, 0, width, height);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
+        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
+        glBegin(GL_TRIANGLES);
+        glColor3f(1.f, 0.f, 0.f);
+        glVertex3f(-0.6f, -0.4f, 0.f);
+        glColor3f(0.f, 1.f, 0.f);
+        glVertex3f(0.6f, -0.4f, 0.f);
+        glColor3f(0.f, 0.f, 1.f);
+        glVertex3f(0.f, 0.6f, 0.f);
+        glEnd();
+        glfwSwapBuffers(FWindow);
+}
 
 
 	void TDonutRendererOpenGL::Reshape()
@@ -100,25 +132,26 @@
 	}
 
 
-		bool TDonutRendererOpenGL::IsRendering()
-		{
-			return FIsRendering.GetValue();
-		}
+	bool TDonutRendererOpenGL::IsRendering()
+	{
+		return (FIsRendering.GetValue() or !glfwWindowShouldClose(FWindow));
+	}
 
-		void TDonutRendererOpenGL::SetRendering(bool parVal)
-		{
-			FIsRendering.SetValue(parVal);
-		}
+	void TDonutRendererOpenGL::SetRendering(bool parVal)
+	{
+		FIsRendering.SetValue(parVal);
+	}
+	//Called when a key is pressed
 
-		// END CLASS DECLARATION
+	// END CLASS DECLARATION
 	void *CreateRenderingThread(void* parGraphicRenderer)
 	{
 		TDonutRendererOpenGL * realGraphicRenderer = (TDonutRendererOpenGL*) parGraphicRenderer;
 		while(realGraphicRenderer->IsRendering())
 		{
 			realGraphicRenderer->Draw();
-			realGraphicRenderer->Reshape();
 		}
+		RENDER_DEBUG_NOARGS("Window isn't rendering anymore");
 		pthread_exit(0);
 	}
 

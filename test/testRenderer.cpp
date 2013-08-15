@@ -22,6 +22,8 @@
 int main()
 {
 	Donut::Engine::Instance().LaunchRendering();
+	int a;
+	std::cin>>a;
 	sleep(2);
 	Donut::Engine::Instance().PauseRendering();
 	sleep(2);
