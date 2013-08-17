@@ -16,12 +16,37 @@
 
 
 
-#ifndef DONUT_RENDER
-#define DONUT_RENDER
+#ifndef DONUT_DEFINES
+#define DONUT_DEFINES
+
+
+#ifdef MACOSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
+
+#include <GLFW/glfw3.h>
+
 
 namespace Donut {
 struct TColorFilter
 {
+	TColorFilter(float parR, float parG, float parB, float parA) :
+	r(parR), 
+	g(parG), 
+	b(parB), 
+	a(parA)
+	{
+	}
+
+	TColorFilter& operator = (const TColorFilter& parFilter)
+	{
+		r = parFilter.r;
+		g = parFilter.g;
+		b = parFilter.b;
+		a = parFilter.a;
+		return *this;
+	}
 	float r;
 	float g;
 	float b;
@@ -35,4 +60,4 @@ struct TColorFilter
 #define DEFAULTFULLSCREEN false
 
 }
-#endif //DONUT_RENDER
+#endif //DONUT_DEFINES

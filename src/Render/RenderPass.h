@@ -15,47 +15,36 @@
  **/
 
 
- #ifndef DONUT_ENGINE
- #define DONUT_ENGINE
-
-#ifdef __posix__
-#include <pthread.h>
-#endif
-
-#include <Base/Singleton.h>
-#include <Render/Renderer.h>
+ #ifndef DONUT_2D_RENDER_PASS
+ #define DONUT_2D_RENDER_PASS
 
 
+#include "DrawableObject.h"
 
- namespace Donut{
- 	class Engine
- 	{
- 	public:
- 		Engine();
- 		~Engine();
+#include "MultiThread/ThreadSharedObject.h"
 
- 		void LaunchRendering();
- 		void StopRendering();
+#include <list>
+ 
+ namespace Donut
+ {
 
- 		void PauseRendering();
- 		void ResumeRendering();
+	class TRenderPass : public TThreadSharedObject
+	{
+	public:
+		TRenderPass();
+		~TRenderPass();
 
- 		void Flush();
+		void Draw();
+		void Clear();
+		void AddDrawable(TDrawableObject* parDrawable);
 
- 		virtual void Update(float dt)
- 		{
+	protected:
+		std::list<TDrawableObject*> FDrawables;
+	};
+	// END CLASS DECLARATION
 
- 		}
- 		virtual void PrepareNextFrame()
- 		{
 
- 		}
- 		void DrawObject(TDrawableObject * parObject);
 
- 	private:
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
- 	};
+	void *CreateRenderingThread(void* parGraphicRenderer);
  }
- #endif // DONUT_ENGINE
+ #endif // DONUT_2D_RENDER_PASS

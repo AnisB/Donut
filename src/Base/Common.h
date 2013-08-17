@@ -63,6 +63,7 @@ template<class T> inline void checked_delete(T * x)
 
 
 #define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
+// #define foreachitem(IT,X) for ( typeof( *X.begin()) IT , typeof( X.begin() ) IT2 = X.begin(); IT2 != X.end(); ++IT2, IT = *IT2 )
 
  }
 #endif

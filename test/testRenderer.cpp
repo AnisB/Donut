@@ -16,21 +16,23 @@
 
 #include <iostream>
 #include <Engine/Engine.h>
+#include <Engine/EngineExample.h>
 #include <unistd.h>
 
 
 int main()
 {
-	Donut::Engine::Instance().LaunchRendering();
-	int a;
-	std::cin>>a;
-	sleep(2);
-	Donut::Engine::Instance().PauseRendering();
-	sleep(2);
-	Donut::Engine::Instance().ResumeRendering();
-	sleep(2);
-	Donut::Engine::Instance().StopRendering();
-	sleep(2);
+	Donut::Engine * engine = new Donut::Engine();
+	engine->LaunchRendering();
+	sleep(1);
+	engine->PauseRendering();
+	sleep(1);
+	engine->ResumeRendering();
+	sleep(1);
+	engine->StopRendering();
+	sleep(1);
+
+	delete engine;
 	return 0;
 
 }

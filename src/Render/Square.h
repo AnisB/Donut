@@ -15,47 +15,41 @@
  **/
 
 
- #ifndef DONUT_ENGINE
- #define DONUT_ENGINE
+ #ifndef DONUT_SQUARE
+ #define DONUT_SQUARE
 
-#ifdef __posix__
-#include <pthread.h>
-#endif
-
-#include <Base/Singleton.h>
-#include <Render/Renderer.h>
-
-
+#include "DrawableObject.h"
+#include "Math/FloatN.h"
 
  namespace Donut{
- 	class Engine
+ class TSquare : public TDrawableObject
+ {
+ public:
+ 	TSquare(float2 parPosition, float parDimension);
+ 	~TSquare();
+
+ 	virtual void Draw();
+
+ 	void SetPosition(const float2& parPos)
  	{
- 	public:
- 		Engine();
- 		~Engine();
+ 		FPosition = parPos;
+ 	}
 
- 		void LaunchRendering();
- 		void StopRendering();
+ 	void SetPosition(float parX, float parY)
+ 	{
+ 		FPosition.x = parX;
+ 		FPosition.y = parY;
+ 	}
 
- 		void PauseRendering();
- 		void ResumeRendering();
+ 	const float2& GetPosition()
+ 	{
+ 		return FPosition;
+ 	}
 
- 		void Flush();
 
- 		virtual void Update(float dt)
- 		{
-
- 		}
- 		virtual void PrepareNextFrame()
- 		{
-
- 		}
- 		void DrawObject(TDrawableObject * parObject);
-
- 	private:
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
- 	};
- }
- #endif // DONUT_ENGINE
+ protected:
+ 	float2 FPosition;
+ 	float FDimension;
+ };
+}
+ #endif // DONUT_SQUARE

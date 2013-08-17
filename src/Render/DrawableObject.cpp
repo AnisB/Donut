@@ -19,6 +19,7 @@
 
 namespace Donut{
  	TDrawableObject::TDrawableObject()
+ 	: FFilter(1.0f,1.0f,1.0f,1.0f)
  	{
 
  	}
@@ -26,16 +27,4 @@ namespace Donut{
  	{
 
  	}
-
- 	void TDrawableObject::Draw(float x, float y, const TColorFilter& parFilter)
- 	{
-
- 	}
-
- 	void TDrawableObject::Draw(float x, float y, const TColorFilter& parFilter, float parScaleX, float parScaleY)
- 	{
-
- 	}
-
-
  }

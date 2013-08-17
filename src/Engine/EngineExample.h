@@ -15,47 +15,31 @@
  **/
 
 
- #ifndef DONUT_ENGINE
- #define DONUT_ENGINE
+#ifndef DONUT_ENGINE_EXAMPLE
+#define DONUT_ENGINE_EXAMPLE
 
-#ifdef __posix__
-#include <pthread.h>
-#endif
-
-#include <Base/Singleton.h>
-#include <Render/Renderer.h>
+#include "Engine.h"
+#include "Render/Square.h"
 
 
 
  namespace Donut{
- 	class Engine
+ 	class TEngineExample : public Engine
  	{
  	public:
- 		Engine();
- 		~Engine();
+ 		TEngineExample();
+ 		virtual ~TEngineExample();
 
- 		void LaunchRendering();
- 		void StopRendering();
+ 		virtual void PrepareNextFrame();
+ 		virtual void Update(float dt);
 
- 		void PauseRendering();
- 		void ResumeRendering();
+ 		virtual void Init();
 
- 		void Flush();
+ 		virtual void Loop(float parNbSec);
 
- 		virtual void Update(float dt)
- 		{
+ 	protected:
+ 		TSquare * FSquare;
 
- 		}
- 		virtual void PrepareNextFrame()
- 		{
-
- 		}
- 		void DrawObject(TDrawableObject * parObject);
-
- 	private:
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
  	};
  }
- #endif // DONUT_ENGINE
+ #endif // DONUT_ENGINE_EXAMPLE

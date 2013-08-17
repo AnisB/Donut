@@ -19,20 +19,19 @@
  #define DONUT_GRAPHIC_RENDERER
 
  #include "Defines.h"
+ #include "RenderPass.h"
  #include "Math/FloatN.h"
  #include "MultiThread/UsualThreadSafeObjects.h"
  #include <string>
 
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
 
-#include <GLFW/glfw3.h>
 
 
  namespace Donut
  {
+
+ 	#define NB_PASSES 1
+
 	class TDonutRendererOpenGL
 	{
 	public:
@@ -46,8 +45,11 @@
 		void ShowRenderWindow();
 
 
+		void Init();
 		void Draw();
-		void Reshape();
+		void Clear();
+
+		void RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER = 0);
 
 		// Rendering activation and disable
 		bool IsRendering();
@@ -63,6 +65,8 @@
 
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;
+
+		TRenderPass FRenderPasses[NB_PASSES];
 
 	};
 	// END CLASS DECLARATION

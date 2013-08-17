@@ -40,26 +40,45 @@
  	{
  		FOpenGLRenderer->CreateRenderWindow(float2(DEFAULTW,DEFAULTL),DEFAULTNAME, DEFAULTFULLSCREEN);
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
+ 		DEFAULT_DEBUG_NOARGS("Redering thread created");
  	}
 
  	void Engine::StopRendering()
  	{
+ 		DEFAULT_DEBUG_NOARGS("Trying to stop rendering");
  		FOpenGLRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FOpenGLRenderer->DestroyRenderWindow();
+ 		DEFAULT_DEBUG_NOARGS("Rendering destroyed");
+
  	}
 
  	void Engine::PauseRendering()
  	{
+ 		DEFAULT_DEBUG_NOARGS("Pause rendering");
  		FOpenGLRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FOpenGLRenderer->HideRenderWindow();
+ 		DEFAULT_DEBUG_NOARGS("Rendering paused");
+
  	}
 
  	void Engine::ResumeRendering()
  	{
+ 		DEFAULT_DEBUG_NOARGS("Resuming rendering");
  		FOpenGLRenderer->ShowRenderWindow();
  		FOpenGLRenderer->SetRendering(true);
- 		CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
+ 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
+ 		DEFAULT_DEBUG_NOARGS("Rendering resumed");
+ 	}
+
+	void Engine::DrawObject(TDrawableObject * parObject)
+ 	{
+ 		FOpenGLRenderer->RegisterToDraw(parObject);
+ 	}
+
+	void Engine::Flush()
+ 	{
+ 		FOpenGLRenderer->Clear();
  	}
  }

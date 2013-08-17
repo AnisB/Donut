@@ -14,6 +14,8 @@
  *
  **/
 
+#ifndef DONUT_THREAD_SHARED_OBJECT
+#define DONUT_THREAD_SHARED_OBJECT
 #ifdef __posix__
 #include <pthread.h>
 #endif
@@ -38,3 +40,4 @@ namespace Donut
 	
 	};
 }
+#endif

@@ -26,9 +26,14 @@ namespace Donut{
  	TDrawableObject();
  	~TDrawableObject();
 
- 	virtual void Draw(float x, float y, const TColorFilter& parFilter);
+ 	virtual void Draw() = 0;
+ 	virtual void SetColor(const TColorFilter& parFilter)
+ 	{
+ 		FFilter = parFilter;
+ 	}
 
- 	virtual void Draw(float x, float y, const TColorFilter& parFilter, float parScaleX, float parScaleY);
+ protected:
+ 	TColorFilter FFilter;
  };
 }
  #endif // DONUT_DRAWABLE_OBJECT

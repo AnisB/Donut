@@ -18,7 +18,8 @@
 #include "Renderer.h"
 
 #include "Base/Common.h"
- 	#include <stdlib.h>
+#include "Square.h"
+#include <stdlib.h>
 #include <stdio.h>
  
  namespace Donut
@@ -63,9 +64,6 @@ static void error_callback(int error, const char* description)
  			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
  			FIsRendering.SetValue(true);
- 			glfwShowWindow(FWindow);
- 			glEnable(GL_DEPTH_TEST);
- 			glfwMakeContextCurrent(FWindow);
  			RENDER_DEBUG_NOARGS("Window created");
 
  		}
@@ -100,53 +98,69 @@ static void error_callback(int error, const char* description)
 
  	}	
 
+ 	void TDonutRendererOpenGL::Init()
+ 	{ 	 
+ 		glfwMakeContextCurrent(FWindow);
+ 	}
+
  	void TDonutRendererOpenGL::Draw()
  	{ 	 
+ 		//Inits
+        glClearColor(0.f,0.f,0.f, 0.f);
+ 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ 		glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
 
-        float ratio;
-        int width, height;
-        glfwGetFramebufferSize(FWindow, &width, &height);
-        ratio = width / (float) height;
-        glViewport(0, 0, width, height);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        glOrtho(-ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glRotatef((float) glfwGetTime() * 50.f, 0.f, 0.f, 1.f);
-        glBegin(GL_TRIANGLES);
-        glColor3f(1.f, 0.f, 0.f);
-        glVertex3f(-0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 1.f, 0.f);
-        glVertex3f(0.6f, -0.4f, 0.f);
-        glColor3f(0.f, 0.f, 1.f);
-        glVertex3f(0.f, 0.6f, 0.f);
-        glEnd();
+        for(size_t pass = 0; pass < NB_PASSES; ++pass)
+        {
+        	TRenderPass & passIter = FRenderPasses[pass];
+        	CRITICAL_SECTION_OBJ_BEGIN(passIter);
+        	passIter.Draw();
+        	CRITICAL_SECTION_OBJ_END(passIter);
+        }
+
+        //SwapBuffer
         glfwSwapBuffers(FWindow);
-}
-
-
-	void TDonutRendererOpenGL::Reshape()
-	{ 	 
-	}
-
+    }
 
 	bool TDonutRendererOpenGL::IsRendering()
 	{
-		return (FIsRendering.GetValue() or !glfwWindowShouldClose(FWindow));
+		return (FIsRendering.GetValue() && !glfwWindowShouldClose(FWindow));
+
 	}
 
 	void TDonutRendererOpenGL::SetRendering(bool parVal)
 	{
 		FIsRendering.SetValue(parVal);
 	}
-	//Called when a key is pressed
+
+
+	void TDonutRendererOpenGL::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	{
+		AssertRelease(PASS_NUMBER < NB_PASSES);
+		TRenderPass & pass = FRenderPasses[PASS_NUMBER];
+		CRITICAL_SECTION_OBJ_BEGIN(pass);
+		pass.AddDrawable(parDrawable);
+		CRITICAL_SECTION_OBJ_END(pass);
+	}
+
+	void TDonutRendererOpenGL::Clear()
+	{
+        for(size_t pass = 0; pass < NB_PASSES; ++pass)
+        {
+        	TRenderPass & passIter = FRenderPasses[pass];
+        	CRITICAL_SECTION_OBJ_BEGIN(passIter);
+        	passIter.Clear();
+        	CRITICAL_SECTION_OBJ_END(passIter);
+        }
+	}
 
 	// END CLASS DECLARATION
 	void *CreateRenderingThread(void* parGraphicRenderer)
 	{
 		TDonutRendererOpenGL * realGraphicRenderer = (TDonutRendererOpenGL*) parGraphicRenderer;
+		realGraphicRenderer->Init();
+
 		while(realGraphicRenderer->IsRendering())
 		{
 			realGraphicRenderer->Draw();

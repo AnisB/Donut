@@ -14,48 +14,40 @@
  *
  **/
 
+#include "RenderPass.h"
 
- #ifndef DONUT_ENGINE
- #define DONUT_ENGINE
+#include "Base/Common.h"
+ namespace Donut
+ {
 
-#ifdef __posix__
-#include <pthread.h>
-#endif
+ 	//CLASS IMPLEMENTATION
+	TRenderPass::TRenderPass()
+	{
 
-#include <Base/Singleton.h>
-#include <Render/Renderer.h>
+	}
+	TRenderPass::~TRenderPass()
+	{
+		FDrawables.clear();
+	}
+
+	void TRenderPass::Draw()
+	{
+		foreach(drawable,FDrawables)
+		{
+			(*drawable)->Draw();
+		}
+	}
+
+	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
+	{
+		FDrawables.push_back(parDrawable);
+	}
+
+	void TRenderPass::Clear()
+	{
+		FDrawables.clear();
+	}
+	// END CLASS IMPLEMENTATION
 
 
-
- namespace Donut{
- 	class Engine
- 	{
- 	public:
- 		Engine();
- 		~Engine();
-
- 		void LaunchRendering();
- 		void StopRendering();
-
- 		void PauseRendering();
- 		void ResumeRendering();
-
- 		void Flush();
-
- 		virtual void Update(float dt)
- 		{
-
- 		}
- 		virtual void PrepareNextFrame()
- 		{
-
- 		}
- 		void DrawObject(TDrawableObject * parObject);
-
- 	private:
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
- 	};
  }
- #endif // DONUT_ENGINE
