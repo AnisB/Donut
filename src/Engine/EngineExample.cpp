@@ -20,6 +20,9 @@
 
 #include "EngineExample.h"
 
+#include "Defines.h"
+
+
 // ----------------------------------------
 //  Implementation
 // ----------------------------------------
@@ -28,40 +31,39 @@
  {
  	TEngineExample::TEngineExample() : Engine()
  	{
+ 		DEFAULT_DEBUG_NOARGS("Creating engine");
  		FSquare = new TSquare(float2(-1,-1), 0.2);
- 		FSquare->SetColor(TColorFilter(1.0f,0.0f,0.0f,1.0f));
+ 		FSquare->GetRepresentation()->SetColor(TColorFilter(1.0f,0.0f,0.0f,1.0f));
+ 		REGISTER_DRAWABLE_PTR(FSquare);
  	}
  	
  	TEngineExample::~TEngineExample()
  	{	
- 	}
-
- 	void TEngineExample::PrepareNextFrame()
- 	{
- 		Flush();
- 		DrawObject(FSquare);
+ 		UNREGISTER_DRAWABLE_PTR(FSquare);
+ 		delete FSquare;
  	}
 
  	void TEngineExample::Update(float dt)
  	{
  		FSquare->SetPosition(FSquare->GetPosition().x +dt *1.f,FSquare->GetPosition().y + dt*1.f);
+ 		if(FSquare->GetPosition().x > 1.0f || FSquare->GetPosition().y > 1.0f)
+ 		{
+ 			FIsRendering = false;
+ 		}
  	}
 
 	void TEngineExample::Init()
 	{
 		LaunchRendering();
+		FIsRendering = true;
 	}
 
-	void TEngineExample::Loop(float parNbSec)
+	void TEngineExample::Loop()
 	{
-		size_t counter = 0; 
-		while(counter < (parNbSec*60)) // 3 seconds
+		while(FIsRendering) // 3 seconds
 		{
 			Update(0.016f);
-			PrepareNextFrame();
 			usleep(16000); // A corriger
-			counter++;
 		}
 	}
-
  }

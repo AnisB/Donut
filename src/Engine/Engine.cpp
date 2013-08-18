@@ -77,6 +77,11 @@
  		FOpenGLRenderer->RegisterToDraw(parObject);
  	}
 
+	void Engine::RemoveObject(TDrawableObject * parObject)
+ 	{
+ 		FOpenGLRenderer->UnRegisterToDraw(parObject);
+ 	}
+
 	void Engine::Flush()
  	{
  		FOpenGLRenderer->Clear();

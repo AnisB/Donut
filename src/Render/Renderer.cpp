@@ -18,7 +18,6 @@
 #include "Renderer.h"
 
 #include "Base/Common.h"
-#include "Square.h"
 #include <stdlib.h>
 #include <stdio.h>
  
@@ -141,6 +140,15 @@ static void error_callback(int error, const char* description)
 		TRenderPass & pass = FRenderPasses[PASS_NUMBER];
 		CRITICAL_SECTION_OBJ_BEGIN(pass);
 		pass.AddDrawable(parDrawable);
+		CRITICAL_SECTION_OBJ_END(pass);
+	}
+
+	void TDonutRendererOpenGL::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	{
+		AssertRelease(PASS_NUMBER < NB_PASSES);
+		TRenderPass & pass = FRenderPasses[PASS_NUMBER];
+		CRITICAL_SECTION_OBJ_BEGIN(pass);
+		pass.RemoveDrawable(parDrawable);
 		CRITICAL_SECTION_OBJ_END(pass);
 	}
 

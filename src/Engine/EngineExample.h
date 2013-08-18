@@ -19,7 +19,7 @@
 #define DONUT_ENGINE_EXAMPLE
 
 #include "Engine.h"
-#include "Render/Square.h"
+#include "Objects/Square.h"
 
 
 
@@ -30,15 +30,15 @@
  		TEngineExample();
  		virtual ~TEngineExample();
 
- 		virtual void PrepareNextFrame();
  		virtual void Update(float dt);
 
  		virtual void Init();
-
- 		virtual void Loop(float parNbSec);
+ 		
+ 		virtual void Loop();
 
  	protected:
  		TSquare * FSquare;
+ 		bool FIsRendering;
 
  	};
  }

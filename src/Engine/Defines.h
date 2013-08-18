@@ -14,45 +14,27 @@
  *
  **/
 
-#include "RenderPass.h"
-
-#include "Base/Common.h"
- namespace Donut
- {
-
- 	//CLASS IMPLEMENTATION
-	TRenderPass::TRenderPass()
-	{
-
-	}
-	TRenderPass::~TRenderPass()
-	{
-		FDrawables.clear();
-	}
-
-	void TRenderPass::Draw()
-	{
-		foreach(drawable,FDrawables)
-		{
-			(*drawable)->Draw();
-		}
-	}
-
-	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
-	{
-		FDrawables.push_back(parDrawable);
-	}
-
-	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
-	{
-		FDrawables.remove(parDrawable);
-	}
-
-	void TRenderPass::Clear()
-	{
-		FDrawables.clear();
-	}
-	// END CLASS IMPLEMENTATION
 
 
- }
+#ifndef DONUT_DEFINES_ENGINE
+#define DONUT_DEFINES_ENGINE
+
+
+#ifdef MACOSX
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
+
+#include <GLFW/glfw3.h>
+
+
+namespace Donut {
+
+#define REGISTER_DRAWABLE(object) DrawObject(object.GetRepresentation())
+#define REGISTER_DRAWABLE_PTR(object) DrawObject(object->GetRepresentation())
+
+#define UNREGISTER_DRAWABLE(object) RemoveObject(object.GetRepresentation())
+#define UNREGISTER_DRAWABLE_PTR(object) RemoveObject(object->GetRepresentation())
+
+}
+#endif //DONUT_DEFINES_ENGINE

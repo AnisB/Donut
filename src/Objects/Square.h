@@ -18,38 +18,32 @@
  #ifndef DONUT_SQUARE
  #define DONUT_SQUARE
 
-#include "DrawableObject.h"
+#include "Render/DrawableObject.h"
+#include "Render/SquareRepresentation.h"
 #include "Math/FloatN.h"
 
  namespace Donut{
- class TSquare : public TDrawableObject
+ class TSquare
  {
  public:
  	TSquare(float2 parPosition, float parDimension);
  	~TSquare();
 
- 	virtual void Draw();
+ 	void SetPosition(const float2& parPos);
 
- 	void SetPosition(const float2& parPos)
- 	{
- 		FPosition = parPos;
- 	}
+ 	void SetPosition(float parX, float parY);
 
- 	void SetPosition(float parX, float parY)
- 	{
- 		FPosition.x = parX;
- 		FPosition.y = parY;
- 	}
+ 	const float2& GetPosition();
 
- 	const float2& GetPosition()
- 	{
- 		return FPosition;
- 	}
+ 	void UpdateRepresentation();
+
+ 	TDrawableObject * GetRepresentation();
 
 
  protected:
  	float2 FPosition;
  	float FDimension;
+ 	TSquareRepresentation * FRepresentation;
  };
 }
  #endif // DONUT_SQUARE

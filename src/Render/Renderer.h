@@ -50,6 +50,7 @@
 		void Clear();
 
 		void RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER = 0);
+		void UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER = 0);
 
 		// Rendering activation and disable
 		bool IsRendering();

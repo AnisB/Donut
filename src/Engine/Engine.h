@@ -51,6 +51,7 @@
 
  		}
  		void DrawObject(TDrawableObject * parObject);
+ 		void RemoveObject(TDrawableObject * parObject);
 
  	private:
  		THREAD_ID FTRenderingThread;

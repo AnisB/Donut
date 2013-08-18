@@ -14,45 +14,33 @@
  *
  **/
 
-#include "RenderPass.h"
 
-#include "Base/Common.h"
- namespace Donut
+ #ifndef DONUT_SQUARE_REPRESENTATION
+ #define DONUT_SQUARE_REPRESENTATION
+
+#include "DrawableObject.h"
+#include "MultiThread/ThreadSharedObject.h"
+#include "Math/FloatN.h"
+
+ namespace Donut{
+ class TSquareRepresentation : public TDrawableObject, public TThreadSharedObject
  {
+ public:
+ 	TSquareRepresentation(float2 parPosition, float parDimension);
+ 	~TSquareRepresentation();
 
- 	//CLASS IMPLEMENTATION
-	TRenderPass::TRenderPass()
-	{
+ 	virtual void Draw();
 
-	}
-	TRenderPass::~TRenderPass()
-	{
-		FDrawables.clear();
-	}
+ 	void SetPosition(const float2& parPos);
 
-	void TRenderPass::Draw()
-	{
-		foreach(drawable,FDrawables)
-		{
-			(*drawable)->Draw();
-		}
-	}
+ 	void SetPosition(float parX, float parY);
 
-	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
-	{
-		FDrawables.push_back(parDrawable);
-	}
-
-	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
-	{
-		FDrawables.remove(parDrawable);
-	}
-
-	void TRenderPass::Clear()
-	{
-		FDrawables.clear();
-	}
-	// END CLASS IMPLEMENTATION
+ 	const float2 GetPosition();
 
 
- }
+ protected:
+ 	float2 FPosition;
+ 	float FDimension;
+ };
+}
+ #endif // DONUT_SQUARE_REPRESENTATION

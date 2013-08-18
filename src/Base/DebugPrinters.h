@@ -42,10 +42,7 @@
 #ifdef DEBUG
 #define DEFAULT_DEBUG_NOARGS(Enonce)\
  	{\
- 		std::string msg = "[DEFAULT]";\
- 		msg += Enonce;\
- 		msg += "\n";\
-		fprintf(stderr,"%s", msg.c_str());\
+ 		std::cout<<"[DEFAULT]"<<Enonce<<std::endl;\
  	}
 #else
 #define DEFAULT_DEBUG_NOARGS(Enonce,...) {}
@@ -71,10 +68,7 @@
 #ifdef DEBUG
 #define STATE_ENGINE_DEBUG_NOARGS(Enonce)\
  	{\
- 		std::string msg = "[STATE ENGINE]";\
- 		msg += Enonce;\
- 		msg += "\n";\
-		fprintf(stderr,"%s", msg.c_str());\
+ 		std::cout<<"[STATE ENGINE]"<<Enonce<<std::endl;\
  	}
 #else
 #define STATE_ENGINE_DEBUG_NOARGS(Enonce,...) {}
@@ -99,10 +93,7 @@
 #ifdef DEBUG
 #define RENDER_DEBUG_NOARGS(Enonce)\
  	{\
- 		std::string msg = "[RENDER]";\
- 		msg += Enonce;\
- 		msg += "\n";\
-		fprintf(stderr,"%s", msg.c_str());\
+ 		std::cout<<"[RENDER]"<<Enonce<<std::endl;\
  	}
 #else
 #define RENDER_DEBUG_NOARGS(Enonce,...) {}

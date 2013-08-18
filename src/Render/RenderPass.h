@@ -37,6 +37,7 @@
 		void Draw();
 		void Clear();
 		void AddDrawable(TDrawableObject* parDrawable);
+		void RemoveDrawable(TDrawableObject* parDrawable);
 
 	protected:
 		std::list<TDrawableObject*> FDrawables;

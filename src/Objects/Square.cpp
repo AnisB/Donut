@@ -16,30 +16,49 @@
 
 
  #include "Square.h"
- #include "Defines.h"
+ #include "Render/Defines.h"
  #include "Base/Common.h"
+
 
 namespace Donut{
  	TSquare::TSquare(float2 parPosition, float parDimension)
- 	: TDrawableObject()
- 	, FPosition(parPosition)
+ 	: FPosition(parPosition)
  	, FDimension(parDimension)
  	{
-
+ 		FRepresentation = new TSquareRepresentation(parPosition, parDimension);
  	}
  	TSquare::~TSquare()
  	{
-
+ 		delete FRepresentation;
  	}
 
- 	void TSquare::Draw()
+ 	void TSquare::SetPosition(const float2& parPos)
  	{
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glBegin(GL_QUADS); // Start drawing a quad primitive  
- 		glVertex2f(FPosition.x, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y + FDimension); // The bottom left corner  
- 		glVertex2f(FPosition.x, FPosition.y + FDimension); // The bottom left corner  
- 		glEnd(); 
+ 		FPosition = parPos;
+ 		UpdateRepresentation();
  	}
+
+ 	void TSquare::SetPosition(float parX, float parY)
+ 	{
+ 		FPosition.x = parX;
+ 		FPosition.y = parY;
+ 		UpdateRepresentation();
+ 	}
+
+ 	const float2& TSquare::GetPosition()
+ 	{
+ 		return FPosition;
+ 	}
+
+ 	void TSquare::UpdateRepresentation()
+ 	{
+ 		FRepresentation->SetPosition(FPosition);
+ 		//FRepresentation->SetDimension(FDimension);
+ 	}
+
+ 	TDrawableObject * TSquare::GetRepresentation()
+ 	{
+ 		return FRepresentation;
+ 	}
+
  }

@@ -24,7 +24,7 @@ int main()
 {
 	Donut::TEngineExample * engine2 = new Donut::TEngineExample();
 	engine2->Init();
-	engine2->Loop(3);
+	engine2->Loop();
 	delete engine2;
 	return 0;
 
