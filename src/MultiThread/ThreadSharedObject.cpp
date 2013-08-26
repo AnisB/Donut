@@ -32,12 +32,16 @@ namespace Donut
 
 	void TThreadSharedObject::Lock()
 	{
+#ifdef __posix__
 		pthread_mutex_lock( &FMutex );
+#endif
 	}
 
 	void TThreadSharedObject::UnLock()
 	{
+#ifdef __posix__
 		pthread_mutex_unlock( &FMutex );
+#endif
 
 	}
 }
