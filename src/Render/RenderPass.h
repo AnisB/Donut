@@ -43,9 +43,5 @@
 		std::list<TDrawableObject*> FDrawables;
 	};
 	// END CLASS DECLARATION
-
-
-
-	void *CreateRenderingThread(void* parGraphicRenderer);
  }
  #endif // DONUT_2D_RENDER_PASS
