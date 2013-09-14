@@ -15,35 +15,30 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
+ #ifndef DONUT_TRIANGLE_REPRESENTATION
+ #define DONUT_TRIANGLE_REPRESENTATION
 
-#include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
+#include "../DrawableObject.h"
+#include "MultiThread/ThreadSharedObject.h"
 #include "Math/FloatN.h"
 
  namespace Donut{
- class TSquare
+ class TTriangleRepresentation : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
+ 	TTriangleRepresentation(float2 parA, float2 parB, float2 parC);
+ 	~TTriangleRepresentation();
 
- 	void SetPosition(const float2& parPos);
+ 	virtual void Draw();
 
- 	void SetPosition(float parX, float parY);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
+ 	void SetA(const float2& parPos);
+ 	void SetB(const float2& parPos);
+ 	void SetC(const float2& parPos);
 
  protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
+ 	float2 FPointA;
+ 	float2 FPointB;
+ 	float2 FPointC;
  };
 }
- #endif // DONUT_SQUARE
+ #endif // DONUT_TRIANGLE_REPRESENTATION

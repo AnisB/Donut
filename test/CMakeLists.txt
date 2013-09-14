@@ -9,8 +9,8 @@ add_executable(testRenderer ${TEST}/testRenderer.cpp)
 TARGET_LINK_LIBRARIES(testRenderer Donut ${CORELIBS})
 
 
-add_executable(testMovingSquare ${TEST}/testMovingSquare.cpp)
-TARGET_LINK_LIBRARIES(testMovingSquare Donut ${CORELIBS})
+add_executable(testMovingShapes ${TEST}/testMovingShapes.cpp)
+TARGET_LINK_LIBRARIES(testMovingShapes Donut ${CORELIBS})
 
  
 

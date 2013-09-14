@@ -15,55 +15,53 @@
  **/
 
 
- #include "SquareRepresentation.h"
- #include "Defines.h"
+ #include "TriangleRepresentation.h"
+ #include "Render/Defines.h"
  #include "Base/Common.h"
  #include "MultiThread/Defines.h"
 
 
 namespace Donut{
- 	TSquareRepresentation::TSquareRepresentation(float2 parPosition, float parDimension)
- 	: TDrawableObject()
- 	, FPosition(parPosition)
- 	, FDimension(parDimension)
+ 	TTriangleRepresentation::TTriangleRepresentation(float2 parA, float2 parB, float2 parC)
+ 	: FPointA(parA)
+ 	, FPointB(parB)
+ 	, FPointC(parC)
  	{
 
  	}
- 	TSquareRepresentation::~TSquareRepresentation()
+ 	TTriangleRepresentation::~TTriangleRepresentation()
  	{
 
  	}
- 	void TSquareRepresentation::SetPosition(const float2& parPos)
+
+ 	void TTriangleRepresentation::SetA(const float2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
- 		FPosition = parPos;
+ 		FPointA = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TSquareRepresentation::SetPosition(float parX, float parY)
+ 	void TTriangleRepresentation::SetB(const float2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
- 		FPosition.x = parX;
- 		FPosition.y = parY;
+ 		FPointB = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	const float2 TSquareRepresentation::GetPosition()
+ 	void TTriangleRepresentation::SetC(const float2& parPos)
  	{
- 		float2 position;
  		CRITICAL_SECTION_BEGIN();
- 		position = FPosition;
+ 		FPointC = parPos;
  		CRITICAL_SECTION_END();	
- 		return position;
  	}
- 	void TSquareRepresentation::Draw()
+
+ 	void TTriangleRepresentation::Draw()
  	{
  		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glBegin(GL_QUADS); // Start drawing a quad primitive  
- 		glVertex2f(FPosition.x, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y + FDimension); // The bottom left corner  
- 		glVertex2f(FPosition.x, FPosition.y + FDimension); // The bottom left corner  
+ 		glBegin(GL_TRIANGLES); // Start drawing a quad primitive  
+ 		glVertex2f(FPointA.x, FPointA.y); // The bottom left corner  
+ 		glVertex2f(FPointB.x , FPointB.y); // The bottom left corner  
+ 		glVertex2f(FPointC.x , FPointC.y ); // The bottom left corner  
  		glEnd(); 
  	}
  }

@@ -24,7 +24,6 @@ set(TEST "${PROJECT_SOURCE_DIR}/test/")
 
 
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
-message(STATUS "${CMAKE_MODULE_PATH}")
 
 
 file(
@@ -66,7 +65,6 @@ IF(WINDOWS)
 add_definitions( -DWIN32 )
 ENDIF()
 
-message(STATUS ${CORELIBS} )
 add_library(Donut ${Source_File})
  
 link_directories(${CMAKE_BINARY_DIR})

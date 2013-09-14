@@ -15,35 +15,17 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
 
-#include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
+#ifndef TEXTURE_HELPERS
+#define TEXTURE_HELPERS
 
- namespace Donut{
- class TSquare
- {
- public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
-
- 	void SetPosition(const float2& parPos);
-
- 	void SetPosition(float parX, float parY);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
-
- protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
- };
+#include "Texture.h"
+ 
+namespace TextureHelpers
+{
+	TImgType::Type GetImgType(const std::string & parImg);
+ 	TTexture * LoadTexture(const std::string & parImg);
+ 	TTexture * LoadBMP(const std::string & parImg);
 }
- #endif // DONUT_SQUARE
+
+#endif // TEXTURE_HELPERS

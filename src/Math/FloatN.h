@@ -43,6 +43,21 @@ struct float2
 		this->y = parFloat2.y;
 	}
 
+	const float2 operator- (const float2& parFloat2) const
+	{
+		float2 result;
+		result.x = (this->x - parFloat2.x);
+		result.y = (this->y - parFloat2.y);
+		return result;
+	}
+
+	float2& operator+=(const float2& parFloat2)
+	{
+		this->x += parFloat2.x;
+		this->y += parFloat2.y;
+		return *this;
+	}
+
 	float x;
 	float y;
 };

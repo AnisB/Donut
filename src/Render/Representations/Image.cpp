@@ -15,35 +15,30 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
-
-#include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
-
- namespace Donut{
- class TSquare
- {
- public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
-
- 	void SetPosition(const float2& parPos);
-
- 	void SetPosition(float parX, float parY);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
+ #include "Image.h"
+ #include "Render/Defines.h"
+ #include "Texturing/TextureManager.h"
+ #include "Base/Common.h"
+ #include "MultiThread/Defines.h"
 
 
- protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
- };
-}
- #endif // DONUT_SQUARE
+namespace Donut{
+ 	TImage::TImage(const std::string& parFileName)
+ 	{
+ 		FTexture  = TextureManager::Instance().LoadTexture(parFileName);
+ 	}
+ 	TImage::~TImage()
+ 	{
+
+ 	}
+
+ 	void TImage::Draw()
+ 	{
+ 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
+ 		glEnable(GL_TEXTURE_2D);
+ 		glBindTexture(GL_TEXTURE_2D, FTexture->FID);
+ 		glBindTexture(GL_TEXTURE_2D, 0);
+ 		glDisable(GL_TEXTURE_2D);
+
+ 	}
+ }

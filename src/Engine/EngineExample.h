@@ -20,6 +20,8 @@
 
 #include "Engine.h"
 #include "Objects/Square.h"
+#include "Objects/Triangle.h"
+#include "Objects/Quad.h"
 
 
 
@@ -38,6 +40,8 @@
 
  	protected:
  		TSquare * FSquare;
+ 		TTriangle * FTriangle;
+ 		TQuad * FQuad;
  		bool FIsRendering;
 
  	};

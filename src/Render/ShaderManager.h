@@ -15,35 +15,37 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
+ #include "Defines.h"
+ #include "Base/Singleton.h"
+ #include <list>
 
-#include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
-
- namespace Donut{
- class TSquare
+ namespace Donut
  {
- public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
 
- 	void SetPosition(const float2& parPos);
+ 	struct TProgram
+ 	{
+ 		TProgram(GLuint parID)
+ 		{
+ 			FProgramID = parID;
+ 		}
 
- 	void SetPosition(float parX, float parY);
+ 		GLuint FProgramID;
+ 	};
 
- 	const float2& GetPosition();
+ 	class ShaderManager : public Singleton<ShaderManager>
+ 	{
 
- 	void UpdateRepresentation();
+ 	public:
+ 		ShaderManager();
+ 		~ShaderManager();
 
- 	TDrawableObject * GetRepresentation();
+ 		TProgram CreateShader(char* parVertexShader, char* parFragmentShader);
+ 		void EnableShader(const TProgram& parProgram);
+ 		void DisableShader( );
 
+ 	private:
+ 		std::list<TProgram> FPrograms;
+ 		TProgram FBasicPipeline;
 
- protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
- };
-}
- #endif // DONUT_SQUARE
+ 	};
+ }

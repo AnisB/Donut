@@ -15,35 +15,28 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
 
-#include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
+#ifndef TEXTURE_MANAGER
+#define TEXTURE_MANAGER
 
- namespace Donut{
- class TSquare
+#include "Base/Singleton.h"
+#include "Texture.h"
+#include <string>
+#include <map>
+
+ namespace Donut 
  {
- public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
+ 	class TextureManager : public Singleton<TextureManager>
+ 	{
+ 	public:
+ 		TextureManager();
+ 		~TextureManager();
+		TTexture* LoadTexture(const std::string&  parTextureName);
+		TTexture* GetTexture(const std::string&  parTextureName);
 
- 	void SetPosition(const float2& parPos);
-
- 	void SetPosition(float parX, float parY);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
-
- protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
- };
+	private:
+		std::map<std::string, TTexture*> FTextures;
+	};
 }
- #endif // DONUT_SQUARE
+
+#endif // TEXTURE_MANAGER

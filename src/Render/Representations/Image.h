@@ -15,35 +15,26 @@
  **/
 
 
- #ifndef DONUT_SQUARE
- #define DONUT_SQUARE
+ #ifndef DONUT_IMAGE
+ #define DONUT_IMAGE
 
 #include "Render/DrawableObject.h"
-#include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
+#include "Texturing/Texture.h"
+#include "MultiThread/ThreadSharedObject.h"
+#include <string>
 
- namespace Donut{
- class TSquare
+ namespace Donut
+ {
+ class TImage : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TSquare(float2 parPosition, float parDimension);
- 	~TSquare();
+ 	TImage(const std::string& parFileName);
+ 	~TImage();
 
- 	void SetPosition(const float2& parPos);
-
- 	void SetPosition(float parX, float parY);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
+ 	virtual void Draw();
 
  protected:
- 	float2 FPosition;
- 	float FDimension;
- 	TSquareRepresentation * FRepresentation;
+ 	TTexture * FTexture;
  };
 }
- #endif // DONUT_SQUARE
+ #endif // DONUT_IMAGE
