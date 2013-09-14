@@ -17,6 +17,7 @@
 #include "RenderPass.h"
 
 #include "Base/Common.h"
+#include "MultiThread/Defines.h"
  namespace Donut
  {
 
@@ -32,26 +33,20 @@
 
 	void TRenderPass::Draw()
 	{
-		CRITICAL_SECTION_BEGIN();
 		foreach(drawable,FDrawables)
 		{
 			(*drawable)->Draw();
 		}
-		CRITICAL_SECTION_END();
 	}
 
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
 	{
-		CRITICAL_SECTION_BEGIN();
 		FDrawables.push_back(parDrawable);
-		CRITICAL_SECTION_END();
 	}
 
 	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
 	{
-		CRITICAL_SECTION_BEGIN();
 		FDrawables.remove(parDrawable);
-		CRITICAL_SECTION_END();
 	}
 
 	void TRenderPass::Clear()

@@ -83,7 +83,7 @@
 
 	void TEngineExample::Loop()
 	{
-		while(FIsRendering) // 3 seconds
+		while(FIsRendering)
 		{
 			Update(0.016f);
 			usleep(16000); // A corriger
