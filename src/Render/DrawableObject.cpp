@@ -20,6 +20,7 @@
 namespace Donut{
  	TDrawableObject::TDrawableObject()
  	: FFilter(1.0f,1.0f,1.0f,1.0f)
+ 	, FShader(0,"","")
  	{
 
  	}

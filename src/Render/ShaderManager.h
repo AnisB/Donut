@@ -13,6 +13,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+ #ifndef  SHADER_MANAGER_DONUT 
+ #define SHADER_MANAGER_DONUT
+
 
 
  #include "Defines.h"
@@ -22,13 +25,20 @@
  namespace Donut
  {
 
- 	struct TProgram
+ 	struct TShader
  	{
- 		TProgram(GLuint parID)
+ 		TShader(GLuint parID, const std::string& parVShader,const std::string& parFShader)
  		{
  			FProgramID = parID;
+ 			FVertexShader = parVShader;
+ 			FFragmentShader = parFShader;
+ 			FActive = false;
  		}
 
+ 		std::string FVertexShader;
+ 		std::string FFragmentShader;
+
+ 		bool FActive;
  		GLuint FProgramID;
  	};
 
@@ -39,13 +49,16 @@
  		ShaderManager();
  		~ShaderManager();
 
- 		TProgram CreateShader(char* parVertexShader, char* parFragmentShader);
- 		void EnableShader(const TProgram& parProgram);
+ 		TShader CreateShader(std::string parVertexShader, std::string parFragmentShader);
+ 		void PrintLog(GLuint parProg);
+ 		void EnableShader(const TShader& parProgram);
  		void DisableShader( );
 
  	private:
- 		std::list<TProgram> FPrograms;
- 		TProgram FBasicPipeline;
+ 		std::list<TShader> FPrograms;
+ 		TShader FBasicPipeline;
 
  	};
  }
+
+ #endif //SHADER_MANAGER_DONUT

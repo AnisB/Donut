@@ -18,59 +18,61 @@
 
 #include "FileLoader.h"
 
+#include "Base/Common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+namespace Donut
+{
+	char * LoadFile( char const* fn) 
+	{
+		FILE *fp;
+		char *content = NULL;
 
-char * LoadFile(char *fn) {
+		int count=0;
 
+		if (fn != NULL) {
+			fp = fopen(fn,"rt");
 
-	FILE *fp;
-	char *content = NULL;
+			if (fp != NULL) {
+	      
+	      fseek(fp, 0, SEEK_END);
+	      count = ftell(fp);
+	      rewind(fp);
 
-	int count=0;
-
-	if (fn != NULL) {
-		fp = fopen(fn,"rt");
-
-		if (fp != NULL) {
-      
-      fseek(fp, 0, SEEK_END);
-      count = ftell(fp);
-      rewind(fp);
-
-			if (count > 0) {
-				content = (char *)malloc(sizeof(char) * (count+1));
-				count = fread(content,sizeof(char),count,fp);
-				content[count] = '\0';
+				if (count > 0) {
+					content = (char *)malloc(sizeof(char) * (count+1));
+					count = fread(content,sizeof(char),count,fp);
+					content[count] = '\0';
+				}
+				fclose(fp);
 			}
-			fclose(fp);
 		}
+		CondAssertReleasePrint((content != NULL),fn);
+		return content;
 	}
-	return content;
-}
 
-bool WriteFile(char *fn, char *s) {
+	bool WriteFile(char *fn, char *s) {
 
-	FILE *fp;
-	bool status = false;
+		FILE *fp;
+		bool status = false;
 
-	if (fn != NULL) {
-		fp = fopen(fn,"w");
+		if (fn != NULL) {
+			fp = fopen(fn,"w");
 
-		if (fp != NULL) {
-			
-			if (fwrite(s,sizeof(char),strlen(s),fp) == strlen(s))
-				status = true;
-			fclose(fp);
+			if (fp != NULL) {
+				
+				if (fwrite(s,sizeof(char),strlen(s),fp) == strlen(s))
+					status = true;
+				fclose(fp);
+			}
 		}
+		return(status);
 	}
-	return(status);
+
+
 }
-
-
-
 
 
 

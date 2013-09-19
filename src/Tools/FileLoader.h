@@ -20,7 +20,8 @@
 
 namespace Donut
 {
-	char * LoadFile(char *fn);
+
+	char * LoadFile( char const* fn);
 	bool WriteFile(char *fn, char *s);
 }
 

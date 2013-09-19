@@ -15,28 +15,44 @@
  **/
 
 
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
+ #ifndef DONUT_FRAME_CANVAS
+ #define DONUT_FRAME_CANVAS
 
-#include "Defines.h"
+
+#include "DrawableObject.h"
 #include "ShaderManager.h"
-namespace Donut
-{
- class TDrawableObject
+
+#include "MultiThread/ThreadSharedObject.h"
+
+ 
+ namespace Donut
  {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
- 	{
- 		FFilter = parFilter;
- 	}
+	class TFrameCanvas :  public TDrawableObject, public TThreadSharedObject
+	{
+	public:
+		TFrameCanvas();
+		~TFrameCanvas();
 
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
-}
- #endif // DONUT_DRAWABLE_OBJECT
+		void Init();
+
+		void SetFragmentShader(const std::string& parFShader);
+		void SetVertexShader(const std::string& parVShader);
+		
+		virtual void Draw();
+		void Enable();
+		void Disable();
+	protected:
+
+		// Buffer Data
+		GLuint FFrameBuffer;
+		GLuint FRenderTexture;
+		GLuint FDepthBuffer;
+
+		//Shader
+		TShader FShader;
+
+	};
+	// END CLASS DECLARATION
+ }
+ #endif // DONUT_FRAME_CANVAS

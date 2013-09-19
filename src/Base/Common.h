@@ -38,6 +38,8 @@
 
 #define AssertRelease(Enonce) assert(Enonce)
 
+#define CondAssertReleasePrint(Enonce,msg) if(!Enonce) {std::cout<< msg <<std::endl;assert(Enonce);}
+
 #ifdef DEBUG
 #define AssertNoReleasePrint(Enonce, Msg) std::cout<< Msg <<std::endl; assert(Enonce)
 #else

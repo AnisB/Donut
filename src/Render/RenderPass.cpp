@@ -24,33 +24,84 @@
  	//CLASS IMPLEMENTATION
 	TRenderPass::TRenderPass()
 	{
-
+		FRenderToTexture = false;
+		FFrameCanvas = new TFrameCanvas();
 	}
 	TRenderPass::~TRenderPass()
 	{
+		delete FFrameCanvas;
 		FDrawables.clear();
 	}
 
 	void TRenderPass::Draw()
 	{
-		foreach(drawable,FDrawables)
+		if(FRenderToTexture)
 		{
-			(*drawable)->Draw();
+			Bind();
+			foreach(drawable,FDrawables)
+			{
+				(*drawable)->Draw();
+			}
+			Unbind();
+			FFrameCanvas->Draw();
 		}
-	}
+		else
+		{
+			foreach(drawable,FDrawables)
+			{
+				(*drawable)->Draw();
+			}
+		}
 
+	}
+	void TRenderPass::Init()
+	{
+ 		//RENDER_DEBUG_NOARGS("Initing the canvas");
+		
+		if(FRenderToTexture)
+		{
+			FFrameCanvas->Init();
+		}
+ 		//RENDER_DEBUG_NOARGS("Canvas created");
+	}
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
 	{
 		FDrawables.push_back(parDrawable);
+ 		RENDER_DEBUG("Drawable added %u", FDrawables.size());
+	}
+
+	void TRenderPass::Bind()
+	{
+		FFrameCanvas->Enable();
+	}
+
+	void TRenderPass::SetFragmentShader(const std::string& parFragShader)
+	{
+		FFrameCanvas->SetFragmentShader(parFragShader);
+		FRenderToTexture = true;
+	}
+
+	void TRenderPass::SetVertexShader(const std::string& parFragShader)
+	{
+		FFrameCanvas->SetVertexShader(parFragShader);
+		FRenderToTexture = true;
+	}
+
+	void TRenderPass::Unbind()
+	{
+		FFrameCanvas->Disable();
 	}
 
 	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
 	{
+ 		RENDER_DEBUG_NOARGS("Removing drawable");
+
 		FDrawables.remove(parDrawable);
 	}
 
 	void TRenderPass::Clear()
 	{
+ 		RENDER_DEBUG_NOARGS("clear drawable");
 		CRITICAL_SECTION_BEGIN();
 		FDrawables.clear();
 		CRITICAL_SECTION_END();

@@ -33,6 +33,8 @@
 
  	void SetPosition(float parX, float parY);
 
+ 	void Rotate(float parAngle);
+
  	const float2& GetPosition();
 
  	void UpdateRepresentation();
@@ -43,6 +45,7 @@
  protected:
  	float2 FPosition;
  	float FDimension;
+ 	float FRotation;
  	TSquareRepresentation * FRepresentation;
  };
 }

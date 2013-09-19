@@ -13,37 +13,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-
-
-#ifndef DONUT_ENGINE_EXAMPLE
-#define DONUT_ENGINE_EXAMPLE
-
-#include "Engine.h"
-#include "Objects/Square.h"
-#include "Objects/Triangle.h"
-#include "Objects/Quad.h"
+ #ifndef INPUT_HELPER_DONUT 
+ #define INPUT_HELPER_DONUT
 
 
 
- namespace Donut{
- 	class TEngineExample : public Engine
- 	{
- 	public:
- 		TEngineExample();
- 		virtual ~TEngineExample();
+ #include "Defines.h"
+ #include "Render/Defines.h"
 
- 		virtual void Update(float dt);
+ namespace Donut
+ {
+ 	// Keyboard
+ 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
- 		virtual void Init();
- 		
- 		virtual void Loop();
+ 	//Mouse
+ 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+ 	void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+ 	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
 
- 	protected:
- 		TSquare * FSquare;
- 		TTriangle * FTriangle;
- 		TQuad * FQuad;
- 		bool FIsRendering;
 
- 	};
+ 	//Joystick
+
  }
- #endif // DONUT_ENGINE_EXAMPLE
+ #endif //INPUT_HELPER_DONUT

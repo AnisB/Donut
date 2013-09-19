@@ -15,28 +15,20 @@
  **/
 
 
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
 
-#include "Defines.h"
-#include "ShaderManager.h"
-namespace Donut
+#ifndef DONUT_INPUT
+#define DONUT_INPUT
+
+
+enum KEY_CODE
 {
- class TDrawableObject
- {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
- 	{
- 		FFilter = parFilter;
- 	}
+};
 
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
-}
- #endif // DONUT_DRAWABLE_OBJECT
+enum MOUSE_CODE
+{
+	
+};
+
+
+#endif

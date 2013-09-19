@@ -14,29 +14,18 @@
  *
  **/
 
+#include <iostream>
+#include <Engine/Engine.h>
+#include "EngineExample2.h"
+#include <unistd.h>
 
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
 
-#include "Defines.h"
-#include "ShaderManager.h"
-namespace Donut
+int main()
 {
- class TDrawableObject
- {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
+	Donut::TEngineExample * engine2 = new Donut::TEngineExample();
+	engine2->Init();
+	engine2->Loop();
+	delete engine2;
+	return 0;
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
- 	{
- 		FFilter = parFilter;
- 	}
-
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
 }
- #endif // DONUT_DRAWABLE_OBJECT

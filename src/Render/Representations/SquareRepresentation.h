@@ -32,8 +32,9 @@
  	virtual void Draw();
 
  	void SetPosition(const float2& parPos);
-
  	void SetPosition(float parX, float parY);
+
+ 	void SetRotation(float parPos);
 
  	const float2 GetPosition();
 
@@ -41,6 +42,7 @@
  protected:
  	float2 FPosition;
  	float FDimension;
+ 	float FRotationAngle;
  };
 }
  #endif // DONUT_SQUARE_REPRESENTATION

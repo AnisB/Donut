@@ -23,6 +23,7 @@
  #include "Math/FloatN.h"
  #include "MultiThread/UsualThreadSafeObjects.h"
  #include <string>
+ #include <vector>
 
 
 
@@ -32,11 +33,11 @@
 
  	#define NB_PASSES 1
 
-	class TDonutRendererOpenGL
+	class TDonutRenderer
 	{
 	public:
-		TDonutRendererOpenGL();
-		~TDonutRendererOpenGL();
+		TDonutRenderer();
+		~TDonutRenderer();
 
 		void CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen);
 		void DestroyRenderWindow();
@@ -56,6 +57,14 @@
 		bool IsRendering();
 		void SetRendering(bool parVal);
 
+
+ 		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
+ 		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
+
+
+ 	private:
+ 		void InputInit();
+
 	protected:
 
 		// Window Infos
@@ -67,7 +76,7 @@
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;
 
-		TRenderPass FRenderPasses[NB_PASSES];
+		std::vector<TRenderPass*> FRenderPasses;
 
 	};
 	// END CLASS DECLARATION

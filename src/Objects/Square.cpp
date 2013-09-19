@@ -18,12 +18,13 @@
  #include "Square.h"
  #include "Render/Defines.h"
  #include "Base/Common.h"
-
+ #include <math.h>
 
 namespace Donut{
  	TSquare::TSquare(float2 parPosition, float parDimension)
  	: FPosition(parPosition)
  	, FDimension(parDimension)
+ 	, FRotation(0)
  	{
  		FRepresentation = new TSquareRepresentation(parPosition, parDimension);
  	}
@@ -35,6 +36,7 @@ namespace Donut{
  	void TSquare::SetPosition(const float2& parPos)
  	{
  		FPosition = parPos;
+ 		//FRotation = fmod(FRotation, 360);
  		UpdateRepresentation();
  	}
 
@@ -42,6 +44,13 @@ namespace Donut{
  	{
  		FPosition.x = parX;
  		FPosition.y = parY;
+ 		UpdateRepresentation();
+ 	}
+
+
+ 	void TSquare::Rotate(float parAngle)
+ 	{
+ 		FRotation += parAngle; 
  		UpdateRepresentation();
  	}
 
@@ -53,6 +62,7 @@ namespace Donut{
  	void TSquare::UpdateRepresentation()
  	{
  		FRepresentation->SetPosition(FPosition);
+ 		FRepresentation->SetRotation(FRotation);
  		//FRepresentation->SetDimension(FDimension);
  	}
 

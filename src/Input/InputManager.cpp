@@ -13,30 +13,41 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+ 
+ #include "InputManager.h"
 
-
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
-
-#include "Defines.h"
-#include "ShaderManager.h"
-namespace Donut
-{
- class TDrawableObject
+ namespace Donut
  {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
+	InputManager::InputManager()
+	{
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
- 	{
- 		FFilter = parFilter;
- 	}
+	}
 
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
-}
- #endif // DONUT_DRAWABLE_OBJECT
+	InputManager::~InputManager()
+	{
+
+	}
+
+	void InputManager::KeyPressed(KEY_CODE parKey)
+	{
+
+	}
+	void InputManager::KeyReleased(KEY_CODE parKey)
+	{
+
+	}
+
+	void InputManager::MouseMoved(int parX, int parY)
+	{
+
+	}
+	void InputManager::MousePressed(MOUSE_CODE parButton)
+	{
+
+	}
+	void InputManager::MouseReleased(MOUSE_CODE parButton)
+	{
+		
+	}
+ }
+

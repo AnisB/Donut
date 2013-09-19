@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
  
-project(testStateEngine)
+project(Donut)
 
 
 #add_definitions( -DRELEASE )
@@ -22,7 +22,7 @@ ENDIF()
 
 set(TEST "${PROJECT_SOURCE_DIR}/test/")
 
-
+SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
 
 
@@ -45,6 +45,7 @@ include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} )
 ENDIF()
 
 IF(APPLE)
+   FIND_PACKAGE (GLFW REQUIRED)
    FIND_PACKAGE (GLFW REQUIRED)
 	add_definitions( -D__posix__ )
 	add_definitions( -D MACOSX)
@@ -70,6 +71,12 @@ add_library(Donut ${Source_File})
 link_directories(${CMAKE_BINARY_DIR})
 
 add_subdirectory(${TEST})
+
+
+add_custom_command(
+    TARGET Donut POST_BUILD
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data/shaders ${PROJECT_BINARY_DIR}
+)
 	
 
 

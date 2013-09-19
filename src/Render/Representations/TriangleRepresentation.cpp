@@ -57,11 +57,14 @@ namespace Donut{
 
  	void TTriangleRepresentation::Draw()
  	{
+ 		CRITICAL_SECTION_BEGIN();
  		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
  		glBegin(GL_TRIANGLES); // Start drawing a quad primitive  
  		glVertex2f(FPointA.x, FPointA.y); // The bottom left corner  
  		glVertex2f(FPointB.x , FPointB.y); // The bottom left corner  
  		glVertex2f(FPointC.x , FPointC.y ); // The bottom left corner  
  		glEnd(); 
+ 		CRITICAL_SECTION_END();	
+ 		
  	}
  }

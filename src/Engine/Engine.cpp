@@ -28,62 +28,73 @@
  {
  	Engine::Engine()
  	{
- 		FOpenGLRenderer = new Donut::TDonutRendererOpenGL();
+ 		DEFAULT_DEBUG_NOARGS("Creating the engine");
+ 		FRenderer = new Donut::TDonutRenderer();
+ 		DEFAULT_DEBUG_NOARGS("Core engine created");
  	}
  	
  	Engine::~Engine()
  	{	
- 		delete FOpenGLRenderer;
+ 		delete FRenderer;
  	}
 
  	void Engine::LaunchRendering()
  	{
- 		FOpenGLRenderer->CreateRenderWindow(float2(DEFAULTW,DEFAULTL),DEFAULTNAME, DEFAULTFULLSCREEN);
- 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
+ 		DEFAULT_DEBUG_NOARGS("creating rendering thread");
+ 		FRenderer->CreateRenderWindow(float2(DEFAULTW,DEFAULTL),DEFAULTNAME, DEFAULTFULLSCREEN);
+ 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
  		DEFAULT_DEBUG_NOARGS("Redering thread created");
  	}
 
  	void Engine::StopRendering()
  	{
  		DEFAULT_DEBUG_NOARGS("Trying to stop rendering");
- 		FOpenGLRenderer->SetRendering(false);
+ 		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
- 		FOpenGLRenderer->DestroyRenderWindow();
+ 		FRenderer->DestroyRenderWindow();
  		DEFAULT_DEBUG_NOARGS("Rendering destroyed");
-
  	}
 
  	void Engine::PauseRendering()
  	{
  		DEFAULT_DEBUG_NOARGS("Pause rendering");
- 		FOpenGLRenderer->SetRendering(false);
+ 		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
- 		FOpenGLRenderer->HideRenderWindow();
+ 		FRenderer->HideRenderWindow();
  		DEFAULT_DEBUG_NOARGS("Rendering paused");
 
  	}
+	void Engine::SetVertexShader(const std::string& parVertex, int parNbPass)
+	{
+		FRenderer->SetVertexShader(parVertex,parNbPass);
+	}
+
+	void Engine::SetFragmentShader(const std::string& parFrag, int parNbPass)
+	{
+		FRenderer->SetFragmentShader(parFrag,parNbPass);
+	}
 
  	void Engine::ResumeRendering()
  	{
  		DEFAULT_DEBUG_NOARGS("Resuming rendering");
- 		FOpenGLRenderer->ShowRenderWindow();
- 		FOpenGLRenderer->SetRendering(true);
- 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FOpenGLRenderer);
+ 		FRenderer->ShowRenderWindow();
+ 		FRenderer->SetRendering(true);
+ 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
  		DEFAULT_DEBUG_NOARGS("Rendering resumed");
  	}
 
 	void Engine::DrawObject(TDrawableObject * parObject)
  	{
- 		FOpenGLRenderer->RegisterToDraw(parObject);
+ 		FRenderer->RegisterToDraw(parObject);
  	}
 
 	void Engine::RemoveObject(TDrawableObject * parObject)
  	{
- 		FOpenGLRenderer->UnRegisterToDraw(parObject);
+ 		FRenderer->UnRegisterToDraw(parObject);
  	}
 
 	void Engine::Flush()
  	{
- 		FOpenGLRenderer->Clear();
+ 		FRenderer->Clear();
  	}
  }

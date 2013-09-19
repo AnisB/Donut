@@ -59,5 +59,9 @@ struct TColorFilter
 #define DEFAULTNAME "Donut"
 #define DEFAULTFULLSCREEN false
 
+
+#define BASIC_VERTEX_SHADER "shaders/vertex/basicVertexShader.glsl"
+#define BASIC_FRAGMENT_SHADER "shaders/fragment/basicFragmentShader.glsl" 
+
 }
 #endif //DONUT_DEFINES

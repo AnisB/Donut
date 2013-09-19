@@ -4,6 +4,7 @@
 #ifndef DONUT_MATH_FLOATN
 #define DONUT_MATH_FLOATN
 
+#include "Base/DebugPrinters.h"
 struct float1
 {
 	float1()

@@ -14,29 +14,32 @@
  *
  **/
 
+ #include "InputHelper.h"
 
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
-
-#include "Defines.h"
-#include "ShaderManager.h"
 namespace Donut
 {
- class TDrawableObject
- {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
+	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+	{
+		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+		{
+		}	
+	}	
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
+
+ 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
  	{
- 		FFilter = parFilter;
+
+ 	}
+ 	
+ 	void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+ 	{
+
  	}
 
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
+ 	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
+ 	{
+
+ 	}
+
+
 }
- #endif // DONUT_DRAWABLE_OBJECT

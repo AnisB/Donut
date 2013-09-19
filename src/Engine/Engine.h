@@ -44,19 +44,21 @@
 
  		virtual void Update(float dt)
  		{
-
+ 			glfwPollEvents();
  		}
  		virtual void PrepareNextFrame()
  		{
 
  		}
+ 		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
+ 		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
  		void DrawObject(TDrawableObject * parObject);
  		void RemoveObject(TDrawableObject * parObject);
 
  	private:
  		THREAD_ID FTRenderingThread;
  		THREAD_DATA FThreadData;
- 		Donut::TDonutRendererOpenGL * FOpenGLRenderer;
+ 		Donut::TDonutRenderer * FRenderer;
  	};
  }
  #endif // DONUT_ENGINE

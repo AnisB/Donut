@@ -15,28 +15,35 @@
  **/
 
 
- #ifndef DONUT_DRAWABLE_OBJECT
- #define DONUT_DRAWABLE_OBJECT
+#ifndef DONUT_ENGINE_EXAMPLE
+#define DONUT_ENGINE_EXAMPLE
 
-#include "Defines.h"
-#include "ShaderManager.h"
-namespace Donut
-{
- class TDrawableObject
- {
- public:
- 	TDrawableObject();
- 	~TDrawableObject();
+#include <Engine/Engine.h>
+#include <Objects/Square.h>
+#include <Objects/Triangle.h>
+#include <Objects/Quad.h>
 
- 	virtual void Draw() = 0;
- 	virtual void SetColor(const TColorFilter& parFilter)
+
+
+ namespace Donut{
+ 	class TEngineExample : public Engine
  	{
- 		FFilter = parFilter;
- 	}
+ 	public:
+ 		TEngineExample();
+ 		virtual ~TEngineExample();
 
- protected:
- 	TColorFilter FFilter;
- 	TShader FShader;
- };
-}
- #endif // DONUT_DRAWABLE_OBJECT
+ 		virtual void Update(float dt);
+
+ 		virtual void Init();
+ 		
+ 		virtual void Loop();
+
+ 	protected:
+ 		TSquare * FSquare;
+ 		TTriangle * FTriangle;
+ 		TQuad * FQuad;
+ 		bool FIsRendering;
+
+ 	};
+ }
+ #endif // DONUT_ENGINE_EXAMPLE

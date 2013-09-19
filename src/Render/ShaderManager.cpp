@@ -20,7 +20,7 @@
 namespace Donut 
 {
 	ShaderManager::ShaderManager()
-	: FBasicPipeline (0)
+	: FBasicPipeline (0, " "," ")
 	{
 	}
 
@@ -29,7 +29,7 @@ namespace Donut
 		
 	}
 
-	TProgram ShaderManager::CreateShader(char* parVertexShader, char* parFragmentShader)
+	TShader ShaderManager::CreateShader(std::string parVertexShader, std::string parFragmentShader)
 	{
 		GLuint programID;
 		GLuint vertexShader;
@@ -41,8 +41,8 @@ namespace Donut
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-		vsFile = LoadFile(parVertexShader);
-		fsFile = LoadFile(parFragmentShader);
+		vsFile = LoadFile(parVertexShader.c_str());
+		fsFile = LoadFile(parFragmentShader.c_str());
 
 		const char * vsFile_ptr = vsFile;
 		const char * fsFile_ptr = fsFile;
@@ -55,20 +55,47 @@ namespace Donut
 
 		glCompileShader(vertexShader);
 		glCompileShader(fragmentShader);
-
+		PrintLog(vertexShader);
+		PrintLog(fragmentShader);
 		programID = glCreateProgram();
 		glAttachShader(programID,vertexShader);
 		glAttachShader(programID,fragmentShader);
 		glLinkProgram(programID);
+		PrintLog(programID);
 
-		TProgram createdProgram(programID);
+		TShader createdProgram(programID,parVertexShader, parFragmentShader);
+		createdProgram.FActive = true;
 		FPrograms.push_back(createdProgram);
+
+		
 		return createdProgram;
 	}
 
-	void ShaderManager::EnableShader(const TProgram& parProgram)
+	void ShaderManager::PrintLog(GLuint parProg)
 	{
-		glUseProgram(parProgram.FProgramID);
+		int infologLength = 0;
+		int charsWritten  = 0;
+		char *infoLog;
+
+	   // afficher le message d'erreur, le cas échéant
+		glGetShaderiv(parProg, GL_INFO_LOG_LENGTH,&infologLength);
+
+		if (infologLength > 1)
+		{
+			infoLog = (char *)malloc(infologLength);
+			glGetShaderInfoLog(parProg, infologLength, &charsWritten, infoLog);
+			printf("%s\n",infoLog);
+			free(infoLog);
+		} 
+	}
+
+
+	void ShaderManager::EnableShader(const TShader& parProgram)
+	{
+		if(parProgram.FActive)
+		{
+			glUseProgram(parProgram.FProgramID);
+		}
 	}
 
 	void ShaderManager::DisableShader()

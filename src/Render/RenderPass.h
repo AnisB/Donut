@@ -23,6 +23,8 @@
 
 #include "MultiThread/ThreadSharedObject.h"
 
+#include "FrameCanvas.h"
+
 #include <list>
  
  namespace Donut
@@ -33,11 +35,29 @@
 	public:
 		TRenderPass();
 		~TRenderPass();
+		void Init();
 
 		void Draw();
 		void Clear();
 		void AddDrawable(TDrawableObject* parDrawable);
 		void RemoveDrawable(TDrawableObject* parDrawable);
+
+		void SetFragmentShader(const std::string& parFShader);
+		void SetVertexShader(const std::string& parVShader);
+
+		void IsFramedCanvas(bool parVal)
+		{
+			FRenderToTexture = parVal;
+		}
+
+	private:
+		void Bind();
+		void Unbind();
+
+	private:
+		TFrameCanvas * FFrameCanvas;
+
+		bool FRenderToTexture;
 
 	protected:
 		std::list<TDrawableObject*> FDrawables;
