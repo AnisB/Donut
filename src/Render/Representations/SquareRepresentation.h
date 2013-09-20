@@ -31,6 +31,7 @@
 
  	virtual void Draw();
 
+ 	void SetDimension(float parDimension);
  	void SetPosition(const float2& parPos);
  	void SetPosition(float parX, float parY);
 

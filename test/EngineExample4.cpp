@@ -18,8 +18,7 @@
 //  Includes
 // ----------------------------------------
 
-#include "EngineExample3.h"
-#include <vector>
+#include "EngineExample4.h"
 #include <Engine/Defines.h>
 
 
@@ -33,24 +32,24 @@
  	{
  		DEFAULT_DEBUG_NOARGS("Creating engine example");
 
- 		FSquare = new TSquare(float2(-0,-0), 0.5);
- 		FSquare->SetColor(TColorFilter(1.0f,0.0f,0.0f,1.0f));
- 		FSquare->SetFragmentShader("shaders/fragment/degrade.glsl");
- 		REGISTER_DRAWABLE_PTR(FSquare);
+ 		FCube = new TCube(float3(0,0,0), 0.5);
+ 		FCube->GetRepresentation()->SetColor(TColorFilter(1.0f,0.0f,0.0f,1.0f));
+ 		REGISTER_DRAWABLE_PTR(FCube);
 
- 		SetFragmentShader("shaders/fragment/sinusoid.glsl",0);
+ 		//SetFragmentShader("shaders/fragment/sinusoid.glsl",0);
  	}
  	
  	TEngineExample::~TEngineExample()
  	{	
- 		UNREGISTER_DRAWABLE_PTR(FSquare);
- 		delete FSquare;
+ 		UNREGISTER_DRAWABLE_PTR(FCube);
+ 		delete FCube;
  	}
 
  	void TEngineExample::Update(float dt)
  	{
  		Engine::Update(dt);	
- 		FSquare->Rotate(100*dt);
+ 		//FCube->RotateX(100*dt);
+ 		//FCube->RotateY(50*dt);
  	}
 
 	void TEngineExample::Init()

@@ -54,15 +54,6 @@ namespace Donut
  		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, FRenderTexture, 0);
 
 		//RENDER_DEBUG("Texture init %u",FRenderTexture);
-
- 		
- 		/*
- 		glGenRenderbuffers(1, &FDepthBuffer);
- 		glBindRenderbuffer(GL_RENDERBUFFER, FDepthBuffer);
- 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, DEFAULTW, DEFAULTL);
- 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
- 		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FDepthBuffer);
- 		*/
  		
  		glGenTextures(1, &FDepthBuffer);
  		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
@@ -106,6 +97,7 @@ namespace Donut
  	{
  		glEnable(GL_TEXTURE_2D);
  		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL); 
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
  		glViewport(0,0,DEFAULTW, DEFAULTL);

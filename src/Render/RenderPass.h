@@ -44,7 +44,7 @@
 
 		void SetFragmentShader(const std::string& parFShader);
 		void SetVertexShader(const std::string& parVShader);
-
+		void PreparePass();
 		void IsFramedCanvas(bool parVal)
 		{
 			FRenderToTexture = parVal;

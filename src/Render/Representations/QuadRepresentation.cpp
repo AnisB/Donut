@@ -42,7 +42,6 @@ namespace Donut{
  	void TQuadRepresentation::Draw()
  	{
  		CRITICAL_SECTION_BEGIN();
- 		
  		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
  		glBegin(GL_QUADS); // Start drawing a quad primitive  
  		foreach(point, FPoints)

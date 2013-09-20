@@ -40,6 +40,8 @@
  		void PauseRendering();
  		void ResumeRendering();
 
+ 		bool IsRendering();
+
  		void Flush();
 
  		virtual void Update(float dt)

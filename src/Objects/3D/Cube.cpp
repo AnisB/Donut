@@ -15,68 +15,64 @@
  **/
 
 
- #include "Square.h"
+ #include "Cube.h"
  #include "Render/Defines.h"
  #include "Base/Common.h"
  #include <math.h>
 
 namespace Donut{
- 	TSquare::TSquare(float2 parPosition, float parDimension)
+ 	TCube::TCube(float3 parPosition, float parDimension)
  	: FPosition(parPosition)
  	, FDimension(parDimension)
- 	, FRotation(0)
+ 	, FRotation(0,0,0)
  	{
- 		FRepresentation = new TSquareRepresentation(parPosition, parDimension);
+ 		FRepresentation = new TCubeR(parPosition, parDimension);
  	}
- 	TSquare::~TSquare()
+ 	TCube::~TCube()
  	{
  		delete FRepresentation;
  	}
 
- 	void TSquare::SetPosition(const float2& parPos)
+ 	void TCube::SetPosition(const float3& parPos)
  	{
  		FPosition = parPos;
  		UpdateRepresentation();
  	}
 
- 	void TSquare::SetVertexShader(const std::string& parVertex)
- 	{
- 		FRepresentation->SetVertexShader(parVertex);
- 	}
 
- 	void TSquare::SetFragmentShader(const std::string& parVertex)
+ 	void TCube::RotateX(float parAngle)
  	{
- 		FRepresentation->SetFragmentShader(parVertex);
- 	}
-
- 	void TSquare::Rotate(float parAngle)
- 	{
- 		FRotation += parAngle; 
- 		FRotation = fmod(FRotation, 360);
+ 		FRotation.x += parAngle; 
  		UpdateRepresentation();
  	}
 
- 	void TSquare::SetColor(const TColorFilter& parColorFilter)
+ 	void TCube::RotateY(float parAngle)
  	{
- 		FRepresentation->SetColor(parColorFilter);
+ 		FRotation.y += parAngle; 
+ 		UpdateRepresentation();
  	}
 
- 	const float2& TSquare::GetPosition()
+ 	void TCube::RotateZ(float parAngle)
+ 	{
+ 		FRotation.z += parAngle; 
+ 		UpdateRepresentation();
+ 	}
+
+ 	const float3& TCube::GetPosition()
  	{
  		return FPosition;
  	}
 
- 	void TSquare::UpdateRepresentation()
+ 	void TCube::UpdateRepresentation()
  	{
  		if( FRepresentation != NULL)
  		{
  			FRepresentation->SetPosition(FPosition);
  			FRepresentation->SetRotation(FRotation);
- 		 	FRepresentation->SetDimension(FDimension);
  		}
  	}
 
- 	TDrawableObject * TSquare::GetRepresentation()
+ 	TDrawableObject * TCube::GetRepresentation()
  	{
  		return FRepresentation;
  	}

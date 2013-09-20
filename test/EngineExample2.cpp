@@ -74,14 +74,13 @@
  		Engine::Update(dt);	
  		
  		//DEFAULT_DEBUG_NOARGS("Update");
- 		FSquare->SetPosition(FSquare->GetPosition().x +dt *1.f,FSquare->GetPosition().y + dt*1.f);
+ 		FSquare->SetPosition(float2(FSquare->GetPosition().x +dt *1.f,FSquare->GetPosition().y + dt*1.f));
  		FTriangle->SetPosition(float2(FTriangle->GetPosition().x +dt *1.f,FTriangle->GetPosition().y - dt*1.f));
- 		FQuad->SetPosition(float2(FQuad->GetPosition().x -dt *1.f,FQuad->GetPosition().y - dt*1.f));
+ 		FQuad->SetPosition(float2(FQuad->GetPosition().x -dt *1.,FQuad->GetPosition().y - dt*1.f));
 
  		if(FSquare->GetPosition().x > 1.0f || FSquare->GetPosition().y > 1.0f)
  		{
  			StopRendering();
- 			FIsRendering = false;
  		}
  	}
 
@@ -89,12 +88,11 @@
 	{
  		DEFAULT_DEBUG_NOARGS("Launching rendering");
 		LaunchRendering();
-		FIsRendering = true;
 	}
 
 	void TEngineExample::Loop()
 	{
-		while(FIsRendering)
+		while(IsRendering())
 		{
 			Update(0.016f);
 			usleep(16000); // A corriger

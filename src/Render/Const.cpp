@@ -15,40 +15,25 @@
  **/
 
 
- #ifndef DONUT_TRIANGLE
- #define DONUT_TRIANGLE
+#include "Render/Const.h"
+namespace Donut
+{
+float cubeVertex[] = { 
+	1.0f, -1.0f, -1.0f, 
+	1.0f, -1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+	-1.0f, -1.0f, -1.0f,
+	1.0f, 1.0f, -1.0f,
+	1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, 1.0f, -1.0f};
 
-#include "Render/DrawableObject.h"
-#include "Render/Representations/TriangleRepresentation.h"
-#include "Math/FloatN.h"
+unsigned int cubeFaces[] = { 
+	0, 1, 2, 3,
+	4, 7, 6, 5,
+	0, 4, 5, 1,
+	1, 5, 6, 2,
+	2, 6, 7, 3,
+	4, 0, 3, 7};
 
- namespace Donut{
- class TTriangle
- {
- public:
- 	TTriangle(float2 parA,float2  parB, float2  parC);
- 	~TTriangle();
-
-
- 	void SetPosition(const float2& parX);
-
- 	void Rotate(float parAngle);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
-
- protected:
- 	float2 FPointA;
- 	float2 FPointB;
- 	float2 FPointC;
-
- 	float2 FCenter;
- 	float FRotation;
- 	TTriangleRepresentation * FRepresentation;
- };
 }
- #endif // DONUT_TRIANGLE

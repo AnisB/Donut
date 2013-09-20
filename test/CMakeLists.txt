@@ -20,6 +20,10 @@ TARGET_LINK_LIBRARIES(testFrameCanvas Donut ${CORELIBS})
 add_executable(testRenderToTexture ${TEST}/testRenderToTexture.cpp ${TEST}/EngineExample3.cpp )
 TARGET_LINK_LIBRARIES(testRenderToTexture Donut ${CORELIBS})
 
+
+add_executable(testRotatingCube ${TEST}/testRotatingCube.cpp ${TEST}/EngineExample4.cpp )
+TARGET_LINK_LIBRARIES(testRotatingCube Donut ${CORELIBS})
+
  
 
 

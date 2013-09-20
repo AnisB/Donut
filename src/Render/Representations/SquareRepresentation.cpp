@@ -41,6 +41,13 @@ namespace Donut{
  		CRITICAL_SECTION_END();	
  	}
 
+ 	void TSquareRepresentation::SetDimension(float parDimension)
+ 	{
+ 		CRITICAL_SECTION_BEGIN();
+ 		FDimension = parDimension;
+ 		CRITICAL_SECTION_END();	
+ 	}
+
  	void TSquareRepresentation::SetPosition(float parX, float parY)
  	{
  		CRITICAL_SECTION_BEGIN();
@@ -64,14 +71,14 @@ namespace Donut{
  	{
  		CRITICAL_SECTION_BEGIN();
  		glPushMatrix();
- 		glLoadIdentity();
+ 		glTranslatef(FPosition.x, FPosition.y, 0);
  		glRotatef(FRotationAngle,0.0,0.0,1.0);
  		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
  		glBegin(GL_QUADS); // Start drawing a quad primitive  
- 		glVertex2f(FPosition.x, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y); // The bottom left corner  
- 		glVertex2f(FPosition.x + FDimension, FPosition.y + FDimension); // The bottom left corner  
- 		glVertex2f(FPosition.x, FPosition.y + FDimension); // The bottom left corner  
+ 		glVertex2f(-FDimension/2, -FDimension/2);  
+ 		glVertex2f(-FDimension/2, FDimension/2);  
+ 		glVertex2f(FDimension/2, FDimension/2);  
+ 		glVertex2f(FDimension/2, -FDimension/2);  
  		glEnd(); 
  		glPopMatrix();
  		CRITICAL_SECTION_END();	

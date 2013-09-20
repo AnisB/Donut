@@ -24,9 +24,9 @@
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #endif
-
 #include <GLFW/glfw3.h>
 
+#include <math.h>
 
 namespace Donut {
 struct TColorFilter

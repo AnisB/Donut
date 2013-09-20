@@ -35,12 +35,15 @@
 
 	void TRenderPass::Draw()
 	{
+		PreparePass();
 		if(FRenderToTexture)
 		{
 			Bind();
 			foreach(drawable,FDrawables)
 			{
+				(*drawable)->Bind();
 				(*drawable)->Draw();
+				(*drawable)->Unbind();
 			}
 			Unbind();
 			FFrameCanvas->Draw();
@@ -52,7 +55,6 @@
 				(*drawable)->Draw();
 			}
 		}
-
 	}
 	void TRenderPass::Init()
 	{
@@ -62,8 +64,19 @@
 		{
 			FFrameCanvas->Init();
 		}
+		foreach(drawable,FDrawables)
+		{
+			(*drawable)->Init();
+			(*drawable)->GenerateShader();
+		}
  		//RENDER_DEBUG_NOARGS("Canvas created");
 	}
+
+	void TRenderPass::PreparePass()
+	{
+
+	}
+
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
 	{
 		FDrawables.push_back(parDrawable);
@@ -101,7 +114,6 @@
 
 	void TRenderPass::Clear()
 	{
- 		RENDER_DEBUG_NOARGS("clear drawable");
 		CRITICAL_SECTION_BEGIN();
 		FDrawables.clear();
 		CRITICAL_SECTION_END();

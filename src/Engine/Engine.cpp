@@ -64,6 +64,12 @@
  		DEFAULT_DEBUG_NOARGS("Rendering paused");
 
  	}
+
+ 	bool Engine::IsRendering()
+ 	{
+ 		return FRenderer->IsRendering();
+ 	}
+
 	void Engine::SetVertexShader(const std::string& parVertex, int parNbPass)
 	{
 		FRenderer->SetVertexShader(parVertex,parNbPass);

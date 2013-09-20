@@ -16,16 +16,54 @@
 
 
  #include "DrawableObject.h"
+ #include "Defines.h"
+ #include "ShaderManager.h"
 
 namespace Donut{
  	TDrawableObject::TDrawableObject()
  	: FFilter(1.0f,1.0f,1.0f,1.0f)
- 	, FShader(0,"","")
+ 	, FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
  	{
 
  	}
  	TDrawableObject::~TDrawableObject()
  	{
 
+ 	}
+
+ 	void TDrawableObject::Bind()
+ 	{
+ 		if(FShader.FActive)
+ 		{
+ 			ShaderManager::Instance().EnableShader(FShader);
+ 		}
+ 	}
+
+ 	void TDrawableObject::Unbind()
+ 	{
+ 		if(FShader.FActive)
+ 		{
+ 			ShaderManager::Instance().DisableShader();
+ 		}
+ 	}
+
+ 	void TDrawableObject::SetVertexShader(const std::string& parShaderPath)
+ 	{
+ 		FShader.FVertexShader = parShaderPath;
+ 		FShader.FActive = true;
+ 	}
+
+ 	void TDrawableObject::SetFragmentShader(const std::string& parShaderPath)
+ 	{
+ 		FShader.FFragmentShader = parShaderPath;
+ 		FShader.FActive = true;
+ 	}
+
+ 	void TDrawableObject::GenerateShader()
+ 	{
+ 		if(FShader.FActive)
+ 		{
+ 			FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader, FShader.FFragmentShader);
+ 		}
  	}
  }

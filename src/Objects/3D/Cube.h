@@ -15,35 +15,37 @@
  **/
 
 
- #ifndef DONUT_TRIANGLE_REPRESENTATION
- #define DONUT_TRIANGLE_REPRESENTATION
+ #ifndef DONUT_CUBE
+ #define DONUT_CUBE
 
-#include "../DrawableObject.h"
-#include "MultiThread/ThreadSharedObject.h"
+#include "Render/DrawableObject.h"
+#include "Render/Representations/3D/CubeR.h"
 #include "Math/FloatN.h"
 
  namespace Donut{
- class TTriangleRepresentation : public TDrawableObject, public TThreadSharedObject
+ class TCube
  {
  public:
- 	TTriangleRepresentation(const float2& parA, const float2& parB, const float2& parC, const float2& parCenter);
- 	~TTriangleRepresentation();
+ 	TCube(float3 parPosition, float parDimension);
+ 	~TCube();
 
- 	virtual void Draw();
+ 	void SetPosition(const float3& parPos);
 
- 	void SetA(const float2& parPos);
- 	void SetB(const float2& parPos);
- 	void SetC(const float2& parPos);
- 	void SetCenter(const float2& parPos);
+ 	void RotateX(float parAngle);
+ 	void RotateY(float parAngle);
+ 	void RotateZ(float parAngle);
 
- 	void SetRotation(float parRotation);
+ 	const float3& GetPosition();
+
+ 	void UpdateRepresentation();
+
+ 	TDrawableObject * GetRepresentation();
 
  protected:
- 	float2 FPointA;
- 	float2 FPointB;
- 	float2 FPointC;
- 	float2 FCenter;
- 	float FRotation;
+ 	float3 FPosition;
+ 	float FDimension;
+ 	float3 FRotation;
+ 	TCubeR * FRepresentation;
  };
 }
- #endif // DONUT_TRIANGLE_REPRESENTATION
+ #endif // DONUT_CUBE

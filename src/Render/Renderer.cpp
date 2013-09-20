@@ -47,6 +47,7 @@
  	}
  	TDonutRenderer::~TDonutRenderer()
  	{
+		FIsRendering.SetValue(false);
  		foreach(pass, FRenderPasses)
  		{
  			delete *pass;
@@ -72,7 +73,6 @@
  			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
  			FIsRendering.SetValue(true);
-
  			RENDER_DEBUG_NOARGS("Window created");	
  			
  		}
@@ -109,11 +109,15 @@
 
  	void TDonutRenderer::Init()
  	{ 	 
+
  		glfwMakeContextCurrent(FWindow);
 		foreach(pass,FRenderPasses)
 		{
 			(*pass)->Init();
 		}
+		 		glOrtho(0.0, 640, 0.0, 480, -10.0, 10.0);
+ 		glMatrixMode(GL_MODELVIEW);
+glLoadIdentity();
  	}
 
  	void TDonutRenderer::Draw()

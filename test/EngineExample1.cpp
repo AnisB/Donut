@@ -70,7 +70,7 @@
  	{
  		Engine::Update(dt);
  		//DEFAULT_DEBUG_NOARGS("Update");
- 		FSquare->SetPosition(FSquare->GetPosition().x +dt *1.f,FSquare->GetPosition().y + dt*1.f);
+ 		FSquare->SetPosition(float2(FSquare->GetPosition().x +dt *1.f,FSquare->GetPosition().y + dt*1.f));
  		FTriangle->SetPosition(float2(FTriangle->GetPosition().x +dt *1.f,FTriangle->GetPosition().y - dt*1.f));
  		FQuad->SetPosition(float2(FQuad->GetPosition().x -dt *1.f,FQuad->GetPosition().y - dt*1.f));
 
@@ -90,7 +90,7 @@
 
 	void TEngineExample::Loop()
 	{
-		while(FIsRendering)
+		while(FIsRendering && IsRendering())
 		{
 			Update(0.016f);
 			usleep(16000); // A corriger

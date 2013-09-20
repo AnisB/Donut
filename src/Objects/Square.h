@@ -30,8 +30,12 @@
  	~TSquare();
 
  	void SetPosition(const float2& parPos);
+ 	void SetColor(const TColorFilter& parColorFilter);
 
- 	void SetPosition(float parX, float parY);
+ 	void SetVertexShader(const std::string& parVertex);
+ 	void SetFragmentShader(const std::string& parFrag);
+
+ 	void Scale(float parScale);
 
  	void Rotate(float parAngle);
 

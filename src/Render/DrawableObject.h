@@ -29,6 +29,18 @@ namespace Donut
  	~TDrawableObject();
 
  	virtual void Draw() = 0;
+ 	virtual void Init()
+ 	{
+
+ 	}
+ 	
+ 	void Bind();
+ 	void Unbind();
+
+ 	void GenerateShader();
+ 	void SetVertexShader(const std::string& parShaderPath);
+ 	void SetFragmentShader(const std::string& parShaderPath);
+
  	virtual void SetColor(const TColorFilter& parFilter)
  	{
  		FFilter = parFilter;

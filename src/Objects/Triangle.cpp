@@ -25,10 +25,11 @@ namespace Donut{
  	: FPointA(parA)
  	, FPointB(parB)
  	, FPointC(parC)
+ 	, FRotation(0)
  	{
  		FCenter.x = (FPointA.x + FPointB.x + FPointC.x)/3;
  		FCenter.y = (FPointA.y + FPointB.y + FPointC.y)/3;
- 		FRepresentation = new TTriangleRepresentation(parA, parB, parC);
+ 		FRepresentation = new TTriangleRepresentation(parA-FCenter, parB-FCenter, parC-FCenter, FCenter);
  	}
  	TTriangle::~TTriangle()
  	{
@@ -46,10 +47,9 @@ namespace Donut{
 
  	void TTriangle::Rotate(float parAngle)
  	{
- 		if(parAngle > 0)
- 		{
-
- 		}
+ 		FRotation += parAngle;
+ 		FRotation = fmod(FRotation, 360.0);
+ 		UpdateRepresentation();
  	}
 
  	const float2& TTriangle::GetPosition()
@@ -59,9 +59,14 @@ namespace Donut{
 
  	void TTriangle::UpdateRepresentation()
  	{
- 		FRepresentation->SetA(FPointA);
- 		FRepresentation->SetB(FPointB);
- 		FRepresentation->SetC(FPointC);
+ 		if( FRepresentation != NULL)
+ 		{
+	 		FRepresentation->SetA(FPointA-FCenter);
+	 		FRepresentation->SetB(FPointB-FCenter);
+	 		FRepresentation->SetC(FPointC-FCenter);
+	 		FRepresentation->SetCenter(FCenter);
+	 		FRepresentation->SetRotation(FRotation);
+	 	}
  	}
 
  	TDrawableObject * TTriangle::GetRepresentation()

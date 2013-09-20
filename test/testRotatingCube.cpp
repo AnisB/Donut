@@ -14,41 +14,18 @@
  *
  **/
 
-
- #ifndef DONUT_TRIANGLE
- #define DONUT_TRIANGLE
-
-#include "Render/DrawableObject.h"
-#include "Render/Representations/TriangleRepresentation.h"
-#include "Math/FloatN.h"
-
- namespace Donut{
- class TTriangle
- {
- public:
- 	TTriangle(float2 parA,float2  parB, float2  parC);
- 	~TTriangle();
+#include <iostream>
+#include <Engine/Engine.h>
+#include "EngineExample4.h"
+#include <unistd.h>
 
 
- 	void SetPosition(const float2& parX);
+int main()
+{
+	Donut::TEngineExample * engine2 = new Donut::TEngineExample();
+	engine2->Init();
+	engine2->Loop();
+	delete engine2;
+	return 0;
 
- 	void Rotate(float parAngle);
-
- 	const float2& GetPosition();
-
- 	void UpdateRepresentation();
-
- 	TDrawableObject * GetRepresentation();
-
-
- protected:
- 	float2 FPointA;
- 	float2 FPointB;
- 	float2 FPointC;
-
- 	float2 FCenter;
- 	float FRotation;
- 	TTriangleRepresentation * FRepresentation;
- };
 }
- #endif // DONUT_TRIANGLE
