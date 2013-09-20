@@ -39,9 +39,17 @@ namespace Donut
  	
 	void TFrameCanvas::Init()
  	{
+ 		glEnable(GL_TEXTURE_2D);
+
+		#ifdef LINUX
+		glGenFramebuffers(1, &FFrameBuffer);
+ 		glBindFramebuffer(GL_FRAMEBUFFER, FFrameBuffer);
+ 		#endif
+ 		#ifdef MACOS
 		glGenFramebuffersEXT(1, &FFrameBuffer);
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
-		//RENDER_DEBUG("Frame buffer init %u",FFrameBuffer);
+ 		#endif
+		RENDER_DEBUG("Frame buffer init %u",FFrameBuffer);
 
  		glGenTextures(1, &FRenderTexture);
  		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
@@ -51,19 +59,15 @@ namespace Donut
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
  		glBindTexture(GL_TEXTURE_2D, 0);
- 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, FRenderTexture, 0);
 
-		//RENDER_DEBUG("Texture init %u",FRenderTexture);
+		#ifdef LINUX
+ 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,  GL_TEXTURE_2D, FRenderTexture,0);
+ 		#endif
 
- 		
- 		/*
- 		glGenRenderbuffers(1, &FDepthBuffer);
- 		glBindRenderbuffer(GL_RENDERBUFFER, FDepthBuffer);
- 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, DEFAULTW, DEFAULTL);
- 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
- 		glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, FDepthBuffer);
- 		*/
- 		
+ 		#ifdef MACOS
+ 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, FRenderTexture,0);
+ 		#endif
+
  		glGenTextures(1, &FDepthBuffer);
  		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
  		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, DEFAULTW, DEFAULTL, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
@@ -72,23 +76,27 @@ namespace Donut
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
  		glBindTexture(GL_TEXTURE_2D, 0);
- 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, FDepthBuffer, 0);
+ 		#ifdef LINUX
+ 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FDepthBuffer,0);
+ 		#endif
  		
-		//RENDER_DEBUG("Depth buffer%u",FDepthBuffer);
+ 		#ifdef MACOS
+ 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, FDepthBuffer, 0);
+ 		#endif
 
-
-
-
- 		if(glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+ 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
  		{
  			RENDER_DEBUG("There is a problem with your frame buffer dude %u", glGetError());
  		}
+ 		#ifdef LINUX
+ 		glBindFramebuffer(1, 0);
+ 		#endif
+ 		
+ 		#ifdef MACOS
  		glBindFramebufferEXT(1, 0);
-
- 		//FShader = ShaderManager::Instance().CreateShader("shaders/vertex/basicVertexShader.glsl","shaders/fragment/basicFragmentShader.glsl");
+ 		#endif
  		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
-		
-		//RENDER_DEBUG_NOARGS("Frame canvas created");
+		RENDER_DEBUG_NOARGS("Frame canvas created");
  	}
 
 	void TFrameCanvas::SetFragmentShader(const std::string& parFShader)

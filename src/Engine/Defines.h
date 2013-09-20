@@ -25,6 +25,10 @@
 #include <OpenGL/glu.h>
 #endif
 
+#ifdef LINUX
+#include <unistd.h>
+#endif
+
 #include <GLFW/glfw3.h>
 
 

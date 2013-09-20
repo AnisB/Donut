@@ -38,9 +38,11 @@ IF(UNIX AND NOT APPLE)
 add_definitions( -D__posix__ )
 add_definitions( -D LINUX )
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
 FIND_PACKAGE (GLFW REQUIRED)
 FIND_PACKAGE (X11 REQUIRED)
-set(CORELIBS ${GLFW_LIBRARY} ${OPENGL_LIBRARIES} ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB})
+set(CORELIBS ${GLFW_LIBRARY} ${GLEW_LIBRARY} ${OPENGL_LIBRARIES} 
+ ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB} pthread)
 include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} )
 ENDIF()
 

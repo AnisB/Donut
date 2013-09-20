@@ -72,7 +72,6 @@
  			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
  			FIsRendering.SetValue(true);
-
  			RENDER_DEBUG_NOARGS("Window created");	
  			
  		}
@@ -110,6 +109,11 @@
  	void TDonutRenderer::Init()
  	{ 	 
  		glfwMakeContextCurrent(FWindow);
+		GLenum err = glewInit();
+		if (GLEW_OK != err)
+		{
+		  std::cout<<"glew Init problem"<<std::endl;
+		}
 		foreach(pass,FRenderPasses)
 		{
 			(*pass)->Init();
