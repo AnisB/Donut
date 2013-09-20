@@ -16,14 +16,19 @@
 
 
 
-#ifndef DONUT_DEFINES
-#define DONUT_DEFINES
+#ifndef DONUT_DEFINES_RENDER
+#define DONUT_DEFINES_RENDER
 
 
 #ifdef MACOSX
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #endif
+
+#ifdef LINUX
+#include <GL/glew.h>
+#endif
+
 #include <GLFW/glfw3.h>
 
 #include <math.h>
@@ -64,4 +69,4 @@ struct TColorFilter
 #define BASIC_FRAGMENT_SHADER "shaders/fragment/basicFragmentShader.glsl" 
 
 }
-#endif //DONUT_DEFINES
+#endif //DONUT_DEFINES_RENDER

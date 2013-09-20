@@ -111,13 +111,17 @@
  	{ 	 
 
  		glfwMakeContextCurrent(FWindow);
+		#ifdef LINUX
+		GLenum err = glewInit();
+		if (GLEW_OK != err)
+		{
+		  std::cout<<"glew Init problem"<<std::endl;
+		}
+		#endif
 		foreach(pass,FRenderPasses)
 		{
 			(*pass)->Init();
 		}
-		 		glOrtho(0.0, 640, 0.0, 480, -10.0, 10.0);
- 		glMatrixMode(GL_MODELVIEW);
-glLoadIdentity();
  	}
 
  	void TDonutRenderer::Draw()

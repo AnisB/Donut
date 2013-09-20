@@ -16,6 +16,7 @@
 
  #include "ShaderManager.h"
  #include "Tools/FileLoader.h"
+ #include "Render/Defines.h"
 
 namespace Donut 
 {
@@ -50,8 +51,8 @@ namespace Donut
 		glShaderSource(vertexShader, 1, (const char **)&vsFile, NULL);
 		glShaderSource(fragmentShader, 1, (const char **)&fsFile, NULL);
 
-		free(vsFile);
-		free(fsFile);
+		delete vsFile;
+		delete  fsFile;
 
 		glCompileShader(vertexShader);
 		glCompileShader(fragmentShader);
@@ -82,10 +83,10 @@ namespace Donut
 
 		if (infologLength > 1)
 		{
-			infoLog = (char *)malloc(infologLength);
+			infoLog = new char(infologLength);
 			glGetShaderInfoLog(parProg, infologLength, &charsWritten, infoLog);
-			printf("%s\n",infoLog);
-			free(infoLog);
+			std::cout<<infoLog<<std::endl;
+			delete infoLog;
 		} 
 	}
 
