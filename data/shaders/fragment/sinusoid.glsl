@@ -1,3 +1,4 @@
+#version 400
 
 uniform sampler2D canvas;
 uniform sampler2D depth;

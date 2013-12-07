@@ -15,41 +15,39 @@
  **/
 
 
-
 #ifndef DONUT_COMMON
 #define DONUT_COMMON
 
-#include <assert.h>
 
+// Includes
+#include <assert.h>
 #include <iostream>
 #include <cstdio>
-
 #include "DebugPrinters.h"
 
 
- namespace Donut
- {
+namespace Donut
+{
  	
 #ifdef DEBUG
-#define AssertNoRelease(Enonce) assert(Enonce)
+	#define AssertNoRelease(Enonce) assert(Enonce)
 #elif RELEASE 
-#define AssertNoRelease(Enonce) {}
+	#define AssertNoRelease(Enonce) {}
 #endif
 
-#define AssertRelease(Enonce) assert(Enonce)
+	#define AssertRelease(Enonce) assert(Enonce)
 
-#define CondAssertReleasePrint(Enonce,msg) if(!Enonce) {std::cout<< msg <<std::endl;assert(Enonce);}
+	#define CondAssertReleasePrint(Enonce,msg) if(!Enonce) {std::cout<< msg <<std::endl;assert(Enonce);}
 
 #ifdef DEBUG
-#define AssertNoReleasePrint(Enonce, Msg) std::cout<< Msg <<std::endl; assert(Enonce)
+	#define AssertNoReleasePrint(Enonce, Msg) std::cout<< Msg <<std::endl; assert(Enonce)
 #else
-#define AssertNoReleasePrint(Enonce, Msg) {}
+	#define AssertNoReleasePrint(Enonce, Msg) {}
 #endif
 
 #ifdef DEBUG
-template<class T> inline void checked_delete(T * x)
+	template<class T> inline void checked_delete(T * x)
  	{
-    // intentionally complex - simplification causes regressions
  		typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
  		(void) sizeof(type_must_be_complete);
  		delete x;
@@ -57,15 +55,14 @@ template<class T> inline void checked_delete(T * x)
 #endif
  	
 #ifdef RELEASE
-template<class T> inline void checked_delete(T * x)
+	template<class T> inline void checked_delete(T * x)
  	{
  		delete x;
  	}
 #endif
 
 
-#define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
-// #define foreachitem(IT,X) for ( typeof( *X.begin()) IT , typeof( X.begin() ) IT2 = X.begin(); IT2 != X.end(); ++IT2, IT = *IT2 )
+	#define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
 
- }
+}
 #endif

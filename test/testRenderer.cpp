@@ -22,7 +22,16 @@
 int main()
 {
 	Donut::Engine * engine = new Donut::Engine();
-	engine->LaunchRendering();
+
+	// Context info
+	Donut::TContextDetail newContext;
+	newContext.windowName = "testRenderer";
+	newContext.width = 1280;
+	newContext.lenght = 720;
+	newContext.major = 4;
+	newContext.minor = 1;
+	// Lanching the test
+	engine->LaunchRendering(newContext);
 	sleep(1);
 	engine->PauseRendering();
 	sleep(1);

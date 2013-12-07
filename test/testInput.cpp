@@ -14,33 +14,30 @@
  *
  **/
 
-
-#ifndef DONUT_ENGINE_EXAMPLE
-#define DONUT_ENGINE_EXAMPLE
-
+#include <iostream>
 #include <Engine/Engine.h>
-#include <Objects/3D/Cube.h>
+#include <Input/InputHelper.h>
+#include <unistd.h>
 
 
+int main()
+{
+	Donut::Engine * engine = new Donut::Engine();
 
- namespace Donut
- {
- 	class TEngineExample : public Engine
- 	{
- 	public:
- 		TEngineExample();
- 		virtual ~TEngineExample();
+	// Context info
+	Donut::TContextDetail newContext;
+	newContext.windowName = "testInput";
+	newContext.width = 1280;
+	newContext.lenght = 720;
+	newContext.major = 4;
+	newContext.minor = 1;
+	// Lanching the test
+	engine->LaunchRendering(newContext);
+	while(engine->IsRendering())
+	{
+		Donut::FarmEvents();
+	}
+	delete engine;
+	return 0;
 
- 		virtual void Update(float dt);
-
- 		virtual void Init();
- 		
- 		virtual void Loop();
-
- 	protected:
- 		TCube * FCube;
- 		bool FIsRendering;
-
- 	};
- }
- #endif // DONUT_ENGINE_EXAMPLE
+}

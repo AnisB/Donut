@@ -21,7 +21,8 @@
 
 #include "DrawableObject.h"
 
-#include "MultiThread/ThreadSharedObject.h"
+#include <MultiThread/ThreadSharedObject.h>
+#include <Render/Camera.h>
 
 #include "FrameCanvas.h"
 
@@ -56,6 +57,7 @@
 
 	private:
 		TFrameCanvas * FFrameCanvas;
+		Camera * FCamera;
 
 		bool FRenderToTexture;
 

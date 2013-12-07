@@ -49,7 +49,7 @@ namespace Donut
 		glGenFramebuffersEXT(1, &FFrameBuffer);
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		#endif
-		RENDER_DEBUG("Frame buffer init %u",FFrameBuffer);
+		RENDER_DEBUG("Frame buffer init "<<FFrameBuffer);
 
  		glGenTextures(1, &FRenderTexture);
  		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
@@ -86,7 +86,7 @@ namespace Donut
 
  		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
  		{
- 			RENDER_DEBUG("There is a problem with your frame buffer dude %u", glGetError());
+ 			RENDER_DEBUG("There is a problem with your frame buffer dude "<<glGetError());
  		}
  		#ifdef LINUX
  		glBindFramebuffer(1, 0);
@@ -96,7 +96,7 @@ namespace Donut
  		glBindFramebufferEXT(1, 0);
  		#endif
  		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
-		RENDER_DEBUG_NOARGS("Frame canvas created");
+		RENDER_DEBUG("Frame canvas created");
  	}
 
 	void TFrameCanvas::SetFragmentShader(const std::string& parFShader)

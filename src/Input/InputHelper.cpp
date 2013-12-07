@@ -16,19 +16,43 @@
 
  #include "InputHelper.h"
 
+ #include <Input/InputManager.h>
+
+
 namespace Donut
 {
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-		if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-		{
-		}	
+	    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	    {
+	        glfwSetWindowShouldClose(window, GL_TRUE);
+	    }
+	    if(action == GLFW_PRESS)
+	    {
+		    InputManager::Instance().KeyPressed((TKeyCode::Type)key);
+	    }
+	    else if(action == GLFW_RELEASE)
+	    {
+		    InputManager::Instance().KeyReleased((TKeyCode::Type)key);
+	    }
+
 	}	
 
+ 	void FarmEvents()
+ 	{
+	  	glfwPollEvents();
+ 	}
 
  	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
  	{
-
+	    if(action == GLFW_PRESS)
+	    {
+		    InputManager::Instance().MousePressed((TMouseCode::Type)button);
+	    }
+	    else if(action == GLFW_RELEASE)
+	    {
+		    InputManager::Instance().MouseReleased((TMouseCode::Type)button);
+	    }
  	}
  	
  	void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
@@ -38,8 +62,11 @@ namespace Donut
 
  	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
  	{
-
+	    int width, height;
+	    glfwGetFramebufferSize(window, &width, &height);
+	    float ratio = width / (float) height;
+	    float x = ratio*(2*xpos/(float)width - 1);
+	    float y = 2*-ypos/(float)height + 1;
+	    InputManager::Instance().MouseMoved(x,y);
  	}
-
-
 }

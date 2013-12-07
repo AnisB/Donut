@@ -21,13 +21,14 @@
  #include <MultiThread/ThreadSharedObject.h>
  #include <Render/DrawableObject.h>
  #include <string>
-namespace Donut {
- class TAnimationEngine : public TThreadSharedObject,
+namespace Donut 
+{
+	class TAnimationEngine : public TThreadSharedObject,
                           public TDrawableObject
- {
- public:
- 	TAnimationEngine(const std::string& parAnimationDescriptor);
- 	~TAnimationEngine();
+	{
+		public:
+			TAnimationEngine(const std::string& parAnimationDescriptor);
+			~TAnimationEngine();
 
  };
 }

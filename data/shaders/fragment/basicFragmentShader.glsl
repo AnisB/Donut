@@ -1,8 +1,9 @@
+#version 400
 
 uniform sampler2D canvas;
 uniform sampler2D depth;
 
-varying vec2 tex_coord;
+in vec2 tex_coord;
 
 void main()
 {

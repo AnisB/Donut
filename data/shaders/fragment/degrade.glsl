@@ -1,4 +1,4 @@
-
+#version 120
 
 varying vec2 tex_coord;
 void main()

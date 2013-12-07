@@ -19,7 +19,9 @@
 
 
  #include "Defines.h"
- #include "Base/Singleton.h"
+ #include <Base/Singleton.h>
+ #include <Math/Vector3.h>
+ #include <Math/Matrix4.h>
  #include <list>
 
  namespace Donut
@@ -50,9 +52,17 @@
  		~ShaderManager();
 
  		TShader CreateShader(std::string parVertexShader, std::string parFragmentShader);
- 		void PrintLog(GLuint parProg);
+
  		void EnableShader(const TShader& parProgram);
  		void DisableShader( );
+
+ 		// Injections
+		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
+
+		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
+
+		void InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
+
 
  	private:
  		std::list<TShader> FPrograms;

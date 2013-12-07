@@ -20,43 +20,51 @@
 #define DONUT_DEFINES_RENDER
 
 
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
-
-#ifdef LINUX
 #include <GL/glew.h>
+#ifndef GLFW_INCLUDE_GL3
+#define GLFW_INCLUDE_GL3
 #endif
-
 #include <GLFW/glfw3.h>
 
 #include <math.h>
+#include <string>
 
-namespace Donut {
-struct TColorFilter
+namespace Donut 
 {
-	TColorFilter(float parR, float parG, float parB, float parA) :
-	r(parR), 
-	g(parG), 
-	b(parB), 
-	a(parA)
-	{
-	}
 
-	TColorFilter& operator = (const TColorFilter& parFilter)
+ 	struct TContextDetail
+ 	{
+ 		std::string windowName;
+ 		int width;
+ 		int lenght;
+ 		int major;
+ 		int minor;
+ 		bool fullScreen;
+ 	};
+
+	struct TColorFilter
 	{
-		r = parFilter.r;
-		g = parFilter.g;
-		b = parFilter.b;
-		a = parFilter.a;
-		return *this;
-	}
-	float r;
-	float g;
-	float b;
-	float a;
-};
+		TColorFilter(float parR, float parG, float parB, float parA) :
+		r(parR), 
+		g(parG), 
+		b(parB), 
+		a(parA)
+		{
+		}
+
+		TColorFilter& operator = (const TColorFilter& parFilter)
+		{
+			r = parFilter.r;
+			g = parFilter.g;
+			b = parFilter.b;
+			a = parFilter.a;
+			return *this;
+		}
+		float r;
+		float g;
+		float b;
+		float a;
+	};
 
 #define DEFAULTW 640 
 #define DEFAULTL 480

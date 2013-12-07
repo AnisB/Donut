@@ -28,9 +28,9 @@
  {
  	Engine::Engine()
  	{
- 		DEFAULT_DEBUG_NOARGS("Creating the engine");
- 		FRenderer = new Donut::TDonutRenderer();
- 		DEFAULT_DEBUG_NOARGS("Core engine created");
+ 		DEFAULT_DEBUG("Creating the engine.");
+ 		FRenderer = new Donut::TRenderer();
+ 		DEFAULT_DEBUG("Core engine created.");
  	}
  	
  	Engine::~Engine()
@@ -38,30 +38,30 @@
  		delete FRenderer;
  	}
 
- 	void Engine::LaunchRendering()
+ 	void Engine::LaunchRendering(const TContextDetail& parContext)
  	{
- 		DEFAULT_DEBUG_NOARGS("creating rendering thread");
- 		FRenderer->CreateRenderWindow(float2(DEFAULTW,DEFAULTL),DEFAULTNAME, DEFAULTFULLSCREEN);
+ 		DEFAULT_DEBUG("creating rendering thread");
+ 		FRenderer->CreateRenderWindow(parContext);
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		DEFAULT_DEBUG_NOARGS("Redering thread created");
+ 		DEFAULT_DEBUG("Redering thread created");
  	}
 
  	void Engine::StopRendering()
  	{
- 		DEFAULT_DEBUG_NOARGS("Trying to stop rendering");
+ 		DEFAULT_DEBUG("Trying to stop rendering");
  		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FRenderer->DestroyRenderWindow();
- 		DEFAULT_DEBUG_NOARGS("Rendering destroyed");
+ 		DEFAULT_DEBUG("Rendering destroyed");
  	}
 
  	void Engine::PauseRendering()
  	{
- 		DEFAULT_DEBUG_NOARGS("Pause rendering");
+ 		DEFAULT_DEBUG("Pause rendering");
  		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FRenderer->HideRenderWindow();
- 		DEFAULT_DEBUG_NOARGS("Rendering paused");
+ 		DEFAULT_DEBUG("Rendering paused");
 
  	}
 
@@ -82,11 +82,11 @@
 
  	void Engine::ResumeRendering()
  	{
- 		DEFAULT_DEBUG_NOARGS("Resuming rendering");
+ 		DEFAULT_DEBUG("Resuming rendering");
  		FRenderer->ShowRenderWindow();
  		FRenderer->SetRendering(true);
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		DEFAULT_DEBUG_NOARGS("Rendering resumed");
+ 		DEFAULT_DEBUG("Rendering resumed");
  	}
 
 	void Engine::DrawObject(TDrawableObject * parObject)

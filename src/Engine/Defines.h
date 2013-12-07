@@ -19,17 +19,8 @@
 #ifndef DONUT_DEFINES_ENGINE
 #define DONUT_DEFINES_ENGINE
 
-
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
-
-#ifdef LINUX
 #include <unistd.h>
-#endif
 
-#include <GLFW/glfw3.h>
 
 
 namespace Donut {

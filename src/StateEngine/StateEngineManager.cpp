@@ -32,7 +32,7 @@ namespace Donut
   {
   	FInstances[parId] = parInstance;
 #ifdef DEBUG
-  	STATE_ENGINE_DEBUG("Instance registered with id %u",parId.FId);
+  	STATE_ENGINE_DEBUG("Instance registered with id "<<parId.FId);
 #endif  
   }
 
@@ -41,7 +41,7 @@ namespace Donut
     AssertRelease(FInstances[TStateEngineId(parStateId)] != NULL);
     delete FInstances[TStateEngineId(parStateId)];
     FInstances.erase(parStateId);
-    STATE_ENGINE_DEBUG("The instance with ID %u was destroyed", parStateId);
+    STATE_ENGINE_DEBUG("The instance with ID "<<parStateId<<" was destroyed");
   }
 
   void TStateEngineManager::DestroyAllInstances()
@@ -55,7 +55,7 @@ namespace Donut
   		}
   	}
   	FInstances.clear();
-    STATE_ENGINE_DEBUG_NOARGS("All State Engine Instances where destroyed");
+    STATE_ENGINE_DEBUG("All State Engine Instances where destroyed");
 
   }
 
@@ -65,7 +65,7 @@ namespace Donut
     TStateEngineId stateId(parStateId);
     AssertRelease(FInstances[stateId] == NULL);
     FInstances[stateId] = stateEngine;
-    STATE_ENGINE_DEBUG("Instance registered with id %u",parStateId);
+    STATE_ENGINE_DEBUG("Instance registered with id "<<parStateId);
     return stateEngine;
   }
   TStateEngine * TStateEngineManager::GetInstance(const TStateEngineId& parId)

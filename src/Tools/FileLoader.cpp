@@ -49,6 +49,7 @@ namespace Donut
 				fclose(fp);
 			}
 		}
+		std::cout<<fn<<std::endl;
 		CondAssertReleasePrint((content != NULL),fn);
 		return content;
 	}

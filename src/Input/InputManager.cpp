@@ -16,6 +16,8 @@
  
  #include "InputManager.h"
 
+ #include <Base/DebugPrinters.h>
+
  namespace Donut
  {
 	InputManager::InputManager()
@@ -28,26 +30,27 @@
 
 	}
 
-	void InputManager::KeyPressed(KEY_CODE parKey)
+	void InputManager::KeyPressed(TKeyCode::Type parKey)
 	{
+		INPUT_DEBUG("Key pressed: "<<parKey);
+	}
+	void InputManager::KeyReleased(TKeyCode::Type parKey)
+	{
+		INPUT_DEBUG("Key released: "<<parKey);
+	}
+
+	void InputManager::MouseMoved(float parX, float parY)
+	{
+		INPUT_DEBUG("Mouse moved: "<<parX<< " "<<parY);
+	}
+	void InputManager::MousePressed(TMouseCode::Type parButton)
+	{
+		INPUT_DEBUG("Button pressed: "<<parButton);
 
 	}
-	void InputManager::KeyReleased(KEY_CODE parKey)
+	void InputManager::MouseReleased(TMouseCode::Type parButton)
 	{
-
-	}
-
-	void InputManager::MouseMoved(int parX, int parY)
-	{
-
-	}
-	void InputManager::MousePressed(MOUSE_CODE parButton)
-	{
-
-	}
-	void InputManager::MouseReleased(MOUSE_CODE parButton)
-	{
-		
+		INPUT_DEBUG("Button released: "<<parButton);
 	}
  }
 

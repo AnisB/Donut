@@ -23,9 +23,10 @@
 
  #include <string>
  #include <vector>
- namespace Donut{
+ namespace Donut
+ {
 
- 	class TAnimation
+ 	class TAnimation : public TDrawableObject
  	{
  	public:
  		TAnimation(unsigned parId, const std::vector<std::string> & parSprites, float parDelay, bool parLooping);

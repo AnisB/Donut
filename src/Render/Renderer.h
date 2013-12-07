@@ -33,20 +33,20 @@
 
  	#define NB_PASSES 1
 
-	class TDonutRenderer
+	class TRenderer
 	{
 	public:
-		TDonutRenderer();
-		~TDonutRenderer();
+		TRenderer();
+		~TRenderer();
 
-		void CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen);
+		bool CreateRenderWindow(const TContextDetail& parContext);
 		void DestroyRenderWindow();
 
 		void HideRenderWindow();
 		void ShowRenderWindow();
 
 
-		void Init();
+		bool Init();
 		void Draw();
 		void Clear();
 

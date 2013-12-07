@@ -70,7 +70,6 @@ namespace Donut{
 
  		CRITICAL_SECTION_BEGIN();
  		glPushMatrix();
- 		glLoadIdentity();
  		glTranslatef(FPosition.x, FPosition.y, FPosition.z);
  		glRotatef(FRotationAngles.x,1.0,0.0,0.0);
  		glRotatef(FRotationAngles.y,0.0,1.0,0.0);
@@ -84,13 +83,3 @@ namespace Donut{
  		CRITICAL_SECTION_END();	
  	}
  }
-
-
-/*
-
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-		glDrawElements(GL_QUADS, sizeof(FCubeIndex)/sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-		glDisableClientState(GL_VERTEX_ARRAY);
-
-		*/

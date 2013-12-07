@@ -20,7 +20,7 @@
 
  #include "Defines.h"
  #include "Base/Singleton.h"
- #include <list>
+ #include <map>
 
  namespace Donut
  {
@@ -31,12 +31,12 @@
  		InputManager();
  		~InputManager();
 
- 		void KeyPressed(KEY_CODE parKey);
- 		void KeyReleased(KEY_CODE parKey);
+ 		void KeyPressed(TKeyCode::Type parKey);
+ 		void KeyReleased(TKeyCode::Type parKey);
 
- 		void MouseMoved(int parX, int parY);
- 		void MousePressed(MOUSE_CODE parButton);
- 		void MouseReleased(MOUSE_CODE parButton);
+ 		void MouseMoved(float parX, float parY);
+ 		void MousePressed(TMouseCode::Type parButton);
+ 		void MouseReleased(TMouseCode::Type parButton);
  	};
  }
 

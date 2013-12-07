@@ -22,7 +22,8 @@
  #include "MultiThread/Defines.h"
 
 
-namespace Donut{
+namespace Donut
+{
  	TImage::TImage(const std::string& parFileName)
  	{
  		FTexture  = TextureManager::Instance().LoadTexture(parFileName);

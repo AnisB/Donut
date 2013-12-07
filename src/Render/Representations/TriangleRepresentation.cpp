@@ -74,6 +74,7 @@ namespace Donut{
 
  	void TTriangleRepresentation::Draw()
  	{
+ 		CRITICAL_SECTION_BEGIN();
  		glPushMatrix();
  		glTranslatef(FCenter.x, FCenter.y, 0);
  		glRotatef(FRotation,0.0,0.0,1.0);

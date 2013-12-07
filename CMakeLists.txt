@@ -47,21 +47,19 @@ include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR} )
 ENDIF()
 
 IF(APPLE)
-   FIND_PACKAGE (GLFW REQUIRED)
-   FIND_PACKAGE (GLFW REQUIRED)
-	add_definitions( -D__posix__ )
-	add_definitions( -D MACOSX)
-   INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
-   FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-   FIND_LIBRARY(IOKIT_LIBRARY IOKit)
-   FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-   MARK_AS_ADVANCED (COCOA_LIBRARY
-                     GLFW_LIBRARY
-                     OpenGL_LIBRARY
-                     IOKIT_LIBRARY)
-   SET(CORELIBS ${COCOA_LIBRARY} ${GLFW_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY})
-   include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${GLFW_INCLUDE_DIR})
-
+  add_definitions( -DMACOSX)
+  add_definitions( -D__posix__ )
+  INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
+  FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+  FIND_LIBRARY(IOKIT_LIBRARY IOKit)
+  FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
+  find_package(GLEW REQUIRED)
+  MARK_AS_ADVANCED (COCOA_LIBRARY
+                   GLFW_LIBRARY
+                   OpenGL_LIBRARY
+                   IOKIT_LIBRARY)
+  SET(CORELIBS ${COCOA_LIBRARY} ${GLEW_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY} "${PROJECT_SOURCE_DIR}/external/mac/libglfw3.a")
+  include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/external/mac/)
 ENDIF (APPLE)
 
 IF(WINDOWS)

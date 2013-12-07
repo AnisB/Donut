@@ -26,14 +26,28 @@
  namespace Donut
  {
 
-	static void error_callback(int error, const char* description)
+	void CheckGLState(const std::string& desc)
 	{
-    	RENDER_DEBUG_NOARGS(description);
+		if(desc=="FLUSH")
+			return;
+		GLenum e = glGetError();
+		if (e != GL_NO_ERROR) 
+		{
+			RENDER_ERR("OpenGL error in: "<<desc.c_str()<<" "/*<<gluErrorString(e)*/<<" "<<e);
+		}
+		else
+		{
+			RENDER_DEBUG("No OpenGL errors@"<<desc);
+		}
 	}
 
+	static void error_callback(int error, const char* description)
+	{
+	    RENDER_ERR(error<<" "<<description);
+	}
 
-	// Class TDonutRenderer
- 	TDonutRenderer::TDonutRenderer()
+	// Class TRenderer
+ 	TRenderer::TRenderer()
  	: FWindowSize(float2())
  	, FIsFullScreen(false)
  	, FWindow(NULL)
@@ -45,7 +59,7 @@
  			FRenderPasses.push_back(new TRenderPass());
  		}
  	}
- 	TDonutRenderer::~TDonutRenderer()
+ 	TRenderer::~TRenderer()
  	{
 		FIsRendering.SetValue(false);
  		foreach(pass, FRenderPasses)
@@ -54,52 +68,81 @@
  		}
  	}
 
- 	void TDonutRenderer::CreateRenderWindow(const float2& parWindowSize, const std::string& parWindowName, bool parIsFullScreen)
+ 	bool TRenderer::CreateRenderWindow(const TContextDetail& parContext)
  	{
  		if(!FInitDone)
  		{
-
 			// Init
  			if (!glfwInit())
  			{
- 				RENDER_DEBUG_NOARGS("Failed creating the window");
- 				return ;
-
+ 				RENDER_ERR("Failed during glfw init.");
+ 				return false;
  			}
+
+ 			// Init error call back
+			glfwSetErrorCallback(error_callback);
  			
- 			glfwSetErrorCallback(error_callback);
+ 			// Setting the context info
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, parContext.major);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, parContext.minor);
+			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-			// Window size
- 			FWindow = glfwCreateWindow(parWindowSize.x, parWindowSize.y, parWindowName.c_str(), NULL, NULL);
 
+			// Window creation
+ 			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), NULL, NULL);
+ 			if(FWindow==NULL)
+ 			{
+ 				RENDER_ERR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
+ 				return false;
+ 			}
+ 			// Setting context
+			glfwMakeContextCurrent(FWindow);
+
+		    // Initiating glew
+			glewExperimental = GL_TRUE;
+			GLenum glewReturn = glewInit();
+			if(glewReturn)
+			{
+			    RENDER_ERR("Glew returned: "<<glewGetErrorString(glewReturn));
+ 				return false;
+			}
+			
+			#ifdef DEBUG
+			const GLubyte* renderer = glGetString (GL_RENDERER); 
+			const GLubyte* version = glGetString (GL_VERSION); 
+			RENDER_DEBUG("Renderer: "<<renderer);
+			RENDER_DEBUG("Version: "<<version);
+			#endif
+ 			// Setting the rendering flag
  			FIsRendering.SetValue(true);
- 			RENDER_DEBUG_NOARGS("Window created");	
- 			
+			CheckGLState("FLUSH");
  		}
  		else
  		{
- 			RENDER_DEBUG_NOARGS("This window has already been created.");
+ 			RENDER_DEBUG("This window has already been created.");
  			AssertRelease(FWindow != NULL);
  			glfwShowWindow(FWindow);
  		}
+ 		return true;
  	}
- 	void TDonutRenderer::HideRenderWindow()
+ 	void TRenderer::HideRenderWindow()
  	{
- 		RENDER_DEBUG_NOARGS("Hiding window.");	
+ 		RENDER_DEBUG("Hiding window.");	
  		AssertRelease(FWindow != NULL);
  		glfwHideWindow(FWindow);
  	}	
 
- 	void TDonutRenderer::ShowRenderWindow()
+ 	void TRenderer::ShowRenderWindow()
  	{
- 		RENDER_DEBUG_NOARGS("Showing window.");	
+ 		RENDER_DEBUG("Showing window.");	
  		AssertRelease(FWindow != NULL);
  		glfwShowWindow(FWindow);
  	}	
 
- 	void TDonutRenderer::DestroyRenderWindow()
+ 	void TRenderer::DestroyRenderWindow()
  	{
- 		RENDER_DEBUG_NOARGS("Destroying window.");	
+ 		RENDER_DEBUG("Destroying window.");	
  		AssertRelease(FWindow != NULL);
  		glfwTerminate();
  		FWindow = NULL;
@@ -107,31 +150,30 @@
 
  	}	
 
- 	void TDonutRenderer::Init()
- 	{ 	 
-
- 		glfwMakeContextCurrent(FWindow);
-		#ifdef LINUX
-		GLenum err = glewInit();
-		if (GLEW_OK != err)
-		{
-		  std::cout<<"glew Init problem"<<std::endl;
-		}
-		#endif
+ 	bool TRenderer::Init()
+ 	{
+ 		bool isOk = true;
+		// Init the render thread context
+		glfwMakeContextCurrent(FWindow);
+ 		// initing the inputs
+ 		InputInit();
 		foreach(pass,FRenderPasses)
 		{
 			(*pass)->Init();
 		}
+ 		glClearColor(0.0,0.0,0.0,0.0); 	
+		return isOk;
  	}
 
- 	void TDonutRenderer::Draw()
+ 	void TRenderer::Draw()
  	{ 	 
  		//Inits
-        glClearColor(0.f,0.f,0.f, 0.f);
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ 		glMatrixMode(GL_PROJECTION);
+        glLoadIdentity();
  		glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
-
+ 		
         for(size_t pass = 0; pass < NB_PASSES; ++pass)
         {
         	TRenderPass & passIter = (*FRenderPasses[pass]);
@@ -139,31 +181,30 @@
         	passIter.Draw();
         	CRITICAL_SECTION_OBJ_END(passIter);
         }
-        //RENDER_DEBUG("OpenGL error %x",glGetError());
-        glfwSwapBuffers(FWindow);
+	  	glfwSwapBuffers (FWindow);
     }
 
-	void TDonutRenderer::InputInit()
+	void TRenderer::InputInit()
 	{
 		glfwSetKeyCallback(FWindow, key_callback);
 		glfwSetMouseButtonCallback(FWindow, mouse_button_callback);
 		glfwSetScrollCallback(FWindow, mouse_scroll_callback);
-		glfwSetCursorPosCallback(FWindow, mouse_scroll_callback);
+		glfwSetCursorPosCallback(FWindow, mouse_pos_callback);
 	}
 
-	bool TDonutRenderer::IsRendering()
+	bool TRenderer::IsRendering()
 	{
 		return (FIsRendering.GetValue() && !glfwWindowShouldClose(FWindow));
 
 	}
 
-	void TDonutRenderer::SetRendering(bool parVal)
+	void TRenderer::SetRendering(bool parVal)
 	{
 		FIsRendering.SetValue(parVal);
 	}
 
 
-	void TDonutRenderer::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	void TRenderer::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
 		AssertRelease(PASS_NUMBER < NB_PASSES);
 		TRenderPass  & pass = (*FRenderPasses[PASS_NUMBER]);
@@ -172,7 +213,7 @@
 		CRITICAL_SECTION_OBJ_END(pass);
 	}
 
-	void TDonutRenderer::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	void TRenderer::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
 		AssertRelease(PASS_NUMBER < NB_PASSES);
 		TRenderPass & pass = (*FRenderPasses[PASS_NUMBER]);
@@ -181,7 +222,7 @@
 		CRITICAL_SECTION_OBJ_END(pass);
 	}
 
-	void TDonutRenderer::Clear()
+	void TRenderer::Clear()
 	{
         for(size_t pass = 0; pass < NB_PASSES; ++pass)
         {
@@ -192,12 +233,12 @@
         }
 	}
 
-	void TDonutRenderer::SetVertexShader(const std::string& parVertex, int parNbPass)
+	void TRenderer::SetVertexShader(const std::string& parVertex, int parNbPass)
 	{
 		FRenderPasses[parNbPass]->SetVertexShader(parVertex);
 	}
 
-	void TDonutRenderer::SetFragmentShader(const std::string& parFrag, int parNbPass)
+	void TRenderer::SetFragmentShader(const std::string& parFrag, int parNbPass)
 	{
 		FRenderPasses[parNbPass]->SetFragmentShader(parFrag);
 	}
@@ -205,14 +246,14 @@
 	// END CLASS DECLARATION
 	void *CreateRenderingThread(void* parGraphicRenderer)
 	{
-		TDonutRenderer * realGraphicRenderer = (TDonutRenderer*) parGraphicRenderer;
+		TRenderer * realGraphicRenderer = (TRenderer*) parGraphicRenderer;
 		realGraphicRenderer->Init();
-		RENDER_DEBUG_NOARGS("Init is done.");
+		RENDER_DEBUG("Init is done.");
 		while(realGraphicRenderer->IsRendering())
 		{
 			realGraphicRenderer->Draw();
 		}
-		RENDER_DEBUG_NOARGS("Window isn't rendering anymore");
+		RENDER_DEBUG("Window isn't rendering anymore");
 		pthread_exit(0);
 	}
 

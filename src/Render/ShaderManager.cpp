@@ -15,11 +15,45 @@
  **/
 
  #include "ShaderManager.h"
- #include "Tools/FileLoader.h"
- #include "Render/Defines.h"
+ #include <Tools/FileLoader.h>
+ #include <Render/Defines.h>
+ #include <Base/DebugPrinters.h>
 
 namespace Donut 
 {
+	void CheckShader(GLuint parShaderID)
+	{
+	    GLint Result = GL_FALSE;
+	    int InfoLogLength;
+	    
+	    glGetShaderiv(parShaderID, GL_COMPILE_STATUS, &Result);
+	    glGetShaderiv(parShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+
+	    if(InfoLogLength>1)
+	    {
+	        char errorMessage[InfoLogLength];
+	        glGetShaderInfoLog(parShaderID, InfoLogLength, NULL, errorMessage);
+	        RENDER_DEBUG( "Shader error:"<< parShaderID);
+	        RENDER_ERR( errorMessage );
+	    }
+	}
+
+
+	void CheckProgram(GLuint parProgramID)
+	{
+	    GLint Result = GL_FALSE;
+	    int InfoLogLength;
+	    
+	    glGetProgramiv(parProgramID, GL_LINK_STATUS, &Result);
+	    glGetProgramiv(parProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+	    if(InfoLogLength>1)
+	    {   
+	        char errorMessage[InfoLogLength];
+	        glGetProgramInfoLog(parProgramID, InfoLogLength, NULL, errorMessage);
+	        RENDER_ERR("Program linking error: "<<std::endl<<errorMessage );
+	    }
+	}
+
 	ShaderManager::ShaderManager()
 	: FBasicPipeline (0, " "," ")
 	{
@@ -56,13 +90,13 @@ namespace Donut
 
 		glCompileShader(vertexShader);
 		glCompileShader(fragmentShader);
-		PrintLog(vertexShader);
-		PrintLog(fragmentShader);
+		CheckShader(vertexShader);
+		CheckShader(fragmentShader);
 		programID = glCreateProgram();
 		glAttachShader(programID,vertexShader);
 		glAttachShader(programID,fragmentShader);
 		glLinkProgram(programID);
-		PrintLog(programID);
+		CheckProgram(programID);
 
 		TShader createdProgram(programID,parVertexShader, parFragmentShader);
 		createdProgram.FActive = true;
@@ -71,25 +105,6 @@ namespace Donut
 		
 		return createdProgram;
 	}
-
-	void ShaderManager::PrintLog(GLuint parProg)
-	{
-		int infologLength = 0;
-		int charsWritten  = 0;
-		char *infoLog;
-
-	   // afficher le message d'erreur, le cas échéant
-		glGetShaderiv(parProg, GL_INFO_LOG_LENGTH,&infologLength);
-
-		if (infologLength > 1)
-		{
-			infoLog = new char(infologLength);
-			glGetShaderInfoLog(parProg, infologLength, &charsWritten, infoLog);
-			std::cout<<infoLog<<std::endl;
-			delete infoLog;
-		} 
-	}
-
 
 	void ShaderManager::EnableShader(const TShader& parProgram)
 	{
@@ -102,5 +117,33 @@ namespace Donut
 	void ShaderManager::DisableShader()
 	{
 		glUseProgram(FBasicPipeline.FProgramID);
+	}
+
+
+	// Injections
+	void ShaderManager::InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
+	{
+		EnableShader(parProgram);
+	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x, parValue.y, parValue.z);
+	    DisableShader();
+	}
+
+	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
+	{
+		EnableShader(parProgram);
+		float mat[16];
+		parValue.toTable(&mat[0]);
+	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
+	    DisableShader();
+
+	}
+	void ShaderManager::InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset)
+	{
+		EnableShader(parProgram);
+	   	glActiveTexture(GL_TEXTURE0+parOffset);
+	    glBindTexture(GL_TEXTURE_2D, parIndexTex);
+	    GLint texRef = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
+	    glUniform1i(texRef, 0+parOffset);
+	    DisableShader();
 	}
 }

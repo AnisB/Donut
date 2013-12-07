@@ -26,9 +26,11 @@
 	{
 		FRenderToTexture = false;
 		FFrameCanvas = new TFrameCanvas();
+		FCamera = new Camera();
 	}
 	TRenderPass::~TRenderPass()
 	{
+		delete FCamera;
 		delete FFrameCanvas;
 		FDrawables.clear();
 	}
@@ -41,9 +43,12 @@
 			Bind();
 			foreach(drawable,FDrawables)
 			{
-				(*drawable)->Bind();
-				(*drawable)->Draw();
-				(*drawable)->Unbind();
+
+				ShaderManager& sm = ShaderManager::Instance();
+				TDrawableObject & drw = *(*drawable);
+				drw.Bind();
+				drw.Draw();
+				drw.Unbind();
 			}
 			Unbind();
 			FFrameCanvas->Draw();
@@ -58,7 +63,7 @@
 	}
 	void TRenderPass::Init()
 	{
- 		//RENDER_DEBUG_NOARGS("Initing the canvas");
+ 		//RENDER_DEBUG("Initing the canvas");
 		
 		if(FRenderToTexture)
 		{
@@ -69,7 +74,7 @@
 			(*drawable)->Init();
 			(*drawable)->GenerateShader();
 		}
- 		//RENDER_DEBUG_NOARGS("Canvas created");
+ 		//RENDER_DEBUG("Canvas created");
 	}
 
 	void TRenderPass::PreparePass()
@@ -80,7 +85,7 @@
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
 	{
 		FDrawables.push_back(parDrawable);
- 		RENDER_DEBUG("Drawable added %u", FDrawables.size());
+ 		RENDER_DEBUG("Drawable added "<< FDrawables.size());
 	}
 
 	void TRenderPass::Bind()
@@ -107,7 +112,7 @@
 
 	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
 	{
- 		RENDER_DEBUG_NOARGS("Removing drawable");
+ 		RENDER_DEBUG("Removing drawable");
 
 		FDrawables.remove(parDrawable);
 	}

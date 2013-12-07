@@ -27,14 +27,15 @@
 
 
 
- namespace Donut{
+ namespace Donut
+ {
  	class Engine
  	{
  	public:
  		Engine();
  		~Engine();
 
- 		void LaunchRendering();
+ 		void LaunchRendering(const TContextDetail& parContext);
  		void StopRendering();
 
  		void PauseRendering();
@@ -60,7 +61,7 @@
  	private:
  		THREAD_ID FTRenderingThread;
  		THREAD_DATA FThreadData;
- 		Donut::TDonutRenderer * FRenderer;
+ 		Donut::TRenderer * FRenderer;
  	};
  }
  #endif // DONUT_ENGINE

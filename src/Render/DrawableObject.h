@@ -38,6 +38,7 @@ namespace Donut
  	void Unbind();
 
  	void GenerateShader();
+ 	const TShader& GetShader() { return FShader;}
  	void SetVertexShader(const std::string& parShaderPath);
  	void SetFragmentShader(const std::string& parShaderPath);
 
@@ -49,6 +50,7 @@ namespace Donut
  protected:
  	TColorFilter FFilter;
  	TShader FShader;
+ 	Matrix4 FModelMatrix;
  };
 }
  #endif // DONUT_DRAWABLE_OBJECT
