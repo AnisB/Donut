@@ -20,16 +20,16 @@
 
 #include "Render/DrawableObject.h"
 #include "Render/Representations/SquareRepresentation.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut{
  class TSquare
  {
  public:
- 	TSquare(float2 parPosition, float parDimension);
+ 	TSquare(TVec2 parPosition, float parDimension);
  	~TSquare();
 
- 	void SetPosition(const float2& parPos);
+ 	void SetPosition(const TVec2& parPos);
  	void SetColor(const TColorFilter& parColorFilter);
 
  	void SetVertexShader(const std::string& parVertex);
@@ -39,7 +39,7 @@
 
  	void Rotate(float parAngle);
 
- 	const float2& GetPosition();
+ 	TVec2 GetPosition();
 
  	void UpdateRepresentation();
 
@@ -47,7 +47,7 @@
 
 
  protected:
- 	float2 FPosition;
+ 	TVec2 FPosition;
  	float FDimension;
  	float FRotation;
  	TSquareRepresentation * FRepresentation;

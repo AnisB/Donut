@@ -16,6 +16,7 @@
 
  #include "ShaderManager.h"
  #include <Tools/FileLoader.h>
+ #include <Base/Common.h>
  #include <Render/Defines.h>
  #include <Base/DebugPrinters.h>
 
@@ -64,7 +65,7 @@ namespace Donut
 		
 	}
 
-	TShader ShaderManager::CreateShader(std::string parVertexShader, std::string parFragmentShader)
+	TShader ShaderManager::CreateShader(const std::string& parVertexShader, const std::string& parFragmentShader)
 	{
 		GLuint programID;
 		GLuint vertexShader;
@@ -85,8 +86,8 @@ namespace Donut
 		glShaderSource(vertexShader, 1, (const char **)&vsFile, NULL);
 		glShaderSource(fragmentShader, 1, (const char **)&fsFile, NULL);
 
-		delete vsFile;
-		delete  fsFile;
+		free(vsFile);
+		free(fsFile);
 
 		glCompileShader(vertexShader);
 		glCompileShader(fragmentShader);
@@ -108,42 +109,40 @@ namespace Donut
 
 	void ShaderManager::EnableShader(const TShader& parProgram)
 	{
-		if(parProgram.FActive)
-		{
-			glUseProgram(parProgram.FProgramID);
-		}
+		AssertNoRelease(parProgram.FActive);
+		glUseProgram(parProgram.FProgramID);
 	}
 
 	void ShaderManager::DisableShader()
 	{
-		glUseProgram(FBasicPipeline.FProgramID);
+		glUseProgram(0);
 	}
 
 
 	// Injections
 	void ShaderManager::InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
 	{
-		EnableShader(parProgram);
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x, parValue.y, parValue.z);
-	    DisableShader();
+	}
+
+
+	void ShaderManager::InjectInt(const TShader& parProgram, int parValue, const std::string& parName)
+	{
+	    glUniform1i(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
 	}
 
 	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
-		EnableShader(parProgram);
 		float mat[16];
 		parValue.toTable(&mat[0]);
+ 		//RENDER_DEBUG(parName<<" "<<mat[0]<<" "<<mat[1]<<" "<<mat[2]<<" "<<mat[3]<<" "<<mat[4]<<" "<<mat[5]<<" "<<mat[6]<<" "<<mat[7]<<" "<<mat[8]<<" "<<mat[9]<<" "<<mat[10]<<" "<<mat[11]<<" "<<mat[12]<<" "<<mat[13]<<" "<<mat[14]<<" "<<mat[15]);
 	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
-	    DisableShader();
-
 	}
 	void ShaderManager::InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset)
 	{
-		EnableShader(parProgram);
 	   	glActiveTexture(GL_TEXTURE0+parOffset);
 	    glBindTexture(GL_TEXTURE_2D, parIndexTex);
 	    GLint texRef = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
 	    glUniform1i(texRef, 0+parOffset);
-	    DisableShader();
 	}
 }

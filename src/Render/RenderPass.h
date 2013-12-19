@@ -50,6 +50,7 @@
 		{
 			FRenderToTexture = parVal;
 		}
+		Camera* GetCamera(){return FCamera;}
 
 	private:
 		void Bind();

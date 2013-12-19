@@ -20,29 +20,29 @@
 
 #include "../DrawableObject.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut{
  class TTriangleRepresentation : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TTriangleRepresentation(const float2& parA, const float2& parB, const float2& parC, const float2& parCenter);
+ 	TTriangleRepresentation(const TVec2& parA, const TVec2& parB, const TVec2& parC, const TVec2& parCenter);
  	~TTriangleRepresentation();
 
  	virtual void Draw();
 
- 	void SetA(const float2& parPos);
- 	void SetB(const float2& parPos);
- 	void SetC(const float2& parPos);
- 	void SetCenter(const float2& parPos);
+ 	void SetA(const TVec2& parPos);
+ 	void SetB(const TVec2& parPos);
+ 	void SetC(const TVec2& parPos);
+ 	void SetCenter(const TVec2& parPos);
 
  	void SetRotation(float parRotation);
 
  protected:
- 	float2 FPointA;
- 	float2 FPointB;
- 	float2 FPointC;
- 	float2 FCenter;
+ 	TVec2 FPointA;
+ 	TVec2 FPointB;
+ 	TVec2 FPointC;
+ 	TVec2 FCenter;
  	float FRotation;
  };
 }

@@ -22,9 +22,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
 
 namespace Donut
 {
+
+	bool BothAreSpaces(char lhs, char rhs) { return (lhs == rhs) && (lhs == ' '); }
+
 	char * LoadFile( char const* fn) 
 	{
 		FILE *fp;
@@ -49,7 +53,6 @@ namespace Donut
 				fclose(fp);
 			}
 		}
-		std::cout<<fn<<std::endl;
 		CondAssertReleasePrint((content != NULL),fn);
 		return content;
 	}
@@ -71,8 +74,33 @@ namespace Donut
 		}
 		return(status);
 	}
+	std::vector<std::string> split(const std::string& parString, char parSeparator, std::vector<std::string> &outStringTable) 
+	{
+	    std::stringstream streamObj(parString);
+	    std::string item;
+	    while (std::getline(streamObj, item, parSeparator)) 
+	    {
+	        outStringTable.push_back(item);
+	    }
+	    return outStringTable;
+	}
 
+	std::vector<std::string> split(const std::string& parString, char parSeparator)
+	{
+	    std::vector<std::string> stringTable;
+	    split(parString, parSeparator, stringTable);
+	    return stringTable;
+	}
+	
+	std::string removeMultSpace(const std::string& parString) 
+	{
+		std::string str = parString;
+	    // Si string nulle on renvoie la string nulle
 
+		std::string::iterator new_end = std::unique(str.begin(), str.end(), BothAreSpaces);
+		str.erase(new_end, str.end());  
+	    return str;
+	}
 }
 
 

@@ -22,7 +22,7 @@
 #include <pthread.h>
 #endif
 
-#include <Base/Singleton.h>
+#include <base/singleton.h>
 #include <Render/Renderer.h>
 
 

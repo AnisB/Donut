@@ -21,7 +21,7 @@
  #include <math.h>
 
 namespace Donut{
- 	TSquare::TSquare(float2 parPosition, float parDimension)
+ 	TSquare::TSquare(TVec2 parPosition, float parDimension)
  	: FPosition(parPosition)
  	, FDimension(parDimension)
  	, FRotation(0)
@@ -33,7 +33,7 @@ namespace Donut{
  		delete FRepresentation;
  	}
 
- 	void TSquare::SetPosition(const float2& parPos)
+ 	void TSquare::SetPosition(const TVec2& parPos)
  	{
  		FPosition = parPos;
  		UpdateRepresentation();
@@ -61,7 +61,7 @@ namespace Donut{
  		FRepresentation->SetColor(parColorFilter);
  	}
 
- 	const float2& TSquare::GetPosition()
+ 	TVec2 TSquare::GetPosition()
  	{
  		return FPosition;
  	}

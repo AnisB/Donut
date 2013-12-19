@@ -16,27 +16,15 @@
 
 
 
-#ifndef TEXTURE_MANAGER
-#define TEXTURE_MANAGER
+#ifndef TEXTURE_HELPERS
+#define TEXTURE_HELPERS
 
-#include "Base/Singleton.h"
 #include "Texture.h"
-#include <string>
-#include <map>
-
- namespace Donut 
- {
- 	class TextureManager : public Singleton<TextureManager>
- 	{
- 	public:
- 		TextureManager();
- 		~TextureManager();
-		TTexture* LoadTexture(const std::string&  parTextureName);
-		TTexture* GetTexture(const std::string&  parTextureName);
-
-	private:
-		std::map<std::string, TTexture*> FTextures;
-	};
+ 
+namespace TextureHelpers
+{
+	TImgType::Type GetImgType(const std::string & parImg);
+ 	TTexture * LoadTexture(const std::string & parImg);
 }
 
-#endif // TEXTURE_MANAGER
+#endif // TEXTURE_HELPERS

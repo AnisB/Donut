@@ -29,7 +29,6 @@
 	{
 
 	}
-
 	void InputManager::KeyPressed(TKeyCode::Type parKey)
 	{
 		INPUT_DEBUG("Key pressed: "<<parKey);
@@ -46,7 +45,6 @@
 	void InputManager::MousePressed(TMouseCode::Type parButton)
 	{
 		INPUT_DEBUG("Button pressed: "<<parButton);
-
 	}
 	void InputManager::MouseReleased(TMouseCode::Type parButton)
 	{

@@ -16,6 +16,7 @@
 
 
  #include "DrawableObject.h"
+ #include <Base/DebugPrinters.h>
  #include "Defines.h"
  #include "ShaderManager.h"
 
@@ -23,8 +24,8 @@ namespace Donut{
  	TDrawableObject::TDrawableObject()
  	: FFilter(1.0f,1.0f,1.0f,1.0f)
  	, FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
+ 	, FModelMatrix(MatrixInit::Identity)
  	{
-
  	}
  	TDrawableObject::~TDrawableObject()
  	{
@@ -33,12 +34,17 @@ namespace Donut{
 
  	void TDrawableObject::Bind()
  	{
+ 		//RENDER_DEBUG("Biding dude "<<FShader.FActive);
  		if(FShader.FActive)
  		{
+ 			//RENDER_DEBUG("I bind");
  			ShaderManager::Instance().EnableShader(FShader);
  		}
  	}
-
+ 	void TDrawableObject::InjectModelMatrix()
+ 	{
+ 			ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
+ 	}
  	void TDrawableObject::Unbind()
  	{
  		if(FShader.FActive)
@@ -61,9 +67,6 @@ namespace Donut{
 
  	void TDrawableObject::GenerateShader()
  	{
- 		if(FShader.FActive)
- 		{
- 			FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader, FShader.FFragmentShader);
- 		}
+		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader, FShader.FFragmentShader);
  	}
  }

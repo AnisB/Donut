@@ -19,7 +19,7 @@
  #define DONUT_IMAGE
 
 #include "Render/DrawableObject.h"
-#include "Texturing/Texture.h"
+#include <resource/Texture.h>
 #include "MultiThread/ThreadSharedObject.h"
 #include <string>
 

@@ -17,7 +17,7 @@
 #define DONUT_STATE_ENGINE_MANAGER
 
 
-#include <Base/Singleton.h>
+#include <base/singleton.h>
 #include "StateEngine.h"
 #include "Defines.h"
 #include <map>

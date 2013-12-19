@@ -20,28 +20,28 @@
 
 #include "Render/DrawableObject.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut{
  class TSquareRepresentation : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TSquareRepresentation(float2 parPosition, float parDimension);
+ 	TSquareRepresentation(TVec2 parPosition, float parDimension);
  	~TSquareRepresentation();
 
  	virtual void Draw();
 
  	void SetDimension(float parDimension);
- 	void SetPosition(const float2& parPos);
+ 	void SetPosition(const TVec2& parPos);
  	void SetPosition(float parX, float parY);
 
  	void SetRotation(float parPos);
 
- 	const float2 GetPosition();
+ 	TVec2 GetPosition();
 
 
  protected:
- 	float2 FPosition;
+ 	TVec2 FPosition;
  	float FDimension;
  	float FRotationAngle;
  };

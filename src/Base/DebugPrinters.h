@@ -27,12 +27,14 @@
 
  	// Color list
 	#define DEFAULT "\033[0m"
+	#define BLACK "\033[0;30m"
 	#define RED "\033[0;31m"
 	#define GREEN "\033[0;32m"
 	#define ORANGE "\033[0;33m"
 	#define BLUE "\033[0;34m"
 	#define MAGENTA "\033[0;35m"
 	#define CYAN "\033[0;36m"
+	#define WHITE "\033[0;37m"
 
 	// Print terms
 	#define PRINT std::cout
@@ -87,6 +89,21 @@
 #else
 #define INPUT_DEBUG(Enonce) {}
  	#define INPUT_ERR(Enonce) {}
+#endif
+
+// FileSystem
+#ifdef DEBUG
+#define FILE_SYSTEM_DEBUG(Enonce)\
+ 	{\
+ 		PRINT<<MAGENTA<<"[FILE_SYSTEM]"<<Enonce<<END_PRINT;\
+ 	}
+ 	#define FILE_SYSTEM_ERR(Enonce)\
+ 	{\
+ 		std::cout<<RED<<"[FILE_SYSTEM]"<<Enonce<<END_PRINT<<std::endl;\
+ 	} 	
+#else
+#define FILE_SYSTEM_DEBUG(Enonce) {}
+ 	#define FILE_SYSTEM_ERR(Enonce) {}
 #endif
 
 }

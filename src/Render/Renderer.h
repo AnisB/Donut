@@ -20,8 +20,8 @@
 
  #include "Defines.h"
  #include "RenderPass.h"
- #include "Math/FloatN.h"
- #include "MultiThread/UsualThreadSafeObjects.h"
+ #include <Math/int.h>
+ #include "multithread/usualthreadsafeobjects.h"
  #include <string>
  #include <vector>
 
@@ -31,7 +31,7 @@
  namespace Donut
  {
 
- 	#define NB_PASSES 1
+ 	#define DEFAULT_NB_PASSES 1
 
 	class TRenderer
 	{
@@ -39,7 +39,7 @@
 		TRenderer();
 		~TRenderer();
 
-		bool CreateRenderWindow(const TContextDetail& parContext);
+		bool CreateRenderWindow(const TContextDetail& parContext, size_t parNbPass = DEFAULT_NB_PASSES);
 		void DestroyRenderWindow();
 
 		void HideRenderWindow();
@@ -60,7 +60,7 @@
 
  		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
  		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
-
+ 		std::vector<TRenderPass*>& GetPasses(){return FRenderPasses;}
 
  	private:
  		void InputInit();
@@ -71,7 +71,8 @@
 		bool FInitDone;
 		GLFWwindow * FWindow;
 		bool FIsFullScreen;
-		float2 FWindowSize;
+		TInt2 FWindowSize;
+		size_t FNbPasses;
 
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;

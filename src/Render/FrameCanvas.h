@@ -49,6 +49,10 @@
 		GLuint FRenderTexture;
 		GLuint FDepthBuffer;
 
+		// Quad
+	 	GLuint FVertexArrayID;
+	 	GLuint FVBO;
+
 		//Shader
 		TShader FShader;
 

@@ -21,7 +21,7 @@
  #include <math.h>
 
 namespace Donut{
- 	TCube::TCube(float3 parPosition, float parDimension)
+ 	TCube::TCube(const TVec3& parPosition, float parDimension)
  	: FPosition(parPosition)
  	, FDimension(parDimension)
  	, FRotation(0,0,0)
@@ -33,7 +33,7 @@ namespace Donut{
  		delete FRepresentation;
  	}
 
- 	void TCube::SetPosition(const float3& parPos)
+ 	void TCube::SetPosition(const TVec3& parPos)
  	{
  		FPosition = parPos;
  		UpdateRepresentation();
@@ -42,23 +42,23 @@ namespace Donut{
 
  	void TCube::RotateX(float parAngle)
  	{
- 		FRotation.x += parAngle; 
+ 		FRotation.val[0] += parAngle; 
  		UpdateRepresentation();
  	}
 
  	void TCube::RotateY(float parAngle)
  	{
- 		FRotation.y += parAngle; 
+ 		FRotation.val[1] += parAngle; 
  		UpdateRepresentation();
  	}
 
  	void TCube::RotateZ(float parAngle)
  	{
- 		FRotation.z += parAngle; 
+ 		FRotation.val[2] += parAngle; 
  		UpdateRepresentation();
  	}
 
- 	const float3& TCube::GetPosition()
+ 	const TVec3& TCube::GetPosition()
  	{
  		return FPosition;
  	}
@@ -68,7 +68,6 @@ namespace Donut{
  		if( FRepresentation != NULL)
  		{
  			FRepresentation->SetPosition(FPosition);
- 			FRepresentation->SetRotation(FRotation);
  		}
  	}
 

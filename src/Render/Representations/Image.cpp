@@ -17,7 +17,7 @@
 
  #include "Image.h"
  #include "Render/Defines.h"
- #include "Texturing/TextureManager.h"
+ #include <resource/resourcemanager.h>
  #include "Base/Common.h"
  #include "MultiThread/Defines.h"
 
@@ -26,8 +26,9 @@ namespace Donut
 {
  	TImage::TImage(const std::string& parFileName)
  	{
- 		FTexture  = TextureManager::Instance().LoadTexture(parFileName);
+ 		FTexture  = ResourceManager::Instance().LoadTexture(parFileName);
  	}
+ 	
  	TImage::~TImage()
  	{
 
@@ -35,11 +36,6 @@ namespace Donut
 
  	void TImage::Draw()
  	{
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glEnable(GL_TEXTURE_2D);
- 		glBindTexture(GL_TEXTURE_2D, FTexture->FID);
- 		glBindTexture(GL_TEXTURE_2D, 0);
- 		glDisable(GL_TEXTURE_2D);
 
  	}
  }

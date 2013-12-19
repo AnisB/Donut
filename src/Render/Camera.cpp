@@ -14,30 +14,27 @@ namespace Donut
 	{
 		
 	}
-	/*
-	void Camera::SetPerspective(float parAngle,)
+	void Camera::DefinePerspective(float parFovy, float parAspect, float parNear, float parFar)
 	{
-		FViewMatrix = FViewMatrix*Matrix4::rotateZAxis(parAngle);
+		FProjection.AsPerspective(parFovy,parAspect,parNear,parFar);
 	}
-	*/
 	void Camera::Roll(double parAngle)
 	{
-		FViewMatrix = FViewMatrix*Matrix4::rotateZAxis(parAngle);
+		FViewMatrix = Matrix4::rotateZAxis(parAngle)*FViewMatrix;
 	}
 
 	void Camera::Yaw(double parAngle)
 	{
-		FViewMatrix = FViewMatrix*Matrix4::rotateYAxis(parAngle);
+		FViewMatrix = Matrix4::rotateYAxis(parAngle)*FViewMatrix;
 	}
-
 
 	void Camera::Pitch(double parAngle)
 	{
-		FViewMatrix = FViewMatrix*Matrix4::rotateXAxis(parAngle);
+		FViewMatrix = Matrix4::rotateXAxis(parAngle)*FViewMatrix;
 	}
 
 	void Camera::Translate(const Vector3& parDir)
 	{
-		FViewMatrix = FViewMatrix*Matrix4::translate(parDir);
+		FViewMatrix = Matrix4::translate(parDir)*FViewMatrix;
 	}
 }

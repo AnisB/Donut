@@ -21,9 +21,12 @@
  #include "Defines.h"
  #include "Render/Defines.h"
 
+ #include <Input/InputManager.h>
+
  namespace Donut
  {
-
+ 	void SetInputManager(InputManager* parInputManager);
+ 	
  	void FarmEvents();
  	// Keyboard
  	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);

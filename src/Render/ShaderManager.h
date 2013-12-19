@@ -19,7 +19,7 @@
 
 
  #include "Defines.h"
- #include <Base/Singleton.h>
+ #include <base/singleton.h>
  #include <Math/Vector3.h>
  #include <Math/Matrix4.h>
  #include <list>
@@ -36,6 +36,13 @@
  			FFragmentShader = parFShader;
  			FActive = false;
  		}
+		TShader(const TShader& parShader)
+ 		{
+ 			FProgramID = parShader.FProgramID;
+ 			FVertexShader = parShader.FVertexShader;
+ 			FFragmentShader = parShader.FFragmentShader;
+ 			FActive = parShader.FActive;
+ 		}
 
  		std::string FVertexShader;
  		std::string FFragmentShader;
@@ -51,12 +58,14 @@
  		ShaderManager();
  		~ShaderManager();
 
- 		TShader CreateShader(std::string parVertexShader, std::string parFragmentShader);
+ 		TShader CreateShader(const std::string& parVertexShader, const std::string& parFragmentShader);
 
  		void EnableShader(const TShader& parProgram);
  		void DisableShader( );
 
  		// Injections
+		void InjectInt(const TShader& parProgram, int parValue, const std::string& parName);
+		
 		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
 
 		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);

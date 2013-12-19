@@ -29,10 +29,31 @@ Matrix4::~Matrix4()
 	delete [] m;
 }
 
-
-void Matrix4::setIdentity()
+void Matrix4::AsPerspective(float parFovy, float parAspect, float parNear, float parFar)
 {
+	float f = 1/tan(parFovy*3.14/360.0);
+	m[0][0] = f/parAspect;
+	m[0][1] = 0.0;
+	m[0][2] = 0.0;
+	m[0][3] = 0.0;
 	
+	m[1][0] = 0.0;
+	m[1][1] = f;
+	m[1][2] = 0.0;
+	m[1][3] = 0.0;
+	
+	m[2][0] = 0.0;
+	m[2][1] = 0.0;
+	m[2][2] = (parFar+parNear)/(parNear-parFar);
+	m[2][3] = (2*parFar*parNear)/(parNear-parFar);
+	
+	m[3][0] = 0.0;
+	m[3][1] = 0.0;
+	m[3][2] = -1;
+	m[3][3] = 0.0;
+}
+void Matrix4::setIdentity()
+{	
 	m[0][0] = 1.0;
 	m[0][1] = 0.0;
 	m[0][2] = 0.0;
@@ -100,7 +121,7 @@ Vector3 Matrix4::zAxis()
 {
 	return Vector3(m[0][2],m[1][2],m[2][2]);
 }
-Vector4 operator*(const Vector4& parFactor)
+Vector4 Matrix4::operator*(const Vector4& parFactor) const
 {
 	Vector4 result;
 	return result;
@@ -108,24 +129,24 @@ Vector4 operator*(const Vector4& parFactor)
 Matrix4 Matrix4::translate(const Vector4& parVector)
 {
 	Matrix4 result(MatrixInit::None);
-	result.m[0][0] = 0.0;
+	result.m[0][0] = 1.0;
 	result.m[0][1] = 0.0;
 	result.m[0][2] = 0.0;
-	result.m[0][3] = 0.0;
+	result.m[0][3] = parVector.x;
 
 	result.m[1][0] = 0.0;
-	result.m[1][1] = 0.0;
+	result.m[1][1] = 1.0;
 	result.m[1][2] = 0.0;
-	result.m[1][3] = 0.0;
+	result.m[1][3] = parVector.y;
 	
 	result.m[2][0] = 0.0;
 	result.m[2][1] = 0.0;
-	result.m[2][2] = 0.0;
-	result.m[2][3] = 0.0;
+	result.m[2][2] = 1.0;
+	result.m[2][3] = parVector.z;
 
-	result.m[3][0] = parVector.x;
-	result.m[3][1] = parVector.y;
-	result.m[3][2] = parVector.z;
+	result.m[3][0] = 0.0;
+	result.m[3][1] = 0.0;
+	result.m[3][2] = 0.0;
 	result.m[3][3] = parVector.w;
 	return result;
 }
@@ -154,6 +175,31 @@ Matrix4 Matrix4::translate(const Vector3& parVector)
 	result.m[3][2] = 0.0;
 	result.m[3][3] = 1.0;
 	return result;
+}
+
+Matrix4 Matrix4::translate(const TVec3& parVector)
+{
+	Matrix4 result(MatrixInit::None);
+	result.m[0][0] = 1.0;
+	result.m[0][1] = 0.0;
+	result.m[0][2] = 0.0;
+	result.m[0][3] = parVector.val[0];
+
+	result.m[1][0] = 0.0;
+	result.m[1][1] = 1.0;
+	result.m[1][2] = 0.0;
+	result.m[1][3] = parVector.val[1];
+	
+	result.m[2][0] = 0.0;
+	result.m[2][1] = 0.0;
+	result.m[2][2] = 1.0;
+	result.m[2][3] = parVector.val[2];
+
+	result.m[3][0] = 0.0;
+	result.m[3][1] = 0.0;
+	result.m[3][2] = 0.0;
+	result.m[3][3] = 1.0;
+	return result;	
 }
 
 Matrix4 Matrix4::rotateXAxis(double parAngle)
@@ -260,7 +306,7 @@ Matrix4& Matrix4::operator=(const Matrix4& parMatrix)
 	m[3][3] = parMatrix.m[3][3];
 	return *this;
 }
-Matrix4 Matrix4::operator*(const Matrix4& parMatrix )
+Matrix4 Matrix4::operator*(const Matrix4& parMatrix ) const
 {
 	Matrix4 result(MatrixInit::None);
 	result.m[0][0] = m[0][0] * parMatrix.m[0][0] + m[0][1] * parMatrix.m[1][0] + m[0][2] * parMatrix.m[2][0] + m[0][3] * parMatrix.m[3][0]; 
@@ -290,6 +336,25 @@ Matrix4 Matrix4::inverse(const Matrix4& parMatrix)
 
 void Matrix4::toTable(float* content) const
 {
+	content[0] = m[0][0];
+	content[1] = m[0][1];
+	content[2] = m[0][2];
+	content[3] = m[0][3];
+
+	content[4] = m[1][0];
+	content[5] = m[1][1];
+	content[6] = m[1][2];
+	content[7] = m[1][3];
+
+	content[8] = m[2][0];
+	content[9] = m[2][1];
+	content[10] = m[2][2];
+	content[11] = m[2][3];
+
+	content[12] = m[3][0];
+	content[13] = m[3][1];
+	content[14] = m[3][2];
+	content[15] = m[3][3];
 }
 
 std::ostream& operator<< (std::ostream& os, const Matrix4& obj) 

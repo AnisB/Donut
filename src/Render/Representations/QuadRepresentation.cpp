@@ -22,7 +22,7 @@
 
 
 namespace Donut{
- 	TQuadRepresentation::TQuadRepresentation(const std::list<float2> & parPoints)
+ 	TQuadRepresentation::TQuadRepresentation(const std::list<TVec2> & parPoints)
  	: FPoints(parPoints)
  	{
 
@@ -32,7 +32,7 @@ namespace Donut{
 
  	}
 
- 	void TQuadRepresentation::SetPoints(const std::list<float2>& parPoints)
+ 	void TQuadRepresentation::SetPoints(const std::list<TVec2>& parPoints)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPoints.clear();
@@ -42,13 +42,6 @@ namespace Donut{
  	void TQuadRepresentation::Draw()
  	{
  		CRITICAL_SECTION_BEGIN();
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glBegin(GL_QUADS); // Start drawing a quad primitive  
- 		foreach(point, FPoints)
- 		{
- 			glVertex2f(point->x, point->y);
- 		}
- 		glEnd(); 
  		CRITICAL_SECTION_END();	
  		
  	}

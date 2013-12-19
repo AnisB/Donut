@@ -20,31 +20,31 @@
 
 #include "Render/DrawableObject.h"
 #include "Render/Representations/3D/CubeR.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut{
  class TCube
  {
  public:
- 	TCube(float3 parPosition, float parDimension);
+ 	TCube(const TVec3& parPosition, float parDimension);
  	~TCube();
 
- 	void SetPosition(const float3& parPos);
+ 	void SetPosition(const TVec3& parPos);
 
  	void RotateX(float parAngle);
  	void RotateY(float parAngle);
  	void RotateZ(float parAngle);
 
- 	const float3& GetPosition();
+ 	const TVec3& GetPosition();
 
  	void UpdateRepresentation();
 
  	TDrawableObject * GetRepresentation();
 
  protected:
- 	float3 FPosition;
+ 	TVec3 FPosition;
  	float FDimension;
- 	float3 FRotation;
+ 	TVec3 FRotation;
  	TCubeR * FRepresentation;
  };
 }

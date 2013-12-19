@@ -20,9 +20,9 @@
 #define DONUT_RENDER_CONSTANTS
 namespace Donut
 {
-    extern float cubeVertex[];
+    extern float cubeVertexLL[24];
 
-    extern unsigned int cubeFaces[];
+    extern unsigned int cubeFacesLL[];
 
 }
 #endif //DONUT_DEFINES

@@ -18,6 +18,12 @@ namespace Donut
 			void Roll(double parAngle);
 			// Translation
 			void Translate(const Vector3& parDir);
+
+			const Matrix4& GetViewMatrix() { return FViewMatrix;}
+			const Matrix4& GetProjectionMatrix() { return FProjection;}
+
+			void DefinePerspective(float parFovy, float parAspect, float parNear, float parFar);
+
 			
 		protected:
 			Matrix4 FViewMatrix;

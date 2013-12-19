@@ -77,7 +77,13 @@ add_custom_command(
     TARGET Donut POST_BUILD
     COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data/shaders ${PROJECT_BINARY_DIR}
 )
-	
+
+add_custom_command(
+    TARGET Donut POST_BUILD
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data ${PROJECT_BINARY_DIR}
+)
+  
+
 
 
  

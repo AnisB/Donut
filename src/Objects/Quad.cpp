@@ -21,17 +21,17 @@
 
 
 namespace Donut{
- 	TQuad::TQuad(const std::list<float2> & parPoints)
+ 	TQuad::TQuad(const std::list<TVec2> & parPoints)
  	: FPoints(parPoints)
  	{
  		float sumX = 0, sumY = 0;
  		foreach(point, FPoints)
  		{
- 			sumX += point->x; 
- 			sumY += point->y; 
+ 			sumX += point->val[0]; 
+ 			sumY += point->val[1]; 
  		}
- 		FCenter.x = (sumX)/parPoints.size();
- 		FCenter.y = (sumY)/parPoints.size();
+ 		FCenter.val[0] = (sumX)/parPoints.size();
+ 		FCenter.val[1]= (sumY)/parPoints.size();
  		FRepresentation = new TQuadRepresentation(parPoints);
  	}
  	TQuad::~TQuad()
@@ -39,9 +39,9 @@ namespace Donut{
  		delete FRepresentation;
  	}
 
- 	void TQuad::SetPosition(const float2& parPos)
+ 	void TQuad::SetPosition(const TVec2& parPos)
  	{
- 		float2 diffPos = (parPos - FCenter);
+ 		TVec2 diffPos = (parPos - FCenter);
  		foreach(point, FPoints)
  		{
  			(*point) += diffPos; 
@@ -57,7 +57,7 @@ namespace Donut{
  		}
  	}
 
- 	const float2& TQuad::GetPosition()
+ 	const TVec2& TQuad::GetPosition()
  	{
  		return FCenter;
  	}

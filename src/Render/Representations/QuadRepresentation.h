@@ -20,22 +20,22 @@
 
 #include "Render/DrawableObject.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 #include <list>
 
  namespace Donut{
  class TQuadRepresentation : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TQuadRepresentation(const std::list<float2>& parPoints);
+ 	TQuadRepresentation(const std::list<TVec2>& parPoints);
  	~TQuadRepresentation();
 
  	virtual void Draw();
 
- 	void SetPoints(const std::list<float2>& parPoints);
+ 	void SetPoints(const std::list<TVec2>& parPoints);
 
  protected:
- 	std::list<float2> FPoints;
+ 	std::list<TVec2> FPoints;
  };
 }
  #endif // DONUT_QUAD_REPRESENTATION

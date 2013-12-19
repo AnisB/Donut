@@ -23,12 +23,26 @@
 
 namespace Donut
 {
+	#define CANVAS_VERTEX_SHADER "shaders/canvas/vertex.glsl"
+	#define CANVAS_FRAGMENT_SHADER "shaders/canvas/fragment.glsl"
+
+	GLfloat fullScreenQuad[20] = { 
+
+		-1.0f, -1.0f, 0.0f, 
+		-1.0f, 1.0f, 0.0f, 
+		1.0f, -1.0f, 0.0f, 
+		1.0f, 1.0f, 0.0f, 
+		0.0,0.0,
+		0.0,1.0,
+		1.0,0.0,
+		1.0,1.0,
+	};
  	TFrameCanvas::TFrameCanvas()
  	: TDrawableObject()
  	, FFrameBuffer(0)
  	, FRenderTexture(0)
  	, FDepthBuffer(0)
- 	, FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
+ 	, FShader(0,CANVAS_VERTEX_SHADER,CANVAS_FRAGMENT_SHADER)
  	{
 
  	}
@@ -39,8 +53,26 @@ namespace Donut
  	
 	void TFrameCanvas::Init()
  	{
- 		glEnable(GL_TEXTURE_2D);
+ 		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
 
+		glGenVertexArrays (1, &FVertexArrayID);
+		glBindVertexArray (FVertexArrayID);
+		
+		glGenBuffers(1, &FVBO);
+		glBindBuffer(GL_ARRAY_BUFFER, FVBO);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(fullScreenQuad), fullScreenQuad, GL_STATIC_DRAW);
+		GLuint posAtt = glGetAttribLocation(FShader.FProgramID, "position");
+		GLuint texCoordAtt = glGetAttribLocation(FShader.FProgramID, "tex_coord");
+		glEnableVertexAttribArray (posAtt);
+		glEnableVertexAttribArray (texCoordAtt);
+		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*12));
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray (0);
+		
+ 		//glEnable(GL_TEXTURE_2D);
 		#ifdef LINUX
 		glGenFramebuffers(1, &FFrameBuffer);
  		glBindFramebuffer(GL_FRAMEBUFFER, FFrameBuffer);
@@ -54,8 +86,8 @@ namespace Donut
  		glGenTextures(1, &FRenderTexture);
  		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
  		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, DEFAULTW, DEFAULTL, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
  		glBindTexture(GL_TEXTURE_2D, 0);
@@ -71,8 +103,8 @@ namespace Donut
  		glGenTextures(1, &FDepthBuffer);
  		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
  		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, DEFAULTW, DEFAULTL, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
  		glBindTexture(GL_TEXTURE_2D, 0);
@@ -89,14 +121,27 @@ namespace Donut
  			RENDER_DEBUG("There is a problem with your frame buffer dude "<<glGetError());
  		}
  		#ifdef LINUX
- 		glBindFramebuffer(1, 0);
+ 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
  		#endif
  		
  		#ifdef MACOSX
- 		glBindFramebufferEXT(1, 0);
+ 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
  		#endif
- 		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
 		RENDER_DEBUG("Frame canvas created");
+		
+ 		ShaderManager::Instance().EnableShader(FShader);
+ 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
+ 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
+ 		GLint tex0 = glGetUniformLocation(FShader.FProgramID, "canvas");
+       	glActiveTexture(GL_TEXTURE0);
+ 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
+		glUniform1i(tex0, 0);
+
+		GLint depth = glGetUniformLocation(FShader.FProgramID, "depth");
+       	glActiveTexture(GL_TEXTURE1);
+ 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
+		glUniform1i(depth, 1);		
+ 		ShaderManager::Instance().DisableShader();
  	}
 
 	void TFrameCanvas::SetFragmentShader(const std::string& parFShader)
@@ -112,13 +157,9 @@ namespace Donut
 
  	void TFrameCanvas::Enable()
  	{
- 		glEnable(GL_TEXTURE_2D);
  		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL); 
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
- 		glViewport(0,0,DEFAULTW, DEFAULTL);
- 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
  	}
 
@@ -126,36 +167,21 @@ namespace Donut
  	{
  		glPopAttrib();
  		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
- 		glClearColor (0.0f, 0.0f, 0.0f, 0.5f);
-		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);   
+ 		glClearColor (1.0, 1.0, 1.0, 0.0);
+		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+ 		glDisable(GL_DEPTH_TEST);
  	}
 
  	void TFrameCanvas::Draw()
  	{
  		ShaderManager::Instance().EnableShader(FShader);
 
-		
- 		GLint depth = glGetUniformLocation(FShader.FProgramID, "depth");
-       	glActiveTexture(GL_TEXTURE1);
- 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
-		glUniform1i(depth, 1);		
+	  	glBindVertexArray (FVertexArrayID);
+	  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
+	  	glBindVertexArray (0);
 
- 		GLint tex0 = glGetUniformLocation(FShader.FProgramID, "canvas");
-       	glActiveTexture(GL_TEXTURE0);
- 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
-		glUniform1i(tex0, 0);
-
- 		glBegin(GL_QUADS);
- 		glVertex2f(-1, -1);  
- 		glVertex2f(1 , -1);
- 		glVertex2f(1, 1);
- 		glVertex2f(-1, 1);
- 		glEnd();
- 		glBindTexture(GL_TEXTURE_2D, 0);
  		ShaderManager::Instance().DisableShader();
 
- 		glDisable(GL_TEXTURE_2D);
- 		glDisable(GL_DEPTH_TEST);
  		glFlush ();
  	}
  }

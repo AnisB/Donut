@@ -22,7 +22,7 @@
 
 
 namespace Donut{
- 	TTriangleRepresentation::TTriangleRepresentation(const float2& parA, const float2& parB, const float2& parC, const float2& parCenter)
+ 	TTriangleRepresentation::TTriangleRepresentation(const TVec2& parA, const TVec2& parB, const TVec2& parC, const TVec2& parCenter)
  	: FPointA(parA)
  	, FPointB(parB)
  	, FPointC(parC)
@@ -36,28 +36,28 @@ namespace Donut{
 
  	}
 
- 	void TTriangleRepresentation::SetA(const float2& parPos)
+ 	void TTriangleRepresentation::SetA(const TVec2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPointA = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TTriangleRepresentation::SetB(const float2& parPos)
+ 	void TTriangleRepresentation::SetB(const TVec2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPointB = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TTriangleRepresentation::SetC(const float2& parPos)
+ 	void TTriangleRepresentation::SetC(const TVec2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPointC = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TTriangleRepresentation::SetCenter(const float2& parPos)
+ 	void TTriangleRepresentation::SetCenter(const TVec2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FCenter = parPos;
@@ -75,16 +75,6 @@ namespace Donut{
  	void TTriangleRepresentation::Draw()
  	{
  		CRITICAL_SECTION_BEGIN();
- 		glPushMatrix();
- 		glTranslatef(FCenter.x, FCenter.y, 0);
- 		glRotatef(FRotation,0.0,0.0,1.0);
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glBegin(GL_TRIANGLES); // Start drawing a quad primitive  
- 		glVertex2f(FPointA.x, FPointA.y); // The bottom left corner  
- 		glVertex2f(FPointB.x , FPointB.y); // The bottom left corner  
- 		glVertex2f(FPointC.x , FPointC.y ); // The bottom left corner 
- 		glEnd(); 
- 		glPopMatrix();
  		CRITICAL_SECTION_END();		
  	}
  }

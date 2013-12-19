@@ -16,16 +16,30 @@
 
 
 
-#ifndef TEXTURE_HELPERS
-#define TEXTURE_HELPERS
+#ifndef RESOURCE_MANAGER
+#define RESOURCE_MANAGER
 
+#include "base/singleton.h"
 #include "Texture.h"
- 
-namespace TextureHelpers
-{
-	TImgType::Type GetImgType(const std::string & parImg);
- 	TTexture * LoadTexture(const std::string & parImg);
- 	TTexture * LoadBMP(const std::string & parImg);
+#include "model.h"
+#include <string>
+#include <map>
+
+ namespace Donut 
+ {
+ 	class ResourceManager : public Singleton<ResourceManager>
+ 	{
+ 	public:
+ 		ResourceManager();
+ 		~ResourceManager();
+		TTexture* LoadTexture(const std::string&  parTextureName);
+		TTexture* GetTexture(const std::string&  parTextureName);
+
+		TModel* LoadObj(const std::string&  parObjName);
+
+	protected:
+		std::map<std::string, TTexture*> FTextures;
+	};
 }
 
-#endif // TEXTURE_HELPERS
+#endif // RESOURCE_MANAGER

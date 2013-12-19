@@ -14,22 +14,22 @@
  *
  **/
 
- #include "TextureManager.h"
+ #include "ResourceManager.h"
 
  #include "TextureHelpers.h"
 
  namespace Donut
  {
- 	TextureManager::TextureManager()
+ 	ResourceManager::ResourceManager()
  	{
 
  	}
 
- 	TextureManager::~TextureManager()
+ 	ResourceManager::~ResourceManager()
  	{
 
  	}
- 	TTexture* TextureManager::LoadTexture(const std::string&  parTextureName)
+ 	TTexture* ResourceManager::LoadTexture(const std::string&  parTextureName)
  	{
  		typeof(FTextures.begin()) it = FTextures.find(parTextureName);
  		if(it != FTextures.end())
@@ -52,7 +52,7 @@
  		return NULL;
  	}
 
- 	TTexture* TextureManager::GetTexture(const std::string&  parTextureName)
+ 	TTexture* ResourceManager::GetTexture(const std::string&  parTextureName)
  	{
  		typeof(FTextures.begin()) it = FTextures.find(parTextureName);
  		if(it != FTextures.end())

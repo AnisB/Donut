@@ -22,7 +22,7 @@
 
 
 namespace Donut{
- 	TSquareRepresentation::TSquareRepresentation(float2 parPosition, float parDimension)
+ 	TSquareRepresentation::TSquareRepresentation(TVec2 parPosition, float parDimension)
  	: TDrawableObject()
  	, FPosition(parPosition)
  	, FDimension(parDimension)
@@ -34,7 +34,7 @@ namespace Donut{
  	{
 
  	}
- 	void TSquareRepresentation::SetPosition(const float2& parPos)
+ 	void TSquareRepresentation::SetPosition(const TVec2& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;
@@ -51,17 +51,17 @@ namespace Donut{
  	void TSquareRepresentation::SetPosition(float parX, float parY)
  	{
  		CRITICAL_SECTION_BEGIN();
- 		FPosition.x = parX;
- 		FPosition.y = parY;
+ 		FPosition.val[0] = parX;
+ 		FPosition.val[1] = parY;
  		CRITICAL_SECTION_END();	
  	}
  	void TSquareRepresentation::SetRotation(float parAngle)
  	{
  		FRotationAngle = parAngle;
  	}
- 	const float2 TSquareRepresentation::GetPosition()
+ 	TVec2 TSquareRepresentation::GetPosition()
  	{
- 		float2 position;
+ 		TVec2 position;
  		CRITICAL_SECTION_BEGIN();
  		position = FPosition;
  		CRITICAL_SECTION_END();	
@@ -70,17 +70,6 @@ namespace Donut{
  	void TSquareRepresentation::Draw()
  	{
  		CRITICAL_SECTION_BEGIN();
- 		glPushMatrix();
- 		glTranslatef(FPosition.x, FPosition.y, 0);
- 		glRotatef(FRotationAngle,0.0,0.0,1.0);
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
- 		glBegin(GL_QUADS); // Start drawing a quad primitive  
- 		glVertex2f(-FDimension/2, -FDimension/2);  
- 		glVertex2f(-FDimension/2, FDimension/2);  
- 		glVertex2f(FDimension/2, FDimension/2);  
- 		glVertex2f(FDimension/2, -FDimension/2);  
- 		glEnd(); 
- 		glPopMatrix();
  		CRITICAL_SECTION_END();	
  	}
  }

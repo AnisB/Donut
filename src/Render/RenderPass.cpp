@@ -24,7 +24,7 @@
  	//CLASS IMPLEMENTATION
 	TRenderPass::TRenderPass()
 	{
-		FRenderToTexture = false;
+		FRenderToTexture = true;
 		FFrameCanvas = new TFrameCanvas();
 		FCamera = new Camera();
 	}
@@ -40,24 +40,39 @@
 		PreparePass();
 		if(FRenderToTexture)
 		{
+			
 			Bind();
 			foreach(drawable,FDrawables)
 			{
-
+ 				//RENDER_DEBUG("Drawable");
 				ShaderManager& sm = ShaderManager::Instance();
 				TDrawableObject & drw = *(*drawable);
 				drw.Bind();
+				drw.InjectModelMatrix();
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
+				//ShaderManager::Instance().InjectMat4(drw.GetShader(),drw.GetModelMatrix()*FCamera->GetViewMatrix()*FCamera->GetProjectionMatrix(),"modelviewprojection");
 				drw.Draw();
 				drw.Unbind();
 			}
 			Unbind();
+			
 			FFrameCanvas->Draw();
 		}
 		else
 		{
 			foreach(drawable,FDrawables)
 			{
-				(*drawable)->Draw();
+ 				//RENDER_DEBUG("Drawable");
+				ShaderManager& sm = ShaderManager::Instance();
+				TDrawableObject & drw = *(*drawable);
+				drw.Bind();
+				drw.InjectModelMatrix();
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
+				//ShaderManager::Instance().InjectMat4(drw.GetShader(),drw.GetModelMatrix()*FCamera->GetViewMatrix()*FCamera->GetProjectionMatrix(),"modelviewprojection");
+				drw.Draw();
+				drw.Unbind();
 			}
 		}
 	}
@@ -74,6 +89,8 @@
 			(*drawable)->Init();
 			(*drawable)->GenerateShader();
 		}
+		glEnable(GL_DEPTH_TEST);
+		glDepthFunc(GL_LEQUAL);
  		//RENDER_DEBUG("Canvas created");
 	}
 
@@ -113,7 +130,6 @@
 	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
 	{
  		RENDER_DEBUG("Removing drawable");
-
 		FDrawables.remove(parDrawable);
 	}
 

@@ -21,14 +21,14 @@
 
 
 namespace Donut{
- 	TTriangle::TTriangle(float2 parA, float2 parB,float2 parC)
+ 	TTriangle::TTriangle(TVec2 parA, TVec2 parB,TVec2 parC)
  	: FPointA(parA)
  	, FPointB(parB)
  	, FPointC(parC)
  	, FRotation(0)
  	{
- 		FCenter.x = (FPointA.x + FPointB.x + FPointC.x)/3;
- 		FCenter.y = (FPointA.y + FPointB.y + FPointC.y)/3;
+ 		FCenter.val[0] = (FPointA.val[0] + FPointB.val[0] + FPointC.val[0])/3;
+ 		FCenter.val[1] = (FPointA.val[1] + FPointB.val[1]+ FPointC.val[1])/3;
  		FRepresentation = new TTriangleRepresentation(parA-FCenter, parB-FCenter, parC-FCenter, FCenter);
  	}
  	TTriangle::~TTriangle()
@@ -36,9 +36,9 @@ namespace Donut{
  		delete FRepresentation;
  	}
 
- 	void TTriangle::SetPosition(const float2& parPos)
+ 	void TTriangle::SetPosition(const TVec2& parPos)
  	{
- 		float2 diffPos = (parPos - FCenter);
+ 		TVec2 diffPos = (parPos - FCenter);
  		FPointA += diffPos;
  		FPointB += diffPos;
  		FPointC += diffPos;
@@ -52,7 +52,7 @@ namespace Donut{
  		UpdateRepresentation();
  	}
 
- 	const float2& TTriangle::GetPosition()
+ 	const TVec2& TTriangle::GetPosition()
  	{
  		return FCenter;
  	}

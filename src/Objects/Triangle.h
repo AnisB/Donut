@@ -20,21 +20,21 @@
 
 #include "Render/DrawableObject.h"
 #include "Render/Representations/TriangleRepresentation.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut{
  class TTriangle
  {
  public:
- 	TTriangle(float2 parA,float2  parB, float2  parC);
+ 	TTriangle(TVec2 parA,TVec2  parB, TVec2  parC);
  	~TTriangle();
 
 
- 	void SetPosition(const float2& parX);
+ 	void SetPosition(const TVec2& parX);
 
  	void Rotate(float parAngle);
 
- 	const float2& GetPosition();
+ 	const TVec2& GetPosition();
 
  	void UpdateRepresentation();
 
@@ -42,11 +42,11 @@
 
 
  protected:
- 	float2 FPointA;
- 	float2 FPointB;
- 	float2 FPointC;
+ 	TVec2 FPointA;
+ 	TVec2 FPointB;
+ 	TVec2 FPointC;
 
- 	float2 FCenter;
+ 	TVec2 FCenter;
  	float FRotation;
  	TTriangleRepresentation * FRepresentation;
  };

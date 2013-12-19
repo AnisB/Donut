@@ -18,11 +18,16 @@
 #ifndef FILE_LOADER
 #define FILE_LOADER
 
+#include <vector>
+#include <string>
+
 namespace Donut
 {
 
 	char * LoadFile( char const* fn);
 	bool WriteFile(char *fn, char *s);
+	std::vector<std::string> split(const std::string& parString, char parSeparator);
+	std::string removeMultSpace(const std::string& parString); 
 }
 
 #endif // FILE_LOADER

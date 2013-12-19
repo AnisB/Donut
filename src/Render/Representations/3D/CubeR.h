@@ -20,33 +20,29 @@
 
 #include "Render/DrawableObject.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
  namespace Donut
  {
  class TCubeR : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TCubeR(float3 parPosition, float parDimension);
+ 	TCubeR(TVec3 parPosition, float parDimension);
  	~TCubeR();
 
  	virtual void Init();
  	virtual void Draw();
 
- 	void SetPosition(const float3& parPos);
-
- 	void SetRotation(const float3& parRotation);
+ 	void SetPosition(const TVec3& parPos);
 
  protected:
- 	float3 FPosition;
+ 	TVec3 FPosition;
  	float FDimension;
- 	float3 FRotationAngles;
 
- 	// VBO & IBO
+ 	// VBO & VAO
+ 	GLuint FVertexArrayID;
  	GLuint FVBO;
  	GLuint FIBO;
- 	float * FCubeVertex;
- 	unsigned int * FCubeIndex;
  };
 }
  #endif // DONUT_DUBE_R

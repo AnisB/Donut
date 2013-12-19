@@ -48,16 +48,13 @@
 
 	// Class TRenderer
  	TRenderer::TRenderer()
- 	: FWindowSize(float2())
+ 	: FWindowSize(TInt2())
  	, FIsFullScreen(false)
  	, FWindow(NULL)
  	, FIsRendering(false)
  	, FInitDone(false)
  	{
- 		for(size_t count = 0; count < NB_PASSES; ++count)
- 		{
- 			FRenderPasses.push_back(new TRenderPass());
- 		}
+
  	}
  	TRenderer::~TRenderer()
  	{
@@ -68,7 +65,7 @@
  		}
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TContextDetail& parContext)
+ 	bool TRenderer::CreateRenderWindow(const TContextDetail& parContext, size_t parNbPass)
  	{
  		if(!FInitDone)
  		{
@@ -117,6 +114,12 @@
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
 			CheckGLState("FLUSH");
+			FNbPasses = parNbPass; 
+	 		for(size_t count = 0; count < FNbPasses; ++count)
+	 		{
+	 			FRenderPasses.push_back(new TRenderPass());
+	 		}
+   			glfwSetInputMode(FWindow,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
  		}
  		else
  		{
@@ -161,7 +164,9 @@
 		{
 			(*pass)->Init();
 		}
- 		glClearColor(0.0,0.0,0.0,0.0); 	
+ 		glClearColor(1.0,1.0,1.0,0.0); 	
+ 		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_FRONT_AND_BACK);
 		return isOk;
  	}
 
@@ -169,12 +174,7 @@
  	{ 	 
  		//Inits
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
- 		glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
- 		glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
- 		
-        for(size_t pass = 0; pass < NB_PASSES; ++pass)
+        for(size_t pass = 0; pass < FNbPasses; ++pass)
         {
         	TRenderPass & passIter = (*FRenderPasses[pass]);
         	CRITICAL_SECTION_OBJ_BEGIN(passIter);
@@ -206,7 +206,7 @@
 
 	void TRenderer::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
-		AssertRelease(PASS_NUMBER < NB_PASSES);
+		AssertRelease(PASS_NUMBER < FNbPasses);
 		TRenderPass  & pass = (*FRenderPasses[PASS_NUMBER]);
 		CRITICAL_SECTION_OBJ_BEGIN(pass);
 		pass.AddDrawable(parDrawable);
@@ -215,7 +215,7 @@
 
 	void TRenderer::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
-		AssertRelease(PASS_NUMBER < NB_PASSES);
+		AssertRelease(PASS_NUMBER < FNbPasses);
 		TRenderPass & pass = (*FRenderPasses[PASS_NUMBER]);
 		CRITICAL_SECTION_OBJ_BEGIN(pass);
 		pass.RemoveDrawable(parDrawable);
@@ -224,7 +224,7 @@
 
 	void TRenderer::Clear()
 	{
-        for(size_t pass = 0; pass < NB_PASSES; ++pass)
+        for(size_t pass = 0; pass < FNbPasses; ++pass)
         {
         	TRenderPass & passIter = (*FRenderPasses[pass]);
         	CRITICAL_SECTION_OBJ_BEGIN(passIter);

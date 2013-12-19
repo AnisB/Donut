@@ -20,32 +20,33 @@
 
 #include "Render/DrawableObject.h"
 #include "Render/Representations/QuadRepresentation.h"
-#include "Math/FloatN.h"
+#include "Math/vec.h"
 
- namespace Donut{
- class TQuad
+ namespace Donut
  {
- public:
- 	TQuad(const std::list<float2>& parPoints);
- 	~TQuad();
+	 class TQuad
+	 {
+	 public:
+	 	TQuad(const std::list<TVec2>& parPoints);
+	 	~TQuad();
 
 
- 	void SetPosition(const float2& parX);
+	 	void SetPosition(const TVec2& parX);
 
- 	void Rotate(float parAngle);
+	 	void Rotate(float parAngle);
 
- 	const float2& GetPosition();
+	 	const TVec2& GetPosition();
 
- 	void UpdateRepresentation();
+	 	void UpdateRepresentation();
 
- 	TDrawableObject * GetRepresentation();
+	 	TDrawableObject * GetRepresentation();
 
 
- protected:
- 	std::list<float2> FPoints;
+	 protected:
+	 	std::list<TVec2> FPoints;
 
- 	float2 FCenter;
- 	TQuadRepresentation * FRepresentation;
- };
+	 	TVec2 FCenter;
+	 	TQuadRepresentation * FRepresentation;
+	 };
 }
  #endif // DONUT_QUAD

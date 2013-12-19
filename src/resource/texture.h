@@ -58,7 +58,6 @@ struct TTexture
         , FFileName ( parFilename )
         , FType (parType)
     {
-        FData = new GLubyte[ FWidth * FHeight * 3 ];
     }
 
     ~TTexture( void )

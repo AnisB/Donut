@@ -66,15 +66,15 @@ namespace Donut
 		float a;
 	};
 
-#define DEFAULTW 640 
-#define DEFAULTL 480
+#define DEFAULTW 1280 
+#define DEFAULTL 720
 
 #define DEFAULTNAME "Donut"
 #define DEFAULTFULLSCREEN false
 
 
-#define BASIC_VERTEX_SHADER "shaders/vertex/basicVertexShader.glsl"
-#define BASIC_FRAGMENT_SHADER "shaders/fragment/basicFragmentShader.glsl" 
+#define BASIC_VERTEX_SHADER "shaders/base/vertex.glsl"
+#define BASIC_FRAGMENT_SHADER "shaders/base/fragment.glsl" 
 
 }
 #endif //DONUT_DEFINES_RENDER

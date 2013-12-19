@@ -37,17 +37,22 @@ namespace Donut
  	void Bind();
  	void Unbind();
 
- 	void GenerateShader();
- 	const TShader& GetShader() { return FShader;}
+ 	virtual void GenerateShader();
  	void SetVertexShader(const std::string& parShaderPath);
  	void SetFragmentShader(const std::string& parShaderPath);
+ 	void InjectModelMatrix();
+ 	const Matrix4& GetModelMatrix() {return FModelMatrix;}
 
  	virtual void SetColor(const TColorFilter& parFilter)
  	{
  		FFilter = parFilter;
  	}
+ 	const TShader& GetShader()
+ 	{
+ 		return FShader;
+ 	}
 
- protected:
+ public:
  	TColorFilter FFilter;
  	TShader FShader;
  	Matrix4 FModelMatrix;

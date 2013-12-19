@@ -19,24 +19,25 @@
 
 
  #include "Defines.h"
- #include "Base/Singleton.h"
+ #include "base/singleton.h"
+ #include <Render/Camera.h>
  #include <map>
 
  namespace Donut
  {
- 	class InputManager : public Singleton<InputManager>
+ 	class InputManager
  	{
 
  	public:
  		InputManager();
  		~InputManager();
 
- 		void KeyPressed(TKeyCode::Type parKey);
- 		void KeyReleased(TKeyCode::Type parKey);
+ 		virtual void KeyPressed(TKeyCode::Type parKey);
+ 		virtual void KeyReleased(TKeyCode::Type parKey);
 
- 		void MouseMoved(float parX, float parY);
- 		void MousePressed(TMouseCode::Type parButton);
- 		void MouseReleased(TMouseCode::Type parButton);
+ 		virtual void MouseMoved(float parX, float parY);
+ 		virtual void MousePressed(TMouseCode::Type parButton);
+ 		virtual void MouseReleased(TMouseCode::Type parButton);
  	};
  }
 

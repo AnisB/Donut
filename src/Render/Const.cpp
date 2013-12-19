@@ -18,17 +18,17 @@
 #include "Render/Const.h"
 namespace Donut
 {
-float cubeVertex[] = { 
-	1.0f, -1.0f, -1.0f, 
-	1.0f, -1.0f, 1.0f,
-	-1.0f, -1.0f, 1.0f,
-	-1.0f, -1.0f, -1.0f,
-	1.0f, 1.0f, -1.0f,
-	1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f, 1.0f,
-	-1.0f, 1.0f, -1.0f};
+float cubeVertexLL[] = { 
+	0.5f, -0.5f, -0.5f, 
+	0.5f, -0.5f, 0.5f,
+	-0.5f, -0.5f, 0.5f,
+	-0.5f, -0.5f, -0.5f,
+	0.5f, 0.5f, -0.5f,
+	0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f, 0.5f,
+	-0.5f, 0.5f, -0.5f};
 
-unsigned int cubeFaces[] = { 
+unsigned int cubeFacesLL[] = { 
 	0, 1, 2, 3,
 	4, 7, 6, 5,
 	0, 4, 5, 1,

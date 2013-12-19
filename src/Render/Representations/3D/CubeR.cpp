@@ -23,17 +23,134 @@
  #include <string.h>
 
 
-namespace Donut{
- 	TCubeR::TCubeR(float3 parPosition, float parDimension)
+namespace Donut
+{
+
+GLfloat cubeVertexL[216] = { 
+
+	// 0 1 2 / 1 2 3
+	1.0f, -1.0f, -1.0f, // 0
+	-1.0f, -1.0f, -1.0f,// 3
+	1.0f, -1.0f, 1.0f,  // 1
+	-1.0f, -1.0f, 1.0f, // 2
+
+	// 4 5 6 // 4 6 7 
+	1.0f, -1.0f, -1.0f, 
+	1.0f, -1.0f, 1.0f,  // 1
+  	1.0f, 1.0f, -1.0f,   // 4
+	1.0f, 1.0f, 1.0f,    // 5
+
+
+	1.0f, -1.0f, -1.0f,  // 0
+	-1.0f, -1.0f, -1.0f, // 3
+  	1.0f, 1.0f, -1.0f,   // 4
+	-1.0f, 1.0f, -1.0f,   // 7
+
+	-1.0f, 1.0f, -1.0f,
+	-1.0f, 1.0f, 1.0f,
+  	1.0f, 1.0f, -1.0f,   // 4
+	1.0f, 1.0f, 1.0f,
+
+	1.0f, 1.0f, 1.0f,
+	1.0f, -1.0f, 1.0f,
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+
+	-1.0f, 1.0f, 1.0f,
+	-1.0f, -1.0f, 1.0f,
+	-1.0f, 1.0f, -1.0f,
+	-1.0f, -1.0f, -1.0f,
+
+	1.0,0.0,0.0,
+	1.0,0.0,0.0,
+	1.0,0.0,0.0,
+	1.0,0.0,0.0,
+	
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+
+	0.0,0.0,1.0,
+	0.0,0.0,1.0,
+	0.0,0.0,1.0,
+	0.0,0.0,1.0,
+
+	0.0,1.0,1.0,
+	0.0,1.0,1.0,
+	0.0,1.0,1.0,
+	0.0,1.0,1.0,
+
+	1.0,0.0,1.0,
+	1.0,0.0,1.0,
+	1.0,0.0,1.0,
+	1.0,0.0,1.0,
+
+	1.0,1.0,0.0,
+	1.0,1.0,0.0,
+	1.0,1.0,0.0,
+	1.0,1.0,0.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,	
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,	
+
+
+};
+
+unsigned int cubeFacesL[64] = 
+{ 
+	0, 1, 2,
+	1, 2, 3,
+
+	4, 5, 6,
+	5, 6, 7,
+
+	8, 9, 10,
+	9, 10, 11,
+
+	12, 13, 14,
+	13, 14, 15,
+
+	16, 17, 18,
+	17, 18, 19,
+
+	20, 21, 22,
+	21, 22, 23
+};
+
+ 	TCubeR::TCubeR(TVec3 parPosition, float parDimension)
  	: TDrawableObject()
  	, FPosition(parPosition)
  	, FDimension(parDimension)
- 	, FRotationAngles(0,0,0)
  	{
- 		FCubeVertex = new float[24];
- 		FCubeIndex = new unsigned[24];
- 		memcpy(&FCubeVertex ,&cubeVertex,sizeof(float)*24);
- 		memcpy(&FCubeIndex ,&cubeFaces,sizeof(unsigned int)*24);
+ 		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
  	}
 
  	TCubeR::~TCubeR()
@@ -43,43 +160,49 @@ namespace Donut{
 
  	void TCubeR::Init()
  	{
+ 		GLfloat data[216];
+ 		memcpy(&data ,&cubeVertexL,sizeof(cubeVertexL));
+
+ 		for(int i = 0; i<72; ++i)
+ 		{
+ 			data[i]*=FDimension;
+ 		}
+		glGenVertexArrays (1, &FVertexArrayID);
+		glBindVertexArray (FVertexArrayID);
+		
 		glGenBuffers(1, &FVBO);
 		glBindBuffer(GL_ARRAY_BUFFER, FVBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(FCubeVertex), &(FCubeVertex), GL_DYNAMIC_DRAW);
+
+		glBufferData(GL_ARRAY_BUFFER, sizeof(data), data, GL_STATIC_DRAW);
 
 		glGenBuffers(1, &FIBO);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, FIBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(FCubeIndex), &FCubeIndex, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeFacesL), cubeFacesL, GL_STATIC_DRAW);
+		GLuint posAtt = glGetAttribLocation(FShader.FProgramID, "position");
+		GLuint normalAtt = glGetAttribLocation(FShader.FProgramID, "normal");
+		GLuint texCoordAtt = glGetAttribLocation(FShader.FProgramID, "tex_coord");
+		glEnableVertexAttribArray (posAtt);
+		glEnableVertexAttribArray (normalAtt);
+		glEnableVertexAttribArray (texCoordAtt);
+		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*72));
+		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*144));
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray (0);
  	}
- 	void TCubeR::SetPosition(const float3& parPos)
+ 	void TCubeR::SetPosition(const TVec3& parPos)
  	{
  		CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TCubeR::SetRotation(const float3& parAngle)
- 	{
- 		FRotationAngles = parAngle;
- 	}
-
  	void TCubeR::Draw()
- 	{
- 		
-    //Clear information from last draw
-
- 		CRITICAL_SECTION_BEGIN();
- 		glPushMatrix();
- 		glTranslatef(FPosition.x, FPosition.y, FPosition.z);
- 		glRotatef(FRotationAngles.x,1.0,0.0,0.0);
- 		glRotatef(FRotationAngles.y,0.0,1.0,0.0);
- 		glRotatef(FRotationAngles.z,0.0,0.0,1.0);
- 		glColor4f(FFilter.r,FFilter.g,FFilter.b, FFilter.a);
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-		glDrawElements(GL_QUADS, sizeof(FCubeIndex)/sizeof(unsigned int), GL_UNSIGNED_INT, 0);
-		glDisableClientState(GL_VERTEX_ARRAY);
- 		glPopMatrix();
- 		CRITICAL_SECTION_END();	
+ 	{	
+    	//Clear information from last draw
+	  	glBindVertexArray (FVertexArrayID);
+	  	glDrawElements(GL_TRIANGLES, 64, GL_UNSIGNED_INT, 0);
+	  	glBindVertexArray (0);
  	}
  }
