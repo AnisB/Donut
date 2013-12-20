@@ -39,6 +39,8 @@ namespace Donut
             void LoadSugars();
             void LoadSugars_MultiThread();
 
+            TSugar GetSugar(const std::string& parModel);
+
         protected:
             TSugar ParseFile(const std::string& parFileName);
         protected:

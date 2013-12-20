@@ -150,23 +150,23 @@ namespace Donut
         std::string file_line;
         std::getline(fin, file_line);
         file_line=removeMultSpace(file_line);
-        std::vector<std::string> entete = split(file_line,' ');
+        std::vector<std::string> header = split(file_line,' ');
 
-        CondAssertReleasePrint((entete.size()==2) && (entete[0]=="Object"),"In file "<<parFileName<<" wrong header.");
-        sugar.name = entete[1];
+        CondAssertReleasePrint((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
+        sugar.name = header[1];
 
         getNonEmptyLine(fin, file_line);
         CondAssertReleasePrint(!(file_line.find("{")>=file_line.size()),"Wrong token@"<< file_line);
         while(!fin.eof())
         {
             getNonEmptyLine(fin, file_line);
-            if(file_line.find("Sugar{")!= std::string::npos)
+            if(file_line.find("model{")!= std::string::npos)
             {
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    //FILE_SYSTEM_DEBUG("The Sugar is: "<<file_line);
-                    sugar.models=file_line;
+                    // FILE_SYSTEM_DEBUG("The model is: "<<file_line);
+                    sugar.model=file_line;
                     getNonEmptyLine(fin, file_line);
                 }
             }
@@ -222,12 +222,17 @@ namespace Donut
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete = split(file_line,' ');
-                    TUniform uni;
-                    uni.dataType = stringToDataType(entete[1]);
-                    uni.name = entete[2];
-                    uni.value = entete[3];
-                    sugar.uniforms.push_back(uni);
-                    //FILE_SYSTEM_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
+                    if(entete[1]=="vertex")
+                    {
+                        sugar.shader.vertex = entete[2];
+                        //FILE_SYSTEM_DEBUG("vertex "<<sugar.shader.vertex);
+
+                    }
+                    else if(entete[1]=="fragment")
+                    {
+                        sugar.shader.fragment = entete[2];
+                        //FILE_SYSTEM_DEBUG("fragment "<<sugar.shader.fragment);
+                    }
                     getNonEmptyLine(fin, file_line);
                 }                
             }
@@ -240,4 +245,12 @@ namespace Donut
     {
 
     }
+    TSugar TSugarLoader::GetSugar(const std::string& parModel)
+    {
+        FILE_SYSTEM_DEBUG("Looking for the sugar "<< parModel);
+        typeof(FSugars.begin()) ite = FSugars.find(parModel);
+        AssertNoReleasePrint((ite!=FSugars.end()),"Sugar model not found.");
+        return ite->second;
+    }
+
 }

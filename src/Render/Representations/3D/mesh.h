@@ -14,18 +14,35 @@
  *
  **/
 
-#ifndef DONUT_MODEL
-#define DONUT_MODEL
 
-#include <string>
-#include <list>
+ #ifndef DONUT_MESH
+ #define DONUT_MESH
 
-struct TModel
-{
-    std::string     name;
-    GLuint vertexArray;
-    int nbVertices;
-};
+#include "Render/DrawableObject.h"
+#include "resource/sugar.h"
+#include "resource/model.h"
+#include "MultiThread/ThreadSharedObject.h"
+#include "Math/vec.h"
 
-#endif // DONUT_MODEL
- 
+ namespace Donut
+ {
+	class TMesh : public TDrawableObject, public TThreadSharedObject
+	{
+	public:
+	 	TMesh(TVec3 parPosition, const std::string& parSugarName);
+	 	~TMesh();
+
+	 	virtual void Init();
+	 	virtual void Draw();
+
+	 	void SetPosition(const TVec3& parPos);
+
+	protected:
+	 	TVec3 FPosition;
+
+	 	// Model to draw
+	 	TSugar FSugarModel;
+	 	TModel* FModel;
+	 };
+}
+ #endif // DONUT_MESH

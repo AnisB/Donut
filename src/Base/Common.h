@@ -40,7 +40,7 @@ namespace Donut
 	#define CondAssertReleasePrint(Enonce,msg) if(!Enonce) {std::cout<< msg <<std::endl;assert(Enonce);}
 
 #ifdef DEBUG
-	#define AssertNoReleasePrint(Enonce, Msg) std::cout<< Msg <<std::endl; assert(Enonce)
+	#define AssertNoReleasePrint(Enonce, Msg) if(!Enonce)  {std::cout<< Msg <<std::endl; assert(Enonce);}
 #else
 	#define AssertNoReleasePrint(Enonce, Msg) {}
 #endif
@@ -63,6 +63,6 @@ namespace Donut
 
 
 	#define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
-
+	#define tryget(IT,LIST, ELEM) typeof( LIST.begin()) IT = LIST.find(ELEM);
 }
 #endif

@@ -47,7 +47,7 @@ struct TTexture
 	GLuint            FID;
     GLuint            FWidth;
     GLuint            FHeight;
-    GLubyte*          FData;
+    unsigned char*    FData;
     std::string       FFileName;
     TImgType::Type    FType;
 

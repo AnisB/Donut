@@ -53,7 +53,7 @@ struct TTextureInfo
     std::string name;
     std::string file;
 };
-struct TShader
+struct TShaderDescr
 {
     std::string vertex;
     std::string tessCtrl;
@@ -64,14 +64,22 @@ struct TShader
 struct TSugar
 {
     std::string               name;
-	std::string               models;
+	std::string               model;
     std::list<TBuildIn>       builtIns;
     std::list<TUniform>       uniforms;
     std::list<TTextureInfo>   textures;
-    TShader                   shader;
+    TShaderDescr              shader;
 
     TSugar( )
     {
+    }
+    TSugar( const TSugar& parSugar)
+    {
+        name = parSugar.name;
+        model = parSugar.model;
+        shader = parSugar.shader;
+        uniforms = parSugar.uniforms;
+        textures = parSugar.textures;
     }
 
     ~TSugar( )

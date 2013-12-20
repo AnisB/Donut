@@ -19,9 +19,11 @@
 #ifndef RESOURCE_MANAGER
 #define RESOURCE_MANAGER
 
+#include <Render/ShaderManager.h>
 #include "base/singleton.h"
 #include "Texture.h"
 #include "model.h"
+#include "sugar.h"
 #include <string>
 #include <map>
 
@@ -35,7 +37,8 @@
 		TTexture* LoadTexture(const std::string&  parTextureName);
 		TTexture* GetTexture(const std::string&  parTextureName);
 
-		TModel* LoadObj(const std::string&  parObjName);
+		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
+		void LoadSugarData(const TShader& parShader, const TSugar&  parSugar);
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;

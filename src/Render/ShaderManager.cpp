@@ -130,7 +130,10 @@ namespace Donut
 	{
 	    glUniform1i(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
 	}
-
+	void ShaderManager::InjectFloat(const TShader& parProgram, float parValue, const std::string& parName)
+	{
+	    glUniform1i(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
+	}
 	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
 		float mat[16];

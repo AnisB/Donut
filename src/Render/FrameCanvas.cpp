@@ -167,13 +167,23 @@ namespace Donut
  	{
  		glPopAttrib();
  		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
- 		glClearColor (1.0, 1.0, 1.0, 0.0);
+ 		glClearColor (0.0, 0.0, 0.0, 0.0);
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
  		glDisable(GL_DEPTH_TEST);
  	}
 
  	void TFrameCanvas::Draw()
  	{
+ 		GLint tex0 = glGetUniformLocation(FShader.FProgramID, "canvas");
+       	glActiveTexture(GL_TEXTURE0);
+ 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
+		glUniform1i(tex0, 0);
+
+		GLint depth = glGetUniformLocation(FShader.FProgramID, "depth");
+       	glActiveTexture(GL_TEXTURE1);
+ 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
+		glUniform1i(depth, 1);		
+ 		ShaderManager::Instance().DisableShader();
  		ShaderManager::Instance().EnableShader(FShader);
 
 	  	glBindVertexArray (FVertexArrayID);

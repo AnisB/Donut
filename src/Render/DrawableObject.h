@@ -26,7 +26,7 @@ namespace Donut
  {
  public:
  	TDrawableObject();
- 	~TDrawableObject();
+ 	virtual ~TDrawableObject();
 
  	virtual void Draw() = 0;
  	virtual void Init()

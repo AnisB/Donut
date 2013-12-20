@@ -124,7 +124,7 @@ GLfloat cubeVertexL[216] = {
 
 };
 
-unsigned int cubeFacesL[64] = 
+unsigned int cubeFacesL[36] = 
 { 
 	0, 1, 2,
 	1, 2, 3,
@@ -201,8 +201,10 @@ unsigned int cubeFacesL[64] =
  	void TCubeR::Draw()
  	{	
     	//Clear information from last draw
+    	// std::cout<<FVertexArrayID<<" "<<36<<std::endl;
+
 	  	glBindVertexArray (FVertexArrayID);
-	  	glDrawElements(GL_TRIANGLES, 64, GL_UNSIGNED_INT, 0);
+	  	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	  	glBindVertexArray (0);
  	}
  }

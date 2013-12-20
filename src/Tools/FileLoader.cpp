@@ -91,7 +91,7 @@ namespace Donut
 	    split(parString, parSeparator, stringTable);
 	    return stringTable;
 	}
-	
+
 	std::string removeMultSpace(const std::string& parString) 
 	{
 		std::string str = parString;
@@ -100,6 +100,23 @@ namespace Donut
 		std::string::iterator new_end = std::unique(str.begin(), str.end(), BothAreSpaces);
 		str.erase(new_end, str.end());  
 	    return str;
+	}
+
+	int convertToInt(const std::string& parToConvert)
+	{
+		std::stringstream streamConverter;
+		streamConverter<<parToConvert;
+		int result;
+		streamConverter>>result;
+		return result;
+	}
+	float convertToFloat(const std::string& parToConvert)
+	{
+		std::stringstream streamConverter;
+		streamConverter<<parToConvert;
+		float result;
+		streamConverter>>result;
+		return result;
 	}
 }
 

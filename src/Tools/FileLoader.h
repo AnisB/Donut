@@ -28,6 +28,9 @@ namespace Donut
 	bool WriteFile(char *fn, char *s);
 	std::vector<std::string> split(const std::string& parString, char parSeparator);
 	std::string removeMultSpace(const std::string& parString); 
+
+	int convertToInt(const std::string& parToConvert);
+	float convertToFloat(const std::string& parToConvert);
 }
 
 #endif // FILE_LOADER

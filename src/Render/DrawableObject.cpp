@@ -67,6 +67,7 @@ namespace Donut{
 
  	void TDrawableObject::GenerateShader()
  	{
+		//RENDER_DEBUG("generation");
 		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader, FShader.FFragmentShader);
  	}
  }

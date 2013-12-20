@@ -20,26 +20,12 @@
 #include "Base/Common.h"
 #include "Input/InputHelper.h"
 #include "Render/Defines.h"
+ #include <Render/Helper.h>
 #include <stdlib.h>
 #include <stdio.h>
  
  namespace Donut
  {
-
-	void CheckGLState(const std::string& desc)
-	{
-		if(desc=="FLUSH")
-			return;
-		GLenum e = glGetError();
-		if (e != GL_NO_ERROR) 
-		{
-			RENDER_ERR("OpenGL error in: "<<desc.c_str()<<" "/*<<gluErrorString(e)*/<<" "<<e);
-		}
-		else
-		{
-			RENDER_DEBUG("No OpenGL errors@"<<desc);
-		}
-	}
 
 	static void error_callback(int error, const char* description)
 	{
@@ -164,7 +150,7 @@
 		{
 			(*pass)->Init();
 		}
- 		glClearColor(1.0,1.0,1.0,0.0); 	
+ 		glClearColor(0.0,0.0,0.0,0.0); 	
  		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_FRONT_AND_BACK);
 		return isOk;

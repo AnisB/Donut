@@ -83,7 +83,10 @@ add_custom_command(
     COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data ${PROJECT_BINARY_DIR}
 )
   
-
+add_custom_command(
+    TARGET Donut POST_BUILD
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/models ${PROJECT_BINARY_DIR}
+)
 
 
  

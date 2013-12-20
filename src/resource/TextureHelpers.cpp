@@ -16,6 +16,7 @@
 
 
 #include "TextureHelpers.h"
+#include <Base/DebugPrinters.h> 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -55,75 +56,42 @@
         if( !Filename )
             return NULL;
 
-        FILE *file;
-        unsigned int  width;
-        unsigned int  height;
-        unsigned long i;
-        unsigned short int planes; // planes in image (must be 1) 
-        unsigned short int bpp;    // bits per pixel (must be 24)
-    
-        // make sure the file is there.
-        if( ( file = fopen( Filename, "rb" ) ) == NULL )
+        FILE* f = fopen(Filename, "rb");
+
+        if(f==NULL)
         {
-            printf( "File Not Found : %s\n", Filename );
-            return NULL;
+            INPUT_ERR("Erreur ouverture fichier "<<Filename);  
+            return NULL;  
         }
-
-        // seek through the bmp header, up to the width/height:
-        fseek( file, 18, SEEK_CUR );
-
-        // read the width
-        if( ( i = ( unsigned long )fread( &width, 4, 1, file ) ) != 1 )
+        else
         {
-            printf( "Error reading width from %s.\n", Filename );
-            return NULL;
-        }
+            INPUT_DEBUG("Fichier ouvert"<<Filename); 
 
-        // read the height 
-        if( ( i = ( unsigned long )fread( &height, 4, 1, file ) ) != 1 )
+        }
+        unsigned char info[54];
+        fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
+
+        // extract image height and width from header
+        int w = *(int*)&info[18];
+        int l = *(int*)&info[22];
+
+        TTexture* Image = new TTexture(Filename,TImgType::BMP, w, l );
+
+        int size = 3 * w  * l ;
+        unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
+        fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+        fclose(f);
+
+        for(int i = 0; i < size; i += 3)
         {
-            printf( "Error reading height from %s.\n", Filename );
-            return NULL;
+                unsigned char tmp = data[i];
+                data[i] = data[i+2];
+                data[i+2] = tmp;
         }
-
-        // read the planes
-        if( ( ( unsigned long )fread( &planes, 2, 1, file ) ) != 1 )
-        {
-            printf( "Error reading planes from %s.\n", Filename );
-            return NULL;
-        }
-
-        if( planes != 1 )
-        {
-            printf( "Planes from %s is not 1: %u\n", Filename, planes );
-            return NULL;
-        }
-
-        // read the bpp
-        if( ( i = ( unsigned long )fread( &bpp, 2, 1, file ) ) != 1 )
-        {
-            printf("Error reading bpp from %s.\n", Filename );
-            return NULL;
-        }
-
-        if( bpp != 24 )
-        {
-            printf( "Bpp from %s is not 24: %u\n", Filename, bpp );
-            return NULL;
-        }
-
-        // seek past the rest of the bitmap header.
-        fseek( file, 24, SEEK_CUR );
 
         // read the data.
-        TTexture* Image = new TTexture(Filename,TImgType::BMP, width, height );
+        Image->FData = data;
 
-        if( ( i = ( unsigned long )fread( Image->FData, width * height * 3, 1, file ) ) != 1 )
-        {
-            printf("Error reading image data from %s.\n", Filename );
-            delete Image;
-            return NULL;
-        }
         return Image;
     }
 

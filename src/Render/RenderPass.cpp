@@ -24,7 +24,7 @@
  	//CLASS IMPLEMENTATION
 	TRenderPass::TRenderPass()
 	{
-		FRenderToTexture = true;
+		FRenderToTexture = false;
 		FFrameCanvas = new TFrameCanvas();
 		FCamera = new Camera();
 	}

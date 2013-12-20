@@ -65,11 +65,9 @@
 
  		// Injections
 		void InjectInt(const TShader& parProgram, int parValue, const std::string& parName);
-		
+		void InjectFloat(const TShader& parProgram, float parValue, const std::string& parName);
 		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
-
 		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
-
 		void InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
 
 

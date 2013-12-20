@@ -1,11 +1,11 @@
-Object TYPE1
+Object Teapot
 {
    model{
-      data/model/teapot/model.obj
+     data/models/teapot/model.obj
    }
    shader{
-      vertex data/model/teapot/vertex.glsl
-      fragment data/model/teapot/fragment.glsl
+      vertex data/models/teapot/vertex.glsl
+      fragment data/models/teapot/fragment.glsl
    }
    built_in_data{
       vec3 camPosition
@@ -17,8 +17,8 @@ Object TYPE1
       float weight 10.0
    }
    textures{
-      diffMap data/model/teapot/diffMap.png
-      normalMap data/model/teapot/normalMap.png
+      diffMap data/models/teapot/diffMap.bmp
+      normalMap data/models/teapot/normalMap.bmp
    }
 }
  
