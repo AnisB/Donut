@@ -20,6 +20,7 @@
 
 #include "Defines.h"
 #include "ShaderManager.h"
+#include "Camera.h"
 namespace Donut
 {
  class TDrawableObject
@@ -41,7 +42,8 @@ namespace Donut
  	void SetVertexShader(const std::string& parShaderPath);
  	void SetFragmentShader(const std::string& parShaderPath);
 
- 	virtual void UpdateInfoShader();
+ 	virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
+ 	virtual void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);
  	
  	const Matrix4& GetModelMatrix() {return FModelMatrix;}
 

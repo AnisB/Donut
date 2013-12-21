@@ -23,6 +23,7 @@
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Defines.h>
+#include <Render/SceneNode.h>
 #include <unistd.h>
 
 
@@ -48,8 +49,9 @@ int main()
 	window->Init();
 
 	// Getting the camera
-	std::vector<Donut::TRenderPass*>& passes = window->GetPasses();
-	Donut::Camera* camera = passes[0]->GetCamera();
+	Donut::TRenderPass* pass= window->GetPasses()[0];
+	Donut::TNode* root= pass->GetRoot();
+	Donut::Camera* camera = pass->GetCamera();
 	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
@@ -57,12 +59,17 @@ int main()
 	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Teapot");
 	Donut::TDrawableObject* cube = new Donut::TCubeR(TVec3(5,0,-5),0.5);
 
-	teapot->GenerateShader();
-	teapot->Init();
+
+	Donut::TSceneNode* node = new Donut::TSceneNode();
 	cube->GenerateShader();
 	cube->Init();
-	window->RegisterToDraw(teapot);
+	teapot->GenerateShader();
+	teapot->Init();
+	node->AddDrawable(cube);
+	node->AddDrawable(teapot);
+	root->AddChild(node);
 	window->RegisterToDraw(cube);
+	window->RegisterToDraw(teapot);
 	
 	while(window->IsRendering())
 	{

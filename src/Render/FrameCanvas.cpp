@@ -96,7 +96,6 @@ namespace Donut
 
 	 		CreateTexture(FDepthBuffer, DEFAULTW, DEFAULTL, TextureNature::DEPTH);
 	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
- 			CheckGLState("Depth");
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{

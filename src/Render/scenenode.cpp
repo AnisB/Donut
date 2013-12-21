@@ -13,41 +13,43 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
- #include "Node.h"
+ #include "scenenode.h"
+
  #include <Base/Common.h>
+
 
 namespace Donut
 {
-	TNode::TNode()
+	TSceneNode::TSceneNode()
 	{
 
 	}
 
-	TNode::~TNode()
+	TSceneNode::~TSceneNode()
 	{
 		
 	}
-	void TNode::AddChild(TNode* parNode)
-	{
-		FSons.push_back(parNode);
-	}
-	bool TNode::RemoveChild(TNode* parNode)
-	{
-		size_t initial = FSons.size();
-		FSons.remove(parNode);
-		return (initial!=FSons.size());
-	}
 
-	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
-	{
+	void TSceneNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
+	{	
+		foreach(drawable,FDrawables)
+		{
+			TDrawableObject& drw = (**drawable);
+			drw.Bind();
+			drw.UpdateInfoShader(parModelMatrix*FModel,parCamera);
+			drw.Draw();
+			drw.Unbind();
+		}
+
 		foreach(son,FSons)
 		{
 			(*son)->Draw(parModelMatrix*FModel,parCamera);
 		}
 	}
 
-	const std::list<TNode*>& TNode::GetChildList()
+	void TSceneNode::AddDrawable(TDrawableObject* parDrawable)
 	{
-		return FSons;	
+		FDrawables.push_back(parDrawable);
 	}
+
 }

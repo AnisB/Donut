@@ -23,6 +23,7 @@
 
 #include <MultiThread/ThreadSharedObject.h>
 #include <Render/Camera.h>
+#include "Node.h"
 
 #include "FrameCanvas.h"
 
@@ -52,6 +53,7 @@
 		}
 		Camera* GetCamera(){return FCamera;}
 		void SetRenderType(FrameCanvasContent::Type parType);
+		TNode* GetRoot();
 	private:
 		void Bind();
 		void Unbind();
@@ -63,6 +65,7 @@
 		bool FRenderToTexture;
 
 	protected:
+		TNode* FRoot;
 		std::list<TDrawableObject*> FDrawables;
 	};
 	// END CLASS DECLARATION

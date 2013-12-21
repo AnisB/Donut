@@ -36,7 +36,7 @@
 	 	virtual void Draw();
 
 	 	void SetPosition(const TVec3& parPos);
- 		virtual void UpdateInfoShader();
+ 		virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
 
 	protected:
 	 	TVec3 FPosition;

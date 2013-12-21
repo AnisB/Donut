@@ -21,6 +21,7 @@
 #include <Input/InputManager.h>
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Defines.h>
+#include <Render/SceneNode.h>
 #include <unistd.h>
 
 
@@ -31,7 +32,7 @@ int main()
 
 	// Context info
 	Donut::TContextDetail newContext;
-	newContext.windowName = "testMapPNT";
+	newContext.windowName = "testDisplay";
 	newContext.width = 1280;
 	newContext.lenght = 720;
 	newContext.major = 4;
@@ -40,8 +41,9 @@ int main()
 	window->Init();
 
 	// Getting the camera
-	std::vector<Donut::TRenderPass*>& passes = window->GetPasses();
-	Donut::Camera* camera = passes[0]->GetCamera();
+	Donut::TRenderPass* pass= window->GetPasses()[0];
+	Donut::TNode* root= pass->GetRoot();
+	Donut::Camera* camera = pass->GetCamera();
 	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
@@ -54,10 +56,14 @@ int main()
 	cube->SetFragmentShader("shaders/test/testFragmentPNT.glsl");
 	cube2->SetFragmentShader("shaders/test/testFragmentPNT.glsl");
 
+	Donut::TSceneNode* node = new Donut::TSceneNode();
 	cube->GenerateShader();
 	cube->Init();
 	cube2->GenerateShader();
 	cube2->Init();
+	node->AddDrawable(cube);
+	node->AddDrawable(cube2);
+	root->AddChild(node);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(cube2);
 	
@@ -73,7 +79,6 @@ int main()
 	delete cube2;
 
 	delete window;
-	delete inManager;
 	return 0;
 
 }

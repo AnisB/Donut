@@ -63,11 +63,6 @@
             INPUT_ERR("Erreur ouverture fichier "<<Filename);  
             return NULL;  
         }
-        else
-        {
-            INPUT_DEBUG("Fichier ouvert"<<Filename); 
-
-        }
         unsigned char info[54];
         fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 

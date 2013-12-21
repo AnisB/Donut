@@ -13,41 +13,33 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
- #include "Node.h"
- #include <Base/Common.h>
+
+#ifndef DONUT_SCENE_NODE
+#define DONUT_SCENE_NODE
+
+
+#include "Node.h"
+
+#include <Render/DrawableObject.h>
+
+#include <list>
 
 namespace Donut
 {
-	TNode::TNode()
+	class TSceneNode : public TNode
 	{
+	public:
+		// Consrtuctor
+		TSceneNode();
+		//Destructor
+		~TSceneNode();
+		// Adds a child to the tree
+		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
 
-	}
+		virtual void AddDrawable(TDrawableObject* parDrawable);
 
-	TNode::~TNode()
-	{
-		
-	}
-	void TNode::AddChild(TNode* parNode)
-	{
-		FSons.push_back(parNode);
-	}
-	bool TNode::RemoveChild(TNode* parNode)
-	{
-		size_t initial = FSons.size();
-		FSons.remove(parNode);
-		return (initial!=FSons.size());
-	}
-
-	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
-	{
-		foreach(son,FSons)
-		{
-			(*son)->Draw(parModelMatrix*FModel,parCamera);
-		}
-	}
-
-	const std::list<TNode*>& TNode::GetChildList()
-	{
-		return FSons;	
-	}
+	protected:
+		std::list<TDrawableObject*> FDrawables;
+	};
 }
+#endif //DONUT_SCENE_NODE

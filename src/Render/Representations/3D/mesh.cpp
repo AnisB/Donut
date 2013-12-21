@@ -58,9 +58,9 @@ namespace Donut
  		CRITICAL_SECTION_END();	
  	}
 
- 	void TMesh::UpdateInfoShader()
+ 	void TMesh::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
  	{
-		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
+		TDrawableObject::UpdateInfoShader(parModelMatrix, parCamera);
  		ShaderManager::Instance().PreDrawSugarData(FSugarModel);
 		
  	}

@@ -17,6 +17,7 @@
 
  #include "DrawableObject.h"
  #include <Base/DebugPrinters.h>
+ #include <Base/Common.h>
  #include "Defines.h"
  #include "ShaderManager.h"
 
@@ -34,17 +35,21 @@ namespace Donut{
 
  	void TDrawableObject::Bind()
  	{
- 		//RENDER_DEBUG("Biding dude "<<FShader.FActive);
- 		if(FShader.FActive)
- 		{
- 			//RENDER_DEBUG("I bind");
- 			ShaderManager::Instance().EnableShader(FShader);
- 		}
+ 		AssertNoRelease(FShader.FActive);
+		ShaderManager::Instance().EnableShader(FShader);
  	}
- 	void TDrawableObject::UpdateInfoShader()
+ 	void TDrawableObject::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
  	{
 		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
+		ShaderManager::Instance().InjectMat4(FShader,parCamera->GetProjectionMatrix()*parCamera->GetViewMatrix()*FModelMatrix,"modelviewprojection");
  	}
+
+ 	void TDrawableObject::UpdateCamera(const Matrix4& parProjection, const Matrix4& parView)
+ 	{
+		ShaderManager::Instance().InjectMat4(FShader,parView,"view");
+		ShaderManager::Instance().InjectMat4(FShader,parProjection,"projection");
+ 	}
+
  	void TDrawableObject::Unbind()
  	{
  		if(FShader.FActive)

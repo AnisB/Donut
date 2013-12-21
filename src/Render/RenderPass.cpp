@@ -27,12 +27,18 @@
 		FRenderToTexture = false;
 		FFrameCanvas = new TFrameCanvas();
 		FCamera = new Camera();
+		FRoot = new TNode();
 	}
 	TRenderPass::~TRenderPass()
 	{
 		delete FCamera;
 		delete FFrameCanvas;
 		FDrawables.clear();
+	}
+
+	TNode* TRenderPass::GetRoot()
+	{
+		return FRoot;
 	}
 
 	void TRenderPass::Draw()
@@ -42,47 +48,34 @@
 		{
 			
 			Bind();
-			foreach(drawable,FDrawables)
-			{
- 				//RENDER_DEBUG("Drawable");
-				ShaderManager& sm = ShaderManager::Instance();
-				TDrawableObject & drw = *(*drawable);
-				drw.Bind();
-				drw.UpdateInfoShader();
-				if(FCamera->HasChanged())
-				{
-					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
-					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
-					FCamera->ChangeNoticed();
-
-				}
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix()*drw.GetModelMatrix(),"modelviewprojection");
-				drw.Draw();
-				drw.Unbind();
-			}
+			// foreach(drawable,FDrawables)
+			// {
+ 			// 		//RENDER_DEBUG("Drawable");
+			// 	TDrawableObject & drw = *(*drawable);
+			// 	drw.Bind();
+			// 	drw.UpdateInfoShader(Matrix4(MatrixInit::Identity),FCamera);
+			// 	drw.Draw();
+			// 	drw.Unbind();
+			// }
+			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
+			FCamera->ChangeNoticed();
 			Unbind();
 			
 			FFrameCanvas->Draw();
 		}
 		else
 		{
-			foreach(drawable,FDrawables)
-			{
- 				//RENDER_DEBUG("Drawable");
-				ShaderManager& sm = ShaderManager::Instance();
-				TDrawableObject & drw = *(*drawable);
-				drw.Bind();
-				drw.UpdateInfoShader();
-				if(FCamera->HasChanged())
-				{
-					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
-					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
-					FCamera->ChangeNoticed();
-				}
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix()*drw.GetModelMatrix(),"modelviewprojection");
-				drw.Draw();
-				drw.Unbind();
-			}
+			// foreach(drawable,FDrawables)
+			// {
+ 		// 		//RENDER_DEBUG("Drawable");
+			// 	TDrawableObject & drw = *(*drawable);
+			// 	drw.Bind();
+			// 	drw.UpdateInfoShader(Matrix4(MatrixInit::Identity),FCamera);
+			// 	drw.Draw();
+			// 	drw.Unbind();
+			// }
+			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
+			FCamera->ChangeNoticed();
 		}
 	}
 	void TRenderPass::Init()
@@ -105,7 +98,17 @@
 
 	void TRenderPass::PreparePass()
 	{
-
+		if(FCamera->HasChanged())
+		{
+			foreach(drawable,FDrawables)
+			{
+				TDrawableObject & drw = *(*drawable);
+				drw.Bind();
+				drw.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
+				drw.Unbind();
+			}
+		}
+		FCamera->ChangeNoticed();
 	}
 
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)

@@ -349,7 +349,7 @@
 	}
 	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{
-		INPUT_DEBUG("Data "<<parSugar.uniforms.size()<<" "<<parSugar.textures.size()); 
+		// INPUT_DEBUG("Data "<<parSugar.uniforms.size()<<" "<<parSugar.textures.size()); 
 		foreach(uni,parSugar.uniforms)
 		{
 			switch(uni->dataType)
@@ -367,7 +367,7 @@
 		foreach(tex,parSugar.textures)
 		{
 			TTexture* texPtr = LoadTexture(tex->file);
-  			INPUT_DEBUG((texPtr->FID)<<" "<<(tex->name)<<" "<<(tex->index));
+  			// INPUT_DEBUG((texPtr->FID)<<" "<<(tex->name)<<" "<<(tex->index));
   			tex->texID =texPtr->FID;
 			ShaderManager::Instance().InjectTex(parShader,texPtr->FID, tex->name,tex->index);
 		}

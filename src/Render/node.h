@@ -20,20 +20,28 @@
 
 // Std includes
 #include <list>
-class TNode
-{
-public:
-	// Consrtuctor
-	TNode();
-	//Destructor
-	~TNode();
-	// Adds a child to the tree
-	void AddChild(TNode* parNode);
-	bool RemoveChild(TNode* parNode);
-	const std::list<TNode*>& GetChildList();
-protected:
-	std::list<TNode*> FSons;
-	TNode* FParent;
-};
+#include <Math/Matrix4.h>
+#include "Camera.h"
 
+namespace Donut
+{
+	class TNode
+	{
+	public:
+		// Consrtuctor
+		TNode();
+		//Destructor
+		~TNode();
+		// Adds a child to the tree
+		void AddChild(TNode* parNode);
+		bool RemoveChild(TNode* parNode);
+		const std::list<TNode*>& GetChildList();
+		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
+
+	protected:
+		std::list<TNode*> FSons;
+		TNode* FParent;
+		Matrix4 FModel;
+	};
+}
 #endif

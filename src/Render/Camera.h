@@ -20,8 +20,9 @@ namespace Donut
 			// Translation
 			void Translate(const Vector3& parDir);
 
-			const Matrix4& GetViewMatrix() { return FViewMatrix;}
-			const Matrix4& GetProjectionMatrix() { return FProjection;}
+			const Matrix4& GetViewMatrix() const{ return FViewMatrix;}
+			const Matrix4& GetProjectionMatrix() const{ return FProjection;}
+			const Matrix4& GetProjectionViewMatrix() const{ return FProjection;}
 
 			void DefinePerspective(float parFovy, float parAspect, float parNear, float parFar);
 			void ChangeNoticed();
@@ -31,6 +32,7 @@ namespace Donut
 		protected:
 			Matrix4 FViewMatrix;
 			Matrix4 FProjection;
+			Matrix4 FProjectionView;
 			TThreadSafeBolean FHasChanged;
 	};
 }
