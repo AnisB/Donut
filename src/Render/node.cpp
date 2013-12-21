@@ -19,6 +19,7 @@
 namespace Donut
 {
 	TNode::TNode()
+	: FModel(MatrixInit::Identity)
 	{
 
 	}
@@ -38,6 +39,19 @@ namespace Donut
 		return (initial!=FSons.size());
 	}
 
+	void TNode::Yaw(float parAngle)
+	{
+		FModel = Matrix4::rotateYAxis(parAngle)*FModel;
+
+	}
+	void TNode::Roll(float parAngle)
+	{
+		FModel = Matrix4::rotateZAxis(parAngle)*FModel;
+	}
+	void TNode::Pitch(float parAngle)
+	{
+		FModel = Matrix4::rotateXAxis(parAngle)*FModel;
+	}	
 	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
 	{
 		foreach(son,FSons)

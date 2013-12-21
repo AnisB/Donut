@@ -42,6 +42,7 @@
  	{
  		DEFAULT_DEBUG("creating rendering thread");
  		FRenderer->CreateRenderWindow(parContext);
+ 		InitScene();
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
  		DEFAULT_DEBUG("Redering thread created");
  	}
@@ -99,8 +100,4 @@
  		FRenderer->UnRegisterToDraw(parObject);
  	}
 
-	void Engine::Flush()
- 	{
- 		FRenderer->Clear();
- 	}
  }

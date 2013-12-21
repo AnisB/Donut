@@ -27,3 +27,6 @@ TARGET_LINK_LIBRARIES(testObjLoad Donut ${CORELIBS})
 
 add_executable(testGBuffer ${TEST}/testGBuffer.cpp)
 TARGET_LINK_LIBRARIES(testGBuffer Donut ${CORELIBS})
+
+add_executable(testMultiThreadRender ${TEST}/testMultiThreadRender.cpp ${TEST}/engineexample1.cpp)
+TARGET_LINK_LIBRARIES(testMultiThreadRender Donut ${CORELIBS})

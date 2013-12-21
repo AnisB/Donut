@@ -30,11 +30,8 @@ namespace Donut
  	virtual ~TDrawableObject();
 
  	virtual void Draw() = 0;
- 	virtual void Init()
- 	{
+ 	virtual void Init() = 0;
 
- 	}
- 	
  	void Bind();
  	void Unbind();
 
@@ -47,17 +44,12 @@ namespace Donut
  	
  	const Matrix4& GetModelMatrix() {return FModelMatrix;}
 
- 	virtual void SetColor(const TColorFilter& parFilter)
- 	{
- 		FFilter = parFilter;
- 	}
  	const TShader& GetShader()
  	{
  		return FShader;
  	}
 
  public:
- 	TColorFilter FFilter;
  	TShader FShader;
  	Matrix4 FModelMatrix;
  };

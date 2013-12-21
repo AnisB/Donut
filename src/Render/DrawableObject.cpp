@@ -23,8 +23,7 @@
 
 namespace Donut{
  	TDrawableObject::TDrawableObject()
- 	: FFilter(1.0f,1.0f,1.0f,1.0f)
- 	, FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
+ 	: FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
  	, FModelMatrix(MatrixInit::Identity)
  	{
  	}
@@ -40,8 +39,9 @@ namespace Donut{
  	}
  	void TDrawableObject::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
  	{
-		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
-		ShaderManager::Instance().InjectMat4(FShader,parCamera->GetProjectionMatrix()*parCamera->GetViewMatrix()*FModelMatrix,"modelviewprojection");
+ 		const Matrix4& reftmpMult = FModelMatrix*parModelMatrix;
+		ShaderManager::Instance().InjectMat4(FShader,reftmpMult,"model");
+		ShaderManager::Instance().InjectMat4(FShader,parCamera->GetProjectionMatrix()*parCamera->GetViewMatrix()*reftmpMult,"modelviewprojection");
  	}
 
  	void TDrawableObject::UpdateCamera(const Matrix4& parProjection, const Matrix4& parView)
@@ -52,11 +52,9 @@ namespace Donut{
 
  	void TDrawableObject::Unbind()
  	{
- 		if(FShader.FActive)
- 		{
- 			ShaderManager::Instance().DisableShader();
- 		}
- 	}
+ 		AssertNoRelease(FShader.FActive);
+		ShaderManager::Instance().DisableShader();
+	}
 
  	void TDrawableObject::SetVertexShader(const std::string& parShaderPath)
  	{

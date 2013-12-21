@@ -35,6 +35,10 @@ namespace Donut
 		// Adds a child to the tree
 		void AddChild(TNode* parNode);
 		bool RemoveChild(TNode* parNode);
+
+		void Yaw(float parAngle);
+		void Roll(float parAngle);
+		void Pitch(float parAngle);
 		const std::list<TNode*>& GetChildList();
 		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
 

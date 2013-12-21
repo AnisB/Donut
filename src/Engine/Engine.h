@@ -39,7 +39,8 @@
 
  		bool IsRendering();
 
- 		void Flush();
+ 		virtual void InitScene(){};
+
 
  		virtual void Update(float dt)
  		{
@@ -57,6 +58,7 @@
  	private:
  		THREAD_ID FTRenderingThread;
  		THREAD_DATA FThreadData;
+ 	protected:
  		Donut::TRenderer * FRenderer;
  	};
  }

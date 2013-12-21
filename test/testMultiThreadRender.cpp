@@ -14,28 +14,17 @@
  *
  **/
 
+#include <iostream>
+#include "engineexample1.h"
+#include <unistd.h>
 
- #ifndef DONUT_QUAD_REPRESENTATION
- #define DONUT_QUAD_REPRESENTATION
 
-#include "Render/DrawableObject.h"
-#include "MultiThread/ThreadSharedObject.h"
-#include "Math/vec.h"
-#include <list>
+int main()
+{
+	Donut::TEngineExample * engine = new Donut::TEngineExample();
 
- namespace Donut{
- class TQuadRepresentation : public TDrawableObject, public TThreadSharedObject
- {
- public:
- 	TQuadRepresentation(const std::list<TVec2>& parPoints);
- 	~TQuadRepresentation();
+	engine->Init();
+	engine->Loop();
+	return 0;
 
- 	virtual void Draw();
-
- 	void SetPoints(const std::list<TVec2>& parPoints);
-
- protected:
- 	std::list<TVec2> FPoints;
- };
 }
- #endif // DONUT_QUAD_REPRESENTATION
