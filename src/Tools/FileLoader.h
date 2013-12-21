@@ -13,22 +13,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-
-
 #ifndef FILE_LOADER
 #define FILE_LOADER
 
+// Std includes
 #include <vector>
 #include <string>
 
 namespace Donut
 {
-
+	//Loads file , free with mallpoc
 	char * LoadFile( char const* fn);
+	// Writes s in f
 	bool WriteFile(char *fn, char *s);
+	// Splits parstring with parSeparator
 	std::vector<std::string> split(const std::string& parString, char parSeparator);
+	// removes multiple spaces in a string
 	std::string removeMultSpace(const std::string& parString); 
 
+	// Converters from string
 	int convertToInt(const std::string& parToConvert);
 	float convertToFloat(const std::string& parToConvert);
 }

@@ -148,4 +148,18 @@ namespace Donut
 	    GLint texRef = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
 	    glUniform1i(texRef, 0+parOffset);
 	}
+
+	void ShaderManager::BindTex(GLuint parIndexTex, GLuint parOffset)
+	{
+   		glActiveTexture(GL_TEXTURE0+parOffset);
+	    glBindTexture(GL_TEXTURE_2D, parIndexTex);	
+	}
+	void ShaderManager::PreDrawSugarData(const TSugar&  parSugar)
+	{
+		foreach(tex,parSugar.textures)
+		{
+			ShaderManager::Instance().BindTex(tex->texID, tex->index);
+		}
+	}
+
 }

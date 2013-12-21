@@ -40,7 +40,9 @@ namespace Donut
  	virtual void GenerateShader();
  	void SetVertexShader(const std::string& parShaderPath);
  	void SetFragmentShader(const std::string& parShaderPath);
- 	void InjectModelMatrix();
+
+ 	virtual void UpdateInfoShader();
+ 	
  	const Matrix4& GetModelMatrix() {return FModelMatrix;}
 
  	virtual void SetColor(const TColorFilter& parFilter)

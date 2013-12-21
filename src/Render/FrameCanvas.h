@@ -27,6 +27,14 @@
  
  namespace Donut
  {
+ 	namespace FrameCanvasContent
+ 	{
+ 		enum Type
+ 		{
+ 			STANDARD, // DIFF+DEPTH
+ 			GBUFFER, //DIFF+DEPTH+NORMAL+SPEC
+ 		};
+ 	}
 
 	class TFrameCanvas :  public TDrawableObject, public TThreadSharedObject
 	{
@@ -36,18 +44,30 @@
 
 		void Init();
 
+		void SetType(FrameCanvasContent::Type parType)
+		{
+			FCanvasType = parType;
+		}
 		void SetFragmentShader(const std::string& parFShader);
 		void SetVertexShader(const std::string& parVShader);
 		
 		virtual void Draw();
 		void Enable();
 		void Disable();
+
+	protected:
+		void createShader();
+		void createVAO();
 	protected:
 
 		// Buffer Data
 		GLuint FFrameBuffer;
-		GLuint FRenderTexture;
+		FrameCanvasContent::Type FCanvasType;
+
+		GLuint FAlbedoBuffer;
 		GLuint FDepthBuffer;
+		GLuint FNormalBuffer;
+		GLuint FSpecularBuffer;
 
 		// Quad
 	 	GLuint FVertexArrayID;

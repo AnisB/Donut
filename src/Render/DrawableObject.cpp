@@ -41,9 +41,9 @@ namespace Donut{
  			ShaderManager::Instance().EnableShader(FShader);
  		}
  	}
- 	void TDrawableObject::InjectModelMatrix()
+ 	void TDrawableObject::UpdateInfoShader()
  	{
- 			ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
+		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
  	}
  	void TDrawableObject::Unbind()
  	{

@@ -50,19 +50,15 @@
  		typeof(FTextures.begin()) it = FTextures.find(parTextureName);
  		if(it != FTextures.end())
  		{
-  			INPUT_DEBUG("Trouvé"); 
  			return it->second;
  		}
  		else
  		{
-  			INPUT_DEBUG("Pas trouvé, chargement"); 
  			TTexture * texture =  TextureHelpers::LoadTexture(parTextureName);
-  			INPUT_DEBUG(texture); 
 
  			FTextures[parTextureName] = texture;
 
  			glBindTexture(GL_TEXTURE_2D, texture->FID);
-  			INPUT_DEBUG("A"); 
 
  			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->FWidth, texture->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texture->FData);
  			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
@@ -70,7 +66,6 @@
  			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
  			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
  			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 1.0); 
-  			//INPUT_DEBUG("B"); 
 
  			glBindTexture(GL_TEXTURE_2D, 0);
  			return texture;
@@ -108,16 +103,11 @@
 	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
 	  		return NULL;
 	  	}
-	  	else
-	  	{
-	  		INPUT_ERR("Parsing model obj: "<<model); 
-	  	}
 		string line;
 		while (getline(in, line)) 
 		{
 			if (line.substr(0,2) == "o ") 
 			{
-	  			INPUT_DEBUG("Nouvel objet.");
 				while(getline(in, line) && line.substr(0,2) != "o ")
 				{
 		  			if (line.substr(0,2) == "v ") 
@@ -132,7 +122,6 @@
 				    }
 				    else if (line.substr(0,7) == "usemtl ") 
 				    {
-				    	INPUT_DEBUG("Usemtl found.");
 				    	getline(in, line);
 				    	while(line.substr(0,2)!="f " && getline(in, line))
 				    	{
@@ -358,14 +347,13 @@
 		glBindVertexArray (0);
 		return newModel;
 	}
-	void ResourceManager::LoadSugarData(const TShader& parShader, const TSugar&  parSugar)
+	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{
 		INPUT_DEBUG("Data "<<parSugar.uniforms.size()<<" "<<parSugar.textures.size()); 
 		foreach(uni,parSugar.uniforms)
 		{
 			switch(uni->dataType)
 			{
-	  			INPUT_DEBUG("Injecting: "<<uni->name); 
 				case ShaderDataType::INTEGER:
 					ShaderManager::Instance().InjectInt(parShader,convertToInt(uni->value), uni->name);
 				break;
@@ -379,7 +367,8 @@
 		foreach(tex,parSugar.textures)
 		{
 			TTexture* texPtr = LoadTexture(tex->file);
-  			INPUT_DEBUG((texPtr->FID)<<" "<<(tex->name)<<" "<<(tex->index)); 
+  			INPUT_DEBUG((texPtr->FID)<<" "<<(tex->name)<<" "<<(tex->index));
+  			tex->texID =texPtr->FID;
 			ShaderManager::Instance().InjectTex(parShader,texPtr->FID, tex->name,tex->index);
 		}
 	}

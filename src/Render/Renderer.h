@@ -58,6 +58,7 @@
 		void SetRendering(bool parVal);
 
 
+ 		void SetRenderType(FrameCanvasContent::Type parType, int parNbPass = 0);
  		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
  		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
  		std::vector<TRenderPass*>& GetPasses(){return FRenderPasses;}

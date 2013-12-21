@@ -18,10 +18,6 @@
  #ifndef DONUT_ENGINE
  #define DONUT_ENGINE
 
-#ifdef __posix__
-#include <pthread.h>
-#endif
-
 #include <base/singleton.h>
 #include <Render/Renderer.h>
 

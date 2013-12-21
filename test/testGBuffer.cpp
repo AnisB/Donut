@@ -36,14 +36,15 @@ int main()
 
 	// Context info
 	Donut::TContextDetail newContext;
-	newContext.windowName = "testObjLoad";
+	newContext.windowName = "testGbuffer";
 	newContext.width = 1280;
 	newContext.lenght = 720;
 	newContext.major = 4;
 	newContext.minor = 1;
 	window->CreateRenderWindow(newContext, 1);
-	window->SetFragmentShader("shaders/canvas/outVertex.glsl");
-	window->SetFragmentShader("shaders/canvas/outFragment.glsl");
+	window->SetFragmentShader("shaders/test/gbufferVertex.glsl");
+	window->SetFragmentShader("shaders/test/gbufferFragment.glsl");
+	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
 	window->Init();
 
 	// Getting the camera

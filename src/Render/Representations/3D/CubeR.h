@@ -30,6 +30,7 @@
  	TCubeR(TVec3 parPosition, float parDimension);
  	~TCubeR();
 
+ 	virtual void UpdateInfoShader();
  	virtual void Init();
  	virtual void Draw();
 

@@ -14,36 +14,26 @@
  *
  **/
 
+#ifndef DONUT_NODE
+#define DONUT_NODE
 
- #ifndef DONUT_MESH
- #define DONUT_MESH
 
-#include "Render/DrawableObject.h"
-#include "resource/sugar.h"
-#include "resource/model.h"
-#include "MultiThread/ThreadSharedObject.h"
-#include "Math/vec.h"
+// Std includes
+#include <list>
+class TNode
+{
+public:
+	// Consrtuctor
+	TNode();
+	//Destructor
+	~TNode();
+	// Adds a child to the tree
+	void AddChild(TNode* parNode);
+	bool RemoveChild(TNode* parNode);
+	const std::list<TNode*>& GetChildList();
+protected:
+	std::list<TNode*> FSons;
+	TNode* FParent;
+};
 
- namespace Donut
- {
-	class TMesh : public TDrawableObject, public TThreadSharedObject
-	{
-	public:
-	 	TMesh(TVec3 parPosition, const std::string& parSugarName);
-	 	~TMesh();
-
-	 	virtual void Init();
-	 	virtual void Draw();
-
-	 	void SetPosition(const TVec3& parPos);
- 		virtual void UpdateInfoShader();
-
-	protected:
-	 	TVec3 FPosition;
-
-	 	// Model to draw
-	 	TSugar FSugarModel;
-	 	TModel* FModel;
-	 };
-}
- #endif // DONUT_MESH
+#endif

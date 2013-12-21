@@ -38,7 +38,7 @@
 		TTexture* GetTexture(const std::string&  parTextureName);
 
 		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
-		void LoadSugarData(const TShader& parShader, const TSugar&  parSugar);
+		void LoadSugarData(const TShader& parShader, TSugar&  parSugar);
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;

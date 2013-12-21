@@ -228,6 +228,11 @@
 	{
 		FRenderPasses[parNbPass]->SetFragmentShader(parFrag);
 	}
+	
+	void TRenderer::SetRenderType(FrameCanvasContent::Type parType, int parNbPass)
+	{
+		FRenderPasses[parNbPass]->SetRenderType(parType);
+	}
 
 	// END CLASS DECLARATION
 	void *CreateRenderingThread(void* parGraphicRenderer)

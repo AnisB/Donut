@@ -15,8 +15,8 @@ out vec2 texCoord;
 
 void main()
 {
-    gl_Position = projection*view*model*vec4(position,1.0);
-    // gl_Position = modelviewprojection*vec4(position,1.0);
+    // gl_Position = projection*view*model*vec4(position,1.0);
+    gl_Position = modelviewprojection*vec4(position,1.0);
     fnormal = vec4(normal,1.0);
     texCoord = tex_coord;
 }

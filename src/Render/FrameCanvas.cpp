@@ -17,6 +17,7 @@
 
  #include "FrameCanvas.h"
  #include "Render/Defines.h"
+ #include <Render/Helper.h>
  #include "Base/Common.h"
  #include "MultiThread/Defines.h"
 
@@ -27,7 +28,6 @@ namespace Donut
 	#define CANVAS_FRAGMENT_SHADER "shaders/canvas/fragment.glsl"
 
 	GLfloat fullScreenQuad[20] = { 
-
 		-1.0f, -1.0f, 0.0f, 
 		-1.0f, 1.0f, 0.0f, 
 		1.0f, -1.0f, 0.0f, 
@@ -39,10 +39,13 @@ namespace Donut
 	};
  	TFrameCanvas::TFrameCanvas()
  	: TDrawableObject()
- 	, FFrameBuffer(0)
- 	, FRenderTexture(0)
- 	, FDepthBuffer(0)
+	, FFrameBuffer(0)
+	, FAlbedoBuffer(0)
+	, FDepthBuffer(0)
+	, FNormalBuffer(0)
+	, FSpecularBuffer(0)
  	, FShader(0,CANVAS_VERTEX_SHADER,CANVAS_FRAGMENT_SHADER)
+ 	, FCanvasType(FrameCanvasContent::STANDARD)
  	{
 
  	}
@@ -50,11 +53,15 @@ namespace Donut
  	TFrameCanvas::~TFrameCanvas()
  	{
  	}
- 	
-	void TFrameCanvas::Init()
- 	{
- 		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
 
+	void TFrameCanvas::createShader()
+	{
+ 		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader,FShader.FFragmentShader);
+	}
+
+	void TFrameCanvas::createVAO()
+	{
+ 		// Full screen quad VAO
 		glGenVertexArrays (1, &FVertexArrayID);
 		glBindVertexArray (FVertexArrayID);
 		
@@ -71,77 +78,76 @@ namespace Donut
 		
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray (0);
-		
- 		//glEnable(GL_TEXTURE_2D);
-		#ifdef LINUX
-		glGenFramebuffers(1, &FFrameBuffer);
- 		glBindFramebuffer(GL_FRAMEBUFFER, FFrameBuffer);
- 		#endif
- 		#ifdef MACOSX
-		glGenFramebuffersEXT(1, &FFrameBuffer);
- 		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
- 		#endif
+	}
+
+	void TFrameCanvas::Init()
+ 	{
+ 		createShader();
+		createVAO();
+
+		// Generation du buffer
+		FFrameBuffer = CreateFrameBuffer();
+		BindFrameBuffer(FFrameBuffer);
 		RENDER_DEBUG("Frame buffer init "<<FFrameBuffer);
+		if(FCanvasType==FrameCanvasContent::STANDARD)
+		{
+	 		CreateTexture(FAlbedoBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
 
- 		glGenTextures(1, &FRenderTexture);
- 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
- 		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, DEFAULTW, DEFAULTL, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
- 		glBindTexture(GL_TEXTURE_2D, 0);
+	 		CreateTexture(FDepthBuffer, DEFAULTW, DEFAULTL, TextureNature::DEPTH);
+	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+ 			CheckGLState("Depth");
 
-		#ifdef LINUX
- 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,  GL_TEXTURE_2D, FRenderTexture,0);
- 		#endif
+	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	 		{
+	 			RENDER_ERR("There is a problem with your standard frame buffer dude "<<glGetError());
+	 		}
 
- 		#ifdef MACOSX
- 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT, FRenderTexture,0);
- 		#endif
+	 		UnBindFrameBuffer();
+			RENDER_DEBUG("Frame canvas created");
+			
+	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
 
- 		glGenTextures(1, &FDepthBuffer);
- 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
- 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, DEFAULTW, DEFAULTL, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
- 		glBindTexture(GL_TEXTURE_2D, 0);
- 		#ifdef LINUX
- 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, FDepthBuffer,0);
- 		#endif
- 		
- 		#ifdef MACOSX
- 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, FDepthBuffer, 0);
- 		#endif
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 1 );
+	 		ShaderManager::Instance().DisableShader();
+		}
+		else if (FCanvasType==FrameCanvasContent::GBUFFER)
+		{
+	 		CreateTexture(FAlbedoBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
 
- 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
- 		{
- 			RENDER_DEBUG("There is a problem with your frame buffer dude "<<glGetError());
- 		}
- 		#ifdef LINUX
- 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
- 		#endif
- 		
- 		#ifdef MACOSX
- 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
- 		#endif
-		RENDER_DEBUG("Frame canvas created");
-		
- 		ShaderManager::Instance().EnableShader(FShader);
- 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
- 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
- 		GLint tex0 = glGetUniformLocation(FShader.FProgramID, "canvas");
-       	glActiveTexture(GL_TEXTURE0);
- 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
-		glUniform1i(tex0, 0);
+	 		CreateTexture(FNormalBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		BindToFrameBuffer(FNormalBuffer, TextureNature::COLOR, 1);
 
-		GLint depth = glGetUniformLocation(FShader.FProgramID, "depth");
-       	glActiveTexture(GL_TEXTURE1);
- 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
-		glUniform1i(depth, 1);		
- 		ShaderManager::Instance().DisableShader();
+	 		CreateTexture(FSpecularBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		BindToFrameBuffer(FSpecularBuffer, TextureNature::COLOR, 2);
+
+	 		CreateTexture(FDepthBuffer, DEFAULTW, DEFAULTL, TextureNature::DEPTH);
+	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+
+	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	 		{
+	 			RENDER_ERR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+	 		}
+
+	 		UnBindFrameBuffer();
+			RENDER_DEBUG("Frame gbuffer canvas created");
+			
+	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
+
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FShader, FNormalBuffer, "nbuffer", 1 );
+	 		ShaderManager::Instance().InjectTex(FShader, FSpecularBuffer, "specbuffer", 2 );
+	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 3 );
+
+	 		ShaderManager::Instance().DisableShader();
+		}
+
  	}
 
 	void TFrameCanvas::SetFragmentShader(const std::string& parFShader)
@@ -161,29 +167,39 @@ namespace Donut
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		if (FCanvasType==FrameCanvasContent::GBUFFER)
+		{
+			GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, 
+                          GL_COLOR_ATTACHMENT2_EXT };
+    		glDrawBuffers(3, buffers);
+		}
+
  	}
 
  	void TFrameCanvas::Disable()
  	{
  		glPopAttrib();
  		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
- 		glClearColor (0.0, 0.0, 0.0, 0.0);
+ 		glClearColor (1.0, 1.0, 1.0, 0.0);
 		glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
  		glDisable(GL_DEPTH_TEST);
  	}
 
  	void TFrameCanvas::Draw()
  	{
- 		GLint tex0 = glGetUniformLocation(FShader.FProgramID, "canvas");
-       	glActiveTexture(GL_TEXTURE0);
- 		glBindTexture(GL_TEXTURE_2D, FRenderTexture);
-		glUniform1i(tex0, 0);
+		if(FCanvasType==FrameCanvasContent::STANDARD)
+		{
+ 			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
+ 			ShaderManager::Instance().BindTex(FDepthBuffer,1);
+		}
+		else if (FCanvasType==FrameCanvasContent::GBUFFER)
+		{
+			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
+ 			ShaderManager::Instance().BindTex(FNormalBuffer,1);
+ 			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
+ 			ShaderManager::Instance().BindTex(FDepthBuffer,3);
+		}
 
-		GLint depth = glGetUniformLocation(FShader.FProgramID, "depth");
-       	glActiveTexture(GL_TEXTURE1);
- 		glBindTexture(GL_TEXTURE_2D, FDepthBuffer);
-		glUniform1i(depth, 1);		
- 		ShaderManager::Instance().DisableShader();
  		ShaderManager::Instance().EnableShader(FShader);
 
 	  	glBindVertexArray (FVertexArrayID);

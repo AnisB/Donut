@@ -52,6 +52,7 @@ struct TTextureInfo
     int index;
     std::string name;
     std::string file;
+    unsigned int texID;
 };
 struct TShaderDescr
 {

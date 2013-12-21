@@ -48,10 +48,15 @@
 				ShaderManager& sm = ShaderManager::Instance();
 				TDrawableObject & drw = *(*drawable);
 				drw.Bind();
-				drw.InjectModelMatrix();
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
-				//ShaderManager::Instance().InjectMat4(drw.GetShader(),drw.GetModelMatrix()*FCamera->GetViewMatrix()*FCamera->GetProjectionMatrix(),"modelviewprojection");
+				drw.UpdateInfoShader();
+				if(FCamera->HasChanged())
+				{
+					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
+					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
+					FCamera->ChangeNoticed();
+
+				}
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix()*drw.GetModelMatrix(),"modelviewprojection");
 				drw.Draw();
 				drw.Unbind();
 			}
@@ -67,10 +72,14 @@
 				ShaderManager& sm = ShaderManager::Instance();
 				TDrawableObject & drw = *(*drawable);
 				drw.Bind();
-				drw.InjectModelMatrix();
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
-				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
-				//ShaderManager::Instance().InjectMat4(drw.GetShader(),drw.GetModelMatrix()*FCamera->GetViewMatrix()*FCamera->GetProjectionMatrix(),"modelviewprojection");
+				drw.UpdateInfoShader();
+				if(FCamera->HasChanged())
+				{
+					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetViewMatrix(),"view");
+					ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix(),"projection");
+					FCamera->ChangeNoticed();
+				}
+				ShaderManager::Instance().InjectMat4(drw.GetShader(),FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix()*drw.GetModelMatrix(),"modelviewprojection");
 				drw.Draw();
 				drw.Unbind();
 			}
@@ -132,7 +141,10 @@
  		RENDER_DEBUG("Removing drawable");
 		FDrawables.remove(parDrawable);
 	}
-
+	void TRenderPass::SetRenderType(FrameCanvasContent::Type parType)
+	{
+		FFrameCanvas->SetType(parType);
+	}
 	void TRenderPass::Clear()
 	{
 		CRITICAL_SECTION_BEGIN();

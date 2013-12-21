@@ -51,7 +51,7 @@
 			FRenderToTexture = parVal;
 		}
 		Camera* GetCamera(){return FCamera;}
-
+		void SetRenderType(FrameCanvasContent::Type parType);
 	private:
 		void Bind();
 		void Unbind();

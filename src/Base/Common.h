@@ -45,23 +45,6 @@ namespace Donut
 	#define AssertNoReleasePrint(Enonce, Msg) {}
 #endif
 
-#ifdef DEBUG
-	template<class T> inline void checked_delete(T * x)
- 	{
- 		typedef char type_must_be_complete[ sizeof(T)? 1: -1 ];
- 		(void) sizeof(type_must_be_complete);
- 		delete x;
- 	}
-#endif
- 	
-#ifdef RELEASE
-	template<class T> inline void checked_delete(T * x)
- 	{
- 		delete x;
- 	}
-#endif
-
-
 	#define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
 	#define tryget(IT,LIST, ELEM) typeof( LIST.begin()) IT = LIST.find(ELEM);
 }

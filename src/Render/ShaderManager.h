@@ -20,6 +20,7 @@
 
  #include "Defines.h"
  #include <base/singleton.h>
+ #include <resource/sugar.h>
  #include <Math/Vector3.h>
  #include <Math/Matrix4.h>
  #include <list>
@@ -70,6 +71,8 @@
 		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
 		void InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
 
+		void BindTex(GLuint parIndexTex, GLuint parOffset);
+		void PreDrawSugarData(const TSugar&  parSugar);
 
  	private:
  		std::list<TShader> FPrograms;

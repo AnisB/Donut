@@ -58,14 +58,17 @@ namespace Donut
  		CRITICAL_SECTION_END();	
  	}
 
+ 	void TMesh::UpdateInfoShader()
+ 	{
+		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
+ 		ShaderManager::Instance().PreDrawSugarData(FSugarModel);
+		
+ 	}
+
  	void TMesh::Draw()
  	{	
-    	//Clear information from last draw
-    	// std::cout<<FModel->vertexArray<<" "<<FModel->nbVertices<<std::endl;
- 		ResourceManager::Instance().LoadSugarData(FShader,FSugarModel);
 	  	glBindVertexArray (FModel->vertexArray);
 	  	glDrawElements(GL_TRIANGLES, FModel->nbVertices, GL_UNSIGNED_INT, 0);
 	  	glBindVertexArray (0);
-
  	}
  }
