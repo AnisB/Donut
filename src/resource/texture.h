@@ -50,6 +50,7 @@ struct TTexture
     unsigned char*    FData;
     std::string       FFileName;
     TImgType::Type    FType;
+    unsigned          FNbRef;
 
     TTexture(std::string parFilename, TImgType::Type parType, int parWidth, int parHeight )
         : FWidth ( parWidth  )
@@ -57,6 +58,7 @@ struct TTexture
         , FData ( NULL )
         , FFileName ( parFilename )
         , FType (parType)
+        , FNbRef(0)
     {
     }
 
@@ -64,6 +66,33 @@ struct TTexture
     {
         if( FData )
             delete [] FData;
+    }
+};
+
+namespace TSkyboxData
+{
+    enum Type
+    {
+        FOLDER,
+        UNIQUEFILE
+
+    };
+}
+
+struct TSkyboxTexture
+{
+    GLuint              FID;
+    TTexture **          FTextures;
+    std::string         FFileName;
+
+    TSkyboxTexture(std::string parFilename)
+    : FFileName ( parFilename )
+    {
+        FTextures = new TTexture*[6];
+    }
+
+    ~TSkyboxTexture( void )
+    {
     }
 };
 

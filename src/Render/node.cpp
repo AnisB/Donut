@@ -41,16 +41,16 @@ namespace Donut
 
 	void TNode::Yaw(float parAngle)
 	{
-		FModel = Matrix4::rotateYAxis(parAngle)*FModel;
+		FModel = FModel*Matrix4::rotateYAxis(parAngle);
 
 	}
 	void TNode::Roll(float parAngle)
 	{
-		FModel = Matrix4::rotateZAxis(parAngle)*FModel;
+		FModel = FModel*Matrix4::rotateZAxis(parAngle);
 	}
 	void TNode::Pitch(float parAngle)
 	{
-		FModel = Matrix4::rotateXAxis(parAngle)*FModel;
+		FModel = FModel*Matrix4::rotateXAxis(parAngle);
 	}	
 	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
 	{
@@ -58,6 +58,10 @@ namespace Donut
 		{
 			(*son)->Draw(parModelMatrix*FModel,parCamera);
 		}
+	}
+	void TNode::Translate(const TVec3& parVector)
+	{
+ 		FModel = FModel*Matrix4::translate(parVector);
 	}
 
 	const std::list<TNode*>& TNode::GetChildList()

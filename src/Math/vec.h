@@ -68,8 +68,11 @@ static TVec2 operator+(const TVec2& parVec1, const TVec2& parVec2)
 
 struct TVec3
 {
-	TVec3()
+	TVec3(float parDefault = 0.0)
 	{
+		val[0] = parDefault;
+		val[1] = parDefault;
+		val[2] = parDefault;
 	}
 
 	TVec3(float parX, float parY, float parZ)
@@ -84,15 +87,24 @@ struct TVec3
 		val[1] = parTVec3.val[1];
 		val[2] = parTVec3.val[2];
 	}
+	void operator+=(const TVec3& parTVec3)
+	{
+		val[0] += parTVec3.val[0];
+		val[1] += parTVec3.val[1];
+		val[2] += parTVec3.val[2];
+	}
 
 	float val[3];
 };
 
 struct TVec4
 {
-	TVec4()
+	TVec4(float parDefault = 0.0)
 	{
-
+		val[0] = parDefault;
+		val[1] = parDefault;
+		val[2] = parDefault;
+		val[3] = parDefault;
 	}
 
 	TVec4(float parX, float parY, float parZ, float parW)

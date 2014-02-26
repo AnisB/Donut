@@ -30,3 +30,9 @@ TARGET_LINK_LIBRARIES(testGBuffer Donut ${CORELIBS})
 
 add_executable(testMultiThreadRender ${TEST}/testMultiThreadRender.cpp ${TEST}/engineexample1.cpp)
 TARGET_LINK_LIBRARIES(testMultiThreadRender Donut ${CORELIBS})
+
+add_executable(testLight ${TEST}/testLight.cpp)
+TARGET_LINK_LIBRARIES(testLight Donut ${CORELIBS})
+
+add_executable(testSkybox ${TEST}/testSkybox.cpp)
+TARGET_LINK_LIBRARIES(testSkybox Donut ${CORELIBS})

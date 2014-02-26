@@ -21,7 +21,7 @@
 
 #include "DrawableObject.h"
 #include "ShaderManager.h"
-
+#include <Render/Light.h>
 #include "MultiThread/ThreadSharedObject.h"
 
  
@@ -50,9 +50,12 @@
 		}
 		void SetFragmentShader(const std::string& parFShader);
 		void SetVertexShader(const std::string& parVShader);
-		
-		virtual void Draw();
+		virtual void Draw() {}
+		virtual void Draw(const std::list<TLight*>& parLights);
+		void InjectData(const TShader& parShader);
+
 		void Enable();
+		void EnableSecond();
 		void Disable();
 
 	protected:
@@ -65,9 +68,13 @@
 		FrameCanvasContent::Type FCanvasType;
 
 		GLuint FAlbedoBuffer;
-		GLuint FDepthBuffer;
+		GLuint FPosBuffer;
 		GLuint FNormalBuffer;
 		GLuint FSpecularBuffer;
+		GLuint FDepthBuffer;
+
+		GLuint FSecondFrameBuffer;
+		GLuint FFinalBuffer;
 
 		// Quad
 	 	GLuint FVertexArrayID;

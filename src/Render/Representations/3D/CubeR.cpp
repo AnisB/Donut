@@ -193,9 +193,9 @@ unsigned int cubeFacesL[36] =
  	}
  	void TCubeR::SetPosition(const TVec3& parPos)
  	{
- 		CRITICAL_SECTION_BEGIN();
+ 		// CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;
- 		CRITICAL_SECTION_END();	
+ 		// CRITICAL_SECTION_END();	
  	}
  	
  	void TCubeR::UpdateInfoShader()

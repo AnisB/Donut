@@ -23,8 +23,14 @@
  
 namespace TextureHelpers
 {
+    std::string ImgTypeToString(TImgType::Type parType);
 	TImgType::Type GetImgType(const std::string & parImg);
  	TTexture * LoadTexture(const std::string & parImg);
+ 	GLuint CreateTextureCube();
+ 	void CreateTexture(TTexture* parTex);
+ 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
+
+ 	void TakeScreenShot(const std::string& parFileName);
 }
 
 #endif // TEXTURE_HELPERS

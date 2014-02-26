@@ -79,11 +79,11 @@ void CreateTexture(GLuint& parTex, int parWidth, int parHeight, TextureNature::T
 	glBindTexture(GL_TEXTURE_2D, parTex);
 	if(parType == TextureNature::COLOR)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, parWidth, parHeight, 0,GL_RGBA, GL_UNSIGNED_BYTE, 0);
+		glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, parWidth, parHeight, 0,GL_RGBA, GL_FLOAT, 0);
 	}
 	else if(parType == TextureNature::DEPTH)
 	{
-		glTexImage2D(GL_TEXTURE_2D,0, GL_DEPTH_COMPONENT24, parWidth, parHeight, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, NULL);
+		glTexImage2D(GL_TEXTURE_2D,0, GL_DEPTH_COMPONENT24, parWidth, parHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	}
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);

@@ -58,7 +58,9 @@ IF(APPLE)
                    GLFW_LIBRARY
                    OpenGL_LIBRARY
                    IOKIT_LIBRARY)
-  SET(CORELIBS ${COCOA_LIBRARY} ${GLEW_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY} "${PROJECT_SOURCE_DIR}/external/mac/libglfw3.a")
+  SET(GRAPHIC_LIBS ${COCOA_LIBRARY} ${GLEW_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY} "${PROJECT_SOURCE_DIR}/external/mac/libglfw3.a")
+  SET(IMAGE_LIBS jpeg png)
+  SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
   include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/external/mac/)
 ENDIF (APPLE)
 

@@ -5,6 +5,7 @@ Object Teapot
    }
    shader{
       vertex data/models/teapot/vertex.glsl
+      geometry data/models/teapot/geometry.glsl
       fragment data/models/teapot/fragment.glsl
    }
    built_in_data{
@@ -16,5 +17,8 @@ Object Teapot
       diffMap data/models/teapot/diffMap.bmp
       normalMap data/models/teapot/normalMap.bmp
    }
+   cubeMap{
+   }
+
 }
  

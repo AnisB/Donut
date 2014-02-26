@@ -187,6 +187,23 @@ namespace Donut
                     getNonEmptyLine(fin, file_line);
                 }                
             }
+            else if(file_line.find("cubemaps{")!= std::string::npos)
+            {
+                int index = 0;
+                getNonEmptyLine(fin, file_line);
+                while(file_line.find("}")== std::string::npos)
+                {
+                    std::vector<std::string> entete = split(file_line,' ');
+                    TCubeMapInfo cm;
+                    cm.index = index;
+                    cm.name = entete[1];
+                    cm.path = entete[2];
+                    sugar.cubeMaps.push_back(cm);
+                    //FILE_SYSTEM_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
+                    index++;
+                    getNonEmptyLine(fin, file_line);
+                }                
+            }
             else if(file_line.find("built_in_data{")!= std::string::npos)
             {
                 getNonEmptyLine(fin, file_line);

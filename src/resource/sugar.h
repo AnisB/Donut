@@ -53,6 +53,37 @@ struct TTextureInfo
     std::string name;
     std::string file;
     unsigned int texID;
+    TTextureInfo()
+    {
+        index=0;
+        texID=0;
+    }
+    TTextureInfo(const TTextureInfo& parTextureInfo)
+    {
+        index=parTextureInfo.index;
+        name=parTextureInfo.name;
+        file=parTextureInfo.file;
+        texID=parTextureInfo.texID;
+    }
+};
+struct TCubeMapInfo
+{
+    int index;
+    std::string name;
+    std::string path;
+    unsigned int cmID;
+    TCubeMapInfo()
+    {
+        index=0;
+        cmID=0;
+    }
+    TCubeMapInfo(const TCubeMapInfo& parCubeMapInfo)
+    {
+        index=parCubeMapInfo.index;
+        name=parCubeMapInfo.name;
+        path=parCubeMapInfo.path;
+        cmID=parCubeMapInfo.cmID;
+    }
 };
 struct TShaderDescr
 {
@@ -69,6 +100,7 @@ struct TSugar
     std::list<TBuildIn>       builtIns;
     std::list<TUniform>       uniforms;
     std::list<TTextureInfo>   textures;
+    std::list<TCubeMapInfo>   cubeMaps;
     TShaderDescr              shader;
 
     TSugar( )
@@ -81,6 +113,7 @@ struct TSugar
         shader = parSugar.shader;
         uniforms = parSugar.uniforms;
         textures = parSugar.textures;
+        cubeMaps = parSugar.cubeMaps;
     }
 
     ~TSugar( )

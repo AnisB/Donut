@@ -23,6 +23,7 @@
 
 #include <MultiThread/ThreadSharedObject.h>
 #include <Render/Camera.h>
+#include <Render/Light.h>
 #include "Node.h"
 
 #include "FrameCanvas.h"
@@ -41,6 +42,10 @@
 
 		void Draw();
 		void Clear();
+
+		void AddLight(TLight* parLight);
+		void RemoveLight(TLight* parLight);
+
 		void AddDrawable(TDrawableObject* parDrawable);
 		void RemoveDrawable(TDrawableObject* parDrawable);
 
@@ -51,9 +56,10 @@
 		{
 			FRenderToTexture = parVal;
 		}
-		Camera* GetCamera(){return FCamera;}
 		void SetRenderType(FrameCanvasContent::Type parType);
 		TNode* GetRoot();
+		Camera* GetCamera(){return FCamera;}
+		
 	private:
 		void Bind();
 		void Unbind();
@@ -67,6 +73,7 @@
 	protected:
 		TNode* FRoot;
 		std::list<TDrawableObject*> FDrawables;
+		std::list<TLight*> FLights;
 	};
 	// END CLASS DECLARATION
  }

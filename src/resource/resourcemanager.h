@@ -37,11 +37,16 @@
 		TTexture* LoadTexture(const std::string&  parTextureName);
 		TTexture* GetTexture(const std::string&  parTextureName);
 
+		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName);
+		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);
+		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
+
 		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
 		void LoadSugarData(const TShader& parShader, TSugar&  parSugar);
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;
+		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;
 	};
 }
 

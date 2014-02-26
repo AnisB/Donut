@@ -17,19 +17,15 @@
 // ----------------------------------------
 //  Includes
 // ----------------------------------------
-
 #include "EngineExample1.h"
-#include <vector>
-#include <Engine/Defines.h>
-#include <resource/sugarloader.h>
-#include <iostream>
-#include <Render/Renderer.h>
+
 #include <Input/InputHelper.h>
+
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+
+#include <Render/Renderer.h>
 #include <Render/Defines.h>
-#include <Render/SceneNode.h>
+
 #include <unistd.h>
 
 // ----------------------------------------
@@ -69,11 +65,11 @@ namespace Donut
                 inManager->FCamera = camera;
                 camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
                 FCubeR = new Donut::TCubeR(TVec3(0,0,-5),0.5);
-                FTeapot = new Donut::TMesh(TVec3(-5,0,-40),"Teapot");
+                FTeapot = new Donut::TMesh(TVec3(0,0,0),"Teapot");
 
                 FNode1 = new Donut::TSceneNode();
                 FNode2 = new Donut::TSceneNode();
-
+                FNode2->Translate(TVec3(-5,0,-40));
                 FCubeR->GenerateShader();
                 FCubeR->Init();
 

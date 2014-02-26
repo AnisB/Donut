@@ -163,9 +163,7 @@
         for(size_t pass = 0; pass < FNbPasses; ++pass)
         {
         	TRenderPass & passIter = (*FRenderPasses[pass]);
-        	CRITICAL_SECTION_OBJ_BEGIN(passIter);
         	passIter.Draw();
-        	CRITICAL_SECTION_OBJ_END(passIter);
         }
 	  	glfwSwapBuffers (FWindow);
     }
@@ -219,6 +217,14 @@
         }
 	}
 
+	TNode* TRenderer::GetRoot(int parNbPass)
+	{
+		return FRenderPasses[parNbPass]->GetRoot();
+	}
+	Camera* TRenderer::GetCamera(int parNbPass)
+	{
+		return FRenderPasses[parNbPass]->GetCamera();
+	}
 	void TRenderer::SetVertexShader(const std::string& parVertex, int parNbPass)
 	{
 		FRenderPasses[parNbPass]->SetVertexShader(parVertex);
@@ -234,7 +240,12 @@
 		FRenderPasses[parNbPass]->SetRenderType(parType);
 	}
 
+	void TRenderer::AddLight(TLight* parLight, int parNbPass)
+	{
+		FRenderPasses[parNbPass]->AddLight(parLight);
+	}
 	// END CLASS DECLARATION
+	
 	void *CreateRenderingThread(void* parGraphicRenderer)
 	{
 		TRenderer * realGraphicRenderer = (TRenderer*) parGraphicRenderer;
@@ -247,5 +258,4 @@
 		RENDER_DEBUG("Window isn't rendering anymore");
 		pthread_exit(0);
 	}
-
 }

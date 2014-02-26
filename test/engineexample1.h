@@ -18,10 +18,14 @@
 #ifndef DONUT_ENGINE_EXAMPLE
 #define DONUT_ENGINE_EXAMPLE
 
+#include <Engine/Defines.h>
 #include <Engine/Engine.h>
+
 #include <Render/SceneNode.h>
+
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Representations/3D/Mesh.h>
+
 #include <Input/DefaultInputManager.h>
 
 

@@ -46,34 +46,14 @@
 		PreparePass();
 		if(FRenderToTexture)
 		{
-			
 			Bind();
-			// foreach(drawable,FDrawables)
-			// {
- 			// 		//RENDER_DEBUG("Drawable");
-			// 	TDrawableObject & drw = *(*drawable);
-			// 	drw.Bind();
-			// 	drw.UpdateInfoShader(Matrix4(MatrixInit::Identity),FCamera);
-			// 	drw.Draw();
-			// 	drw.Unbind();
-			// }
 			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
 			FCamera->ChangeNoticed();
 			Unbind();
-			
-			FFrameCanvas->Draw();
+			FFrameCanvas->Draw(FLights);
 		}
 		else
 		{
-			// foreach(drawable,FDrawables)
-			// {
- 		// 		//RENDER_DEBUG("Drawable");
-			// 	TDrawableObject & drw = *(*drawable);
-			// 	drw.Bind();
-			// 	drw.UpdateInfoShader(Matrix4(MatrixInit::Identity),FCamera);
-			// 	drw.Draw();
-			// 	drw.Unbind();
-			// }
 			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
 			FCamera->ChangeNoticed();
 		}
@@ -88,8 +68,8 @@
 		}
 		foreach(drawable,FDrawables)
 		{
-			(*drawable)->Init();
 			(*drawable)->GenerateShader();
+			(*drawable)->Init();
 		}
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
@@ -106,6 +86,13 @@
 				drw.Bind();
 				drw.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
 				drw.Unbind();
+			}
+			foreach(light,FLights)
+			{	
+				TLight & lt = *(*light);
+				lt.Bind();
+				lt.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
+				lt.Unbind();
 			}
 		}
 		FCamera->ChangeNoticed();
@@ -147,12 +134,24 @@
 	void TRenderPass::SetRenderType(FrameCanvasContent::Type parType)
 	{
 		FFrameCanvas->SetType(parType);
+		FRenderToTexture = true;
 	}
 	void TRenderPass::Clear()
 	{
 		CRITICAL_SECTION_BEGIN();
 		FDrawables.clear();
 		CRITICAL_SECTION_END();
+	}
+
+	void TRenderPass::AddLight(TLight* parLight)
+	{
+		FLights.push_back(parLight);
+		FFrameCanvas->InjectData(parLight->GetShader());
+
+	}
+	void TRenderPass::RemoveLight(TLight* parLight)
+	{
+		FLights.remove(parLight);
 	}
 	// END CLASS IMPLEMENTATION
 

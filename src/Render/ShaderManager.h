@@ -30,10 +30,11 @@
 
  	struct TShader
  	{
- 		TShader(GLuint parID, const std::string& parVShader,const std::string& parFShader)
+ 		TShader(GLuint parID, const std::string& parVShader, const std::string& parGShader, const std::string& parFShader)
  		{
  			FProgramID = parID;
  			FVertexShader = parVShader;
+ 			FGeometryShader = parGShader;
  			FFragmentShader = parFShader;
  			FActive = false;
  		}
@@ -41,11 +42,13 @@
  		{
  			FProgramID = parShader.FProgramID;
  			FVertexShader = parShader.FVertexShader;
+ 			FGeometryShader = parShader.FGeometryShader;
  			FFragmentShader = parShader.FFragmentShader;
  			FActive = parShader.FActive;
  		}
 
  		std::string FVertexShader;
+ 		std::string FGeometryShader;
  		std::string FFragmentShader;
 
  		bool FActive;
@@ -59,7 +62,7 @@
  		ShaderManager();
  		~ShaderManager();
 
- 		TShader CreateShader(const std::string& parVertexShader, const std::string& parFragmentShader);
+ 		bool CreateShader(TShader& parShader);
 
  		void EnableShader(const TShader& parProgram);
  		void DisableShader( );
@@ -68,10 +71,14 @@
 		void InjectInt(const TShader& parProgram, int parValue, const std::string& parName);
 		void InjectFloat(const TShader& parProgram, float parValue, const std::string& parName);
 		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
+		void InjectVec3(const TShader& parProgram, const TVec3& parValue, const std::string& parName);
+		void InjectVec4(const TShader& parProgram, const TVec4& parValue, const std::string& parName);
 		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
 		void InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
+		void InjectCubeMap(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
 
 		void BindTex(GLuint parIndexTex, GLuint parOffset);
+		void BindCubeMap(GLuint parIndexTex, GLuint parOffset);
 		void PreDrawSugarData(const TSugar&  parSugar);
 
  	private:

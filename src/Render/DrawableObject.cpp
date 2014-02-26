@@ -23,7 +23,7 @@
 
 namespace Donut{
  	TDrawableObject::TDrawableObject()
- 	: FShader(0,BASIC_VERTEX_SHADER,BASIC_FRAGMENT_SHADER)
+ 	: FShader(0,BASIC_VERTEX_SHADER, BASIC_GEOMETRY_SHADER, BASIC_FRAGMENT_SHADER)
  	, FModelMatrix(MatrixInit::Identity)
  	{
  	}
@@ -71,6 +71,6 @@ namespace Donut{
  	void TDrawableObject::GenerateShader()
  	{
 		//RENDER_DEBUG("generation");
-		FShader = ShaderManager::Instance().CreateShader(FShader.FVertexShader, FShader.FFragmentShader);
+		ShaderManager::Instance().CreateShader(FShader);
  	}
  }

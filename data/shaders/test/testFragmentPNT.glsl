@@ -2,10 +2,10 @@
 
 out vec4 frag_color;
 
-in vec4 fnormal;
+in vec3 fnormal;
 in vec2 texCoord;
 
 void main()
 {
-    frag_color = fnormal*texCoord.y*texCoord.x;
+    frag_color = vec4(fnormal,1.0)*texCoord.y*texCoord.x;
 }

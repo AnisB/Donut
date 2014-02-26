@@ -39,6 +39,8 @@ namespace Donut
 		void Yaw(float parAngle);
 		void Roll(float parAngle);
 		void Pitch(float parAngle);
+
+		void Translate(const TVec3& parVector);
 		const std::list<TNode*>& GetChildList();
 		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
 

@@ -74,7 +74,13 @@ namespace Donut
 
 
 #define BASIC_VERTEX_SHADER "shaders/base/vertex.glsl"
+#define BASIC_GEOMETRY_SHADER "shaders/base/geometry.glsl" 
 #define BASIC_FRAGMENT_SHADER "shaders/base/fragment.glsl" 
+
+#define LIGHT_VERTEX "shaders/light/vertex.glsl"
+#define LIGHT_GEOMETRY "shaders/light/geometry.glsl" 
+#define LIGHT_FRAGMENT "shaders/light/fragment.glsl" 
+#define DEFAULT_RAY 100 
 
 }
 #endif //DONUT_DEFINES_RENDER

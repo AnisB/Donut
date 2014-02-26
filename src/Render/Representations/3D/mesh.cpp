@@ -53,9 +53,9 @@ namespace Donut
 
  	void TMesh::SetPosition(const TVec3& parPos)
  	{
- 		CRITICAL_SECTION_BEGIN();
+ 		// CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;
- 		CRITICAL_SECTION_END();	
+ 		// CRITICAL_SECTION_END();	
  	}
 
  	void TMesh::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
