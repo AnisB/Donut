@@ -1,4 +1,4 @@
 Donut
 =====
 
-A 2D game engine prototype
+A 3D game engine - OpenGL Based
