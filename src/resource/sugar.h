@@ -17,6 +17,7 @@
 #ifndef DONUT_SUGAR
 #define DONUT_SUGAR
 
+#include <render/defines.h>
 #include <string>
 #include <list>
 
@@ -88,9 +89,20 @@ struct TCubeMapInfo
 struct TShaderDescr
 {
     std::string vertex;
-    std::string tessCtrl;
-    std::string tessEval;
+    std::string geometry;
+    std::string tesscontrol;
+    std::string tesseval;
     std::string fragment;
+    bool isTesselated;
+    TShaderDescr()
+    {
+        isTesselated =  false;
+        vertex =  BASIC_SHADER;
+        geometry =  BASIC_SHADER;
+        tesscontrol =  BASIC_SHADER;
+        tesseval =  BASIC_SHADER;
+        fragment =  BASIC_SHADER;
+    }
 };
 
 struct TSugar

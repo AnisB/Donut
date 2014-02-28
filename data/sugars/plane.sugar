@@ -1,0 +1,26 @@
+Object Plane
+{
+   model{
+      data/models/plane/model.obj
+   }
+   shader{
+      vertex data/models/plane/vertex.glsl
+      tesscontrol data/models/plane/tesscontrol.glsl
+      tesseval data/models/plane/tesseval.glsl
+      geometry data/models/plane/geometry.glsl
+      fragment data/models/plane/fragment.glsl
+   }
+
+    built_in_data{
+   }
+   extern_data{
+      float TessLevelInner 16
+      float TessLevelOuter 16
+   }
+   textures{
+      diffMap data/models/teapot/diffMap.bmp
+   }
+   cubeMap{
+   }
+}
+ 

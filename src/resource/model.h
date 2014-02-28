@@ -25,6 +25,11 @@ struct TModel
     std::string     name;
     GLuint vertexArray;
     int nbVertices;
+    bool isTesselated;
+    TModel()
+    {
+    	isTesselated = false;
+    }
 };
 
 #endif // DONUT_MODEL

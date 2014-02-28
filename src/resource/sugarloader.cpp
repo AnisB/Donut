@@ -229,7 +229,7 @@ namespace Donut
                     uni.name = entete[2];
                     uni.value = entete[3];
                     sugar.uniforms.push_back(uni);
-                    //FILE_SYSTEM_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
+                    // FILE_SYSTEM_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
                     getNonEmptyLine(fin, file_line);
                 }                
             }
@@ -243,13 +243,29 @@ namespace Donut
                     {
                         sugar.shader.vertex = entete[2];
                         //FILE_SYSTEM_DEBUG("vertex "<<sugar.shader.vertex);
-
+                    }
+                    else if(entete[1]=="tesscontrol")
+                    {
+                        sugar.shader.tesscontrol = entete[2];
+                        // FILE_SYSTEM_ERR("tesscontrol "<<sugar.shader.tesscontrol);
+                        sugar.shader.isTesselated = true;
+                    }
+                    else if(entete[1]=="tesseval")
+                    {
+                        sugar.shader.tesseval = entete[2];
+                        // FILE_SYSTEM_ERR("tesseval "<<sugar.shader.tesseval);
+                        sugar.shader.isTesselated = true;
+                    }
+                    else if(entete[1]=="geometry")
+                    {
+                        sugar.shader.geometry = entete[2];
                     }
                     else if(entete[1]=="fragment")
                     {
                         sugar.shader.fragment = entete[2];
                         //FILE_SYSTEM_DEBUG("fragment "<<sugar.shader.fragment);
                     }
+
                     getNonEmptyLine(fin, file_line);
                 }                
             }

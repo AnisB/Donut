@@ -20,7 +20,7 @@
  namespace Donut
  {
 	TLight::TLight()
-	: FShader(0,LIGHT_VERTEX, LIGHT_GEOMETRY, LIGHT_FRAGMENT)
+	: FShader(0,LIGHT_VERTEX, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, LIGHT_FRAGMENT)
 	, FPosition(0.0,0.0,0.0)
 	, FDiff(1.0,1.0,1.0,1.0)
 	, FSpec(0.0,0.0,1.0,1.0)

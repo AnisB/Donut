@@ -92,6 +92,17 @@ int main()
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(teapot);
 	
+	for (int i = 0; i< 10; i++)
+	{
+		for (int j = 0; j< 10; j++)
+		{
+			Donut::TDrawableObject* teapot2 = new Donut::TMesh(TVec3(20*j,0,-40*i),"Teapot");
+			teapot2->GenerateShader();
+			teapot2->Init();
+			node->AddDrawable(teapot2);
+			window->RegisterToDraw(teapot2);
+		}
+	}
 	while(window->IsRendering())
 	{
 		window->Draw();

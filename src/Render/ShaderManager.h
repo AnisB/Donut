@@ -28,32 +28,38 @@
  namespace Donut
  {
 
- 	struct TShader
- 	{
- 		TShader(GLuint parID, const std::string& parVShader, const std::string& parGShader, const std::string& parFShader)
- 		{
- 			FProgramID = parID;
- 			FVertexShader = parVShader;
- 			FGeometryShader = parGShader;
- 			FFragmentShader = parFShader;
- 			FActive = false;
- 		}
+	struct TShader
+	{
+		TShader(GLuint parID, const std::string& parVShader, const std::string& parTCShader, const std::string& parTEShader, const std::string& parGShader, const std::string& parFShader)
+		{
+			FProgramID = parID;
+			FVertexShader = parVShader;
+			FTessControl = parTCShader;
+			FTessEval = parTEShader;
+			FGeometryShader = parGShader;
+			FFragmentShader = parFShader;
+			FActive = false;
+		}
 		TShader(const TShader& parShader)
- 		{
- 			FProgramID = parShader.FProgramID;
- 			FVertexShader = parShader.FVertexShader;
- 			FGeometryShader = parShader.FGeometryShader;
- 			FFragmentShader = parShader.FFragmentShader;
- 			FActive = parShader.FActive;
- 		}
+		{
+			FProgramID = parShader.FProgramID;
+			FVertexShader = parShader.FVertexShader;
+			FTessControl = parShader.FTessControl;
+			FTessEval = parShader.FTessEval;
+			FGeometryShader = parShader.FGeometryShader;
+			FFragmentShader = parShader.FFragmentShader;
+			FActive = parShader.FActive;
+		}
 
- 		std::string FVertexShader;
- 		std::string FGeometryShader;
- 		std::string FFragmentShader;
+		std::string FVertexShader;
+		std::string FTessControl;
+		std::string FTessEval;
+		std::string FGeometryShader;
+		std::string FFragmentShader;
 
- 		bool FActive;
- 		GLuint FProgramID;
- 	};
+		bool FActive;
+		GLuint FProgramID;
+	};
 
  	class ShaderManager : public Singleton<ShaderManager>
  	{
@@ -83,8 +89,6 @@
 
  	private:
  		std::list<TShader> FPrograms;
- 		TShader FBasicPipeline;
-
  	};
  }
 

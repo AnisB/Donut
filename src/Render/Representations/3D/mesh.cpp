@@ -35,8 +35,10 @@ namespace Donut
  	{
  		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
  		RENDER_DEBUG("Le nom du modèle est"<<FSugarModel.model);
- 		RENDER_DEBUG("Les infos shaders sont"<<FSugarModel.shader.vertex<<" "<<FSugarModel.shader.fragment);
  		FShader.FVertexShader = FSugarModel.shader.vertex;
+ 		FShader.FTessControl = FSugarModel.shader.tesscontrol;
+ 		FShader.FTessEval = FSugarModel.shader.tesseval;
+ 		FShader.FGeometryShader = FSugarModel.shader.geometry;
  		FShader.FFragmentShader = FSugarModel.shader.fragment;
  	}
 
@@ -48,7 +50,10 @@ namespace Donut
  	void TMesh::Init()
  	{
  		FModel = ResourceManager::Instance().LoadObj(FShader,FSugarModel.model);
+ 		Bind();
  		ResourceManager::Instance().LoadSugarData(FShader,FSugarModel);
+ 		Unbind();
+
  	}
 
  	void TMesh::SetPosition(const TVec3& parPos)
@@ -62,13 +67,20 @@ namespace Donut
  	{
 		TDrawableObject::UpdateInfoShader(parModelMatrix, parCamera);
  		ShaderManager::Instance().PreDrawSugarData(FSugarModel);
-		
  	}
 
  	void TMesh::Draw()
  	{	
 	  	glBindVertexArray (FModel->vertexArray);
-	  	glDrawElements(GL_TRIANGLES, FModel->nbVertices, GL_UNSIGNED_INT, 0);
+	  	// RENDER_DEBUG("Tesselation active: "<<FSugarModel.shader.isTesselated<<FModel->nbVertices);
+	  	if(FSugarModel.shader.isTesselated)
+	  	{
+	  		glDrawElements(GL_PATCHES, FModel->nbVertices, GL_UNSIGNED_INT, 0);
+	  	}
+	  	else
+	  	{
+	  		glDrawElements(GL_TRIANGLES, FModel->nbVertices, GL_UNSIGNED_INT, 0);
+	  	}
 	  	glBindVertexArray (0);
  	}
  }

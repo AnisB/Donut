@@ -153,6 +153,13 @@
 
 	TModel* ResourceManager::LoadObj(const TShader& parShader, const std::string&  parFileName)
 	{
+		// Looking in the databaseModel
+ 		typeof(FModels.begin()) it = FModels.find(parFileName);
+ 		if(it != FModels.end())
+ 		{
+  			INPUT_DEBUG("Model already in memory :D"<<parFileName); 
+ 			return it->second;
+ 		}
 		std::string model = parFileName.substr(1,parFileName.size());
   		INPUT_ERR("I will try to load: "<<model); 
 		// Liste des vertices
@@ -180,7 +187,7 @@
 				{
 		  			if (line.substr(0,2) == "v ") 
 				    {
-		  				//INPUT_DEBUG("Nouveau vertice.");
+		  				// INPUT_DEBUG("Nouveau vertice.");
 						stringstream s(line.substr(2));
 						TVec3 v; 
 						s >> v.val[0]; 
@@ -188,25 +195,23 @@
 						s >> v.val[2]; 
 						listePoints.push_back(v);
 				    }
-				    else if (line.substr(0,7) == "usemtl ") 
+				    else if (line.substr(0,2)=="f ")
 				    {
-				    	getline(in, line);
-				    	while(line.substr(0,2)!="f " && getline(in, line))
-				    	{
-
-				    	}
 				    	TShape newShape;
 				    	while(line.substr(0,2)=="f ")
 				    	{
+				    		// INPUT_DEBUG("new primitive "<< line);
 				    		newShape.info.push_back(line.substr(2));
 				    		if(!getline(in, line))
 				    			break;
 				    	}
+			    		// INPUT_DEBUG("Add shape");
+
 				    	shapes.push_back(newShape);
 				    }
 				    else if(line[0] == 'v' && line[1] == 't') 
 				    { 	
-				    	//INPUT_DEBUG("UV mapping.");
+				    	// INPUT_DEBUG("UV mapping.");
 						istringstream s(line.substr(2));
 						float u,v;
 						s >> u;
@@ -233,6 +238,7 @@
 		    	// Commentaire
 			}
 		}
+
 	 	TModel * newModel = new TModel();
 	 	newModel->name = parFileName;
 	 	GLfloat * data;
@@ -251,6 +257,7 @@
 			AssertNoReleasePrint((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4, la dimension est:"<<dimShape);
 			std::vector<std::string> sample2 = split(sample[2],'/');
 			int nbInfo = sample2.size();
+
 			if(nbInfo==1)
 			{
 				data = new GLfloat[3*dimShape*nbShape];
@@ -413,11 +420,11 @@
 			}	
 		}
 		glBindVertexArray (0);
+		FModels[parFileName] = newModel;
 		return newModel;
 	}
 	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{
-		// INPUT_DEBUG("Data "<<parSugar.uniforms.size()<<" "<<parSugar.textures.size()); 
 		foreach(uni,parSugar.uniforms)
 		{
 			switch(uni->dataType)

@@ -44,7 +44,7 @@ namespace Donut
 	, FDepthBuffer(0)
 	, FNormalBuffer(0)
 	, FSpecularBuffer(0)
- 	, FShader(0,CANVAS_VERTEX_SHADER, BASIC_GEOMETRY_SHADER, CANVAS_FRAGMENT_SHADER)
+ 	, FShader(0,CANVAS_VERTEX_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, CANVAS_FRAGMENT_SHADER)
  	, FCanvasType(FrameCanvasContent::STANDARD)
  	{
 

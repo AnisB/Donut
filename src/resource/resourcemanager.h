@@ -46,6 +46,7 @@
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;
+		std::map<std::string, TModel*> FModels;
 		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;
 	};
 }

@@ -23,7 +23,7 @@
 
 namespace Donut{
  	TDrawableObject::TDrawableObject()
- 	: FShader(0,BASIC_VERTEX_SHADER, BASIC_GEOMETRY_SHADER, BASIC_FRAGMENT_SHADER)
+ 	: FShader(0,BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER)
  	, FModelMatrix(MatrixInit::Identity)
  	{
  	}

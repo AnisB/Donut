@@ -18,6 +18,7 @@
  #include <Tools/FileLoader.h>
  #include <Base/Common.h>
  #include <Render/Defines.h>
+ #include <render/helper.h>
  #include <Base/DebugPrinters.h>
 
 namespace Donut 
@@ -40,7 +41,7 @@ namespace Donut
 	}
 
 
-	bool CheckProgram(GLuint parProgramID,const std::string& parVShadePath, const std::string& parGShadePath,  const std::string& parFShadePath)
+	bool CheckProgram(GLuint parProgramID)
 	{
 	    GLint Result = GL_FALSE;
 	    int InfoLogLength;
@@ -51,14 +52,13 @@ namespace Donut
 	    {   
 	        char errorMessage[InfoLogLength];
 	        glGetProgramInfoLog(parProgramID, InfoLogLength, NULL, errorMessage);
-	        RENDER_ERR("Program linking error: "<<parVShadePath<<" "<<parGShadePath<<" "<<parFShadePath<<std::endl<<errorMessage );
-	        return false;
+	        RENDER_ERR("Program linking error: "<<std::endl<<errorMessage );
+	        // return false;
 	    }
 	    return true;
 	}
 
 	ShaderManager::ShaderManager()
-	: FBasicPipeline (0, " "," ", " ")
 	{
 	}
 
@@ -71,12 +71,14 @@ namespace Donut
 	{
 		GLuint programID;
 		GLuint vertexShader;
+		GLuint tessControlShader;
+		GLuint tessEvalShader;
 		GLuint geometryShader;
 		GLuint fragmentShader;
 
 		programID = glCreateProgram();
 
-		if(parShader.FVertexShader != BASIC_VERTEX_SHADER)
+		if(parShader.FVertexShader!=BASIC_SHADER)
 		{
 			char * vsFile = NULL;
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -87,22 +89,35 @@ namespace Donut
 			glCompileShader(vertexShader);
 			CheckShader(vertexShader, parShader.FVertexShader);
 			glAttachShader(programID,vertexShader);			
+
+		}
+		if(parShader.FTessControl!=BASIC_SHADER)
+		{
+			char * tcsFile = NULL;
+			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
+			tcsFile = LoadFile(parShader.FTessControl.c_str());
+			const char * tcsFile_ptr = tcsFile;
+			glShaderSource(tessControlShader, 1, (const char **)&tcsFile, NULL);
+			free(tcsFile);
+			glCompileShader(tessControlShader);
+			CheckShader(tessControlShader, parShader.FTessControl);
+			glAttachShader(programID,tessControlShader);
 		}
 
-		if(parShader.FFragmentShader != BASIC_FRAGMENT_SHADER)
+		if(parShader.FTessEval!=BASIC_SHADER)
 		{
-			char * fsFile = NULL;
-			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			fsFile = LoadFile(parShader.FFragmentShader.c_str());
-			const char * fsFile_ptr = fsFile;
-			glShaderSource(fragmentShader, 1, (const char **)&fsFile, NULL);
-			free(fsFile);
-			glCompileShader(fragmentShader);
-			CheckShader(fragmentShader, parShader.FFragmentShader);
-			glAttachShader(programID,fragmentShader);
-		
+			char * tesFile = NULL;
+			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
+			tesFile = LoadFile(parShader.FTessEval.c_str());
+			const char * tesFile_ptr = tesFile;
+			glShaderSource(tessEvalShader, 1, (const char **)&tesFile, NULL);
+			free(tesFile);
+			glCompileShader(tessEvalShader);
+			CheckShader(tessEvalShader, parShader.FTessEval);
+			glAttachShader(programID,tessEvalShader);
 		}
-		if(parShader.FGeometryShader != BASIC_GEOMETRY_SHADER)
+
+		if(parShader.FGeometryShader!=BASIC_SHADER)
 		{
 			char * gsFile = NULL;
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
@@ -114,9 +129,20 @@ namespace Donut
 			CheckShader(geometryShader, parShader.FGeometryShader);
 			glAttachShader(programID,geometryShader);
 		}
-
+		if(parShader.FFragmentShader!=BASIC_SHADER)
+		{
+			char * fsFile = NULL;
+			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+			fsFile = LoadFile(parShader.FFragmentShader.c_str());
+			const char * fsFile_ptr = fsFile;
+			glShaderSource(fragmentShader, 1, (const char **)&fsFile, NULL);
+			free(fsFile);
+			glCompileShader(fragmentShader);
+			CheckShader(fragmentShader, parShader.FFragmentShader);
+			glAttachShader(programID,fragmentShader);
+		}
 		glLinkProgram(programID);
-		if(CheckProgram(programID,parShader.FVertexShader, parShader.FGeometryShader, parShader.FFragmentShader))
+		if(CheckProgram(programID))
 		{
 			parShader.FProgramID = programID;
 			parShader.FActive = true;
@@ -127,8 +153,6 @@ namespace Donut
 		{
 			return false;
 		}
-
-
 	}
 
 	void ShaderManager::EnableShader(const TShader& parProgram)
@@ -160,17 +184,19 @@ namespace Donut
 
 	void ShaderManager::InjectInt(const TShader& parProgram, int parValue, const std::string& parName)
 	{
-	    glUniform1i(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
+		GLuint location = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
+	    glUniform1i(location, parValue);
 	}
 	void ShaderManager::InjectFloat(const TShader& parProgram, float parValue, const std::string& parName)
 	{
-	    glUniform1f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
+	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
 	}
 	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
 		float mat[16];
 		parValue.toTable(&mat[0]);
 	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
+
 	}
 	void ShaderManager::InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset)
 	{

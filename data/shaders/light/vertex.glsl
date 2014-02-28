@@ -6,10 +6,10 @@ uniform mat4 projection;
 in vec3 position;
 in vec2 tex_coord;
 
-out vec2 texCoordV;
+out vec2 texCoord;
 
 void main()
 {
     gl_Position = vec4(position,1.0);
-    texCoordV = tex_coord;
+    texCoord = tex_coord;
 }

@@ -8,7 +8,7 @@ uniform int width;
 uniform int lenght;
 
 in vec2 texCoord;
-#define MIN_STEP 0.005
+#define MIN_STEP 0.0005
 #define LINE_SIZE 2.0
 const float blurSize = 1.0/512.0;
 
