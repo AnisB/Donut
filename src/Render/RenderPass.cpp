@@ -33,6 +33,7 @@
 	{
 		delete FCamera;
 		delete FFrameCanvas;
+		delete FRoot;
 		FDrawables.clear();
 	}
 

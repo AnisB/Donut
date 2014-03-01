@@ -42,12 +42,23 @@ namespace TImgType
 	};
 }
 
+namespace TDataType
+{
+    enum Type
+    {
+        FLOAT,
+        UNSIGNED_BYTE
+    };
+}
+
 struct TTexture
 {
 	GLuint            FID;
     GLuint            FWidth;
     GLuint            FHeight;
-    unsigned char*    FData;
+    GLvoid *          FData;
+    TDataType::Type   FDataType;
+
     std::string       FFileName;
     TImgType::Type    FType;
     unsigned          FNbRef;
@@ -59,13 +70,34 @@ struct TTexture
         , FFileName ( parFilename )
         , FType (parType)
         , FNbRef(0)
+        , FDataType(TDataType::UNSIGNED_BYTE)
+    {
+    }
+    TTexture(int parWidth, int parHeight )
+        : FWidth ( parWidth  )
+        , FHeight( parHeight )
+        , FData ( NULL )
+        , FFileName ( "RUNTIME" )
+        , FType (TImgType::NONE)
+        , FNbRef(0)
+        , FDataType(TDataType::UNSIGNED_BYTE)
     {
     }
 
     ~TTexture( void )
     {
         if( FData )
-            delete [] FData;
+        {
+            switch(FDataType)
+            {
+                case TDataType::UNSIGNED_BYTE:
+                    delete [] (unsigned char*)FData;
+                break;
+                case TDataType::FLOAT:
+                    delete [] (GLfloat*)FData;
+                break;
+            }
+        }
     }
 };
 
@@ -75,7 +107,6 @@ namespace TSkyboxData
     {
         FOLDER,
         UNIQUEFILE
-
     };
 }
 
@@ -93,6 +124,7 @@ struct TSkyboxTexture
 
     ~TSkyboxTexture( void )
     {
+        delete [] FTextures;
     }
 };
 

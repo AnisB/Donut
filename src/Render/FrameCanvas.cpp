@@ -91,10 +91,10 @@ namespace Donut
 		RENDER_DEBUG("Frame buffer init "<<FFrameBuffer);
 		if(FCanvasType==FrameCanvasContent::STANDARD)
 		{
-	 		CreateTexture(FAlbedoBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
 
-	 		CreateTexture(FDepthBuffer, DEFAULTW, DEFAULTL, TextureNature::DEPTH);
+	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
 	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -106,8 +106,8 @@ namespace Donut
 			RENDER_DEBUG("Frame canvas created");
 			
 	 		ShaderManager::Instance().EnableShader(FShader);
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 1 );
@@ -115,19 +115,19 @@ namespace Donut
 		}
 		else if (FCanvasType==FrameCanvasContent::GBUFFER)
 		{
-	 		CreateTexture(FAlbedoBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
 
-	 		CreateTexture(FNormalBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FNormalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FNormalBuffer, TextureNature::COLOR, 1);
 
-	 		CreateTexture(FSpecularBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FSpecularBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FSpecularBuffer, TextureNature::COLOR, 2);
 
-	 		CreateTexture(FPosBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FPosBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FPosBuffer, TextureNature::COLOR, 3);
 
-	 		CreateTexture(FDepthBuffer, DEFAULTW, DEFAULTL, TextureNature::DEPTH);
+	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
 	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -141,7 +141,7 @@ namespace Donut
 			FSecondFrameBuffer = CreateFrameBuffer();
 			BindFrameBuffer(FSecondFrameBuffer);
 
-	 		CreateTexture(FFinalBuffer, DEFAULTW, DEFAULTL, TextureNature::COLOR);
+	 		CreateTexture(FFinalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
 	 		BindToFrameBuffer(FFinalBuffer, TextureNature::COLOR, 0);
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -151,8 +151,8 @@ namespace Donut
 
 	 		UnBindFrameBuffer();
 	 		ShaderManager::Instance().EnableShader(FShader);
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTW, "width");
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULTL, "lenght");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(FShader, FFinalBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "diff", 1 );
@@ -179,8 +179,8 @@ namespace Donut
 		if (FCanvasType==FrameCanvasContent::GBUFFER)
 		{
 	 		ShaderManager::Instance().EnableShader(parShader);
-	 		ShaderManager::Instance().InjectInt(parShader, DEFAULTW, "width");
-	 		ShaderManager::Instance().InjectInt(parShader, DEFAULTL, "lenght");
+	 		ShaderManager::Instance().InjectInt(parShader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(parShader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(parShader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(parShader, FNormalBuffer, "nbuffer", 1 );

@@ -28,6 +28,8 @@ namespace TextureHelpers
  	TTexture * LoadTexture(const std::string & parImg);
  	GLuint CreateTextureCube();
  	void CreateTexture(TTexture* parTex);
+    void CreateDataTexture(TTexture* parTex);
+
  	void BindToCubeMap(GLuint parType, TTexture* parTexture);
 
  	void TakeScreenShot(const std::string& parFileName);

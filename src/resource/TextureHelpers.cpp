@@ -174,7 +174,7 @@
         //read turn the uncompressed data into something ogl can read
         Image->FData = new unsigned char[size];      //setup data for the data its going to be handling
 
-        unsigned char* p1 = Image->FData;
+        unsigned char* p1 = (unsigned char*)    Image->FData;
         unsigned char** p2 = &p1;
         int numlines = 0;
 
@@ -364,6 +364,20 @@
 
         glBindTexture(GL_TEXTURE_2D, 0);
     }
+
+    void CreateDataTexture(TTexture* parTex)
+    {
+        glGenTextures(1, &(parTex->FID));
+        glBindTexture(GL_TEXTURE_2D, parTex->FID);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, parTex->FWidth, parTex->FHeight, 0, GL_RED, GL_FLOAT, parTex->FData);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 1.0); 
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
     void TakeScreenShot(const std::string& parFileName)
     {
         unsigned char *pdata = new unsigned char[1280*720*3];

@@ -39,3 +39,6 @@ TARGET_LINK_LIBRARIES(testSkybox Donut ${CORELIBS})
 
 add_executable(testTesselation ${TEST}/testTesselation.cpp)
 TARGET_LINK_LIBRARIES(testTesselation Donut ${CORELIBS})
+
+add_executable(nurbsProgram ${TEST}/nurbsProgram.cpp)
+TARGET_LINK_LIBRARIES(nurbsProgram Donut ${CORELIBS})

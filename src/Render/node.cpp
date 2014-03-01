@@ -26,7 +26,10 @@ namespace Donut
 
 	TNode::~TNode()
 	{
-		
+		foreach(child, FSons)
+		{
+			delete *child;
+		}
 	}
 	void TNode::AddChild(TNode* parNode)
 	{

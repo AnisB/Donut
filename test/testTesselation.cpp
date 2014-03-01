@@ -14,17 +14,13 @@
  *
  **/
 
-#include <iostream>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
-#include <Input/InputManager.h>
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
 #include <Render/SceneNode.h>
-#include <unistd.h>
 
 
 int main()
@@ -38,10 +34,6 @@ int main()
 	// Context info
 	Donut::TContextDetail newContext;
 	newContext.windowName = "testTesselation";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
 

@@ -26,6 +26,7 @@
 #endif
 #include <GLFW/glfw3.h>
 
+#include <render/const.h>
 #include <math.h>
 #include <string>
 
@@ -40,6 +41,17 @@ namespace Donut
  		int major;
  		int minor;
  		bool fullScreen;
+
+ 		TContextDetail()
+ 		{
+ 			windowName = DEFAULT_NAME;
+ 			width = DEFAULT_WIDTH;
+ 			lenght = DEFAULT_LENGHT;
+ 			major = DEFAULT_MAJOR_VERSION;
+ 			minor = DEFAULT_MINOR_VERSION;
+ 			fullScreen = DEFAULT_FULLSCREEN;
+ 		}
+
  	};
 
 	struct TColorFilter
@@ -65,13 +77,6 @@ namespace Donut
 		float b;
 		float a;
 	};
-
-#define DEFAULTW 1280 
-#define DEFAULTL 720
-
-#define DEFAULTNAME "Donut"
-#define DEFAULTFULLSCREEN false
-
 
 #define BASIC_SHADER "DEFAULT"
 

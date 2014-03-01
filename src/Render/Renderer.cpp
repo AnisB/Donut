@@ -73,7 +73,7 @@
 
 
 			// Window creation
- 			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), NULL, NULL);
+ 			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), parContext.fullScreen?glfwGetPrimaryMonitor():NULL, NULL);
  			if(FWindow==NULL)
  			{
  				RENDER_ERR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());

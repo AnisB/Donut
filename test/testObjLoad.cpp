@@ -38,10 +38,6 @@ int main()
 	// Context info
 	Donut::TContextDetail newContext;
 	newContext.windowName = "testObjLoad";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
 	window->CreateRenderWindow(newContext, 1);
 	window->SetFragmentShader("shaders/canvas/outVertex.glsl");
 	window->SetFragmentShader("shaders/canvas/outFragment.glsl");
