@@ -15,7 +15,7 @@
  **/
 
 // ----------------------------------------
-//  Includes
+// Includes
 // ----------------------------------------
 #include "EngineExample1.h"
 
@@ -29,84 +29,84 @@
 #include <unistd.h>
 
 // ----------------------------------------
-//  Implementation
+// Implementation
 // ----------------------------------------
 
 namespace Donut
 {
-        TEngineExample::TEngineExample() : Engine()
-        {
-                Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();       
-                modeltest.SetDirectory("data");
-                modeltest.LoadSugars();
-        }
-         
-        TEngineExample::~TEngineExample()
-        {
-                delete FNode1;
-                delete FNode2;
-                FRenderer->UnRegisterToDraw(FCubeR);
-                delete FCubeR;      
-                FRenderer->UnRegisterToDraw(FTeapot);
-                delete FTeapot;  
-                delete inManager;    
-        }
+    TEngineExample::TEngineExample() : Engine()
+    {
+        Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();    
+        modeltest.SetDirectory("data");
+        modeltest.LoadSugars();
+    }
+     
+    TEngineExample::~TEngineExample()
+    {
+        delete FNode1;
+        delete FNode2;
+        FRenderer->UnRegisterToDraw(FCubeR);
+        delete FCubeR;   
+        FRenderer->UnRegisterToDraw(FTeapot);
+        delete FTeapot; 
+        delete inManager;  
+    }
 
-        void TEngineExample::InitScene()
+    void TEngineExample::InitScene()
+    {
+        FRenderer->SetFragmentShader("shaders/canvas/outVertex.glsl");
+        FRenderer->SetFragmentShader("shaders/canvas/outFragment.glsl");
+
+        Donut::TRenderPass* pass= FRenderer->GetPasses()[0];
+        Donut::TNode* root= pass->GetRoot();
+        Donut::Camera* camera = pass->GetCamera();
+        inManager = new Donut::DefaultInputManager();
+        Donut::SetInputManager(inManager);
+        inManager->FCamera = camera;
+        camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
+        FCubeR = new Donut::TCubeR(TVec3(0,0,-5),0.5);
+        FTeapot = new Donut::TMesh(TVec3(0,0,0),"Teapot");
+
+        FNode1 = new Donut::TSceneNode();
+        FNode2 = new Donut::TSceneNode();
+        FNode2->Translate(TVec3(-5,0,-40));
+        FCubeR->GenerateShader();
+        FCubeR->Init();
+
+        FTeapot->GenerateShader();
+        FTeapot->Init();
+        FNode1->AddDrawable(FCubeR);
+        FNode2->AddDrawable(FTeapot);
+        root->AddChild(FNode1);
+        root->AddChild(FNode2);
+        FRenderer->RegisterToDraw(FCubeR);
+        FRenderer->RegisterToDraw(FTeapot);
+    }
+    void TEngineExample::Update(float dt)
+    {
+        Engine::Update(dt);
+        inManager->Update(dt);  
+        FNode2->Yaw(dt*2);  
+    }
+
+    void TEngineExample::Init()
+    {
+        Donut::TContextDetail newContext;
+        newContext.windowName = "Engine example 1";
+        newContext.width = 1280;
+        newContext.lenght = 720;
+        newContext.major = 4;
+        newContext.minor = 1;
+        LaunchRendering(newContext);
+        FIsRendering = true;
+    }
+
+    void TEngineExample::Loop()
+    {
+        while(FIsRendering && FRenderer->IsRendering())
         {
-                FRenderer->SetFragmentShader("shaders/canvas/outVertex.glsl");
-                FRenderer->SetFragmentShader("shaders/canvas/outFragment.glsl");
-
-                Donut::TRenderPass* pass= FRenderer->GetPasses()[0];
-                Donut::TNode* root= pass->GetRoot();
-                Donut::Camera* camera = pass->GetCamera();
-                inManager = new Donut::DefaultInputManager();
-                Donut::SetInputManager(inManager);
-                inManager->FCamera = camera;
-                camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-                FCubeR = new Donut::TCubeR(TVec3(0,0,-5),0.5);
-                FTeapot = new Donut::TMesh(TVec3(0,0,0),"Teapot");
-
-                FNode1 = new Donut::TSceneNode();
-                FNode2 = new Donut::TSceneNode();
-                FNode2->Translate(TVec3(-5,0,-40));
-                FCubeR->GenerateShader();
-                FCubeR->Init();
-
-                FTeapot->GenerateShader();
-                FTeapot->Init();
-                FNode1->AddDrawable(FCubeR);
-                FNode2->AddDrawable(FTeapot);
-                root->AddChild(FNode1);
-                root->AddChild(FNode2);
-                FRenderer->RegisterToDraw(FCubeR);
-                FRenderer->RegisterToDraw(FTeapot);
+          Update(0.016f);
+          usleep(16000); // A corriger
         }
-        void TEngineExample::Update(float dt)
-        {
-                Engine::Update(dt);
-                inManager->Update(dt);    
-                FNode2->Yaw(dt*2);    
-        }
-
-        void TEngineExample::Init()
-        {
-                Donut::TContextDetail newContext;
-                newContext.windowName = "Engine example 1";
-                newContext.width = 1280;
-                newContext.lenght = 720;
-                newContext.major = 4;
-                newContext.minor = 1;
-                LaunchRendering(newContext);
-                FIsRendering = true;
-        }
-
-        void TEngineExample::Loop()
-        {
-                while(FIsRendering && FRenderer->IsRendering())
-                {
-                    Update(0.016f);
-                    usleep(16000); // A corriger
-                }
-        }
+    }
  }

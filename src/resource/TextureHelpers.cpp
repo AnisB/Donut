@@ -369,12 +369,20 @@
     {
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, parTex->FWidth, parTex->FHeight, 0, GL_RED, GL_FLOAT, parTex->FData);
+        INPUT_ERR("Data texture "<< parTex->FWidth<<" "<<parTex->FHeight);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 1.0); 
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    void ReLoadTexture(TTexture* parTex)
+    {
+        glBindTexture(GL_TEXTURE_2D, parTex->FID);
+        INPUT_ERR("Reload data texture "<< parTex->FWidth<<" "<<parTex->FHeight);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 

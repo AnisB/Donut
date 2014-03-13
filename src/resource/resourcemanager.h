@@ -36,6 +36,8 @@
  		~ResourceManager();
 		TTexture* LoadTexture(const std::string&  parTextureName);
 		TTexture* GetTexture(const std::string&  parTextureName);
+		void LoadTextures(TSugar&  parSugar);
+
 
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName);
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);

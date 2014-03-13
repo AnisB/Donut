@@ -48,5 +48,6 @@ namespace Donut
 	#define foreach(IT,X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
 	#define tryget(IT,LIST, ELEM) typeof( LIST.begin()) IT = LIST.find(ELEM);
 	#define PACK_DATA(VAL,MAXVAL) (VAL/MAXVAL+0.5)
+	#define UNPACK_DATA(VAL,MAXVAL) ((VAL-0.5)*MAXVAL)
 }
 #endif

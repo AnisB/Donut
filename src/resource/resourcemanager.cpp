@@ -441,9 +441,15 @@
 		}
 		foreach(tex,parSugar.textures)
 		{
+			ShaderManager::Instance().InjectTex(parShader,tex->texID, tex->name,tex->index);
+		}
+	}
+	void ResourceManager::LoadTextures(TSugar&  parSugar)
+	{
+		foreach(tex,parSugar.textures)
+		{
 			TTexture* texPtr = LoadTexture(tex->file);
   			tex->texID =texPtr->FID;
-			ShaderManager::Instance().InjectTex(parShader,texPtr->FID, tex->name,tex->index);
 		}
 	}
 }

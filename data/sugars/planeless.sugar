@@ -1,4 +1,4 @@
-Object Plane
+Object PlaneLess
 {
    model{
       data/models/plane/model.obj
@@ -14,8 +14,8 @@ Object Plane
     built_in_data{
    }
    extern_data{
-      float TessLevelInner 8
-      float TessLevelOuter 8
+      float TessLevelInner 4
+      float TessLevelOuter 4
    }
    textures{
       diffMap data/models/plane/tissu.jpg

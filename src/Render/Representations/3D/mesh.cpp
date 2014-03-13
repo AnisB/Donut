@@ -40,11 +40,23 @@ namespace Donut
  		FShader.FTessEval = FSugarModel.shader.tesseval;
  		FShader.FGeometryShader = FSugarModel.shader.geometry;
  		FShader.FFragmentShader = FSugarModel.shader.fragment;
+ 		ResourceManager::Instance().LoadTextures(FSugarModel);
+
  	}
 
  	TMesh::~TMesh()
  	{
 
+ 	}
+
+
+ 	void TMesh::AddTexture(TTexture* parTex, const std::string& parName)
+ 	{
+ 		TTextureInfo newTex;
+		newTex.texID = parTex->FID;
+		newTex.index = FSugarModel.textures.size();
+		newTex.name = parName;
+ 		FSugarModel.textures.push_back(newTex);
  	}
 
  	void TMesh::Init()

@@ -21,6 +21,7 @@
 #include "Render/DrawableObject.h"
 #include "resource/sugar.h"
 #include "resource/model.h"
+#include "resource/texture.h"
 #include "MultiThread/ThreadSharedObject.h"
 #include "Math/vec.h"
 
@@ -32,6 +33,7 @@
 	 	TMesh(TVec3 parPosition, const std::string& parSugarName);
 	 	~TMesh();
 
+	 	virtual void AddTexture(TTexture* parTex, const std::string& parName);
 	 	virtual void Init();
 	 	virtual void Draw();
 

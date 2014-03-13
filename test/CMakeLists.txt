@@ -1,6 +1,6 @@
 
 add_definitions( -DDONUT_TESTS)
-#  SFML finding
+# SFML finding
 add_executable(testStateEngine ${TEST}/testStateEngine.cpp)
 TARGET_LINK_LIBRARIES(testStateEngine Donut ${CORELIBS})
 
@@ -40,5 +40,5 @@ TARGET_LINK_LIBRARIES(testSkybox Donut ${CORELIBS})
 add_executable(testTesselation ${TEST}/testTesselation.cpp)
 TARGET_LINK_LIBRARIES(testTesselation Donut ${CORELIBS})
 
-add_executable(nurbsProgram ${TEST}/nurbsProgram.cpp)
-TARGET_LINK_LIBRARIES(nurbsProgram Donut ${CORELIBS})
+add_executable(bezierProgram ${TEST}/bezierProgram)
+TARGET_LINK_LIBRARIES(bezierProgram Donut ${CORELIBS})

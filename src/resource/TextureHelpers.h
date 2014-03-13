@@ -29,6 +29,7 @@ namespace TextureHelpers
  	GLuint CreateTextureCube();
  	void CreateTexture(TTexture* parTex);
     void CreateDataTexture(TTexture* parTex);
+    void ReLoadTexture(TTexture* parTex);
 
  	void BindToCubeMap(GLuint parType, TTexture* parTexture);
 
