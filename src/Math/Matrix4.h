@@ -4,7 +4,7 @@
 #include <math/vector4.h>
 #include <math/vector3.h>
 #include <math/vec.h>
-
+#include <string.h>
 
 class Vector4;
 

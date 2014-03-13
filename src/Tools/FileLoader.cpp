@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sstream>
+#ifdef LINUX
+#include <algorithm>
+#endif
 
 namespace Donut
 {

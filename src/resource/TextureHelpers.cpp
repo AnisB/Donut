@@ -381,7 +381,6 @@
     void ReLoadTexture(TTexture* parTex)
     {
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        INPUT_ERR("Reload data texture "<< parTex->FWidth<<" "<<parTex->FHeight);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glBindTexture(GL_TEXTURE_2D, 0);
     }

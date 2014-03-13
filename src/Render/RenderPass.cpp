@@ -34,7 +34,11 @@
 		delete FCamera;
 		delete FFrameCanvas;
 		delete FRoot;
-		FDrawables.clear();
+ 		foreach(drawable, FDrawables)
+ 		{
+ 			if(*drawable)
+ 				delete *drawable;
+ 		}
 	}
 
 	TNode* TRenderPass::GetRoot()

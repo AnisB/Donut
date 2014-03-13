@@ -28,7 +28,7 @@
 
 namespace Donut
 {
- 	
+ 	#define PI 3.14159265359
 #ifdef DEBUG
 	#define AssertNoRelease(Enonce) assert(Enonce)
 #elif RELEASE 

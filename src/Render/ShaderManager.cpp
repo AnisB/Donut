@@ -20,7 +20,7 @@
  #include <Render/Defines.h>
  #include <render/helper.h>
  #include <Base/DebugPrinters.h>
-
+ #include <stdlib.h>
 namespace Donut 
 {
 	void CheckShader(GLuint parShaderID, const std::string& parShadePath)

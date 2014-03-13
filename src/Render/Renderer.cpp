@@ -153,7 +153,7 @@
  		glClearColor(0.0,0.0,0.0,0.0); 	
  		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_FRONT_AND_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		return isOk;
  	}
 
