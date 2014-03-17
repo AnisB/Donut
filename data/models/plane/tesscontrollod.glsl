@@ -4,6 +4,7 @@ layout(vertices = 3) out;
 
 // Données recues du vertex shader
 in vec2 texCoordV[];
+in float dist[];
 
 // Données transférées au tess_eval shader
 out vec2 texCoordTC[];
@@ -11,7 +12,7 @@ out vec2 texCoordTC[];
 // Niveau de raffinement
 uniform float TessLevelInner;
 uniform float TessLevelOuter;
- 
+
 #define ID gl_InvocationID
 void main()
 {
@@ -21,9 +22,9 @@ void main()
     // Definition du rafinement
     if (ID == 0) 
     {
-        gl_TessLevelInner[0] = TessLevelInner;
-        gl_TessLevelOuter[0] = TessLevelOuter;
-        gl_TessLevelOuter[1] = TessLevelOuter;
-        gl_TessLevelOuter[2] = TessLevelOuter;
+        gl_TessLevelInner[0] = TessLevelInner/(dist[ID]*0.01);
+        gl_TessLevelOuter[0] = TessLevelOuter/(dist[ID]*0.01);
+        gl_TessLevelOuter[1] = TessLevelOuter/(dist[ID]*0.01);
+        gl_TessLevelOuter[2] = TessLevelOuter/(dist[ID]*0.01);
     }
 }
