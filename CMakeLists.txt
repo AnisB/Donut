@@ -9,6 +9,8 @@ add_definitions( -DDEBUG )
 
 
 set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
+set(TEST "${PROJECT_SOURCE_DIR}/test/")
+set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
 
 IF(UNIX AND NOT APPLE)
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/linux")
@@ -20,7 +22,7 @@ set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/mac")
 set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
 ENDIF()
 
-set(TEST "${PROJECT_SOURCE_DIR}/test/")
+
 
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
@@ -73,8 +75,11 @@ add_library(Donut ${Source_File})
  
 link_directories(${CMAKE_BINARY_DIR})
 
+IF(TEST_ACTIVE)
 add_subdirectory(${TEST})
+ENDIF()
 
+add_subdirectory(${PROGRAM})
 
 add_custom_command(
     TARGET Donut POST_BUILD
