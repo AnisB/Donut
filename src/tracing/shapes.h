@@ -14,28 +14,25 @@
  *
  **/
 
+#include <tracing/structures.h>
 
 
-#ifndef TEXTURE_HELPERS
-#define TEXTURE_HELPERS
-
-#include "Texture.h"
- 
-namespace TextureHelpers
+namespace Donut
 {
-    std::string ImgTypeToString(TImgType::Type parType);
-	TImgType::Type GetImgType(const std::string & parImg);
- 	TTexture * LoadTexture(const std::string & parImg);
- 	GLuint CreateTextureCube();
- 	void CreateTexture(TTexture* parTex);
-    void CreateDataTexture(TTexture* parTex);
-    void ReLoadTexture(TTexture* parTex);
-
- 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
-
- 	void TakeScreenShot(const std::string& parFileName);
-    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
-
+	class TTriangle
+	{
+		// Methods
+	public:
+		TTriangle();
+		TTriangle(const TVertice& parV0, const TVertice& parV1, const TVertice& parV2);
+		TTriangle(const TTriangle& parTriangle);
+		TIntersect intersect(const TRay& parRay);
+		// Attributes
+	protected:
+		TVertice v0;
+		TVertice v1;
+		TVertice v2;
+	};
 }
 
-#endif // TEXTURE_HELPERS
+

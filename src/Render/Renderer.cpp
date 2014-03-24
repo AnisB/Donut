@@ -153,9 +153,19 @@
  		glClearColor(0.0,0.0,0.0,0.0); 	
  		//glEnable(GL_CULL_FACE);
 		//glCullFace(GL_FRONT_AND_BACK);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		return isOk;
  	}
+	void TRenderer::SetLook(const TRenderingLook::Type parLook)
+	{
+		if(parLook == TRenderingLook::LINE)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		}
+		else if(parLook == TRenderingLook::FILL)
+		{
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+	}
 
  	void TRenderer::Draw()
  	{ 	 

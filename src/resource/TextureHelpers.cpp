@@ -126,7 +126,7 @@
     }
     TTexture* LoadJPG(const char* FileName, bool Fast = true)
     {
-        printf("Loading jpg dude %s\n", FileName);
+        // printf("Loading jpg dude %s\n", FileName);
 
         FILE* file = fopen(FileName, "rb");  //open the file
         struct jpeg_decompress_struct info;  //the jpeg decompress info
@@ -369,7 +369,7 @@
     {
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        INPUT_ERR("Data texture "<< parTex->FWidth<<" "<<parTex->FHeight);
+        FILE_SYSTEM_DEBUG("Create texture width:"<<parTex->FWidth<<" height:"<<parTex->FHeight);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -389,6 +389,44 @@
     {
         unsigned char *pdata = new unsigned char[1280*720*3];
         glReadPixels(0, 0, 1280, 720, GL_RGB, GL_UNSIGNED_BYTE, pdata);
+
+        FILE *outfile;
+        if ((outfile = fopen(parFileName.c_str(), "wb")) == NULL) 
+        {
+            printf("can't open %s",parFileName.c_str());
+            return;
+        }
+
+        struct jpeg_compress_struct cinfo;
+        struct jpeg_error_mgr       jerr;
+
+        cinfo.err = jpeg_std_error(&jerr);
+        jpeg_create_compress(&cinfo);
+        jpeg_stdio_dest(&cinfo, outfile);
+
+        cinfo.image_width      = 1280;
+        cinfo.image_height     = 720;
+        cinfo.input_components = 3;
+        cinfo.in_color_space   = JCS_RGB;
+
+        jpeg_set_defaults(&cinfo);
+        /*set the quality [0..100]  */
+        jpeg_set_quality (&cinfo, 100, true);
+        jpeg_start_compress(&cinfo, true);
+
+        JSAMPROW row_pointer;
+        int row_stride = 1280 * 3;
+
+        while (cinfo.next_scanline < cinfo.image_height)
+        {
+            row_pointer = (JSAMPROW) &pdata[(cinfo.image_height-1-cinfo.next_scanline)*row_stride];
+            jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+        }
+    }
+
+    void SaveTextureToFile(const std::string& parFileName, const TTexture* parTexture)
+    {
+        float *pdata = (float*)(parTexture->FData);
 
         FILE *outfile;
         if ((outfile = fopen(parFileName.c_str(), "wb")) == NULL) 

@@ -14,28 +14,30 @@
  *
  **/
 
+#include <math/vec.h>
 
-
-#ifndef TEXTURE_HELPERS
-#define TEXTURE_HELPERS
-
-#include "Texture.h"
- 
-namespace TextureHelpers
+struct TVertice
 {
-    std::string ImgTypeToString(TImgType::Type parType);
-	TImgType::Type GetImgType(const std::string & parImg);
- 	TTexture * LoadTexture(const std::string & parImg);
- 	GLuint CreateTextureCube();
- 	void CreateTexture(TTexture* parTex);
-    void CreateDataTexture(TTexture* parTex);
-    void ReLoadTexture(TTexture* parTex);
+	TVec3 position;
+	TVec3 normal;
+	TVec2 uv;
+};
 
- 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
+struct TRay
+{
+	TVec3 origin;
+	TVec3 direction;
+};
 
- 	void TakeScreenShot(const std::string& parFileName);
-    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
 
-}
+struct TIntersect
+{
+	TIntersect()
+	{
+		isValid = false;
+	}	
 
-#endif // TEXTURE_HELPERS
+	bool isValid;
+	float distance;
+	TVertice point;
+};

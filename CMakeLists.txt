@@ -21,6 +21,7 @@ set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
 ENDIF()
 
 set(TEST "${PROJECT_SOURCE_DIR}/test/")
+set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
 
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
@@ -74,6 +75,7 @@ add_library(Donut ${Source_File})
 link_directories(${CMAKE_BINARY_DIR})
 
 add_subdirectory(${TEST})
+add_subdirectory(${PROGRAM})
 
 
 add_custom_command(

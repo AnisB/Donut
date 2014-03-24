@@ -36,6 +36,7 @@ int main()
 	newContext.windowName = "testTesselation";
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
+	window->SetLook(Donut::TRenderingLook::LINE);
 
 	// Getting the camera
 	Donut::TRenderPass* pass= window->GetPasses()[0];
@@ -45,7 +46,7 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Plane");
+	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Tess");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	teapot->GenerateShader();
@@ -62,7 +63,6 @@ int main()
 	}
 	window->UnRegisterToDraw(teapot);
 	delete teapot;
-
 	delete window;
 	return 0;
 

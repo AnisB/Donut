@@ -4,8 +4,8 @@ Object Plane
       data/models/plane/model.obj
    }
    shader{
-      vertex data/models/plane/vertexlod.glsl
-      tesscontrol data/models/plane/tesscontrollod.glsl
+      vertex data/models/plane/vertex.glsl
+      tesscontrol data/models/plane/tesscontrol.glsl
       tesseval data/models/plane/tesseval.glsl
       geometry data/models/plane/geometry.glsl
       fragment data/models/plane/fragment.glsl

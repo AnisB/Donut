@@ -1,0 +1,26 @@
+Object Tess
+{
+   model{
+      data/models/teapot/model.obj
+   }
+   shader{
+      vertex data/models/test/vertex.glsl
+      tesscontrol data/models/test/tesscontrol.glsl
+      tesseval data/models/test/tesseval.glsl
+      fragment data/models/test/fragment.glsl
+   }
+
+    built_in_data{
+   }
+   extern_data{
+      float TessLevelInner 4
+      float TessLevelOuter 4
+   }
+   textures{
+      diffMap data/models/plane/tissu.jpg
+      displacement data/models/plane/noise.png
+   }
+   cubeMap{
+   }
+}
+ 

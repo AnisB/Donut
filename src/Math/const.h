@@ -16,26 +16,11 @@
 
 
 
-#ifndef TEXTURE_HELPERS
-#define TEXTURE_HELPERS
-
-#include "Texture.h"
- 
-namespace TextureHelpers
+namespace Donut
 {
-    std::string ImgTypeToString(TImgType::Type parType);
-	TImgType::Type GetImgType(const std::string & parImg);
- 	TTexture * LoadTexture(const std::string & parImg);
- 	GLuint CreateTextureCube();
- 	void CreateTexture(TTexture* parTex);
-    void CreateDataTexture(TTexture* parTex);
-    void ReLoadTexture(TTexture* parTex);
-
- 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
-
- 	void TakeScreenShot(const std::string& parFileName);
-    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
-
+	#define EPSILON 0.0000001
+	#define TWOPI 6.28318530718
+	#define PI 3.14159265359
+	#define PI_2 1.57079632679
+	#define PI_4 0.78539816339
 }
-
-#endif // TEXTURE_HELPERS

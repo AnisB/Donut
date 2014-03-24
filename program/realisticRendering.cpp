@@ -37,15 +37,8 @@ int main()
 
 	// Context info
 	Donut::TContextDetail newContext;
-	newContext.windowName = "testGbuffer";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
+	newContext.windowName = "Lego dude";
 	window->CreateRenderWindow(newContext, 1);
-	window->SetFragmentShader("shaders/test/gbufferVertex.glsl");
-	window->SetFragmentShader("shaders/test/gbufferFragment.glsl");
-	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
 	window->Init();
 
 	// Getting the camera
@@ -55,21 +48,15 @@ int main()
 	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Teapot");
-	Donut::TDrawableObject* cube = new Donut::TCubeR(TVec3(5,0,-5),0.5);
-
+	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
+	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0,-10),"LegoDude");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	cube->GenerateShader();
-	cube->Init();
-	teapot->GenerateShader();
-	teapot->Init();
-	node->AddDrawable(cube);
-	node->AddDrawable(teapot);
+	lego->GenerateShader();
+	lego->Init();
+	node->AddDrawable(lego);
 	root->AddChild(node);
-	window->RegisterToDraw(cube);
-	window->RegisterToDraw(teapot);
+	window->RegisterToDraw(lego);
 	
 	while(window->IsRendering())
 	{
@@ -77,10 +64,8 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update(0.016);
 	}
-	window->UnRegisterToDraw(cube);
-	window->UnRegisterToDraw(teapot);
-	delete teapot;
-	delete cube;
+	window->UnRegisterToDraw(lego);
+	delete lego;
 
 	delete window;
 	return 0;

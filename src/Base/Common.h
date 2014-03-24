@@ -37,10 +37,10 @@ namespace Donut
 
 	#define AssertRelease(Enonce) assert(Enonce)
 
-	#define CondAssertReleasePrint(Enonce,msg) if(!Enonce) {std::cout<< msg <<std::endl;assert(Enonce);}
+	#define CondAssertReleasePrint(Enonce,msg) if(!(Enonce)) {std::cout<< msg <<std::endl;assert(Enonce);}
 
 #ifdef DEBUG
-	#define AssertNoReleasePrint(Enonce, Msg) if(!Enonce)  {std::cout<< Msg <<std::endl; assert(Enonce);}
+	#define AssertNoReleasePrint(Enonce, Msg) if(!(Enonce))  {std::cout<< Msg <<std::endl; assert(Enonce);}
 #else
 	#define AssertNoReleasePrint(Enonce, Msg) {}
 #endif

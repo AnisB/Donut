@@ -25,6 +25,7 @@
 #include "model.h"
 #include "sugar.h"
 #include <string>
+#include <vector>
 #include <map>
 
  namespace Donut 
@@ -44,6 +45,7 @@
 		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
 
 		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
+		std::vector<TTexture*> LoadObjToTexture(const std::string&  parFileName);
 		void LoadSugarData(const TShader& parShader, TSugar&  parSugar);
 
 	protected:

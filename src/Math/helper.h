@@ -14,28 +14,4 @@
  *
  **/
 
-
-
-#ifndef TEXTURE_HELPERS
-#define TEXTURE_HELPERS
-
-#include "Texture.h"
- 
-namespace TextureHelpers
-{
-    std::string ImgTypeToString(TImgType::Type parType);
-	TImgType::Type GetImgType(const std::string & parImg);
- 	TTexture * LoadTexture(const std::string & parImg);
- 	GLuint CreateTextureCube();
- 	void CreateTexture(TTexture* parTex);
-    void CreateDataTexture(TTexture* parTex);
-    void ReLoadTexture(TTexture* parTex);
-
- 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
-
- 	void TakeScreenShot(const std::string& parFileName);
-    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
-
-}
-
-#endif // TEXTURE_HELPERS
+ float normalize(float parVal);

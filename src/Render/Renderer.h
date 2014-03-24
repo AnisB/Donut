@@ -31,6 +31,14 @@
  namespace Donut
  {
 
+ 	namespace TRenderingLook
+ 	{
+ 		enum Type
+ 		{
+	 		FILL,
+ 			LINE
+ 		};
+ 	}
  	#define DEFAULT_NB_PASSES 1
 
 	class TRenderer
@@ -67,6 +75,9 @@
  		Camera* GetCamera(int parNbPass = 0);
  		void AddLight(TLight* parLight, int parNbPass = 0);
  		std::vector<TRenderPass*>& GetPasses(){return FRenderPasses;}
+
+ 		// Tool
+ 		void SetLook(const TRenderingLook::Type parLook);
 
  	private:
  		void InputInit();

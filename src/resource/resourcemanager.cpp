@@ -22,6 +22,7 @@
  #include <Base/DebugPrinters.h>
  #include <Render/Helper.h>
  #include <Tools/FileLoader.h>
+ #include <math/helper.h>
 
  #include <fstream>
  #include <sstream> 
@@ -310,6 +311,7 @@
 				foreach(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
+					AssertNoReleasePrint(vertices.size()==3, *prim);
 					vertices.erase(vertices.begin());
 					foreach(vertice, vertices)
 					{
@@ -322,7 +324,6 @@
 						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
 						data[3*dimShape*nbShape+verticeCounter*2] = mapp.val[0];
 						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.val[1];
-
 						verticeCounter++;
 					}	
 				}
@@ -422,6 +423,199 @@
 		glBindVertexArray (0);
 		FModels[parFileName] = newModel;
 		return newModel;
+	}
+	std::vector<TTexture*> ResourceManager::LoadObjToTexture(const std::string&  parFileName)
+	{
+		// Looking in the databaseModel
+		std::string model = parFileName;
+  		INPUT_ERR("Loading obj file to texture: "<<model); 
+		// Liste des vertices
+		std::vector<TVec3> listePoints;
+		// Liste des infos par point
+		std::vector<TVec3> normales;
+		std::vector<TVec2> uvList;
+
+		// Gestion des infos
+		std::list<TShape> shapes;
+		
+		fstream in;
+		in.open(model.c_str(), std::fstream::in);
+	  	if (!in) 
+	  	{ 
+	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
+	  		return std::vector<TTexture*>(0);
+	  	}
+		string line;
+		while (getline(in, line)) 
+		{
+			if (line.substr(0,2) == "o ") 
+			{
+				while(getline(in, line) && line.substr(0,2) != "o ")
+				{
+		  			if (line.substr(0,2) == "v ") 
+				    {
+		  				// INPUT_DEBUG("Nouveau vertice.");
+						stringstream s(line.substr(2));
+						TVec3 v; 
+						s >> v.val[0]; 
+						s >> v.val[1]; 
+						s >> v.val[2]; 
+						listePoints.push_back(v);
+				    }
+				    else if (line.substr(0,2)=="f ")
+				    {
+				    	TShape newShape;
+				    	while(line.substr(0,2)=="f ")
+				    	{
+				    		// INPUT_DEBUG("new primitive "<< line);
+				    		newShape.info.push_back(line.substr(2));
+				    		if(!getline(in, line))
+				    			break;
+				    	}
+			    		// INPUT_DEBUG("Add shape");
+
+				    	shapes.push_back(newShape);
+				    }
+				    else if(line[0] == 'v' && line[1] == 't') 
+				    { 	
+				    	// INPUT_DEBUG("UV mapping.");
+						istringstream s(line.substr(2));
+						float u,v;
+						s >> u;
+						s >> v;
+						TVec2 map;
+						map.val[0] = u;
+						map.val[1] = v;
+				      	uvList.push_back(map);
+					}
+				    else if(line[0] == 'v' && line[1] == 'n') 
+				    { 
+				    	//INPUT_DEBUG("Normal.");
+						istringstream s(line.substr(2));
+						TVec3 normal;
+						s >> normal.val[0];
+						s >> normal.val[1];
+						s >> normal.val[2];
+				      	normales.push_back(normal);
+					}
+				}
+			}
+		    else if (line[0] == '#') 
+		    { 
+		    	// Commentaire
+			}
+		}
+		std::vector<TTexture*> resultat;
+		foreach(shape, shapes)
+		{
+			TShape & currentShape = *shape;
+			int nbShape = currentShape.info.size();
+			AssertNoReleasePrint(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
+			std::vector<std::string> sample = split(currentShape.info[0],' '); 
+			int dimShape = sample.size();
+			AssertNoReleasePrint(dimShape==3, "Shape de dimension autre que 3 ou 4, la dimension est:"<<dimShape);
+	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
+			std::vector<std::string> sample2 = split(sample[2],'/');
+			int nbInfo = sample2.size();
+
+			const int verticeSize = 9;
+			const int lineSize = verticeSize; // (NORMAL(3)+POSITION(3)+UV(2))*NB_PTS(3)
+			INPUT_DEBUG("Il y a "<<nbShape<<" points"); 
+			TTexture* shapeData = new TTexture(lineSize, nbShape);
+			shapeData->FDataType = TDataType::FLOAT;
+			GLfloat * data = new GLfloat[nbShape * lineSize * 3];
+			if(nbInfo == 1)
+			{
+				int lineNumber = 0;
+				foreach(prim, currentShape.info)
+				{
+					std::vector<std::string> vertices = split(*prim,' ');
+					int verticeCounter = 0;
+					foreach(vertice, vertices)
+					{
+						// Vertex position
+						TVec3& point = listePoints[convertToInt(*vertice)-1];
+						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
+						data[decalage] = normalize(point.val[0]);
+						data[1+ decalage] = normalize(point.val[1]);
+						data[2+ decalage] = normalize(point.val[2]);
+						// Vertex normal
+						data[3+decalage] = normalize(0.0);
+						data[4+decalage] = normalize(0.0);
+						data[5+decalage] = normalize(1.0);
+
+						data[6+decalage] = normalize(0.0);
+						data[7+decalage] = normalize(0.0);
+						data[8+decalage] = normalize(0.0);
+						verticeCounter++;
+					}
+					lineNumber++;	
+				}
+			}
+			else if (nbInfo == 2)
+			{
+				int lineNumber = 0;
+				foreach(prim, currentShape.info)
+				{
+					std::vector<std::string> vertices = split(*prim,' ');
+					int verticeCounter = 0;
+					foreach(vertice, vertices)
+					{
+						// Vertex position
+						std::vector<std::string> dataVert = split(*vertice,'/');
+						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
+						data[decalage] = normalize(point.val[0]);
+						data[1+ decalage] = normalize(point.val[1]);
+						data[2+ decalage] = normalize(point.val[2]);
+						// Vertex normal
+						data[3+decalage] = normalize(0.0);
+						data[4+decalage] = normalize(0.0);
+						data[5+decalage] = normalize(1.0);
+						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						data[6+decalage] = normalize(mapp.val[0]);
+						data[7+decalage] = normalize(mapp.val[1]);
+						data[8+decalage] = normalize(0.0);
+						verticeCounter++;
+					}
+					lineNumber++;	
+				}
+			}
+			else if (nbInfo == 3)
+			{
+				int lineNumber = 0;
+				foreach(prim, currentShape.info)
+				{
+					std::vector<std::string> vertices = split(*prim,' ');
+					int verticeCounter = 0;
+					foreach(vertice, vertices)
+					{
+						// Vertex position
+						std::vector<std::string> dataVert = split(*vertice,'/');
+						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
+						data[decalage] = normalize(point.val[0]);
+						data[1+ decalage] = normalize(point.val[1]);
+						data[2+ decalage] = normalize(point.val[2]);
+						// Vertex normal
+						TVec3& norm = normales[convertToInt(dataVert[2])-1];
+						data[3+decalage] = normalize(norm.val[0]);
+						data[4+decalage] = normalize(norm.val[1]);
+						data[5+decalage] = normalize(norm.val[2]);
+						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						data[6+decalage] = normalize(mapp.val[0]);
+						data[7+decalage] = normalize(mapp.val[1]);
+						data[8+decalage] = normalize(0.0);
+						verticeCounter++;
+					}
+					// std::cout<<"ENDPRIMITIVE"<<std::endl;
+					lineNumber++;	
+				}
+			}
+			shapeData->FData = (GLvoid*)data;
+			resultat.push_back(shapeData);
+		}
+		return resultat;
 	}
 	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{
