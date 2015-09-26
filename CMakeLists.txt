@@ -9,6 +9,8 @@ add_definitions( -D_DEBUG )
 
 set(CMAKE_BUILD_TYPE "Debug")
 set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
+set(TEST "${PROJECT_SOURCE_DIR}/test/")
+set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
 
 IF(UNIX AND NOT APPLE)
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/linux")
@@ -74,9 +76,11 @@ add_library(Donut ${Source_File})
  
 link_directories(${CMAKE_BINARY_DIR})
 
+IF(TEST_ACTIVE)
 add_subdirectory(${TEST})
-add_subdirectory(${PROGRAM})
+ENDIF()
 
+add_subdirectory(${PROGRAM})
 
 add_custom_command(
     TARGET Donut POST_BUILD
