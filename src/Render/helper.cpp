@@ -1,5 +1,6 @@
 #include "helper.h"
 
+#include <base/common.h>
 
 void CheckGLState(const std::string& desc)
 {
@@ -8,7 +9,7 @@ void CheckGLState(const std::string& desc)
 	GLenum e = glGetError();
 	if (e != GL_NO_ERROR) 
 	{
-		RENDER_ERR("OpenGL error in: "<<desc.c_str()/*<<" *<<gluErrorString(e)*/<<" "<<e);
+		RENDER_ERROR("OpenGL error in: "<<desc.c_str()<<" "<<e);
 	}
 	else
 	{

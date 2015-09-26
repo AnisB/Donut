@@ -4,10 +4,10 @@ project(Donut)
 
 
 #add_definitions( -DRELEASE )
-add_definitions( -DDEBUG )
+add_definitions( -D_DEBUG )
 
 
-
+set(CMAKE_BUILD_TYPE "Debug")
 set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
 
 IF(UNIX AND NOT APPLE)

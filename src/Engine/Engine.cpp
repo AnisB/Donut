@@ -17,8 +17,9 @@
 // ----------------------------------------
 //  Includes
 // ----------------------------------------
-
+// Donut includes
 #include "Engine.h"
+#include <base/common.h>
 
 // ----------------------------------------
 //  Implementation
@@ -28,9 +29,9 @@
  {
  	Engine::Engine()
  	{
- 		DEFAULT_DEBUG("Creating the engine.");
+ 		ENGINE_INFO("Creating the engine...");
  		FRenderer = new Donut::TRenderer();
- 		DEFAULT_DEBUG("Core engine created.");
+ 		ENGINE_INFO("Core engine created");
  	}
  	
  	Engine::~Engine()
@@ -40,29 +41,29 @@
 
  	void Engine::LaunchRendering(const TContextDetail& parContext)
  	{
- 		DEFAULT_DEBUG("creating rendering thread");
+ 		ENGINE_INFO("Creating rendering thread...");
  		FRenderer->CreateRenderWindow(parContext);
  		InitScene();
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		DEFAULT_DEBUG("Redering thread created");
+ 		ENGINE_INFO("Redering thread created");
  	}
 
  	void Engine::StopRendering()
  	{
- 		DEFAULT_DEBUG("Trying to stop rendering");
+ 		ENGINE_INFO("Rendering will stop...");
  		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FRenderer->DestroyRenderWindow();
- 		DEFAULT_DEBUG("Rendering destroyed");
+ 		ENGINE_INFO("Rendering stoped");
  	}
 
  	void Engine::PauseRendering()
  	{
- 		DEFAULT_DEBUG("Pause rendering");
+ 		ENGINE_INFO("Pausing rendering...");
  		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FRenderer->HideRenderWindow();
- 		DEFAULT_DEBUG("Rendering paused");
+ 		ENGINE_INFO("Rendering paused");
 
  	}
 
@@ -83,11 +84,11 @@
 
  	void Engine::ResumeRendering()
  	{
- 		DEFAULT_DEBUG("Resuming rendering");
+ 		ENGINE_INFO("Resuming rendering...");
  		FRenderer->ShowRenderWindow();
  		FRenderer->SetRendering(true);
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		DEFAULT_DEBUG("Rendering resumed");
+ 		ENGINE_INFO("Rendering resumed");
  	}
 
 	void Engine::DrawObject(TDrawableObject * parObject)

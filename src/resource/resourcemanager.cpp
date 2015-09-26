@@ -19,10 +19,10 @@
  #include "TextureHelpers.h"
  #include <Math/vec.h>
  #include <Base/Common.h>
- #include <Base/DebugPrinters.h>
  #include <Render/Helper.h>
  #include <Tools/FileLoader.h>
  #include <math/helper.h>
+ #include "Base/Macro.h"
 
  #include <fstream>
  #include <sstream> 
@@ -162,7 +162,7 @@
  			return it->second;
  		}
 		std::string model = parFileName.substr(1,parFileName.size());
-  		INPUT_ERR("I will try to load: "<<model); 
+  		INPUT_ERROR("I will try to load: "<<model); 
 		// Liste des vertices
 		std::vector<TVec3> listePoints;
 		// Liste des infos par point
@@ -179,6 +179,7 @@
 	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
 	  		return NULL;
 	  	}
+  		INPUT_DEBUG("OBJ File opened: "<<model); 
 		string line;
 		while (getline(in, line)) 
 		{
@@ -206,7 +207,6 @@
 				    		if(!getline(in, line))
 				    			break;
 				    	}
-			    		// INPUT_DEBUG("Add shape");
 
 				    	shapes.push_back(newShape);
 				    }
@@ -239,7 +239,7 @@
 		    	// Commentaire
 			}
 		}
-
+		INPUT_DEBUG("All data into memory")
 	 	TModel * newModel = new TModel();
 	 	newModel->name = parFileName;
 	 	GLfloat * data;
@@ -252,10 +252,10 @@
 		{
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
-			AssertNoReleasePrint(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
+			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
 			std::vector<std::string> sample = split(currentShape.info[0],' '); 
 			int dimShape = sample.size();
-			AssertNoReleasePrint((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4, la dimension est:"<<dimShape);
+			ASSERT_MSG_NO_RELEASE((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4");
 			std::vector<std::string> sample2 = split(sample[2],'/');
 			int nbInfo = sample2.size();
 
@@ -266,7 +266,7 @@
 				foreach(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
-					vertices.erase(vertices.begin());
+					// vertices.erase(vertices.begin());
 					foreach(vertice, vertices)
 					{
 						TVec3& point = listePoints[convertToInt(*vertice)-1];
@@ -285,7 +285,7 @@
 				GLuint IBO;
 				glGenBuffers(1, &VBO);
 				glBindBuffer(GL_ARRAY_BUFFER, VBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*8, data, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*3, data, GL_STATIC_DRAW);
 
 				glGenBuffers(1, &IBO);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -311,7 +311,7 @@
 				foreach(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
-					AssertNoReleasePrint(vertices.size()==3, *prim);
+					ASSERT_MSG_NO_RELEASE(vertices.size()==3, *prim);
 					vertices.erase(vertices.begin());
 					foreach(vertice, vertices)
 					{
@@ -424,11 +424,11 @@
 		FModels[parFileName] = newModel;
 		return newModel;
 	}
-	std::vector<TTexture*> ResourceManager::LoadObjToTexture(const std::string&  parFileName)
+	std::vector<int> ResourceManager::LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable)
 	{
 		// Looking in the databaseModel
 		std::string model = parFileName;
-  		INPUT_ERR("Loading obj file to texture: "<<model); 
+  		INPUT_ERROR("Loading obj file to texture: "<<model); 
 		// Liste des vertices
 		std::vector<TVec3> listePoints;
 		// Liste des infos par point
@@ -443,7 +443,7 @@
 	  	if (!in) 
 	  	{ 
 	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
-	  		return std::vector<TTexture*>(0);
+	  		return std::vector<int>(0);
 	  	}
 		string line;
 		while (getline(in, line)) 
@@ -505,25 +505,25 @@
 		    	// Commentaire
 			}
 		}
-		std::vector<TTexture*> resultat;
+		std::vector<int> nbShapes;
 		foreach(shape, shapes)
 		{
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
-			AssertNoReleasePrint(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
+			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
 			std::vector<std::string> sample = split(currentShape.info[0],' '); 
 			int dimShape = sample.size();
-			AssertNoReleasePrint(dimShape==3, "Shape de dimension autre que 3 ou 4, la dimension est:"<<dimShape);
+			ASSERT_MSG_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
 	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
 			std::vector<std::string> sample2 = split(sample[2],'/');
 			int nbInfo = sample2.size();
 
 			const int verticeSize = 9;
-			const int lineSize = verticeSize; // (NORMAL(3)+POSITION(3)+UV(2))*NB_PTS(3)
+			const int lineSize = verticeSize*3; // (NORMAL(3)+POSITION(3)+UV(2))*NB_PTS(3)
 			INPUT_DEBUG("Il y a "<<nbShape<<" points"); 
-			TTexture* shapeData = new TTexture(lineSize, nbShape);
+			TTexture* shapeData = new TTexture(verticeSize, nbShape);
 			shapeData->FDataType = TDataType::FLOAT;
-			GLfloat * data = new GLfloat[nbShape * lineSize * 3];
+			GLfloat * data = new GLfloat[nbShape * lineSize];
 			if(nbInfo == 1)
 			{
 				int lineNumber = 0;
@@ -597,25 +597,37 @@
 						data[decalage] = normalize(point.val[0]);
 						data[1+ decalage] = normalize(point.val[1]);
 						data[2+ decalage] = normalize(point.val[2]);
+						// std::cout<<"decalage "<<decalage<<std::endl;
+						// std::cout<<"Point "<<point.val[0]<<" "<<point.val[1]<<" "<<point.val[2]<<" "<<std::endl;
 						// Vertex normal
 						TVec3& norm = normales[convertToInt(dataVert[2])-1];
 						data[3+decalage] = normalize(norm.val[0]);
 						data[4+decalage] = normalize(norm.val[1]);
 						data[5+decalage] = normalize(norm.val[2]);
+						// std::cout<<"Normale "<<norm.val[0]<<" "<<norm.val[1]<<" "<<norm.val[2]<<" "<<std::endl;
+
 						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
 						data[6+decalage] = normalize(mapp.val[0]);
 						data[7+decalage] = normalize(mapp.val[1]);
 						data[8+decalage] = normalize(0.0);
+						// std::cout<<"TexCoord "<<mapp.val[0]<<" "<<mapp.val[1]<<std::endl;
 						verticeCounter++;
 					}
 					// std::cout<<"ENDPRIMITIVE"<<std::endl;
 					lineNumber++;	
 				}
 			}
+			// for(int i = 0; i < nbShape * lineSize;i++)
+			// {
+			// 	// std::cout<<"IVAL "<<i<<" VAL: "<<data[i]<<" ";
+			// 	std::cout<<data[i]<<" ";
+			// }
+			// std::cout<<std::endl;
 			shapeData->FData = (GLvoid*)data;
-			resultat.push_back(shapeData);
+			parTexturetable.push_back(shapeData);
+			nbShapes.push_back(nbShape);
 		}
-		return resultat;
+		return nbShapes;
 	}
 	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{

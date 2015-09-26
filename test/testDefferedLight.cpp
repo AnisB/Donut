@@ -45,7 +45,7 @@ int main()
 	window->CreateRenderWindow(newContext, 1);
 	window->SetFragmentShader("shaders/canvas/vertex.glsl");
 	window->SetFragmentShader("shaders/canvas/lightout.glsl");
-	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
+	window->SetRenderType(Donut::FrameCanvasContent::DEFFERED);
 	window->Init();
 
 	Donut::TLight* lightSource = new Donut::TLight();

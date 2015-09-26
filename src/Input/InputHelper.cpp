@@ -14,9 +14,9 @@
  *
  **/
 
- #include "InputHelper.h"
-
- #include <Base/Common.h>
+// Donut includes
+#include "InputHelper.h"
+#include <base/common.h>
 
 namespace Donut
 {
@@ -32,7 +32,7 @@ namespace Donut
 
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-	    AssertNoRelease(InManager!=NULL);
+	    ASSERT_NO_RELEASE(InManager != NULL);
 	    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	    {
 	        glfwSetWindowShouldClose(window, GL_TRUE);
@@ -55,7 +55,7 @@ namespace Donut
 
  	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
  	{
-	    AssertNoRelease(InManager!=NULL);
+	    ASSERT_NO_RELEASE(InManager!=NULL);
 	    if(action == GLFW_PRESS)
 	    {
 		    InManager->MousePressed((TMouseCode::Type)button);
@@ -73,7 +73,7 @@ namespace Donut
 
  	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
  	{
-	    AssertNoRelease(InManager!=NULL);
+	    ASSERT_NO_RELEASE(InManager!=NULL);
 	    int width, height;
 	    glfwGetFramebufferSize(window, &width, &height);
 	    float ratio = width / (float) height;

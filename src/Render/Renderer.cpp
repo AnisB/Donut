@@ -20,7 +20,9 @@
 #include "Base/Common.h"
 #include "Input/InputHelper.h"
 #include "Render/Defines.h"
- #include <Render/Helper.h>
+#include "Base/Macro.h"
+#include <Render/Helper.h>
+ 
 #include <stdlib.h>
 #include <stdio.h>
  
@@ -29,7 +31,7 @@
 
 	static void error_callback(int error, const char* description)
 	{
-	    RENDER_ERR(error<<" "<<description);
+	    RENDER_ERROR(error<<" "<<description);
 	}
 
 	// Class TRenderer
@@ -58,7 +60,7 @@
 			// Init
  			if (!glfwInit())
  			{
- 				RENDER_ERR("Failed during glfw init.");
+ 				RENDER_ERROR("Failed during glfw init.");
  				return false;
  			}
 
@@ -76,7 +78,7 @@
  			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), parContext.fullScreen?glfwGetPrimaryMonitor():NULL, NULL);
  			if(FWindow==NULL)
  			{
- 				RENDER_ERR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
+ 				RENDER_ERROR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
  				return false;
  			}
  			// Setting context
@@ -87,7 +89,7 @@
 			GLenum glewReturn = glewInit();
 			if(glewReturn)
 			{
-			    RENDER_ERR("Glew returned: "<<glewGetErrorString(glewReturn));
+			    RENDER_ERROR("Glew returned: "<<glewGetErrorString(glewReturn));
  				return false;
 			}
 			
@@ -110,7 +112,7 @@
  		else
  		{
  			RENDER_DEBUG("This window has already been created.");
- 			AssertRelease(FWindow != NULL);
+ 			ASSERT(FWindow != NULL);
  			glfwShowWindow(FWindow);
  		}
  		return true;
@@ -118,21 +120,21 @@
  	void TRenderer::HideRenderWindow()
  	{
  		RENDER_DEBUG("Hiding window.");	
- 		AssertRelease(FWindow != NULL);
+ 		ASSERT(FWindow != NULL);
  		glfwHideWindow(FWindow);
  	}	
 
  	void TRenderer::ShowRenderWindow()
  	{
  		RENDER_DEBUG("Showing window.");	
- 		AssertRelease(FWindow != NULL);
+ 		ASSERT(FWindow != NULL);
  		glfwShowWindow(FWindow);
  	}	
 
  	void TRenderer::DestroyRenderWindow()
  	{
  		RENDER_DEBUG("Destroying window.");	
- 		AssertRelease(FWindow != NULL);
+ 		ASSERT(FWindow != NULL);
  		glfwTerminate();
  		FWindow = NULL;
  		FInitDone = false;
@@ -201,7 +203,7 @@
 
 	void TRenderer::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
-		AssertRelease(PASS_NUMBER < FNbPasses);
+		ASSERT(PASS_NUMBER < FNbPasses);
 		TRenderPass  & pass = (*FRenderPasses[PASS_NUMBER]);
 		CRITICAL_SECTION_OBJ_BEGIN(pass);
 		pass.AddDrawable(parDrawable);
@@ -210,7 +212,7 @@
 
 	void TRenderer::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
 	{
-		AssertRelease(PASS_NUMBER < FNbPasses);
+		ASSERT(PASS_NUMBER < FNbPasses);
 		TRenderPass & pass = (*FRenderPasses[PASS_NUMBER]);
 		CRITICAL_SECTION_OBJ_BEGIN(pass);
 		pass.RemoveDrawable(parDrawable);

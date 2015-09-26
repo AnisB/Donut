@@ -16,8 +16,8 @@
 
 
 #include "TextureHelpers.h"
-#include <Base/DebugPrinters.h> 
-
+#include <base/common.h>
+ 
 #include <stdio.h>
 #include <stdlib.h>
 #include <jpeglib.h>
@@ -96,7 +96,7 @@
 
         if(f==NULL)
         {
-            INPUT_ERR("Erreur ouverture fichier "<<Filename);  
+            INPUT_ERROR("Erreur ouverture fichier "<<Filename);  
             return NULL;  
         }
         unsigned char info[54];
@@ -369,7 +369,7 @@
     {
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        FILE_SYSTEM_DEBUG("Create texture width:"<<parTex->FWidth<<" height:"<<parTex->FHeight);
+        RESOURCE_DEBUG("Create data texture width:"<<parTex->FWidth<<" height:"<<parTex->FHeight);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);

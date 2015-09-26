@@ -19,6 +19,8 @@
 #include "Defines.h"
 #include <Base/Common.h>
 #include "StateEngineManager.h"
+#include "Base/Macro.h"
+
 //--------------------------------------------------------------------
 // TStateEngine
 //--------------------------------------------------------------------
@@ -33,13 +35,13 @@ namespace Donut
  	{
  		foreach(state, FStates)
  		{
- 			AssertNoRelease(state->second);
+ 			ASSERT_NO_RELEASE(state->second);
  			delete state->second;
  		}
 
  		foreach(transition, FTransitions)
  		{
- 			AssertNoRelease(transition->second);
+ 			ASSERT_NO_RELEASE(transition->second);
  			delete transition->second;
  		}
  	}

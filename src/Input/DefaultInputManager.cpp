@@ -16,8 +16,6 @@
  
  #include "DefaultInputManager.h"
 
- #include <Base/DebugPrinters.h>
-
  namespace Donut
  {
 	DefaultInputManager::DefaultInputManager()

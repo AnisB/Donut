@@ -36,7 +36,8 @@ int main()
 	modeltest.SetDirectory("data");
 	// Charge les modèles
 	modeltest.LoadSugars();
-	std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/lego/legodude.obj");
+	std::vector<TTexture*> triangles;
+	Donut::ResourceManager::Instance().LoadObjToTexture("data/models/lego/legodude.obj",triangles);
 	TextureHelpers::CreateDataTexture(triangles[0]);
 	return 0;
 }

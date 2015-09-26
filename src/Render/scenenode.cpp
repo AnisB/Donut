@@ -16,6 +16,7 @@
  #include "scenenode.h"
 
  #include <Base/Common.h>
+ #include "Base/Macro.h"
 
 
 namespace Donut

@@ -45,3 +45,6 @@ TARGET_LINK_LIBRARIES(testModelToTexture Donut ${CORELIBS})
 
 add_executable(testRayTracer ${TEST}/testRayTracer.cpp)
 TARGET_LINK_LIBRARIES(testRayTracer Donut ${CORELIBS})
+
+add_executable(testSSAO ${TEST}/testSSAO.cpp)
+TARGET_LINK_LIBRARIES(testSSAO Donut ${CORELIBS})

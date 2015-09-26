@@ -29,11 +29,6 @@
 // Autres includes
 #include <cmath> 
 
-// Declaration de constantes
-// Normalize val permet de définir la valeur maximale (en valeur absolue que vont avoir les coordonnées xyz de chaque point)
-// Elle sert a normalize les valeur avant de les injecter dans la texture
-#define NORMALIZE_VAL 40.0
-
 // La texture de points de controle
 TTexture* triangles = NULL;
 // La fenetre de rendu
@@ -58,6 +53,8 @@ void init()
 	// Context info
 	Donut::TContextDetail newContext;
 	newContext.windowName = "bezierProgram";
+	newContext.width = 512;
+	newContext.lenght = 386;
 	//Initialisation de la fenetre
 	window->CreateRenderWindow(newContext);
 	window->Init();
@@ -70,7 +67,7 @@ void init()
 	// On donne la camera a l'input manager
 	inManager->FCamera = camera;
 	// On définit la perspective
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
+	camera->DefinePerspective(29.0,1280.0/720.0,1.0,500.0);
 	// On déplace la camera
 	camera->Translate(Vector3(0,0,-20));
 }
@@ -85,8 +82,10 @@ void initScene()
 	// On génère le shader associé a ce modèle
 	surface->GenerateShader();
 	// On crée les points de controle
-	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/other/triangle.obj");
-	std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/lego/legodude.obj");
+	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");
+	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/test/cube.obj");
+	std::vector<TTexture*> triangles;
+	std::vector<int> nbShapes = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj",triangles);
 	TextureHelpers::CreateDataTexture(triangles[0]);
 	// On l'injecte dans chacun des modèles
 	surface->AddTexture(triangles[0], "triangles");
@@ -109,6 +108,7 @@ void destroy()
 // Loop de rendu
 void renderLoop()
 {
+
 	while(window->IsRendering())
 	{
 		window->Draw();

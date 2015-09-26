@@ -16,7 +16,6 @@
 
 
  #include "DrawableObject.h"
- #include <Base/DebugPrinters.h>
  #include <Base/Common.h>
  #include "Defines.h"
  #include "ShaderManager.h"
@@ -34,7 +33,7 @@ namespace Donut{
 
  	void TDrawableObject::Bind()
  	{
- 		AssertNoRelease(FShader.FActive);
+ 		ASSERT_NO_RELEASE(FShader.FActive);
 		ShaderManager::Instance().EnableShader(FShader);
  	}
  	void TDrawableObject::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
@@ -52,7 +51,7 @@ namespace Donut{
 
  	void TDrawableObject::Unbind()
  	{
- 		AssertNoRelease(FShader.FActive);
+ 		ASSERT_NO_RELEASE(FShader.FActive);
 		ShaderManager::Instance().DisableShader();
 	}
 

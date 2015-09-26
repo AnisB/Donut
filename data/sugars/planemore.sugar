@@ -1,7 +1,7 @@
-Object PlaneMore
+Object Rabbit
 {
    model{
-      data/models/plane/model.obj
+      data/models/teapot/model.obj
    }
    shader{
       vertex data/models/plane/vertex.glsl

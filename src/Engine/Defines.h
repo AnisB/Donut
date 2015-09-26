@@ -19,17 +19,16 @@
 #ifndef DONUT_DEFINES_ENGINE
 #define DONUT_DEFINES_ENGINE
 
+//STL Includes
 #include <unistd.h>
 
-
-
-namespace Donut {
-
-#define REGISTER_DRAWABLE(object) DrawObject(object.GetRepresentation())
-#define REGISTER_DRAWABLE_PTR(object) DrawObject(object->GetRepresentation())
-
-#define UNREGISTER_DRAWABLE(object) RemoveObject(object.GetRepresentation())
-#define UNREGISTER_DRAWABLE_PTR(object) RemoveObject(object->GetRepresentation())
-
+namespace Donut 
+{
+	#define REGISTER_DRAWABLE(object) DrawObject(object.GetRepresentation())
+	#define REGISTER_DRAWABLE_PTR(object) DrawObject(object->GetRepresentation())
+	
+	#define UNREGISTER_DRAWABLE(object) RemoveObject(object.GetRepresentation())
+	#define UNREGISTER_DRAWABLE_PTR(object) RemoveObject(object->GetRepresentation())
 }
+
 #endif //DONUT_DEFINES_ENGINE

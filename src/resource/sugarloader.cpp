@@ -17,7 +17,6 @@
 #include "sugarloader.h"
 
 
-#include <Base/DebugPrinters.h>
 #include <Base/Common.h>
 
 #include <Tools/FileLoader.h>
@@ -105,8 +104,8 @@ namespace Donut
 
         if (! directory) 
         {
-            FILE_SYSTEM_ERR("Error in directory: "<< directoryName); 
-            FILE_SYSTEM_ERR("Error n°: "<< strerror (errno)); 
+            RESOURCE_ERROR("Error in directory: "<< directoryName); 
+            RESOURCE_ERROR("Error n°: "<< strerror (errno)); 
             return;
         }
 
@@ -132,14 +131,14 @@ namespace Donut
             directoryNameforParse+=newEntry->d_name;
             const TSugar& newSugar = ParseFile(directoryNameforParse);
             FSugars[newSugar.name]= newSugar;
-            FILE_SYSTEM_DEBUG("New Sugar file: "<< directoryNameforParse); 
+            RESOURCE_DEBUG("New Sugar file: "<< directoryNameforParse); 
         }
         if (closedir (directory)) 
         {
-            FILE_SYSTEM_ERR("Error while closing directory: "<< directoryName); 
+            RESOURCE_ERROR("Error while closing directory: "<< directoryName); 
             return;
         }
-        FILE_SYSTEM_DEBUG("The parser found: "<<FSugars.size());
+        RESOURCE_DEBUG("The parser found: "<<FSugars.size());
     }
 
     TSugar TSugarLoader::ParseFile(const std::string& parFileName)
@@ -152,11 +151,11 @@ namespace Donut
         file_line=removeMultSpace(file_line);
         std::vector<std::string> header = split(file_line,' ');
 
-        CondAssertReleasePrint((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
+        ASSERT_MSG((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
         sugar.name = header[1];
 
         getNonEmptyLine(fin, file_line);
-        CondAssertReleasePrint(!(file_line.find("{")>=file_line.size()),"Wrong token@"<< file_line);
+        ASSERT_MSG(!(file_line.find("{")>=file_line.size()),"Wrong token@"<< file_line);
         while(!fin.eof())
         {
             getNonEmptyLine(fin, file_line);
@@ -165,7 +164,7 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    // FILE_SYSTEM_DEBUG("The model is: "<<file_line);
+                    // RESOURCE_DEBUG("The model is: "<<file_line);
                     sugar.model=file_line;
                     getNonEmptyLine(fin, file_line);
                 }
@@ -182,7 +181,7 @@ namespace Donut
                     tex.name = entete[1];
                     tex.file = entete[2];
                     sugar.textures.push_back(tex);
-                    //FILE_SYSTEM_DEBUG(tex.index<<" "<<tex.name<<" "<<tex.file);
+                    //RESOURCE_DEBUG(tex.index<<" "<<tex.name<<" "<<tex.file);
                     index++;
                     getNonEmptyLine(fin, file_line);
                 }                
@@ -199,7 +198,7 @@ namespace Donut
                     cm.name = entete[1];
                     cm.path = entete[2];
                     sugar.cubeMaps.push_back(cm);
-                    //FILE_SYSTEM_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
+                    //RESOURCE_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
                     index++;
                     getNonEmptyLine(fin, file_line);
                 }                
@@ -214,7 +213,7 @@ namespace Donut
                     bi.dataType = stringToDataType(entete[1]);
                     bi.name = entete[2];
                     sugar.builtIns.push_back(bi);
-                    //FILE_SYSTEM_DEBUG(bi.dataType<<" "<<bi.name);
+                    //RESOURCE_DEBUG(bi.dataType<<" "<<bi.name);
                     getNonEmptyLine(fin, file_line);
                 }                
             }
@@ -229,7 +228,7 @@ namespace Donut
                     uni.name = entete[2];
                     uni.value = entete[3];
                     sugar.uniforms.push_back(uni);
-                    // FILE_SYSTEM_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
+                    // RESOURCE_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
                     getNonEmptyLine(fin, file_line);
                 }                
             }
@@ -242,18 +241,18 @@ namespace Donut
                     if(entete[1]=="vertex")
                     {
                         sugar.shader.vertex = entete[2];
-                        //FILE_SYSTEM_DEBUG("vertex "<<sugar.shader.vertex);
+                        //RESOURCE_DEBUG("vertex "<<sugar.shader.vertex);
                     }
                     else if(entete[1]=="tesscontrol")
                     {
                         sugar.shader.tesscontrol = entete[2];
-                        // FILE_SYSTEM_ERR("tesscontrol "<<sugar.shader.tesscontrol);
+                        // RESOURCE_ERROR("tesscontrol "<<sugar.shader.tesscontrol);
                         sugar.shader.isTesselated = true;
                     }
                     else if(entete[1]=="tesseval")
                     {
                         sugar.shader.tesseval = entete[2];
-                        // FILE_SYSTEM_ERR("tesseval "<<sugar.shader.tesseval);
+                        // RESOURCE_ERROR("tesseval "<<sugar.shader.tesseval);
                         sugar.shader.isTesselated = true;
                     }
                     else if(entete[1]=="geometry")
@@ -263,7 +262,7 @@ namespace Donut
                     else if(entete[1]=="fragment")
                     {
                         sugar.shader.fragment = entete[2];
-                        //FILE_SYSTEM_DEBUG("fragment "<<sugar.shader.fragment);
+                        //RESOURCE_DEBUG("fragment "<<sugar.shader.fragment);
                     }
 
                     getNonEmptyLine(fin, file_line);
@@ -280,9 +279,9 @@ namespace Donut
     }
     TSugar TSugarLoader::GetSugar(const std::string& parModel)
     {
-        FILE_SYSTEM_DEBUG("Looking for the sugar "<< parModel);
+        RESOURCE_DEBUG("Looking for the sugar "<< parModel);
         typeof(FSugars.begin()) ite = FSugars.find(parModel);
-        AssertNoReleasePrint((ite!=FSugars.end()),"Sugar model not found.");
+        ASSERT_MSG_NO_RELEASE((ite!=FSugars.end()),"Sugar model not found.");
         return ite->second;
     }
 

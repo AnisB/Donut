@@ -58,7 +58,7 @@ namespace Donut
 				fclose(fp);
 			}
 		}
-		CondAssertReleasePrint((content != NULL),fn);
+		ASSERT_MSG((content != NULL),fn);
 		return content;
 	}
 

@@ -18,9 +18,6 @@
 #ifndef DONUT_MATH_TVEC
 #define DONUT_MATH_TVEC
 
-#include "Base/DebugPrinters.h"
-
-
 struct TVec1
 {
 	TVec1()

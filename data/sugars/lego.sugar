@@ -1,0 +1,51 @@
+Object Lego
+{
+   model{
+     data/geometry/lego.obj
+   }
+   shader{
+      vertex data/shaders/basetex/vertex.glsl
+      geometry data/shaders/basetex/geometry.glsl
+      fragment data/shaders/basetex/fragment.glsl
+   }
+   built_in_data{
+   }
+   extern_data{
+      float TessLevelInner 4
+      float TessLevelOuter 4
+      float redCoeff[0] 0.79
+      float redCoeff[1] 0.39
+      float redCoeff[2] -0.34
+      float redCoeff[3] -0.29
+      float redCoeff[4] -0.11
+      float redCoeff[5] -0.26
+      float redCoeff[6] -0.16
+      float redCoeff[7] 0.56
+      float redCoeff[8] 0.21
+      float greenCoeff[0] 0.44
+      float greenCoeff[1] 0.35
+      float greenCoeff[2] -0.18
+      float greenCoeff[3] -0.06
+      float greenCoeff[4] -0.05
+      float greenCoeff[5] -0.22
+      float greenCoeff[6] -0.09
+      float greenCoeff[7] 0.21
+      float greenCoeff[8] -0.05
+      float blueCoeff[0] 0.54
+      float blueCoeff[1] 0.60
+      float blueCoeff[2] -0.27
+      float blueCoeff[3] 0.01
+      float blueCoeff[4] -0.12
+      float blueCoeff[5] -0.47
+      float blueCoeff[6] -0.15
+      float blueCoeff[7] 0.14
+      float blueCoeff[8] -0.30
+   }
+   textures{
+      textureCmp data/textures/noise.png
+   }
+   cubeMap{
+   }
+
+}
+ 

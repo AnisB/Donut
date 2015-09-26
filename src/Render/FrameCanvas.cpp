@@ -18,7 +18,8 @@
  #include "FrameCanvas.h"
  #include "Render/Defines.h"
  #include <Render/Helper.h>
- #include "Base/Common.h"
+ #include <base/Common.h>
+ #include "Base/Macro.h"
  #include "MultiThread/Defines.h"
 
 
@@ -99,7 +100,7 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERR("There is a problem with your standard frame buffer dude "<<glGetError());
+	 			RENDER_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
@@ -132,7 +133,43 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+	 			RENDER_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
+	 		}
+
+	 		UnBindFrameBuffer();
+			RENDER_DEBUG("Frame canvas created");
+			
+	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
+
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "nbuffer", 1 );
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "specbuffer", 2 );
+	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "posbuffer", 3 );
+	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 4 );
+	 		ShaderManager::Instance().DisableShader();
+		}
+		else if (FCanvasType==FrameCanvasContent::DEFFERED)
+		{
+	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
+	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
+
+	 		CreateTexture(FNormalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
+	 		BindToFrameBuffer(FNormalBuffer, TextureNature::COLOR, 1);
+
+	 		CreateTexture(FSpecularBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
+	 		BindToFrameBuffer(FSpecularBuffer, TextureNature::COLOR, 2);
+
+	 		CreateTexture(FPosBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
+	 		BindToFrameBuffer(FPosBuffer, TextureNature::COLOR, 3);
+
+	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
+	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+
+	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+	 		{
+	 			RENDER_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
@@ -146,7 +183,7 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+	 			RENDER_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
@@ -157,6 +194,7 @@ namespace Donut
 	 		ShaderManager::Instance().InjectTex(FShader, FFinalBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "diff", 1 );
 	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 2 );
+	 		ShaderManager::Instance().InjectTex(FShader, FPosBuffer, "posbuffer", 3 );
 	 		ShaderManager::Instance().DisableShader();
 
 		}
@@ -176,7 +214,7 @@ namespace Donut
 
 	void TFrameCanvas::InjectData(const TShader& parShader)
 	{
-		if (FCanvasType==FrameCanvasContent::GBUFFER)
+		if(FCanvasType==FrameCanvasContent::DEFFERED)
 		{
 	 		ShaderManager::Instance().EnableShader(parShader);
 	 		ShaderManager::Instance().InjectInt(parShader, DEFAULT_WIDTH, "width");
@@ -198,7 +236,7 @@ namespace Donut
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (FCanvasType==FrameCanvasContent::GBUFFER)
+		if (FCanvasType==FrameCanvasContent::GBUFFER || FCanvasType==FrameCanvasContent::DEFFERED)
 		{
 			GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, 
                           GL_COLOR_ATTACHMENT2_EXT ,GL_COLOR_ATTACHMENT3_EXT };
@@ -240,6 +278,20 @@ namespace Donut
 
 		}
 		else if (FCanvasType==FrameCanvasContent::GBUFFER)
+		{
+			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
+ 			ShaderManager::Instance().BindTex(FNormalBuffer,1);
+ 			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
+ 			ShaderManager::Instance().BindTex(FPosBuffer,3);
+ 			ShaderManager::Instance().BindTex(FDepthBuffer,4);
+	 		ShaderManager::Instance().EnableShader(FShader);
+		  	glBindVertexArray (FVertexArrayID);
+		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
+		  	glBindVertexArray (0);
+	 		ShaderManager::Instance().DisableShader();
+ 			glFlush ();
+		}
+		else if (FCanvasType==FrameCanvasContent::DEFFERED)
 		{
 			EnableSecond();
 			glEnable (GL_BLEND); // --- could reject background frags!

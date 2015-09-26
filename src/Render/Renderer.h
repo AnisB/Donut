@@ -99,8 +99,6 @@
 	};
 	// END CLASS DECLARATION
 
-
-
 	void *CreateRenderingThread(void* parGraphicRenderer);
  }
  #endif // DONUT_GRAPHIC_RENDERER

@@ -14,7 +14,6 @@
  *
  **/
 
-#include <iostream>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
@@ -24,7 +23,6 @@
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Defines.h>
 #include <Render/SceneNode.h>
-#include <unistd.h>
 
 
 int main()
@@ -39,8 +37,8 @@ int main()
 	Donut::TContextDetail newContext;
 	newContext.windowName = "testObjLoad";
 	window->CreateRenderWindow(newContext, 1);
-	window->SetFragmentShader("shaders/canvas/outVertex.glsl");
-	window->SetFragmentShader("shaders/canvas/outFragment.glsl");
+	//window->SetFragmentShader("shaders/canvas/outVertex.glsl");
+	//window->SetFragmentShader("shaders/canvas/outFragment.glsl");
 	window->Init();
 
 	// Getting the camera
@@ -51,7 +49,7 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Teapot");
+	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Lego");
 	Donut::TDrawableObject* cube = new Donut::TCubeR(TVec3(5,0,-5),0.5);
 
 

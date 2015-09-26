@@ -18,6 +18,8 @@
 
 #include "Base/Common.h"
 #include "MultiThread/Defines.h"
+#include "Base/Macro.h"
+
  namespace Donut
  {
 

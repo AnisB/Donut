@@ -45,7 +45,7 @@
 		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
 
 		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
-		std::vector<TTexture*> LoadObjToTexture(const std::string&  parFileName);
+		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
 		void LoadSugarData(const TShader& parShader, TSugar&  parSugar);
 
 	protected:

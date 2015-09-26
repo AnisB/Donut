@@ -15,9 +15,8 @@
  **/
  
  #include "InputManager.h"
-
- #include <Base/DebugPrinters.h>
-
+#include <base/common.h>
+ 
  namespace Donut
  {
 	InputManager::InputManager()

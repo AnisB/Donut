@@ -33,6 +33,7 @@
  		{
  			STANDARD, // DIFF+DEPTH
  			GBUFFER, //DIFF+DEPTH+NORMAL+SPEC
+ 			DEFFERED // Deferred lightning
  		};
  	}
 

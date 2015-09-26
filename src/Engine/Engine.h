@@ -21,10 +21,8 @@
 #include <base/singleton.h>
 #include <Render/Renderer.h>
 
-
-
- namespace Donut
- {
+namespace Donut
+{
  	class Engine
  	{
  	public:
@@ -59,7 +57,7 @@
  		THREAD_ID FTRenderingThread;
  		THREAD_DATA FThreadData;
  	protected:
- 		Donut::TRenderer * FRenderer;
+ 		TRenderer* FRenderer;
  	};
- }
- #endif // DONUT_ENGINE
+}
+#endif // DONUT_ENGINE

@@ -16,6 +16,8 @@
 
 #include "StateEngineManager.h"
 #include <Base/Common.h>
+#include "Base/Macro.h"
+
 namespace Donut
 {
 
@@ -38,7 +40,7 @@ namespace Donut
 
   void TStateEngineManager::DestroySpecificInstance(int parStateId)
   {
-    AssertRelease(FInstances[TStateEngineId(parStateId)] != NULL);
+    ASSERT(FInstances[TStateEngineId(parStateId)] != NULL);
     delete FInstances[TStateEngineId(parStateId)];
     FInstances.erase(parStateId);
     STATE_ENGINE_DEBUG("The instance with ID "<<parStateId<<" was destroyed");
@@ -63,7 +65,7 @@ namespace Donut
   {
     Donut::TStateEngine * stateEngine = new Donut::TStateEngine(parStateId);
     TStateEngineId stateId(parStateId);
-    AssertRelease(FInstances[stateId] == NULL);
+    ASSERT(FInstances[stateId] == NULL);
     FInstances[stateId] = stateEngine;
     STATE_ENGINE_DEBUG("Instance registered with id "<<parStateId);
     return stateEngine;

@@ -2,7 +2,6 @@
 #define RENDER_HELPER
 
 
-#include <Base/DebugPrinters.h>
 #include "Defines.h"
 #include <iostream>
 

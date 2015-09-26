@@ -22,7 +22,7 @@
 
 struct TModel
 {
-    std::string     name;
+    std::string name;
     GLuint vertexArray;
     int nbVertices;
     bool isTesselated;

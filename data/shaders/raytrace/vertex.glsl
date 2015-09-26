@@ -15,17 +15,17 @@ out vec4 unitY;
 out vec4 coinInfGauche;
 out vec3 cameraPosition;
 
-#define focalDistance 50.0f
+#define focalDistance 50.0
 const float hauteurEcran = 1.52638111*focalDistance;
-const float ratio = 1280.0/720.0;
+const float ratio = 512.0/386.0;
 
 void main()
 {
-	cameraPosition = view[3].xyz;
+	cameraPosition = (view*vec4(0.0,0.0,0.0,1.0)).xyz;
 	unitX = normalize(view * vec4(1.0,0.0,0.0,0.0));
 	unitY = normalize(view * vec4(0.0,1.0,0.0,0.0));
 	vec4 unitZ = normalize(view * vec4(0.0,0.0,1.0,0.0));
-	coinInfGauche = -unitZ * 50.0 - unitX*hauteurEcran*ratio - unitY*hauteurEcran;
+	coinInfGauche = -unitZ * 50.0 - unitX*hauteurEcran*ratio + unitY*hauteurEcran;
 	// cameraPosition = vec3(0.0,0.0,10.0);
 	// cameraPosition = vec3(view[0][3],view[1][3],view[2][3]);
     gl_Position = vec4(position,1.0);

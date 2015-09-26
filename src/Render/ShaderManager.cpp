@@ -19,8 +19,9 @@
  #include <Base/Common.h>
  #include <Render/Defines.h>
  #include <render/helper.h>
- #include <Base/DebugPrinters.h>
  #include <stdlib.h>
+ #include "Base/Macro.h"
+ 
 namespace Donut 
 {
 	void CheckShader(GLuint parShaderID, const std::string& parShadePath)
@@ -36,7 +37,7 @@ namespace Donut
 	        char errorMessage[InfoLogLength];
 	        glGetShaderInfoLog(parShaderID, InfoLogLength, NULL, errorMessage);
 	        RENDER_DEBUG( "Shader error:"<<parShadePath<<" "<<parShaderID);
-	        RENDER_ERR( errorMessage );
+	        RENDER_ERROR( errorMessage );
 	    }
 	}
 
@@ -52,7 +53,7 @@ namespace Donut
 	    {   
 	        char errorMessage[InfoLogLength];
 	        glGetProgramInfoLog(parProgramID, InfoLogLength, NULL, errorMessage);
-	        RENDER_ERR("Program linking error: "<<std::endl<<errorMessage );
+	        RENDER_ERROR("Program linking error: "<<std::endl<<errorMessage );
 	        // return false;
 	    }
 	    return true;
@@ -157,7 +158,7 @@ namespace Donut
 
 	void ShaderManager::EnableShader(const TShader& parProgram)
 	{
-		AssertNoRelease(parProgram.FActive);
+		ASSERT_NO_RELEASE(parProgram.FActive);
 		glUseProgram(parProgram.FProgramID);
 	}
 
