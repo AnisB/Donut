@@ -59,6 +59,8 @@
 		void SetRenderType(FrameCanvasContent::Type parType);
 		TNode* GetRoot();
 		Camera* GetCamera(){return FCamera;}
+
+		void AddTexture(const std::string& _textureName, const std::string& _unifomName);
 		
 	private:
 		void Bind();

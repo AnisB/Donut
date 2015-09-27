@@ -19,7 +19,6 @@
  #include "Render/Defines.h"
  #include <Render/Helper.h>
  #include <base/Common.h>
- #include "Base/Macro.h"
  #include "MultiThread/Defines.h"
 
 
@@ -47,6 +46,7 @@ namespace Donut
 	, FSpecularBuffer(0)
  	, FShader(0,CANVAS_VERTEX_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, CANVAS_FRAGMENT_SHADER)
  	, FCanvasType(FrameCanvasContent::STANDARD)
+ 	, FTextureCounter(0)
  	{
 
  	}
@@ -112,6 +112,7 @@ namespace Donut
 
 	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 1 );
+	 		FTextureCounter = 2;
 	 		ShaderManager::Instance().DisableShader();
 		}
 		else if (FCanvasType==FrameCanvasContent::GBUFFER)
@@ -130,6 +131,7 @@ namespace Donut
 
 	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
 	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+	 		FTextureCounter = 4;
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
@@ -166,6 +168,8 @@ namespace Donut
 
 	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
 	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+
+	 		FTextureCounter = 4;
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
@@ -284,6 +288,12 @@ namespace Donut
  			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
  			ShaderManager::Instance().BindTex(FPosBuffer,3);
  			ShaderManager::Instance().BindTex(FDepthBuffer,4);
+ 			int counter = FTextureCounter-FTextures.size()-1;
+ 			foreach(tex, FTextures)
+ 			{
+ 				ShaderManager::Instance().BindTex((*tex)->FID,counter);
+ 				counter++;
+ 			}
 	 		ShaderManager::Instance().EnableShader(FShader);
 		  	glBindVertexArray (FVertexArrayID);
 		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
@@ -332,4 +342,14 @@ namespace Donut
  			glFlush ();
 		}
  	}
+
+	void TFrameCanvas::AttachTexture(TTexture* _texture, const std::string& _uniformVarName)
+	{
+		RENDER_INFO("Attaching texture "<<_texture->FFileName<<" to frame canvas");
+		FTextures.push_back(_texture);
+	 	FTextureCounter++;
+ 		ShaderManager::Instance().EnableShader(FShader);
+ 		ShaderManager::Instance().InjectTex(FShader, _texture->FID, _uniformVarName, FTextureCounter);
+ 		ShaderManager::Instance().DisableShader();
+	}
  }

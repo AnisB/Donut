@@ -22,8 +22,10 @@
 #include "DrawableObject.h"
 #include "ShaderManager.h"
 #include <Render/Light.h>
+#include <resource/texture.h>
 #include "MultiThread/ThreadSharedObject.h"
 
+#include <vector>
  
  namespace Donut
  {
@@ -58,6 +60,7 @@
 		void Enable();
 		void EnableSecond();
 		void Disable();
+		void AttachTexture(TTexture* _texture, const std::string& _uniformVarName);
 
 	protected:
 		void createShader();
@@ -73,7 +76,9 @@
 		GLuint FNormalBuffer;
 		GLuint FSpecularBuffer;
 		GLuint FDepthBuffer;
-
+		std::vector<TTexture*> FTextures;
+		int FTextureCounter;
+		
 		GLuint FSecondFrameBuffer;
 		GLuint FFinalBuffer;
 
@@ -83,6 +88,7 @@
 
 		//Shader
 		TShader FShader;
+
 
 	};
 	// END CLASS DECLARATION

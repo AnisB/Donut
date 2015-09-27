@@ -19,6 +19,7 @@
 #include "Base/Common.h"
 #include "MultiThread/Defines.h"
 #include "Base/Macro.h"
+#include "resource/resourcemanager.h"
 
  namespace Donut
  {
@@ -159,6 +160,12 @@
 	void TRenderPass::RemoveLight(TLight* parLight)
 	{
 		FLights.remove(parLight);
+	}
+
+	void TRenderPass::AddTexture(const std::string& _textureName, const std::string& _unifomName)
+	{
+		TTexture* texture  = ResourceManager::Instance().LoadTexture(_textureName);
+		FFrameCanvas->AttachTexture(texture, _unifomName);
 	}
 	// END CLASS IMPLEMENTATION
 

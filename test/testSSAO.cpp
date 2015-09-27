@@ -30,6 +30,7 @@
 int main()
 {
 	Donut::TSugarLoader::Instance().Init("data");	
+
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -46,17 +47,28 @@ int main()
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
+	pass->AddTexture("data/textures/random.jpg", "random");
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* rabbit = new Donut::TMesh(TVec3(0,0,-40),"Lego");
-
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,5000.0);
+	camera->Translate(Vector3(0.0,-4, 15));
+	Donut::TDrawableObject* house = new Donut::TMesh(TVec3(0,0,-40),"House");
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	rabbit->GenerateShader();
-	rabbit->Init();
-	node->AddDrawable(rabbit);
+	house->GenerateShader();
+	house->Init();
+	node->AddDrawable(house);
 	root->AddChild(node);
-	window->RegisterToDraw(rabbit);
+	window->RegisterToDraw(house);
+
+	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0.05,-40),"Lego");
+	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
+	lego->GenerateShader();
+	lego->Init();
+	legoNode->AddDrawable(lego);
+	root->AddChild(legoNode);
+	window->RegisterToDraw(lego);
+
+
 	
 	while(window->IsRendering())
 	{
@@ -64,8 +76,8 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update(0.016);
 	}
-	window->UnRegisterToDraw(rabbit);
-	delete rabbit;
+	window->UnRegisterToDraw(house);
+	delete house;
 	delete window;
 	return 0;
 

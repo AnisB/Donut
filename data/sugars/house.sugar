@@ -1,7 +1,7 @@
-Object Lego
+Object House
 {
    model{
-     data/geometry/lego.obj
+     data/geometry/house.obj
    }
    shader{
       vertex data/shaders/basetex/vertex.glsl
@@ -14,7 +14,7 @@ Object Lego
       float weight 10.0
    }
    textures{
-      textureCmp data/textures/yellow.jpg
+      textureCmp data/textures/farmHouse.jpg
    }
    cubeMap{
    }

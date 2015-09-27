@@ -11,11 +11,13 @@ in vec2 tex_coord;
 
 out vec2 texCoordV;
 out vec3 fnormalV;
+out vec4 ecPosV;
 
 
 void main()
 {
-    gl_Position = modelviewprojection*vec4(position,1.0);
+	ecPosV = view*model*vec4(position,1.0);
+    gl_Position = projection*ecPosV;
     texCoordV = tex_coord;
     fnormalV = normalize(view*model*vec4(normal,0.0)).xyz;
 }

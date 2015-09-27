@@ -1,7 +1,5 @@
 ./build
  build/*.*
 build
-
 .DS_STORE
-
 *.*~
