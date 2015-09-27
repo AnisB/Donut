@@ -50,7 +50,7 @@
          TSceneNode * FNode1;
          TSceneNode * FNode2;
          bool FIsRendering;
-        Donut::DefaultInputManager * inManager;
+        Donut::TDefaultInputManager * inManager;
 
 
          };

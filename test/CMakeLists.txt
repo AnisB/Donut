@@ -37,9 +37,6 @@ TARGET_LINK_LIBRARIES(testSkybox Donut ${CORELIBS})
 add_executable(testTesselation ${TEST}/testTesselation.cpp)
 TARGET_LINK_LIBRARIES(testTesselation Donut ${CORELIBS})
 
-add_executable(bezierProgram ${TEST}/bezierProgram.cpp)
-TARGET_LINK_LIBRARIES(bezierProgram Donut ${CORELIBS})
-
 add_executable(testModelToTexture ${TEST}/testModelToTexture.cpp)
 TARGET_LINK_LIBRARIES(testModelToTexture Donut ${CORELIBS})
 

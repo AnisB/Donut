@@ -13,17 +13,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-#ifndef FILE_LOADER
-#define FILE_LOADER
+#ifndef DONUT_FILE_LOADER
+#define DONUT_FILE_LOADER
 
 // Std includes
 #include <vector>
 #include <string>
+#include <sstream>
 
 namespace Donut
 {
 	//Loads file , free with mallpoc
-	char * LoadFile( char const* fn);
+	void readFile(char const* fn, std::string& _output);
 	// Writes s in f
 	bool WriteFile(char *fn, char *s);
 	// Splits parstring with parSeparator
@@ -32,8 +33,15 @@ namespace Donut
 	std::string removeMultSpace(const std::string& parString); 
 
 	// Converters from string
-	int convertToInt(const std::string& parToConvert);
-	float convertToFloat(const std::string& parToConvert);
+	template<typename T>
+	T stringConvert(const std::string& _param)
+	{
+		std::stringstream streamConverter;
+		streamConverter<<_param;
+		T result;
+		streamConverter>>result;
+		return result;
+	}
 }
 
 #endif // FILE_LOADER

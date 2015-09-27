@@ -1,12 +1,12 @@
 Object Rabbit
 {
    model{
-     data/models/rabbit/model.obj
+     data/geometry/rabbit.obj
    }
    shader{
-      vertex data/models/rabbit/vertex.glsl
-      geometry data/models/rabbit/geometry.glsl
-      fragment data/models/rabbit/fragment.glsl
+      vertex data/shaders/basetex/vertex.glsl
+      geometry data/shaders/basetex/geometry.glsl
+      fragment data/shaders/basetex/fragment.glsl
    }
    built_in_data{
    }
@@ -14,6 +14,7 @@ Object Rabbit
       float weight 10.0
    }
    textures{
+      textureCmp data/textures/noise.png
    }
 
    cubeMap{

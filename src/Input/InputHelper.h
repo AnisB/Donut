@@ -13,31 +13,30 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
- #ifndef INPUT_HELPER_DONUT 
- #define INPUT_HELPER_DONUT
 
+#ifndef INPUT_HELPER_DONUT 
+#define INPUT_HELPER_DONUT
 
+// Library includes
+#include "defines.h"
+#include <render/defines.h>
+#include <input/inputManager.h>
 
- #include "Defines.h"
- #include "Render/Defines.h"
+namespace Donut
+{
+	// Sets the input manager 
+	void SetInputManager(TInputManager* parInputManager);
+	TInputManager*  GetInputManager();
+	// Farms the inputs
+	void FarmEvents();
 
- #include <Input/InputManager.h>
-
- namespace Donut
- {
- 	void SetInputManager(InputManager* parInputManager);
- 	
- 	void FarmEvents();
- 	// Keyboard
- 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
- 	//Mouse
- 	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
- 	void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
- 	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
-
-
- 	//Joystick
-
- }
- #endif //INPUT_HELPER_DONUT
+	// GLFW functions
+	//Keyboard
+	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	//Mouse
+	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos);
+	//Joystick
+}
+#endif //INPUT_HELPER_DONUT

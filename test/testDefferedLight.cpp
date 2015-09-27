@@ -29,9 +29,7 @@
 
 int main()
 {
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	modeltest.LoadSugars();
+	Donut::TSugarLoader::Instance().Init("data");	
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -73,8 +71,7 @@ int main()
 
 	Donut::TNode* root= window->GetRoot();
 	Donut::Camera* camera = window->GetCamera();
-	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
-	Donut::SetInputManager(inManager);
+	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	Donut::TDrawableObject* teapot = new Donut::TMesh(TVec3(0,0,-40),"Teapot");

@@ -23,11 +23,15 @@
 namespace Donut
 {
 	void __handleFail(std::string _message);
-	#define ASSERT(Enonce) {if(!(Enonce)) __handleFail("");}
-	#define ASSERT_MSG(Enonce, MSG) {if(!(Enonce)){std::stringstream stream; stream<<MSG;  __handleFail(stream.str()); };}
+	#define ASSERT_FAIL() {__handleFail("");}
+	#define ASSERT_FAIL_MSG(MSG) {std::stringstream stream; stream<<MSG;  __handleFail(stream.str());}
+	#define ASSERT(Enonce) {if(!(Enonce)) ASSERT_FAIL_MSG ("");}
+	#define ASSERT_MSG(Enonce, MSG) {if(!(Enonce)) ASSERT_FAIL_MSG(MSG);}
 #ifdef _DEBUG
-	#define ASSERT_NO_RELEASE(Enonce) {if(!(Enonce)) __handleFail("");}
-	#define ASSERT_MSG_NO_RELEASE(Enonce, MSG) {if(!(Enonce)){std::stringstream stream; stream<<MSG;  __handleFail(stream.str()); };}
+	#define ASSERT_FAIL_NO_RELEASE() ASSERT_FAIL()
+	#define ASSERT_FAIL_MSG_NO_RELEASE(MSG) ASSERT_FAIL_MSG(MSG)
+	#define ASSERT_NO_RELEASE(Enonce) ASSERT(Enonce)
+	#define ASSERT_MSG_NO_RELEASE(Enonce, MSG) ASSERT_MSG(Enonce, MSG)
 #elif _RELEASE 
 	#define ASSERT_NO_RELEASE(Enonce) {}
 	#define ASSERT_MSG_NO_RELEASE(Enonce) {}

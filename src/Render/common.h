@@ -17,6 +17,13 @@
 #ifndef RENDER_COMMON_H
 #define RENDER_COMMON_H
 
+#include <GL/glew.h>
+
+#ifndef GLFW_INCLUDE_GL3
+#define GLFW_INCLUDE_GL3
+#endif
+ 
+#include <GLFW/glfw3.h>
 
 // Donut includes
 #include <base/printers.h>

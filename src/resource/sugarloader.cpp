@@ -29,6 +29,14 @@
 #include <errno.h>
 #include <fstream>
 
+#define TOKEN_VEC3  "vec3"
+#define TOKEN_VEC4  "vec4"
+#define TOKEN_MAT3  "mat3"
+#define TOKEN_MAT4  "mat4"
+#define TOKEN_FLOAT "float"
+#define TOKEN_BOOL  "bool"
+#define TOKEN_INT   "int"
+
 namespace Donut
 {
     void getNonEmptyLine(std::ifstream& file, std::string& parFile)
@@ -91,6 +99,15 @@ namespace Donut
         FMediaPath = parDirectory;
     }
 
+    void TSugarLoader::Init(const std::string& parDirectory)
+    {
+        RESOURCE_WARNING("========= SUGAR LOADER INIT =========");
+        SetDirectory(parDirectory);
+        LoadSugars();
+        RESOURCE_WARNING("=====================================");
+
+    }
+
     void TSugarLoader::LoadSugars()
     {   
         // useful vars
@@ -131,14 +148,14 @@ namespace Donut
             directoryNameforParse+=newEntry->d_name;
             const TSugar& newSugar = ParseFile(directoryNameforParse);
             FSugars[newSugar.name]= newSugar;
-            RESOURCE_DEBUG("New Sugar file: "<< directoryNameforParse); 
+            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< directoryNameforParse); 
         }
         if (closedir (directory)) 
         {
-            RESOURCE_ERROR("Error while closing directory: "<< directoryName); 
+            ASSERT_FAIL_MSG("Error while closing directory: "<< directoryName); 
             return;
         }
-        RESOURCE_DEBUG("The parser found: "<<FSugars.size());
+        RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
     }
 
     TSugar TSugarLoader::ParseFile(const std::string& parFileName)
@@ -275,13 +292,13 @@ namespace Donut
 
     void TSugarLoader::LoadSugars_MultiThread()
     {
-
+        ASSERT_FAIL_MSG("NOT IMPLEMENTED YET");
     }
     TSugar TSugarLoader::GetSugar(const std::string& parModel)
     {
-        RESOURCE_DEBUG("Looking for the sugar "<< parModel);
+        RESOURCE_WARNING(parModel<<" is requested");
         typeof(FSugars.begin()) ite = FSugars.find(parModel);
-        ASSERT_MSG_NO_RELEASE((ite!=FSugars.end()),"Sugar model not found.");
+        ASSERT_MSG_NO_RELEASE((ite!=FSugars.end()),"Sugar model not found: "<<parModel);
         return ite->second;
     }
 

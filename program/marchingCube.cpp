@@ -29,7 +29,7 @@ std::vector<Vector3> gridPoints;
 // La fenetre de rendu
 Donut::TRenderer * window = NULL;
 // Le gestionnaire d'input
-Donut::DefaultInputManager * inManager = NULL;
+Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
 Donut::TSceneNode* node;
 
@@ -53,7 +53,7 @@ void init()
 	// Getting the camera
 	Donut::Camera* camera = window->GetCamera();
 	// On définit un gestionnaire d'input
-	inManager = new Donut::DefaultInputManager();
+	inManager = new Donut::TDefaultInputManager();
 	Donut::SetInputManager(inManager);
 	// On donne la camera a l'input manager
 	inManager->FCamera = camera;

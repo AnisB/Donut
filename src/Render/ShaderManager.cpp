@@ -70,6 +70,7 @@ namespace Donut
 
 	bool ShaderManager::CreateShader(TShader& parShader)
 	{
+		RENDER_DEBUG("Creating shader kernel");
 		GLuint programID;
 		GLuint vertexShader;
 		GLuint tessControlShader;
@@ -81,12 +82,11 @@ namespace Donut
 
 		if(parShader.FVertexShader!=BASIC_SHADER)
 		{
-			char * vsFile = NULL;
+			std::string vsFile;
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			vsFile = LoadFile(parShader.FVertexShader.c_str());
-			const char * vsFile_ptr = vsFile;
-			glShaderSource(vertexShader, 1, (const char **)&vsFile, NULL);
-			free(vsFile);
+			readFile(parShader.FVertexShader.c_str(),vsFile);
+			const char * vsFile_ptr = vsFile.c_str();
+			glShaderSource(vertexShader, 1, (const char **)&vsFile_ptr, NULL);
 			glCompileShader(vertexShader);
 			CheckShader(vertexShader, parShader.FVertexShader);
 			glAttachShader(programID,vertexShader);			
@@ -94,12 +94,11 @@ namespace Donut
 		}
 		if(parShader.FTessControl!=BASIC_SHADER)
 		{
-			char * tcsFile = NULL;
+			std::string tcsFile;
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
-			tcsFile = LoadFile(parShader.FTessControl.c_str());
-			const char * tcsFile_ptr = tcsFile;
-			glShaderSource(tessControlShader, 1, (const char **)&tcsFile, NULL);
-			free(tcsFile);
+			readFile(parShader.FTessControl.c_str(), tcsFile);
+			const char * tcsFile_ptr = tcsFile.c_str();
+			glShaderSource(tessControlShader, 1, (const char **)&tcsFile_ptr, NULL);
 			glCompileShader(tessControlShader);
 			CheckShader(tessControlShader, parShader.FTessControl);
 			glAttachShader(programID,tessControlShader);
@@ -107,12 +106,11 @@ namespace Donut
 
 		if(parShader.FTessEval!=BASIC_SHADER)
 		{
-			char * tesFile = NULL;
+			std::string tesFile;
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-			tesFile = LoadFile(parShader.FTessEval.c_str());
-			const char * tesFile_ptr = tesFile;
-			glShaderSource(tessEvalShader, 1, (const char **)&tesFile, NULL);
-			free(tesFile);
+			readFile(parShader.FTessEval.c_str(), tesFile);
+			const char * tesFile_ptr = tesFile.c_str();
+			glShaderSource(tessEvalShader, 1, (const char **)&tesFile_ptr, NULL);
 			glCompileShader(tessEvalShader);
 			CheckShader(tessEvalShader, parShader.FTessEval);
 			glAttachShader(programID,tessEvalShader);
@@ -120,24 +118,22 @@ namespace Donut
 
 		if(parShader.FGeometryShader!=BASIC_SHADER)
 		{
-			char * gsFile = NULL;
+			std::string gsFile;
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			gsFile = LoadFile(parShader.FGeometryShader.c_str());
-			const char * gsFile_ptr = gsFile;
-			glShaderSource(geometryShader, 1, (const char **)&gsFile, NULL);
-			free(gsFile);
+			readFile(parShader.FGeometryShader.c_str(), gsFile);
+			const char * gsFile_ptr = gsFile.c_str();
+			glShaderSource(geometryShader, 1, (const char **)&gsFile_ptr, NULL);
 			glCompileShader(geometryShader);
 			CheckShader(geometryShader, parShader.FGeometryShader);
 			glAttachShader(programID,geometryShader);
 		}
 		if(parShader.FFragmentShader!=BASIC_SHADER)
 		{
-			char * fsFile = NULL;
+			std::string fsFile;
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			fsFile = LoadFile(parShader.FFragmentShader.c_str());
-			const char * fsFile_ptr = fsFile;
-			glShaderSource(fragmentShader, 1, (const char **)&fsFile, NULL);
-			free(fsFile);
+			readFile(parShader.FFragmentShader.c_str(), fsFile);
+			const char * fsFile_ptr = fsFile.c_str();
+			glShaderSource(fragmentShader, 1, (const char **)&fsFile_ptr, NULL);
 			glCompileShader(fragmentShader);
 			CheckShader(fragmentShader, parShader.FFragmentShader);
 			glAttachShader(programID,fragmentShader);
@@ -148,10 +144,12 @@ namespace Donut
 			parShader.FProgramID = programID;
 			parShader.FActive = true;
 			FPrograms.push_back(parShader);
+			RENDER_DEBUG("Shader created");
 			return true;
 		}
 		else
 		{
+			ASSERT_FAIL_MSG_NO_RELEASE("Shader creation failed.");
 			return false;
 		}
 	}

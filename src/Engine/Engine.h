@@ -19,6 +19,7 @@
  #define DONUT_ENGINE
 
 #include <base/singleton.h>
+#include <input/inputhelper.h>
 #include <Render/Renderer.h>
 
 namespace Donut
@@ -42,7 +43,7 @@ namespace Donut
 
  		virtual void Update(float dt)
  		{
- 			glfwPollEvents();
+ 			FarmEvents();
  		}
  		virtual void PrepareNextFrame()
  		{

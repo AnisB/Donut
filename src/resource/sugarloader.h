@@ -32,16 +32,15 @@ namespace Donut
             //Base
             TSugarLoader();
             ~TSugarLoader();
-
-            void SetDirectory(const std::string& parDirectory);
             
-            //Loading
+            // Init
+            void Init(const std::string& parDirectory);
+        protected:
+            void SetDirectory(const std::string& parDirectory);
             void LoadSugars();
             void LoadSugars_MultiThread();
-
+        public:
             TSugar GetSugar(const std::string& parModel);
-
-        protected:
             TSugar ParseFile(const std::string& parFileName);
         protected:
             std::string FMediaPath;

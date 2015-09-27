@@ -18,8 +18,6 @@
 
 int main()
 {
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	modeltest.LoadSugars();
+	Donut::TSugarLoader::Instance().Init("data");
 	return 0;
 }

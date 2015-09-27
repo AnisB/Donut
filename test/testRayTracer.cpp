@@ -29,6 +29,8 @@
 // Autres includes
 #include <cmath> 
 
+using namespace Donut;
+
 // La texture de points de controle
 TTexture* triangles = NULL;
 // La fenetre de rendu
@@ -36,17 +38,14 @@ Donut::TRenderer * window = NULL;
 // Les surface a afficher
 Donut::TMesh* surface = NULL;
 // Le gestionnaire d'input
-Donut::DefaultInputManager * inManager = NULL;
+Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
 Donut::TSceneNode* node;
 
 void init()
 {
 	// Spécifie le répertoire de chargement des modèles
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	// Charge les modèles
-	modeltest.LoadSugars();
+	Donut::TSugarLoader::Instance().Init("data");	
 	// Creating the rendering window
 	window = new Donut::TRenderer();
 
@@ -62,9 +61,7 @@ void init()
 	// Getting the camera
 	Donut::Camera* camera = window->GetCamera();
 	// On définit un gestionnaire d'input
-	inManager = new Donut::DefaultInputManager();
-	Donut::SetInputManager(inManager);
-	// On donne la camera a l'input manager
+	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	// On définit la perspective
 	camera->DefinePerspective(29.0,1280.0/720.0,1.0,500.0);
@@ -85,7 +82,7 @@ void initScene()
 	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");
 	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/test/cube.obj");
 	std::vector<TTexture*> triangles;
-	std::vector<int> nbShapes = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj",triangles);
+	std::vector<int> nbShapes = Donut::ResourceManager::Instance().LoadObjToTexture("data/geometry/teapot.obj",triangles);
 	TextureHelpers::CreateDataTexture(triangles[0]);
 	// On l'injecte dans chacun des modèles
 	surface->AddTexture(triangles[0], "triangles");

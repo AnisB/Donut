@@ -15,21 +15,26 @@
  **/
 
 // Donut includes
-#include "InputHelper.h"
 #include <base/common.h>
+#include "inputhelper.h"
+#include "defaultinputmanager.h"
 
 namespace Donut
 {
- 	InputManager* InManager = new InputManager();
+	// The library input manager
+ 	static TInputManager* InManager = new TDefaultInputManager();
 
- 	void SetInputManager(InputManager* parInputManager)
+ 	void SetInputManager(TInputManager* _inputManager)
  	{
- 		INPUT_DEBUG("The input manager was changed.");
+ 		INPUT_INFO("Input manager has changed");
  		if(InManager!=NULL)
  			delete InManager;
- 		InManager = parInputManager;
+ 		InManager = _inputManager;
  	}
-
+	TInputManager*  GetInputManager()
+	{
+		return InManager;
+	}
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 	    ASSERT_NO_RELEASE(InManager != NULL);
@@ -45,7 +50,6 @@ namespace Donut
 	    {
 		    InManager->KeyReleased((TKeyCode::Type)key);
 	    }
-
 	}	
 
  	void FarmEvents()
@@ -55,7 +59,7 @@ namespace Donut
 
  	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
  	{
-	    ASSERT_NO_RELEASE(InManager!=NULL);
+	    ASSERT_NO_RELEASE(InManager != NULL);
 	    if(action == GLFW_PRESS)
 	    {
 		    InManager->MousePressed((TMouseCode::Type)button);
@@ -73,7 +77,7 @@ namespace Donut
 
  	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
  	{
-	    ASSERT_NO_RELEASE(InManager!=NULL);
+	    ASSERT_NO_RELEASE(InManager != NULL);
 	    int width, height;
 	    glfwGetFramebufferSize(window, &width, &height);
 	    float ratio = width / (float) height;

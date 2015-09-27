@@ -18,6 +18,7 @@
 #include "security.h"
 #include "exception.h"
 #include "const.h"
+#include <base/common.h>
 
 // STL include
 #include <unistd.h>
@@ -35,6 +36,7 @@ namespace Donut
 
 	void __handleFail(std::string _message)
 	{
+		GENERAL_ERROR(_message);
 		printTrace();
 		throw TException(_message);
 	}

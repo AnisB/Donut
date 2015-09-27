@@ -29,15 +29,13 @@
 
 int main()
 {
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	modeltest.LoadSugars();
+    Donut::TSugarLoader::Instance().Init("data");   
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
 	Donut::TContextDetail newContext;
-	newContext.windowName = "Lego dude";
+	newContext.windowName = "Lego";
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
 
@@ -45,11 +43,11 @@ int main()
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
-	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
+	Donut::TDefaultInputManager * inManager = new Donut::TDefaultInputManager();
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
-	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0,-10),"LegoDude");
+	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0,-10),"Lego");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	lego->GenerateShader();

@@ -36,9 +36,7 @@ namespace Donut
 {
     TEngineExample::TEngineExample() : Engine()
     {
-        Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();    
-        modeltest.SetDirectory("data");
-        modeltest.LoadSugars();
+        Donut::TSugarLoader::Instance().Init("data");
     }
      
     TEngineExample::~TEngineExample()
@@ -60,7 +58,7 @@ namespace Donut
         Donut::TRenderPass* pass= FRenderer->GetPasses()[0];
         Donut::TNode* root= pass->GetRoot();
         Donut::Camera* camera = pass->GetCamera();
-        inManager = new Donut::DefaultInputManager();
+        inManager = new Donut::TDefaultInputManager();
         Donut::SetInputManager(inManager);
         inManager->FCamera = camera;
         camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);

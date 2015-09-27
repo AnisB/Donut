@@ -19,6 +19,7 @@
 
 // STL Includes
 #include <exception>
+#include <string>
 
 namespace Donut
 {

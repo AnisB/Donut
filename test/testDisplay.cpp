@@ -44,8 +44,7 @@ int main()
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
-	Donut::DefaultInputManager * inManager = new Donut::DefaultInputManager();
-	Donut::SetInputManager(inManager);
+	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	

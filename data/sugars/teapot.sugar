@@ -1,7 +1,7 @@
 Object Teapot
 {
    model{
-     data/models/teapot/model.obj
+     data/geometry/teapot.obj
    }
    shader{
       vertex data/models/teapot/vertex.glsl

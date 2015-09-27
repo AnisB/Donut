@@ -86,23 +86,24 @@
  	{
 
  	}
- 	TTexture* ResourceManager::LoadTexture(const std::string&  parTextureName)
+ 	TTexture* ResourceManager::LoadTexture(const std::string&  _textureName)
  	{
- 		typeof(FTextures.begin()) it = FTextures.find(parTextureName);
+ 		typeof(FTextures.begin()) it = FTextures.find(_textureName);
  		if(it != FTextures.end())
  		{
+ 			RESOURCE_INFO(_textureName<<" already loaded");
  			it->second->FNbRef++;
  			return it->second;
  		}
  		else
  		{
- 			TTexture * texture =  TextureHelpers::LoadTexture(parTextureName);
- 			FTextures[parTextureName] = texture;
+ 			RESOURCE_INFO("Reading "<<_textureName);
+ 			TTexture * texture =  TextureHelpers::LoadTexture(_textureName);
+ 			FTextures[_textureName] = texture;
  			TextureHelpers::CreateTexture(texture);
  			texture->FNbRef++;
  			return texture;
  		}
- 		return NULL;
  	}
 
  	TTexture* ResourceManager::GetTexture(const std::string&  parTextureName)
@@ -158,11 +159,11 @@
  		typeof(FModels.begin()) it = FModels.find(parFileName);
  		if(it != FModels.end())
  		{
-  			INPUT_DEBUG("Model already in memory :D"<<parFileName); 
+  			RESOURCE_INFO(parFileName<<" already loaded"); 
  			return it->second;
  		}
 		std::string model = parFileName.substr(1,parFileName.size());
-  		INPUT_ERROR("I will try to load: "<<model); 
+  		RESOURCE_INFO("Trying to load Wavefront: "<<model); 
 		// Liste des vertices
 		std::vector<TVec3> listePoints;
 		// Liste des infos par point
@@ -176,10 +177,9 @@
 		in.open(model.c_str(), std::fstream::in);
 	  	if (!in) 
 	  	{ 
-	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
+	  		ASSERT_FAIL_MSG("Cannot find model obj: "<<model); 
 	  		return NULL;
 	  	}
-  		INPUT_DEBUG("OBJ File opened: "<<model); 
 		string line;
 		while (getline(in, line)) 
 		{
@@ -239,7 +239,6 @@
 		    	// Commentaire
 			}
 		}
-		INPUT_DEBUG("All data into memory")
 	 	TModel * newModel = new TModel();
 	 	newModel->name = parFileName;
 	 	GLfloat * data;
@@ -269,7 +268,7 @@
 					// vertices.erase(vertices.begin());
 					foreach(vertice, vertices)
 					{
-						TVec3& point = listePoints[convertToInt(*vertice)-1];
+						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
 						data[verticeCounter*3] = point.val[0];
 						data[verticeCounter*3+1] = point.val[1];
 						data[verticeCounter*3+2] = point.val[2];
@@ -316,12 +315,12 @@
 					foreach(vertice, vertices)
 					{
 						std::vector<std::string> dataVert = split(*vertice,'/');
-						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						data[verticeCounter*3] = point.val[0];
 						data[verticeCounter*3+1] = point.val[1];
 						data[verticeCounter*3+2] = point.val[2];
 
-						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
 						data[3*dimShape*nbShape+verticeCounter*2] = mapp.val[0];
 						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.val[1];
 						verticeCounter++;
@@ -368,16 +367,16 @@
 					foreach(vertice, vertices)
 					{
 						std::vector<std::string> dataVert = split(*vertice,'/');
-						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						data[verticeCounter*3] = point.val[0];
 						data[verticeCounter*3+1] = point.val[1];
 						data[verticeCounter*3+2] = point.val[2];
 
-						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
 						data[3*dimShape*nbShape+verticeCounter*2] = mapp.val[0];
 						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.val[1];
 
-						TVec3& norm = normales[convertToInt(dataVert[2])-1];
+						TVec3& norm = normales[stringConvert<int>(dataVert[2])-1];
 						data[5*dimShape*nbShape+verticeCounter*3] = norm.val[0];
 						data[5*dimShape*nbShape+verticeCounter*3+1] = norm.val[1];
 						data[5*dimShape*nbShape+verticeCounter*3+2] = norm.val[2];
@@ -442,7 +441,7 @@
 		in.open(model.c_str(), std::fstream::in);
 	  	if (!in) 
 	  	{ 
-	  		INPUT_DEBUG("Cannot find model obj: "<<model); 
+	  		ASSERT_FAIL_MSG("Cannot find model obj: "<<model); 
 	  		return std::vector<int>(0);
 	  	}
 		string line;
@@ -534,7 +533,7 @@
 					foreach(vertice, vertices)
 					{
 						// Vertex position
-						TVec3& point = listePoints[convertToInt(*vertice)-1];
+						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = normalize(point.val[0]);
 						data[1+ decalage] = normalize(point.val[1]);
@@ -563,7 +562,7 @@
 					{
 						// Vertex position
 						std::vector<std::string> dataVert = split(*vertice,'/');
-						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = normalize(point.val[0]);
 						data[1+ decalage] = normalize(point.val[1]);
@@ -572,7 +571,7 @@
 						data[3+decalage] = normalize(0.0);
 						data[4+decalage] = normalize(0.0);
 						data[5+decalage] = normalize(1.0);
-						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
 						data[6+decalage] = normalize(mapp.val[0]);
 						data[7+decalage] = normalize(mapp.val[1]);
 						data[8+decalage] = normalize(0.0);
@@ -592,7 +591,7 @@
 					{
 						// Vertex position
 						std::vector<std::string> dataVert = split(*vertice,'/');
-						TVec3& point = listePoints[convertToInt(dataVert[0])-1];
+						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = normalize(point.val[0]);
 						data[1+ decalage] = normalize(point.val[1]);
@@ -600,13 +599,13 @@
 						// std::cout<<"decalage "<<decalage<<std::endl;
 						// std::cout<<"Point "<<point.val[0]<<" "<<point.val[1]<<" "<<point.val[2]<<" "<<std::endl;
 						// Vertex normal
-						TVec3& norm = normales[convertToInt(dataVert[2])-1];
+						TVec3& norm = normales[stringConvert<int>(dataVert[2])-1];
 						data[3+decalage] = normalize(norm.val[0]);
 						data[4+decalage] = normalize(norm.val[1]);
 						data[5+decalage] = normalize(norm.val[2]);
 						// std::cout<<"Normale "<<norm.val[0]<<" "<<norm.val[1]<<" "<<norm.val[2]<<" "<<std::endl;
 
-						TVec2& mapp = uvList[convertToInt(dataVert[1])-1];
+						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
 						data[6+decalage] = normalize(mapp.val[0]);
 						data[7+decalage] = normalize(mapp.val[1]);
 						data[8+decalage] = normalize(0.0);
@@ -636,10 +635,10 @@
 			switch(uni->dataType)
 			{
 				case ShaderDataType::INTEGER:
-					ShaderManager::Instance().InjectInt(parShader,convertToInt(uni->value), uni->name);
+					ShaderManager::Instance().InjectInt(parShader,stringConvert<int>(uni->value), uni->name);
 				break;
 				case ShaderDataType::FLOAT:
-					ShaderManager::Instance().InjectFloat(parShader, convertToFloat(uni->value),uni->name);
+					ShaderManager::Instance().InjectFloat(parShader, stringConvert<float>(uni->value),uni->name);
 				break;
 				default:
 				break;
@@ -652,6 +651,7 @@
 	}
 	void ResourceManager::LoadTextures(TSugar&  parSugar)
 	{
+		RESOURCE_INFO("Loading textures for "<<parSugar.name)
 		foreach(tex,parSugar.textures)
 		{
 			TTexture* texPtr = LoadTexture(tex->file);

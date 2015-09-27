@@ -14,15 +14,18 @@
  *
  **/
 
+#include <base/common.h>
 
 #include "TextureHelpers.h"
-#include <base/common.h>
  
 #include <stdio.h>
 #include <stdlib.h>
 #include <jpeglib.h>
 #include <jerror.h>
 #include <png.h>
+
+namespace Donut
+{
 
  namespace TextureHelpers
  {
@@ -187,7 +190,6 @@
         jpeg_finish_decompress(&info);   //finish decompressing this file
 
         fclose(file);                    //close the file
-        printf("File is  OK\n");
 
         return Image;
     }
@@ -200,6 +202,7 @@
         if (fp == 0)
         {
             perror(file_name);
+            ASSERT_FAIL_MSG("File not found: "<<file_name);
             return 0;
         }
 
@@ -208,7 +211,7 @@
 
         if (png_sig_cmp(header, 0, 8))
         {
-            fprintf(stderr, "error: %s is not a PNG.\n", file_name);
+            ASSERT_FAIL_MSG("File is not a PNG: "<<file_name);
             fclose(fp);
             return 0;
         }
@@ -216,7 +219,7 @@
         png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
         if (!png_ptr)
         {
-            fprintf(stderr, "error: png_create_read_struct returned 0.\n");
+            ASSERT_FAIL_MSG("png_create_read_struct returned 0");
             fclose(fp);
             return 0;
         }
@@ -266,7 +269,7 @@
         png_get_IHDR(png_ptr, info_ptr, &temp_width, &temp_height, &bit_depth, &color_type,
             NULL, NULL, NULL);
 
-        TTexture* image = new TTexture(file_name,TImgType::PNG, temp_width, temp_height );
+        TTexture* image = new TTexture(file_name,TImgType::PNG, temp_width, temp_height);
 
         // Update the png info struct.
         png_read_update_info(png_ptr, info_ptr);
@@ -326,29 +329,27 @@
 	    {
 	    	case TImgType::PNG:
                 texture = LoadPNG(parImg.c_str());
-                // printf("PNG load\n");
 	    	    break;
 	    	case TImgType::JPG:
 	    	    texture = LoadJPG(parImg.c_str());
-                // printf("JPG load\n");
 
 	    	    break;
 	    	case TImgType::BMP:
 	    	    texture = LoadBMP(parImg.c_str());
-                 // printf("BMP load\n");
 
 	    	    break;
 	    	case TImgType::TGA:
 	    	    texture = NULL;
 	    	    break;
     	    default:
-    	        texture = NULL;
+    	        ASSERT_FAIL_MSG("Unhandled type "<<parImg);
 	    };
 	    return texture;
 	}
 
     void CreateTexture(TTexture* parTex)
     {
+        RESOURCE_INFO("Creating GPU texture.");
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
 
@@ -367,9 +368,10 @@
 
     void CreateDataTexture(TTexture* parTex)
     {
+        RENDER_INFO("Creating data texture "<<parTex->FWidth<<"x"<<parTex->FHeight);
+
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        RESOURCE_DEBUG("Create data texture width:"<<parTex->FWidth<<" height:"<<parTex->FHeight);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
@@ -462,4 +464,5 @@
         }
     }
 
+}
 }

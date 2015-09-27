@@ -14,55 +14,50 @@
  *
  **/
 
-// Header include
-#include "FileLoader.h"
-
-// Project includes
-#include <Base/Common.h>
+// Donut include
+#include "fileloader.h"
+#include <base/common.h>
 
 // STL include 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sstream>
+#include <fstream>
+
 #ifdef LINUX
 #include <algorithm>
 #endif
 
 namespace Donut
 {
-
-	bool BothAreSpaces(char lhs, char rhs) { return (lhs == rhs) && (lhs == ' '); }
-
-	char * LoadFile( char const* fn) 
-	{
-		FILE *fp;
-		char *content = NULL;
-
-		int count=0;
-
-		if (fn != NULL) {
-			fp = fopen(fn,"rt");
-
-			if (fp != NULL) {
-	      
-	      fseek(fp, 0, SEEK_END);
-	      count = ftell(fp);
-	      rewind(fp);
-
-				if (count > 0) {
-					content = (char *)malloc(sizeof(char) * (count+1));
-					count = fread(content,sizeof(char),count,fp);
-					content[count] = '\0';
-				}
-				fclose(fp);
-			}
-		}
-		ASSERT_MSG((content != NULL),fn);
-		return content;
+	bool BothAreSpaces(char lhs, char rhs) 
+	{ 
+		return (lhs == rhs) && (lhs == ' '); 
 	}
 
-	bool WriteFile(char *fn, char *s) {
+	void readFile( char const* fn, std::string& _output) 
+	{
+		ASSERT_MSG(fn != NULL, "Empty file name to load");
+		std::ifstream fileReader (fn);
+		if (fileReader.is_open())
+		{
+			std::string line;
+			while ( getline (fileReader, line) )
+			{
+				_output += line;
+				_output += "\n";
+			}
+			fileReader.close();
+		}
+		else
+		{
+			ASSERT_FAIL_MSG("Failed could not be loaded "<<fn);
+		}
+	}
+
+	bool WriteFile(char *fn, char *s) 
+	{
 
 		FILE *fp;
 		bool status = false;
@@ -105,23 +100,6 @@ namespace Donut
 		std::string::iterator new_end = std::unique(str.begin(), str.end(), BothAreSpaces);
 		str.erase(new_end, str.end());  
 	    return str;
-	}
-
-	int convertToInt(const std::string& parToConvert)
-	{
-		std::stringstream streamConverter;
-		streamConverter<<parToConvert;
-		int result;
-		streamConverter>>result;
-		return result;
-	}
-	float convertToFloat(const std::string& parToConvert)
-	{
-		std::stringstream streamConverter;
-		streamConverter<<parToConvert;
-		float result;
-		streamConverter>>result;
-		return result;
 	}
 }
 

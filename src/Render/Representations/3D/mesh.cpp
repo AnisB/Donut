@@ -34,14 +34,12 @@ namespace Donut
  	, FSugarModel(TSugarLoader::Instance().GetSugar(parSugarName))
  	{
  		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
- 		RENDER_DEBUG("Le nom du modèle est"<<FSugarModel.model);
  		FShader.FVertexShader = FSugarModel.shader.vertex;
  		FShader.FTessControl = FSugarModel.shader.tesscontrol;
  		FShader.FTessEval = FSugarModel.shader.tesseval;
  		FShader.FGeometryShader = FSugarModel.shader.geometry;
  		FShader.FFragmentShader = FSugarModel.shader.fragment;
  		ResourceManager::Instance().LoadTextures(FSugarModel);
-
  	}
 
  	TMesh::~TMesh()

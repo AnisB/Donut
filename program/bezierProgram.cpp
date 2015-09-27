@@ -44,7 +44,7 @@ Donut::TMesh* surface = NULL;
 Donut::TMesh* surface2 = NULL;
 Donut::TMesh* surface3 = NULL;
 // Le gestionnaire d'input
-Donut::DefaultInputManager * inManager = NULL;
+Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
 Donut::TSceneNode* node;
 //Temps global
@@ -52,6 +52,7 @@ float totalTime = 0.0;
 // Resolution de la grille
 #define RESOLUTION_GRID 5 
 
+using namespace Donut;
 //Génére la texture la première fois
 void generateTexture()
 {
@@ -141,10 +142,7 @@ void createControlPoints()
 void init()
 {
 	// Spécifie le répertoire de chargement des modèles
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	// Charge les modèles
-	modeltest.LoadSugars();
+    Donut::TSugarLoader::Instance().Init("data");    
 	// Creating the rendering window
 	window = new Donut::TRenderer();
 
@@ -158,7 +156,7 @@ void init()
 	// Getting the camera
 	Donut::Camera* camera = window->GetCamera();
 	// On définit un gestionnaire d'input
-	inManager = new Donut::DefaultInputManager();
+	inManager = new Donut::TDefaultInputManager();
 	Donut::SetInputManager(inManager);
 	// On donne la camera a l'input manager
 	inManager->FCamera = camera;

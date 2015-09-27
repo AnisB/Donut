@@ -4,9 +4,8 @@ Object Lego
      data/geometry/lego.obj
    }
    shader{
-      vertex data/shaders/basetex/vertex.glsl
-      geometry data/shaders/basetex/geometry.glsl
-      fragment data/shaders/basetex/fragment.glsl
+      vertex data/shaders/sphericalharmonics/vertex.glsl
+      fragment data/shaders/sphericalharmonics/fragment.glsl
    }
    built_in_data{
    }

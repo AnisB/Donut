@@ -1,7 +1,7 @@
 Object Plane
 {
    model{
-      data/models/plane/model.obj
+      data/geometry/plane.obj
    }
    shader{
       vertex data/models/plane/vertex.glsl

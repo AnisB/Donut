@@ -29,13 +29,11 @@
 // Autres includes
 #include <cmath> 
 
+using namespace Donut;
+
 int main()
 {
-	// Spécifie le répertoire de chargement des modèles
-	Donut::TSugarLoader& modeltest = Donut::TSugarLoader::Instance();	
-	modeltest.SetDirectory("data");
-	// Charge les modèles
-	modeltest.LoadSugars();
+	Donut::TSugarLoader::Instance().Init("data");
 	std::vector<TTexture*> triangles;
 	Donut::ResourceManager::Instance().LoadObjToTexture("data/models/lego/legodude.obj",triangles);
 	TextureHelpers::CreateDataTexture(triangles[0]);
