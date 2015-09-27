@@ -28,9 +28,9 @@ void main()
     // Definition du rafinement
     if (ID == 0) 
     {
-        gl_TessLevelInner[0] = TessLevelInner/(dist[ID]*0.01);
-        gl_TessLevelOuter[0] = TessLevelOuter/(dist[ID]*0.01);
-        gl_TessLevelOuter[1] = TessLevelOuter/(dist[ID]*0.01);
-        gl_TessLevelOuter[2] = TessLevelOuter/(dist[ID]*0.01);
+        gl_TessLevelInner[0] = dist[ID]*TessLevelInner;
+        gl_TessLevelOuter[0] = dist[ID]*TessLevelOuter;
+        gl_TessLevelOuter[1] = dist[ID]*TessLevelOuter;
+        gl_TessLevelOuter[2] = dist[ID]*TessLevelOuter;
     }
 }

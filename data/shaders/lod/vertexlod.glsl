@@ -25,5 +25,5 @@ void main()
     normalV = normal;
     // Envoie de la coordonnée de texture
     vec4 proj = modelviewprojection*vec4(position,1.0);
-    dist = proj.z;
+    dist = clamp(1.0-proj.z/proj.w*0.9,0.0,1.0);
 }
