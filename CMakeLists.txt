@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.6)
  
-project(Donut)
+project(DonutEngine)
 
 
 #add_definitions( -DRELEASE )
@@ -22,17 +22,17 @@ set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/mac")
 set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
 ENDIF()
 
-IF(WINDOWS)
+IF(WIN32)
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/windows")
 set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/windows")
 ENDIF()
 
 set(TEST "${PROJECT_SOURCE_DIR}/test/")
 set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
-
+IF (NOT WIN32)
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
-
+ENDIF()
 
 file(
 	GLOB_RECURSE 
@@ -53,6 +53,7 @@ set(GRAPHIC_LIBS "${EXTERNAL_LIBS}/libglfw3.a" ${GLEW_LIBRARY} ${OPENGL_LIBRARIE
    SET(IMAGE_LIBS jpeg png)
    SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
 include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${EXTERNAL_LIBS} )
+add_library(Donut ${Source_File})
 ENDIF()
 
 IF(APPLE)
@@ -71,20 +72,19 @@ IF(APPLE)
   SET(IMAGE_LIBS jpeg png)
   SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
   include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${EXTERNAL_LIBS})
+  add_library(Donut ${Source_File})
 ENDIF (APPLE)
 
-IF(WINDOWS)
+IF(WIN32)
 add_definitions( -DWIN32 )
 FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-SET(GRAPHIC_LIBS "${EXTERNAL_LIBS}/lib-vc2012/glfw3.lib" "${EXTERNAL_LIBS}/glew.a" )
-SET(IMAGE_LIBS jpeg png)
-SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
+SET(GRAPHIC_LIBS "${EXTERNAL_LIBS}/lib-vc2012/glfw3.lib" "${EXTERNAL_LIBS}/glew32.lib" "${EXTERNAL_LIBS}/glew32s.lib" "opengl32.lib")
+SET(CORELIBS ${GRAPHIC_LIBS} )
+add_library(Donut ${Source_File})
 include_directories(${SOURCES} ${EXTERNAL_INCLUDES})
+link_directories(${CMAKE_BINARY_DIR})
 ENDIF()
 
-add_library(Donut ${Source_File})
- 
-link_directories(${CMAKE_BINARY_DIR})
 
 IF(TEST_ACTIVE)
 add_subdirectory(${TEST})
@@ -92,6 +92,7 @@ ENDIF()
 
 add_subdirectory(${PROGRAM})
 
+IF(UNIX)
 add_custom_command(
     TARGET Donut POST_BUILD
     COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data/shaders ${PROJECT_BINARY_DIR}
@@ -106,7 +107,7 @@ add_custom_command(
     TARGET Donut POST_BUILD
     COMMAND ln -sf ${PROJECT_SOURCE_DIR}/models ${PROJECT_BINARY_DIR}
 )
-
+ENDIF(UNIX)
 
  
 

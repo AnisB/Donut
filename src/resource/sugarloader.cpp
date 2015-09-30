@@ -162,7 +162,7 @@ namespace Donut
         }
         RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
 #elif WIN32
-		ASSERT_FAIL_MSG("Currently not supported");
+
 #endif
     }
 

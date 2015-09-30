@@ -20,10 +20,12 @@
  
 #include <stdio.h>
 #include <stdlib.h>
+#if __posix__
 #include <jpeglib.h>
 #include <jerror.h>
 #include <png.h>
-
+#elif WIN32
+#endif
 namespace Donut
 {
 
@@ -129,6 +131,7 @@ namespace Donut
     }
     TTexture* LoadJPG(const char* FileName, bool Fast = true)
     {
+#if __posix__
         // printf("Loading jpg dude %s\n", FileName);
 
         FILE* file = fopen(FileName, "rb");  //open the file
@@ -192,10 +195,16 @@ namespace Donut
         fclose(file);                    //close the file
 
         return Image;
+#elif WIN32
+		ASSERT_NOT_IMPLEMENTED()
+		return nullptr;
+
+#endif
     }
 
     TTexture* LoadPNG(const char* file_name)
     {
+#if __posix__
         png_byte header[8];
 
         FILE *fp = fopen(file_name, "rb");
@@ -318,6 +327,10 @@ namespace Donut
         free(row_pointers);
         fclose(fp);
         return image;
+#elif WIN32
+		ASSERT_NOT_IMPLEMENTED()
+		return nullptr;
+#endif
     }
 
  	TTexture * LoadTexture(const std::string & parImg)
@@ -389,6 +402,7 @@ namespace Donut
 
     void TakeScreenShot(const std::string& parFileName)
     {
+#if __posix__
         unsigned char *pdata = new unsigned char[1280*720*3];
         glReadPixels(0, 0, 1280, 720, GL_RGB, GL_UNSIGNED_BYTE, pdata);
 
@@ -424,10 +438,14 @@ namespace Donut
             row_pointer = (JSAMPROW) &pdata[(cinfo.image_height-1-cinfo.next_scanline)*row_stride];
             jpeg_write_scanlines(&cinfo, &row_pointer, 1);
         }
+#elif WIN32
+	ASSERT_NOT_IMPLEMENTED()
+#endif
     }
 
     void SaveTextureToFile(const std::string& parFileName, const TTexture* parTexture)
     {
+#if __posix__
         float *pdata = (float*)(parTexture->FData);
 
         FILE *outfile;
@@ -462,6 +480,9 @@ namespace Donut
             row_pointer = (JSAMPROW) &pdata[(cinfo.image_height-1-cinfo.next_scanline)*row_stride];
             jpeg_write_scanlines(&cinfo, &row_pointer, 1);
         }
+#elif WIN32
+	ASSERT_NOT_IMPLEMENTED()
+#endif
     }
 
 }
