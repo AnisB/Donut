@@ -44,7 +44,11 @@
  		ENGINE_INFO("Creating rendering thread...");
  		FRenderer->CreateRenderWindow(parContext);
  		InitScene();
+#if __posix__
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
+#elif WIN32
+ 		CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
+#endif
  		ENGINE_INFO("Redering thread created");
  	}
 

@@ -88,7 +88,11 @@
  	}
  	TTexture* ResourceManager::LoadTexture(const std::string&  _textureName)
  	{
+#if __posix
  		typeof(FTextures.begin()) it = FTextures.find(_textureName);
+#elif WIN32
+ 		auto it = FTextures.find(_textureName);
+#endif
  		if(it != FTextures.end())
  		{
  			RESOURCE_INFO(_textureName<<" already loaded");
@@ -106,9 +110,13 @@
  		}
  	}
 
- 	TTexture* ResourceManager::GetTexture(const std::string&  parTextureName)
+ 	TTexture* ResourceManager::GetTexture(const std::string&  _textureName)
  	{
- 		typeof(FTextures.begin()) it = FTextures.find(parTextureName);
+#if __posix
+ 		typeof(FTextures.begin()) it = FTextures.find(_textureName);
+#elif WIN32
+ 		auto it = FTextures.find(_textureName);
+#endif
  		if(it != FTextures.end())
  		{
  			return it->second;
@@ -145,7 +153,8 @@
 	}
 	TSkyboxTexture* ResourceManager::GetSkybox(const std::string&  parTextureName)
 	{
- 		typeof(FSkyboxTextures.begin()) it = FSkyboxTextures.find(parTextureName);
+
+ 		auto it = FSkyboxTextures.find(parTextureName);
  		if(it != FSkyboxTextures.end())
  		{
  			return it->second;
@@ -156,7 +165,7 @@
 	TModel* ResourceManager::LoadObj(const TShader& parShader, const std::string&  parFileName)
 	{
 		// Looking in the databaseModel
- 		typeof(FModels.begin()) it = FModels.find(parFileName);
+ 		auto it = FModels.find(parFileName);
  		if(it != FModels.end())
  		{
   			RESOURCE_INFO(parFileName<<" already loaded"); 
@@ -247,7 +256,7 @@
 		glGenVertexArrays (1, &VAO);
 		glBindVertexArray (VAO);
 
-		foreach(shape,shapes)
+		foreach_macro(shape,shapes)
 		{
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
@@ -262,11 +271,11 @@
 			{
 				data = new GLfloat[3*dimShape*nbShape];
 				int verticeCounter = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
 					// vertices.erase(vertices.begin());
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
 						data[verticeCounter*3] = point.val[0];
@@ -307,12 +316,12 @@
 			{
 				data = new GLfloat[5*dimShape*nbShape];
 				int verticeCounter = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
 					ASSERT_MSG_NO_RELEASE(vertices.size()==3, *prim);
 					vertices.erase(vertices.begin());
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						std::vector<std::string> dataVert = split(*vertice,'/');
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
@@ -361,10 +370,10 @@
 			{
 				data = new GLfloat[8*dimShape*nbShape];
 				int verticeCounter = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						std::vector<std::string> dataVert = split(*vertice,'/');
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
@@ -505,7 +514,7 @@
 			}
 		}
 		std::vector<int> nbShapes;
-		foreach(shape, shapes)
+		foreach_macro(shape, shapes)
 		{
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
@@ -526,11 +535,11 @@
 			if(nbInfo == 1)
 			{
 				int lineNumber = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
 					int verticeCounter = 0;
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
 						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
@@ -554,11 +563,11 @@
 			else if (nbInfo == 2)
 			{
 				int lineNumber = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
 					int verticeCounter = 0;
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
 						std::vector<std::string> dataVert = split(*vertice,'/');
@@ -583,11 +592,11 @@
 			else if (nbInfo == 3)
 			{
 				int lineNumber = 0;
-				foreach(prim, currentShape.info)
+				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices = split(*prim,' ');
 					int verticeCounter = 0;
-					foreach(vertice, vertices)
+					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
 						std::vector<std::string> dataVert = split(*vertice,'/');
@@ -630,7 +639,7 @@
 	}
 	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
 	{
-		foreach(uni,parSugar.uniforms)
+		foreach_macro(uni,parSugar.uniforms)
 		{
 			switch(uni->dataType)
 			{
@@ -644,7 +653,7 @@
 				break;
 			}
 		}
-		foreach(tex,parSugar.textures)
+		foreach_macro(tex,parSugar.textures)
 		{
 			ShaderManager::Instance().InjectTex(parShader,tex->texID, tex->name,tex->index);
 		}
@@ -652,7 +661,7 @@
 	void ResourceManager::LoadTextures(TSugar&  parSugar)
 	{
 		RESOURCE_INFO("Loading textures for "<<parSugar.name)
-		foreach(tex,parSugar.textures)
+		foreach_macro(tex,parSugar.textures)
 		{
 			TTexture* texPtr = LoadTexture(tex->file);
   			tex->texID =texPtr->FID;

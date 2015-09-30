@@ -48,7 +48,7 @@ namespace Donut
 
   void TStateEngineManager::DestroyAllInstances()
   {
-  	foreach(instance, FInstances)
+  	foreach_macro(instance, FInstances)
   	{
   		if(instance->second !=NULL)
   		{

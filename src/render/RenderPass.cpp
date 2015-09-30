@@ -37,7 +37,7 @@
 		delete FCamera;
 		delete FFrameCanvas;
 		delete FRoot;
- 		foreach(drawable, FDrawables)
+ 		foreach_macro(drawable, FDrawables)
  		{
  			if(*drawable)
  				delete *drawable;
@@ -74,7 +74,7 @@
 		{
 			FFrameCanvas->Init();
 		}
-		foreach(drawable,FDrawables)
+		foreach_macro(drawable,FDrawables)
 		{
 			(*drawable)->GenerateShader();
 			(*drawable)->Init();
@@ -88,14 +88,14 @@
 	{
 		if(FCamera->HasChanged())
 		{
-			foreach(drawable,FDrawables)
+			foreach_macro(drawable,FDrawables)
 			{
 				TDrawableObject & drw = *(*drawable);
 				drw.Bind();
 				drw.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
 				drw.Unbind();
 			}
-			foreach(light,FLights)
+			foreach_macro(light,FLights)
 			{	
 				TLight & lt = *(*light);
 				lt.Bind();

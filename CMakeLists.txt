@@ -22,6 +22,11 @@ set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/mac")
 set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
 ENDIF()
 
+IF(WINDOWS)
+set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/windows")
+set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/windows")
+ENDIF()
+
 set(TEST "${PROJECT_SOURCE_DIR}/test/")
 set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
 
@@ -70,6 +75,11 @@ ENDIF (APPLE)
 
 IF(WINDOWS)
 add_definitions( -DWIN32 )
+FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
+SET(GRAPHIC_LIBS "${EXTERNAL_LIBS}/lib-vc2012/glfw3.lib" "${EXTERNAL_LIBS}/glew.a" )
+SET(IMAGE_LIBS jpeg png)
+SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
+include_directories(${SOURCES} ${EXTERNAL_INCLUDES})
 ENDIF()
 
 add_library(Donut ${Source_File})

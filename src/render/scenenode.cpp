@@ -33,7 +33,7 @@ namespace Donut
 
 	void TSceneNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
 	{	
-		foreach(drawable,FDrawables)
+		foreach_macro(drawable,FDrawables)
 		{
 			TDrawableObject& drw = (**drawable);
 			drw.Bind();
@@ -42,7 +42,7 @@ namespace Donut
 			drw.Unbind();
 		}
 
-		foreach(son,FSons)
+		foreach_macro(son,FSons)
 		{
 			(*son)->Draw(parModelMatrix*FModel,parCamera);
 		}

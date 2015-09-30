@@ -16,8 +16,7 @@
 
 #include <tracing/shapes.h>
 #include <math/const.h>
-#include <tgmath.h>
-
+#include <math.h>
 
 namespace Donut
 {

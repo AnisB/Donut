@@ -25,7 +25,7 @@
 #include <sstream>
 #include <fstream>
 
-#ifdef LINUX
+#if LINUX | WIN32
 #include <algorithm>
 #endif
 

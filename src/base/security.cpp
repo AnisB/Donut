@@ -18,26 +18,32 @@
 #include "security.h"
 #include "exception.h"
 #include "const.h"
-#include <base/common.h>
+#include "common.h"
 
 // STL include
+#if __posix__
 #include <unistd.h>
 #include <execinfo.h>
+#endif
 
 namespace Donut
 {
 	void printTrace()
 	{
+		#if __posix__
 	    void *array[EXCEPTION_STACK_SIZE];
 	    size_t size;
 	    size = backtrace(array, EXCEPTION_STACK_SIZE);
-	    backtrace_symbols_fd(array, size, STDERR_FILENO);	
+	    backtrace_symbols_fd(array, size, STDERR_FILENO);
+		#endif
 	}
 
 	void __handleFail(std::string _message)
 	{
 		GENERAL_ERROR(_message);
+		#if __posix__
 		printTrace();
+		#endif
 		throw TException(_message);
 	}
 

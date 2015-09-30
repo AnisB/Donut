@@ -27,7 +27,7 @@ namespace Donut
 
 	TNode::~TNode()
 	{
-		foreach(child, FSons)
+		foreach_macro(child, FSons)
 		{
 			delete *child;
 		}
@@ -58,7 +58,7 @@ namespace Donut
 	}	
 	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
 	{
-		foreach(son,FSons)
+		foreach_macro(son,FSons)
 		{
 			(*son)->Draw(parModelMatrix*FModel,parCamera);
 		}

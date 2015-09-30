@@ -47,7 +47,7 @@
  	TRenderer::~TRenderer()
  	{
 		FIsRendering.SetValue(false);
- 		foreach(pass, FRenderPasses)
+ 		foreach_macro(pass, FRenderPasses)
  		{
  			delete *pass;
  		}
@@ -148,7 +148,7 @@
 		glfwMakeContextCurrent(FWindow);
  		// initing the inputs
  		InputInit();
-		foreach(pass,FRenderPasses)
+		foreach_macro(pass,FRenderPasses)
 		{
 			(*pass)->Init();
 		}
@@ -269,6 +269,6 @@
 			realGraphicRenderer->Draw();
 		}
 		RENDER_DEBUG("Window isn't rendering anymore");
-		pthread_exit(0);
+		THREAD_EXIT(0);
 	}
 }
