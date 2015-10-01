@@ -122,7 +122,12 @@ namespace Donut
         if (! directory) 
         {
             RESOURCE_ERROR("Error in directory: "<< directoryName); 
+#if LINUX
             RESOURCE_ERROR("Error n°: "<< strerror (errno)); 
+#elif WIN32
+			char msg[20];
+            RESOURCE_ERROR("Error n°: "<< strerror_s (msg, errno)); 
+#endif
             return;
         }
 

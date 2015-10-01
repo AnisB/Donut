@@ -97,7 +97,8 @@ namespace Donut
         if( !Filename )
             return NULL;
 
-        FILE* f = fopen(Filename, "rb");
+        FILE* f = NULL;
+		fopen_s(&f, Filename, "rb");
 
         if(f==NULL)
         {

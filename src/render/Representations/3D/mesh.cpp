@@ -46,6 +46,15 @@ namespace Donut
  		}
  	}
 
+	TMesh::TMesh(TShader& _shader, TModel* _model)
+ 	: TDrawableObject()
+	, FModel(_model)
+ 	, FPosition()
+ 	{
+ 		FModelMatrix = FModelMatrix*Matrix4::translate(FPosition);
+ 		FShader = _shader;
+ 	}
+
  	TMesh::~TMesh()
  	{
 

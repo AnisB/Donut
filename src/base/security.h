@@ -23,11 +23,11 @@
 namespace Donut
 {
 	void __handleFail(std::string _message);
-	#define ASSERT_FAIL() {__handleFail("");}
-	#define ASSERT_FAIL_MSG(MSG) {std::stringstream stream; stream<<MSG;  __handleFail(stream.str());}
+	#define ASSERT_FAIL() {Donut::__handleFail("");}
+	#define ASSERT_FAIL_MSG(MSG) {std::stringstream stream; stream<<MSG;  Donut::__handleFail(stream.str());}
 	#define ASSERT(Enonce) {if(!(Enonce)) ASSERT_FAIL_MSG ("");}
 	#define ASSERT_MSG(Enonce, MSG) {if(!(Enonce)) ASSERT_FAIL_MSG(MSG);}
-	#define ASSERT_NOT_IMPLEMENTED() {__handleFail("Currently not implemented");}
+	#define ASSERT_NOT_IMPLEMENTED() {Donut::__handleFail("Currently not implemented");}
 #ifdef _DEBUG
 	#define ASSERT_FAIL_NO_RELEASE() ASSERT_FAIL()
 	#define ASSERT_FAIL_MSG_NO_RELEASE(MSG) ASSERT_FAIL_MSG(MSG)

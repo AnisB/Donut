@@ -31,6 +31,8 @@
 	{
 	public:
 	 	TMesh(TVec3 parPosition, const std::string& parSugarName, bool _autoInit = true);
+		TMesh(TShader& _shader, TModel* _model);
+
 	 	~TMesh();
 
 	 	virtual void AddTexture(TTexture* parTex, const std::string& parName);

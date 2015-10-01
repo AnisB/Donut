@@ -62,8 +62,9 @@ namespace Donut
 		FILE *fp;
 		bool status = false;
 
-		if (fn != NULL) {
-			fp = fopen(fn,"w");
+		if (fn != NULL) 
+		{
+			fopen_s(&fp,fn,"w");
 
 			if (fp != NULL) {
 				

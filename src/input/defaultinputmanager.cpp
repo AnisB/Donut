@@ -67,19 +67,19 @@ void TDefaultInputManager::MouseReleased(TMouseCode::Type parButton)
 	{
 	if(FKeys[TKeyCode::W])
 	{
-		FCamera->Translate(Vector3(0.0,0.0,parTime*10));
+		FCamera->Translate(Vector3(0.0,0.0,parTime*150));
 	}
 	if(FKeys[TKeyCode::S])
 	{
-		FCamera->Translate(Vector3(0.0,0.0,-parTime*10));
+		FCamera->Translate(Vector3(0.0,0.0,-parTime*150));
 	}	
 	if(FKeys[TKeyCode::A])
 	{
-		FCamera->Translate(Vector3(parTime*10,0.0,0.0));
+		FCamera->Translate(Vector3(parTime*150,0.0,0.0));
 	}
 	if(FKeys[TKeyCode::D])
 	{
-		FCamera->Translate(Vector3(-parTime*10,0.0,0.0));
+		FCamera->Translate(Vector3(-parTime*150,0.0,0.0));
 	}
 	}
 }
