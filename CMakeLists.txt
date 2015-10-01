@@ -6,7 +6,7 @@ project(DonutEngine)
 #add_definitions( -DRELEASE )
 add_definitions( -D_DEBUG )
 
-
+add_definitions(-std=c++11) 
 set(CMAKE_BUILD_TYPE "Debug")
 set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
 set(TEST "${PROJECT_SOURCE_DIR}/test/")

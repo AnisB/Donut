@@ -18,7 +18,7 @@
 #define DONUT_MULTI_THREAD
 
 #ifdef __posix__
-#include <pthread_t>
+#include <pthread.h>
 #elif WIN32
 #include <windows.h>
 #endif 

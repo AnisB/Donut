@@ -42,7 +42,7 @@ namespace Donut
 	#define END_PRINT DEFAULT<<std::endl
 
 	// General print macro
-	#define PRINT_GENERAL(COLOR, TYPE, ENONCE) {PRINT<<COLOR<<"["TYPE<<"] "<<ENONCE<<END_PRINT;}
+	#define PRINT_GENERAL(COLOR, TYPE, ENONCE) {PRINT<<COLOR<<"["<<TYPE<<"] "<<ENONCE<<END_PRINT;}
 
 	// General purpose MACROS
 	#if _DEBUG

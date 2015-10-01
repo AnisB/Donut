@@ -88,11 +88,7 @@
  	}
  	TTexture* ResourceManager::LoadTexture(const std::string&  _textureName)
  	{
-#if __posix
- 		typeof(FTextures.begin()) it = FTextures.find(_textureName);
-#elif WIN32
  		auto it = FTextures.find(_textureName);
-#endif
  		if(it != FTextures.end())
  		{
  			RESOURCE_INFO(_textureName<<" already loaded");
@@ -112,11 +108,7 @@
 
  	TTexture* ResourceManager::GetTexture(const std::string&  _textureName)
  	{
-#if __posix
- 		typeof(FTextures.begin()) it = FTextures.find(_textureName);
-#elif WIN32
  		auto it = FTextures.find(_textureName);
-#endif
  		if(it != FTextures.end())
  		{
  			return it->second;

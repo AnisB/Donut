@@ -24,7 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#if __posix
+#if __posix__
 #include <dirent.h>
 #elif WIN32
 
@@ -114,7 +114,7 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
-#if __posix
+#if __posix__
         // useful vars
         DIR * directory;
         std::string directoryName = FMediaPath.c_str();

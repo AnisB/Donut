@@ -19,13 +19,8 @@
 
 namespace Donut
 {
-#ifdef __posix__
-	#define foreach_macro(IT, X) for ( typeof( X.begin() ) IT = X.begin(); IT != X.end(); ++IT )
-	#define tryget(IT, LIST, ELEM) typeof( LIST.begin()) IT = LIST.find(ELEM);
-#elif WIN32
 	#define foreach_macro(IT, X) for ( auto IT = X.begin(); IT != X.end(); ++IT )
 	#define tryget(IT, LIST, ELEM) auto IT = LIST.find(ELEM);
-#endif
 
 	#define PACK_DATA(VAL,MAXVAL) (VAL/MAXVAL+0.5)
 	#define UNPACK_DATA(VAL,MAXVAL) ((VAL-0.5)*MAXVAL)
