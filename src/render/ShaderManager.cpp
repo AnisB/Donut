@@ -34,10 +34,11 @@ namespace Donut
 
 	    if(InfoLogLength>1)
 	    {
-	        char errorMessage[InfoLogLength];
+	        char* errorMessage = new char[InfoLogLength];
 	        glGetShaderInfoLog(parShaderID, InfoLogLength, NULL, errorMessage);
 	        RENDER_DEBUG( "Shader error:"<<parShadePath<<" "<<parShaderID);
 	        RENDER_ERROR( errorMessage );
+			delete [] errorMessage;
 	    }
 	}
 
@@ -51,10 +52,10 @@ namespace Donut
 	    glGetProgramiv(parProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
 	    if(InfoLogLength>1)
 	    {   
-	        char errorMessage[InfoLogLength];
+	        char* errorMessage = new char[InfoLogLength];
 	        glGetProgramInfoLog(parProgramID, InfoLogLength, NULL, errorMessage);
 	        RENDER_ERROR("Program linking error: "<<std::endl<<errorMessage );
-	        // return false;
+			delete [] errorMessage;
 	    }
 	    return true;
 	}
@@ -227,7 +228,7 @@ namespace Donut
 
 	void ShaderManager::PreDrawSugarData(const TSugar&  parSugar)
 	{
-		foreach(tex,parSugar.textures)
+		foreach_macro(tex,parSugar.textures)
 		{
 			ShaderManager::Instance().BindTex(tex->texID, tex->index);
 		}

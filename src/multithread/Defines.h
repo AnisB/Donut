@@ -14,19 +14,14 @@
  *
  **/
 
-
-
 #ifndef DONUT_MULTI_THREAD
 #define DONUT_MULTI_THREAD
 
-
 #ifdef __posix__
-#define THREAD_ID pthread_t
-#endif
-
-#ifdef WIN32
-#define THREAD_ID int
-#endif
+#include <pthread_t>
+#elif WIN32
+#include <windows.h>
+#endif 
 
 #define CRITICAL_SECTION_BEGIN() this->Lock()
 #define CRITICAL_SECTION_END() this->UnLock()
@@ -40,28 +35,21 @@
 
 
 #ifdef __posix__
+#define THREAD_ID pthread_t
 #define CREATE_THREAD(THREADID, FUNCTION, ARGUMENT) pthread_create(&THREADID, NULL, &FUNCTION, (void*)ARGUMENT)
-#endif
-
-#ifdef WIN32
-#define CREATE_THREAD(THREADID, FUNCTION, ARGUMENT) CreateThread( NULL, 0,FUNCTION,&ARGUMENT, NULL)
-#endif
-
-#ifdef __posix__
 #define THREAD_JOIN(THREADID, DATA, RETURN) pthread_join(THREADID, RETURN)
-#endif
-
-#ifdef WIN32
-#define THREAD_JOIN(THREADID, DATA, ARGUMENT) WaitForSingleObject(DATA, INFINITE);
-#endif
-
-#ifdef __posix__
+#define THREAD_EXIT(RETVAL) pthread_exit(0);
 #define THREAD_DATA int
+
 #endif
 
 #ifdef WIN32
+#define THREAD_ID DWORD
+#define CREATE_THREAD(THREADID, FUNCTION, ARGUMENT) CreateThread( NULL, 0,(LPTHREAD_START_ROUTINE)&FUNCTION,&ARGUMENT, NULL,&THREADID);
+#define THREAD_JOIN(THREADID, DATA, ARGUMENT) WaitForSingleObject(DATA, INFINITE);
+#define THREAD_EXIT(RETVAL) ExitThread(0);
 #define THREAD_DATA HANDLE
 #endif
 
 
-#endif
+#endif // DONUT_MULTI_THREAD

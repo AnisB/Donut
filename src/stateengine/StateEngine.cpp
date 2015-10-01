@@ -33,13 +33,13 @@ namespace Donut
  	
  	TStateEngine::~TStateEngine()
  	{
- 		foreach(state, FStates)
+ 		foreach_macro(state, FStates)
  		{
  			ASSERT_NO_RELEASE(state->second);
  			delete state->second;
  		}
 
- 		foreach(transition, FTransitions)
+ 		foreach_macro(transition, FTransitions)
  		{
  			ASSERT_NO_RELEASE(transition->second);
  			delete transition->second;
@@ -64,7 +64,7 @@ namespace Donut
  		bool hasChangedState = false;
  		const std::map<TTransitionId, TTransition *> & associatedTransitions = currentState->GetTransitions();
 
- 		foreach(transition, associatedTransitions)
+ 		foreach_macro(transition, associatedTransitions)
  		{
  			currentState->TransitionCallBack();
  			if(transition->second->EvaluateTransition())
@@ -89,7 +89,7 @@ namespace Donut
  		currentState->Update(parDt);
 
  		const std::map<TTransitionId, TTransition *> & associatedTransitions = currentState->GetTransitions();
- 		foreach(transition, associatedTransitions)
+ 		foreach_macro(transition, associatedTransitions)
  		{
  			currentState->TransitionCallBack();
  			if(transition->second->EvaluateTransition())

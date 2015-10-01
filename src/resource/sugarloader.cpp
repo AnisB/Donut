@@ -24,7 +24,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
+#if __posix
 #include <dirent.h>
+#elif WIN32
+
+#endif
 #include <string.h>
 #include <errno.h>
 #include <fstream>
@@ -110,6 +114,7 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
+#if __posix
         // useful vars
         DIR * directory;
         std::string directoryName = FMediaPath.c_str();
@@ -156,6 +161,9 @@ namespace Donut
             return;
         }
         RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
+#elif WIN32
+
+#endif
     }
 
     TSugar TSugarLoader::ParseFile(const std::string& parFileName)
@@ -297,7 +305,7 @@ namespace Donut
     TSugar TSugarLoader::GetSugar(const std::string& parModel)
     {
         RESOURCE_WARNING(parModel<<" is requested");
-        typeof(FSugars.begin()) ite = FSugars.find(parModel);
+        auto ite = FSugars.find(parModel);
         ASSERT_MSG_NO_RELEASE((ite!=FSugars.end()),"Sugar model not found: "<<parModel);
         return ite->second;
     }

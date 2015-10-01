@@ -44,9 +44,14 @@ namespace Donut
  		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.")
  		FRenderer->CreateRenderWindow(parContext);
  		InitScene();
+#if __posix__
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		ENGINE_INFO("Redering thread launched");
+#elif WIN32
+ 		CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
+#endif
+ 		ENGINE_INFO("Redering thread created");
  		FRenderingRunning = true;
+ 		
  	}
 
  	void TEngine::StopRendering()
