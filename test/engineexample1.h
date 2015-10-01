@@ -18,7 +18,6 @@
 #ifndef DONUT_ENGINE_EXAMPLE
 #define DONUT_ENGINE_EXAMPLE
 
-#include <Engine/Defines.h>
 #include <Engine/Engine.h>
 
 #include <Render/SceneNode.h>
@@ -31,7 +30,7 @@
 
  namespace Donut
  {
-     class TEngineExample : public Engine
+     class TEngineExample : public TEngine
      {
      public:
           TEngineExample();

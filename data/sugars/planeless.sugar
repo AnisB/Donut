@@ -4,11 +4,11 @@ Object PlaneLess
       data/geometry/plane.obj
    }
    shader{
-      vertex data/models/plane/vertex.glsl
-      tesscontrol data/models/plane/tesscontrol.glsl
-      tesseval data/models/plane/tesseval.glsl
-      geometry data/models/plane/geometry.glsl
-      fragment data/models/plane/fragment.glsl
+      vertex data/shaders/bezier/vertex.glsl
+      tesscontrol data/shaders/bezier/tesscontrol.glsl
+      tesseval data/shaders/bezier/tesseval.glsl
+      geometry data/shaders/bezier/geometry.glsl
+      fragment data/shaders/bezier/fragment.glsl
    }
 
     built_in_data{
@@ -18,8 +18,8 @@ Object PlaneLess
       float TessLevelOuter 4
    }
    textures{
-      diffMap data/models/plane/tissu.jpg
-      displacement data/models/plane/noise.png
+      diffMap data/textures/cloth.jpg
+      displacement data/textures/noise.png
    }
    cubeMap{
    }

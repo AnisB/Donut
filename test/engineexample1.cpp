@@ -34,7 +34,8 @@
 
 namespace Donut
 {
-    TEngineExample::TEngineExample() : Engine()
+    TEngineExample::TEngineExample() 
+    : TEngine()
     {
         Donut::TSugarLoader::Instance().Init("data");
     }
@@ -82,7 +83,7 @@ namespace Donut
     }
     void TEngineExample::Update(float dt)
     {
-        Engine::Update(dt);
+        TEngine::Update(dt);
         inManager->Update(dt);  
         FNode2->Yaw(dt*2);  
     }

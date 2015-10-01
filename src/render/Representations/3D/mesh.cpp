@@ -28,7 +28,7 @@
 
 namespace Donut
 {
- 	TMesh::TMesh(TVec3 parPosition, const std::string& parSugarName)
+ 	TMesh::TMesh(TVec3 parPosition, const std::string& parSugarName, bool _autoInit)
  	: TDrawableObject()
  	, FPosition(parPosition)
  	, FSugarModel(TSugarLoader::Instance().GetSugar(parSugarName))
@@ -40,6 +40,10 @@ namespace Donut
  		FShader.FGeometryShader = FSugarModel.shader.geometry;
  		FShader.FFragmentShader = FSugarModel.shader.fragment;
  		ResourceManager::Instance().LoadTextures(FSugarModel);
+ 		if(_autoInit)
+ 		{
+ 			Init();
+ 		}
  	}
 
  	TMesh::~TMesh()
@@ -59,6 +63,7 @@ namespace Donut
 
  	void TMesh::Init()
  	{
+ 		GenerateShader();
  		FModel = ResourceManager::Instance().LoadObj(FShader,FSugarModel.model);
  		Bind();
  		ResourceManager::Instance().LoadSugarData(FShader,FSugarModel);
@@ -68,9 +73,7 @@ namespace Donut
 
  	void TMesh::SetPosition(const TVec3& parPos)
  	{
- 		// CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;
- 		// CRITICAL_SECTION_END();	
  	}
 
  	void TMesh::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
@@ -82,7 +85,6 @@ namespace Donut
  	void TMesh::Draw()
  	{	
 	  	glBindVertexArray (FModel->vertexArray);
-	  	// RENDER_DEBUG("Tesselation active: "<<FSugarModel.shader.isTesselated<<FModel->nbVertices);
 	  	if(FSugarModel.shader.isTesselated)
 	  	{
 	  		glDrawElements(GL_PATCHES, FModel->nbVertices, GL_UNSIGNED_INT, 0);

@@ -22,7 +22,7 @@
 
 int main()
 {
-	Donut::Engine * engine = new Donut::Engine();
+	Donut::TEngine * engine = new Donut::TEngine();
 
 	// Context info
 	Donut::TContextDetail newContext;
@@ -35,7 +35,7 @@ int main()
 	engine->LaunchRendering(newContext);
 	while(engine->IsRendering())
 	{
-		Donut::FarmEvents();
+		engine->Update(0.016);
 	}
 	delete engine;
 	return 0;

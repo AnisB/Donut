@@ -25,41 +25,41 @@
 //  Implementation
 // ----------------------------------------
 
- namespace Donut
- {
- 	Engine::Engine()
+namespace Donut
+{
+ 	TEngine::TEngine()
+ 	: FRenderingRunning(false)
  	{
- 		ENGINE_INFO("Creating the engine...");
  		FRenderer = new Donut::TRenderer();
- 		ENGINE_INFO("Core engine created");
+ 		ENGINE_INFO("Engine created");
  	}
  	
- 	Engine::~Engine()
+ 	TEngine::~TEngine()
  	{	
  		delete FRenderer;
  	}
 
- 	void Engine::LaunchRendering(const TContextDetail& parContext)
+ 	void TEngine::LaunchRendering(const TContextDetail& parContext)
  	{
- 		ENGINE_INFO("Creating rendering thread...");
+ 		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.")
  		FRenderer->CreateRenderWindow(parContext);
  		InitScene();
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		ENGINE_INFO("Redering thread created");
+ 		ENGINE_INFO("Redering thread launched");
+ 		FRenderingRunning = true;
  	}
 
- 	void Engine::StopRendering()
+ 	void TEngine::StopRendering()
  	{
- 		ENGINE_INFO("Rendering will stop...");
  		FRenderer->SetRendering(false);
- 		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
+ 		THREAD_JOIN(FTRenderingThread, FThreadData, NULL);
  		FRenderer->DestroyRenderWindow();
  		ENGINE_INFO("Rendering stoped");
+ 		FRenderingRunning = false;
  	}
 
- 	void Engine::PauseRendering()
+ 	void TEngine::PauseRendering()
  	{
- 		ENGINE_INFO("Pausing rendering...");
  		FRenderer->SetRendering(false);
  		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
  		FRenderer->HideRenderWindow();
@@ -67,38 +67,42 @@
 
  	}
 
- 	bool Engine::IsRendering()
+ 	void TEngine::ResumeRendering()
+ 	{
+ 		ASSERT_MSG_NO_RELEASE(FRenderingRunning, "Rendering is not launched.")
+ 		FRenderer->ShowRenderWindow();
+ 		FRenderer->SetRendering(true);
+ 		FThreadData = CREATE_THREAD(FTRenderingThread, CreateRenderingThread, FRenderer);
+ 		ENGINE_INFO("Rendering resumed");
+ 	}
+
+ 	bool TEngine::IsRendering()
  	{
  		return FRenderer->IsRendering();
  	}
 
-	void Engine::SetVertexShader(const std::string& parVertex, int parNbPass)
+	void TEngine::SetVertexShader(const std::string& parVertex, int parNbPass)
 	{
-		FRenderer->SetVertexShader(parVertex,parNbPass);
+		FRenderer->SetVertexShader(parVertex, parNbPass);
 	}
 
-	void Engine::SetFragmentShader(const std::string& parFrag, int parNbPass)
+	void TEngine::SetFragmentShader(const std::string& parFrag, int parNbPass)
 	{
-		FRenderer->SetFragmentShader(parFrag,parNbPass);
+		FRenderer->SetFragmentShader(parFrag, parNbPass);
 	}
 
- 	void Engine::ResumeRendering()
- 	{
- 		ENGINE_INFO("Resuming rendering...");
- 		FRenderer->ShowRenderWindow();
- 		FRenderer->SetRendering(true);
- 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
- 		ENGINE_INFO("Rendering resumed");
- 	}
+	void TEngine::Update(float dt)
+	{
+		FarmEvents();
+	}
 
-	void Engine::DrawObject(TDrawableObject * parObject)
+	void TEngine::DrawObject(TDrawableObject * parObject)
  	{
  		FRenderer->RegisterToDraw(parObject);
  	}
 
-	void Engine::RemoveObject(TDrawableObject * parObject)
+	void TEngine::RemoveObject(TDrawableObject * parObject)
  	{
  		FRenderer->UnRegisterToDraw(parObject);
  	}
-
- }
+}

@@ -48,24 +48,19 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TCubeR* cube = new Donut::TCubeR(TVec3(0,0,-5),0.5);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(TVec3(5,0,-5),1.0);
-	cube->SetVertexShader("shaders/test/testVertexPNT.glsl");
-	cube2->SetVertexShader("shaders/test/testVertexPNT.glsl");
-	cube->SetFragmentShader("shaders/test/testFragmentPNT.glsl");
-	cube2->SetFragmentShader("shaders/test/testFragmentPNT.glsl");
+	Donut::TShader shader;
+	shader.FVertexShader = "shaders/test/testVertexPNT.glsl";
+	shader.FFragmentShader = "shaders/test/testFragmentPNT.glsl";
+	Donut::TCubeR* cube = new Donut::TCubeR(TVec3(0,0,-5),0.5,shader);
+	Donut::TCubeR* cube2 = new Donut::TCubeR(TVec3(5,0,-5),1.0,shader);
+
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	cube->GenerateShader();
-	cube->Init();
-	cube2->GenerateShader();
-	cube2->Init();
 	node->AddDrawable(cube);
 	node->AddDrawable(cube2);
 	root->AddChild(node);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(cube2);
-	
 	while(window->IsRendering())
 	{
 		window->Draw();

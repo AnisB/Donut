@@ -21,7 +21,7 @@
 
 int main()
 {
-	Donut::Engine * engine = new Donut::Engine();
+	Donut::TEngine * engine = new Donut::TEngine();
 
 	// Context info
 	Donut::TContextDetail newContext;

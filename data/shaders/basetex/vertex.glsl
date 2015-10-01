@@ -17,7 +17,7 @@ out vec4 ecPosV;
 void main()
 {
 	ecPosV = view*model*vec4(position,1.0);
-    gl_Position = projection*ecPosV;
+    gl_Position = modelviewprojection*vec4(position,1.0);
     texCoordV = tex_coord;
     fnormalV = normalize(view*model*vec4(normal,0.0)).xyz;
 }

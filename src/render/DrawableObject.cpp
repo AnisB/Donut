@@ -26,6 +26,13 @@ namespace Donut{
  	, FModelMatrix(MatrixInit::Identity)
  	{
  	}
+ 	
+  	TDrawableObject::TDrawableObject(const TShader& _shader)
+ 	: FShader(_shader)
+ 	, FModelMatrix(MatrixInit::Identity)
+ 	{
+ 	}
+
  	TDrawableObject::~TDrawableObject()
  	{
 
@@ -54,17 +61,15 @@ namespace Donut{
  		ASSERT_NO_RELEASE(FShader.FActive);
 		ShaderManager::Instance().DisableShader();
 	}
-
- 	void TDrawableObject::SetVertexShader(const std::string& parShaderPath)
+ 	
+ 	void TDrawableObject::SetShader(const TShader& _shader)
  	{
- 		FShader.FVertexShader = parShaderPath;
- 		FShader.FActive = true;
- 	}
-
- 	void TDrawableObject::SetFragmentShader(const std::string& parShaderPath)
- 	{
- 		FShader.FFragmentShader = parShaderPath;
- 		FShader.FActive = true;
+ 		// TODO: Remove one reference from the previous shader in the shader manager
+ 		FShader = _shader;
+ 		if(!FShader.FActive)
+ 		{
+ 			ShaderManager::Instance().CreateShader(FShader);
+ 		}
  	}
 
  	void TDrawableObject::GenerateShader()

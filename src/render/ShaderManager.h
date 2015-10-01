@@ -30,6 +30,17 @@
 
 	struct TShader
 	{
+		TShader()
+		{
+			FProgramID = 0;
+			FVertexShader = BASIC_SHADER;
+			FTessControl = BASIC_SHADER;
+			FTessEval = BASIC_SHADER;
+			FGeometryShader = BASIC_SHADER;
+			FFragmentShader = BASIC_SHADER;
+			FActive = false;
+		}
+
 		TShader(GLuint parID, const std::string& parVShader, const std::string& parTCShader, const std::string& parTEShader, const std::string& parGShader, const std::string& parFShader)
 		{
 			FProgramID = parID;

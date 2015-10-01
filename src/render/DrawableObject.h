@@ -28,6 +28,7 @@ namespace Donut
  {
  public:
  	TDrawableObject();
+ 	TDrawableObject(const TShader& _shader);
  	virtual ~TDrawableObject();
 
  	virtual void Draw() = 0;
@@ -37,8 +38,7 @@ namespace Donut
  	void Unbind();
 
  	virtual void GenerateShader();
- 	void SetVertexShader(const std::string& parShaderPath);
- 	void SetFragmentShader(const std::string& parShaderPath);
+ 	void SetShader(const TShader& _shader);
 
  	virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
  	virtual void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);

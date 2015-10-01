@@ -27,7 +27,8 @@
  class TCubeR : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TCubeR(TVec3 parPosition, float parDimension);
+ 	TCubeR(TVec3 parPosition, float parDimension, bool _autoInit = true);
+ 	TCubeR(TVec3 parPosition, float parDimension, const TShader& _shader, bool _autoInit = true);
  	~TCubeR();
 
  	virtual void UpdateInfoShader();

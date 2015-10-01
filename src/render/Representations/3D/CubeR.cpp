@@ -145,12 +145,27 @@ unsigned int cubeFacesL[36] =
 	21, 22, 23
 };
 
- 	TCubeR::TCubeR(TVec3 parPosition, float parDimension)
- 	: TDrawableObject()
+ 	TCubeR::TCubeR(TVec3 parPosition, float parDimension, bool _autoInit)
+  	: TDrawableObject()
+ 	, FPosition(parPosition)
+ 	, FDimension(parDimension)
+ 	{
+		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
+ 		if (_autoInit)
+ 		{
+ 			Init();
+ 		}
+ 	}
+ 	TCubeR::TCubeR(TVec3 parPosition, float parDimension, const TShader& _shader, bool _autoInit)
+ 	: TDrawableObject(_shader)
  	, FPosition(parPosition)
  	, FDimension(parDimension)
  	{
  		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
+ 		if (_autoInit)
+ 		{
+ 			Init();
+ 		}
  	}
 
  	TCubeR::~TCubeR()
@@ -160,6 +175,7 @@ unsigned int cubeFacesL[36] =
 
  	void TCubeR::Init()
  	{
+ 		GenerateShader();
  		GLfloat data[216];
  		memcpy(&data ,&cubeVertexL,sizeof(cubeVertexL));
 
