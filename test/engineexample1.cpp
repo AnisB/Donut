@@ -26,8 +26,6 @@
 #include <Render/Renderer.h>
 #include <Render/Defines.h>
 
-#include <unistd.h>
-
 // ----------------------------------------
 // Implementation
 // ----------------------------------------
@@ -105,7 +103,7 @@ namespace Donut
         while(FIsRendering && FRenderer->IsRendering())
         {
           Update(0.016f);
-          usleep(16000); // A corriger
+          GENERIC_SLEEP(16); // A corriger
         }
     }
  }

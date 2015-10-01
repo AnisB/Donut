@@ -22,7 +22,6 @@
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Defines.h>
 #include <Render/SceneNode.h>
-#include <unistd.h>
 
 
 int main()

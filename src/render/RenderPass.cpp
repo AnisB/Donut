@@ -102,8 +102,8 @@
 				lt.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
 				lt.Unbind();
 			}
+			FCamera->ChangeNoticed();
 		}
-		FCamera->ChangeNoticed();
 	}
 
 	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)

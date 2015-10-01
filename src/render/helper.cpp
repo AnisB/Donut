@@ -4,8 +4,7 @@
 
 void CheckGLState(const std::string& desc)
 {
-	if(desc=="FLUSH")
-		return;
+
 	GLenum e = glGetError();
 	if (e != GL_NO_ERROR) 
 	{
@@ -20,17 +19,17 @@ void CheckGLState(const std::string& desc)
 GLuint CreateFrameBuffer()
 {
 	GLuint frameBufferIndex;
-	#ifdef LINUX
+	#if LINUX | WIN32
 	glGenFramebuffers(1, &frameBufferIndex);
 	#endif
-	#ifdef MACOSX
+	#ifdef MACOSX 
 	glGenFramebuffersEXT(1, &frameBufferIndex);
 	#endif
 	return frameBufferIndex;
 }
 void BindFrameBuffer(GLuint parFrameBuffer)
 {
-	#ifdef LINUX
+	#if LINUX | WIN32
 	glBindFramebuffer(GL_FRAMEBUFFER, parFrameBuffer);
 	#endif
 	#ifdef MACOSX
@@ -40,7 +39,7 @@ void BindFrameBuffer(GLuint parFrameBuffer)
 
 void UnBindFrameBuffer()
 {
-	#ifdef LINUX
+	#if LINUX | WIN32
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	#endif
 	
@@ -53,7 +52,7 @@ void BindToFrameBuffer(GLuint parTextureIndex, TextureNature::Type parTextureTyp
 {
  		if(parTextureType == TextureNature::COLOR)
 		{
-			#ifdef LINUX
+			#if LINUX | WIN32
 	 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+parOffset,  GL_TEXTURE_2D, parTextureIndex,0);
 	 		#endif
 
@@ -63,7 +62,7 @@ void BindToFrameBuffer(GLuint parTextureIndex, TextureNature::Type parTextureTyp
 		}
  		else if(parTextureType == TextureNature::DEPTH)
  		{
-	 		#ifdef LINUX
+			#if LINUX | WIN32
 	 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, parTextureIndex,0);
 	 		#endif
 	 		

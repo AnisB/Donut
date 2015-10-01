@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <Engine/Engine.h>
-#include <unistd.h>
 
 
 int main()
@@ -32,14 +31,13 @@ int main()
 	newContext.minor = 1;
 	// Lanching the test
 	engine->LaunchRendering(newContext);
-	sleep(1);
+	GENERIC_SLEEP(1);
 	engine->PauseRendering();
-	sleep(1);
+	GENERIC_SLEEP(1);
 	engine->ResumeRendering();
-	sleep(1);
+	GENERIC_SLEEP(1);
 	engine->StopRendering();
-	sleep(1);
-
+	GENERIC_SLEEP(1);
 	delete engine;
 	return 0;
 

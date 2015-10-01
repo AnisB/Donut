@@ -24,11 +24,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#if __posix__
 #include <dirent.h>
-#elif WIN32
-
-#endif
 #include <string.h>
 #include <errno.h>
 #include <fstream>
@@ -114,7 +110,6 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
-#if __posix__
         // useful vars
         DIR * directory;
         std::string directoryName = FMediaPath.c_str();
@@ -161,9 +156,6 @@ namespace Donut
             return;
         }
         RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
-#elif WIN32
-
-#endif
     }
 
     TSugar TSugarLoader::ParseFile(const std::string& parFileName)

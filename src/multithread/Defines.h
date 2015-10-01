@@ -40,7 +40,7 @@
 #define THREAD_JOIN(THREADID, DATA, RETURN) pthread_join(THREADID, RETURN)
 #define THREAD_EXIT(RETVAL) pthread_exit(0);
 #define THREAD_DATA int
-
+#define GENERIC_SLEEP(VALUE) sleep(VALUE)
 #endif
 
 #ifdef WIN32
@@ -49,6 +49,7 @@
 #define THREAD_JOIN(THREADID, DATA, ARGUMENT) WaitForSingleObject(DATA, INFINITE);
 #define THREAD_EXIT(RETVAL) ExitThread(0);
 #define THREAD_DATA HANDLE
+#define GENERIC_SLEEP(VALUE) Sleep(VALUE)
 #endif
 
 

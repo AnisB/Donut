@@ -1,5 +1,4 @@
 #include "Matrix4.h"
-
 #include <math.h>
 
 Matrix4::Matrix4(MatrixInit::Type reset)
@@ -21,8 +20,8 @@ Matrix4::Matrix4(const Matrix4& parMatrix)
 	for(int i = 0; i<4; ++i)
 	{
 		m[i] = new double[4];
+		memcpy(m[i], parMatrix.m[i],4*sizeof(double));
 	}
-	memcpy(m,parMatrix.m,16);
 }
 Matrix4::~Matrix4()
 {

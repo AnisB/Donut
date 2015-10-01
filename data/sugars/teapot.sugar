@@ -14,7 +14,7 @@ Object Teapot
       float weight 10.0
    }
    textures{
-      textureCmp data/textures/cloth.jpg
+      textureCmp data/textures/rockwall.bmp
    }
    cubeMap{
    }
