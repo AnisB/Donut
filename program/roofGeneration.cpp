@@ -38,27 +38,9 @@ TModel* ComputeModel(TOutput* _output,const Donut::TShader& parShader, const std
 	{
 		TOutput::TFace& currentFace = *f->second;
 		int degree =  currentFace.pointCount();
-		ASSERT_MSG((degree!= 3 || degree != 4), "one of the faces is a polygon");
+		//ASSERT_MSG(degree >= 3, "one of the faces is a polygon");
 
-		if (degree == 3)
-		{
-			for (auto ptsLoop =  currentFace.points.begin(); ptsLoop != currentFace.points.end(); ptsLoop++)
-			{
-				TLoop<stingray::Vector3>& loop = *ptsLoop;
-				auto start = loop.GetFirstLoopable();
-				auto it = start;
-				do
-				{
-
-					positions.push_back(it->me.x);
-					positions.push_back(it->me.y);
-					positions.push_back(it->me.z);
-					indexes.push_back(indexes.size());
-					it = it->GetNext();
-				} while(it != start);
-			}
-		}
-		else if (degree ==4)
+		if (degree>=3)
 		{
 			for (auto ptsLoop =  currentFace.points.begin(); ptsLoop != currentFace.points.end(); ptsLoop++)
 			{
@@ -66,42 +48,30 @@ TModel* ComputeModel(TOutput* _output,const Donut::TShader& parShader, const std
 				auto start = loop.GetFirstLoopable();
 				auto it1 = start->GetNext();
 				auto it2 = it1->GetNext();
-				auto it3 = it2->GetNext();
+				do
+				{
+					positions.push_back(start->me.y);
+					positions.push_back(start->me.z);
+					positions.push_back(start->me.x);
+					indexes.push_back(indexes.size());
 
-				positions.push_back(start->me.x);
-				positions.push_back(start->me.y);
-				positions.push_back(start->me.z);
-				indexes.push_back(indexes.size());
+					positions.push_back(it1->me.y);
+					positions.push_back(it1->me.z);
+					positions.push_back(it1->me.x);
+					indexes.push_back(indexes.size());
 
-				positions.push_back(it1->me.x);
-				positions.push_back(it1->me.y);
-				positions.push_back(it1->me.z);
-				indexes.push_back(indexes.size());
+					positions.push_back(it2->me.y);
+					positions.push_back(it2->me.z);
+					positions.push_back(it2->me.x);
+					indexes.push_back(indexes.size());
 
-				positions.push_back(it2->me.x);
-				positions.push_back(it2->me.y);
-				positions.push_back(it2->me.z);
-				indexes.push_back(indexes.size());
-				
-				positions.push_back(start->me.x);
-				positions.push_back(start->me.y);
-				positions.push_back(start->me.z);
-				indexes.push_back(indexes.size());
-
-				positions.push_back(it2->me.x);
-				positions.push_back(it2->me.y);
-				positions.push_back(it2->me.z);
-				indexes.push_back(indexes.size());
-
-				positions.push_back(it3->me.x);
-				positions.push_back(it3->me.y);
-				positions.push_back(it3->me.z);
-				indexes.push_back(indexes.size());
-				
+					it1 = it2;
+					it2 = it2->GetNext();
+				} while(it2 != start);
 			}
 		}
 	}
-	/*
+	
 	int nbPoints = _polygon.size();
 	
 	for (int i  = 0; i < nbPoints; ++i)
@@ -110,40 +80,42 @@ TModel* ComputeModel(TOutput* _output,const Donut::TShader& parShader, const std
 		const stingray::Vector3& nextPoint = _polygon[(i+1)%nbPoints];
 
 		// Triangle 1
-		positions.push_back(currentPoint.x);
 		positions.push_back(currentPoint.y);
 		positions.push_back(currentPoint.z);
+		positions.push_back(currentPoint.x);
 		indexes.push_back(indexes.size());
 
-		positions.push_back(nextPoint.x);
+		positions.push_back(currentPoint.y);
+		positions.push_back(currentPoint.z -100);
+		positions.push_back(currentPoint.x);
+		indexes.push_back(indexes.size());
+
 		positions.push_back(nextPoint.y);
 		positions.push_back(nextPoint.z);
-		indexes.push_back(indexes.size());
-
-		positions.push_back(currentPoint.x );
-		positions.push_back(currentPoint.y);
-		positions.push_back(currentPoint.z- 100);
+		positions.push_back(nextPoint.x);
 		indexes.push_back(indexes.size());
 
 		// Triangle 2
 
-		positions.push_back(currentPoint.x);
 		positions.push_back(currentPoint.y);
-		positions.push_back(currentPoint.z- 100);
+		positions.push_back(currentPoint.z - 100);
+		positions.push_back(currentPoint.x);
 		indexes.push_back(indexes.size());
 
-		positions.push_back(nextPoint.x);
-		positions.push_back(nextPoint.y);
-		positions.push_back(nextPoint.z);
-		indexes.push_back(indexes.size());
 
-		positions.push_back(nextPoint.x);
 		positions.push_back(nextPoint.y);
 		positions.push_back(nextPoint.z-100);
+		positions.push_back(nextPoint.x);
 		indexes.push_back(indexes.size());
 
+		positions.push_back(nextPoint.y);
+		positions.push_back(nextPoint.z);
+		positions.push_back(nextPoint.x);
+		indexes.push_back(indexes.size());
+
+
 	}
-	*/
+	
 	std::vector<float> data = positions;
 	
 	for(int i  = 0; i < positions.size(); i+=9)
@@ -192,26 +164,60 @@ TModel* ComputeModel(TOutput* _output,const Donut::TShader& parShader, const std
 	return newModel;
 }
 
-Donut::TDrawableObject* GenerateDrawableMeshFromPoints()
+Donut::TDrawableObject* GenerateDrawableMeshFromPoints(const std::vector<stingray::Vector3>& _points)
 {
-	std::vector<stingray::Vector3> points;
-	points.push_back(stingray::vector3(0.0, 0.0,0.0));
-	points.push_back(stingray::vector3(100.0, 0.0,0.0));
-	points.push_back(stingray::vector3(0.0, 100.0,0.0));
-
-	TOutput* output = generateRoof(points);
+	TOutput* output = generateRoof(_points);
 
 	Donut::TShader shader;
 	shader.FVertexShader = "shaders/uniform/vertex.glsl";
 	shader.FFragmentShader = "shaders/uniform/fragment.glsl";
 	Donut::ShaderManager::Instance().CreateShader(shader);
-	TModel* model = ComputeModel(output, shader, points);
+	TModel* model = ComputeModel(output, shader, _points);
 	Donut::TMesh* hat = new Donut::TMesh(shader,model);
 	return hat;
 }
 
+
 int main()
 {
+
+	std::vector<std::vector<stingray::Vector3>> houses;
+	
+	{
+		std::vector<stingray::Vector3> house;
+		house.push_back(stingray::vector3(-200.0, -100.0,0.0));
+		house.push_back(stingray::vector3(-50.0, -100.0,0.0));
+		house.push_back(stingray::vector3(-50.0, -150.0,0.0));
+		house.push_back(stingray::vector3(50, -150,0.0));
+		house.push_back(stingray::vector3(50, -100.0,0.0));
+		house.push_back(stingray::vector3(200, -100.0,0.0));
+		house.push_back(stingray::vector3(200.0, 100.0,0.0));
+		house.push_back(stingray::vector3(-200.0, 100.0,0.0));
+		houses.push_back(house);
+	}
+
+		
+	{
+		std::vector<stingray::Vector3> house;
+		house.push_back(stingray::vector3(0.0, 0.0,0.0));
+		house.push_back(stingray::vector3(-50.0, -20.0,0.0));
+		house.push_back(stingray::vector3(50, -100.0,0.0));
+		house.push_back(stingray::vector3(120.0, -60,0.0));
+		house.push_back(stingray::vector3(100.0, 0.0,0.0));
+		houses.push_back(house);
+	} 
+	
+	{
+		std::vector<stingray::Vector3> house;
+		house.push_back(stingray::vector3(-200.0, -100.0,0.0));
+		house.push_back(stingray::vector3(200, -100.0,0.0));
+		house.push_back(stingray::vector3(200.0, 170.0,0.0));
+		house.push_back(stingray::vector3(150.0, 130.0,0.0));
+		house.push_back(stingray::vector3(-200.0, 100.0,0.0));
+		houses.push_back(house);
+	}
+
+
     Donut::TSugarLoader::Instance().Init("data");   
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
@@ -220,23 +226,34 @@ int main()
 	Donut::TContextDetail newContext;
 	newContext.windowName = "roofGeneration";
 	window->CreateRenderWindow(newContext, 1);
+	window->SetVertexShader("shaders/canvas/ssaoV.glsl");
+	window->SetFragmentShader("shaders/canvas/ssaoF.glsl");
 	window->Init();
 
 	// Getting the camera
 	Donut::TRenderPass* pass= window->GetPasses()[0];
+	pass->AddTexture("data/textures/random.bmp", "random");
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
 	Donut::TDefaultInputManager * inManager = new Donut::TDefaultInputManager();
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
+	camera->DefinePerspective(45.0,1280.0/720.0,0.1,5000.0);
 
+	std::vector<Donut::TDrawableObject*> housesRenders;
+	int counter = 0;
+	for(auto houseIT = houses.begin(); houseIT != houses.end(); ++houseIT)
+	{
+		Donut::TDrawableObject* newHouse = GenerateDrawableMeshFromPoints(*houseIT);
+		Donut::TSceneNode* node = new Donut::TSceneNode();
+		node->Translate(TVec3(counter*300,0.0,-200.0));
+		node->AddDrawable(newHouse);
+		root->AddChild(node);
+		window->RegisterToDraw(newHouse);
+		housesRenders.push_back(newHouse);
+		counter++;
+	}
 
-	Donut::TDrawableObject* roof = GenerateDrawableMeshFromPoints();
-	Donut::TSceneNode* node = new Donut::TSceneNode();
-	node->AddDrawable(roof);
-	root->AddChild(node);
-	window->RegisterToDraw(roof);
 	
 	while(window->IsRendering())
 	{
@@ -244,8 +261,13 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update(0.016);
 	}
-	window->UnRegisterToDraw(roof);
-	delete roof;
+
+	for(auto houseDrawer = housesRenders.begin(); houseDrawer != housesRenders.end(); ++houseDrawer)
+	{
+		window->UnRegisterToDraw(*houseDrawer);
+		delete *houseDrawer;
+
+	}
 	delete window;
 	return 0;
 
