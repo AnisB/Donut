@@ -27,152 +27,49 @@
 #include <Render/ShaderManager.h>
 #include <Math/helper.h>
 
-TModel* ComputeModel(TOutput* _output,const Donut::TShader& parShader, const std::vector<stingray::Vector3>& _polygon)
+TModel* ComputeModel( CityGeneration::TMesh* _mesh, const Donut::TShader& parShader)
 {
 	TModel* newModel = new TModel();
-	std::vector<float> positions;
-	std::vector<unsigned int> indexes;
-
-	auto faces = _output->faces;
-	for (auto f =  faces.begin(); f != faces.end(); f++)
-	{
-		TOutput::TFace& currentFace = *f->second;
-		int degree =  currentFace.pointCount();
-		//ASSERT_MSG(degree >= 3, "one of the faces is a polygon");
-
-		if (degree>=3)
-		{
-			for (auto ptsLoop =  currentFace.points.begin(); ptsLoop != currentFace.points.end(); ptsLoop++)
-			{
-				TLoop<stingray::Vector3>& loop = *ptsLoop;
-				auto start = loop.GetFirstLoopable();
-				auto it1 = start->GetNext();
-				auto it2 = it1->GetNext();
-				do
-				{
-					positions.push_back(start->me.y);
-					positions.push_back(start->me.z);
-					positions.push_back(start->me.x);
-					indexes.push_back(indexes.size());
-
-					positions.push_back(it1->me.y);
-					positions.push_back(it1->me.z);
-					positions.push_back(it1->me.x);
-					indexes.push_back(indexes.size());
-
-					positions.push_back(it2->me.y);
-					positions.push_back(it2->me.z);
-					positions.push_back(it2->me.x);
-					indexes.push_back(indexes.size());
-
-					it1 = it2;
-					it2 = it2->GetNext();
-				} while(it2 != start);
-			}
-		}
-	}
-	
-	int nbPoints = _polygon.size();
-	
-	for (int i  = 0; i < nbPoints; ++i)
-	{
-		const stingray::Vector3& currentPoint = _polygon[i];
-		const stingray::Vector3& nextPoint = _polygon[(i+1)%nbPoints];
-
-		// Triangle 1
-		positions.push_back(currentPoint.y);
-		positions.push_back(currentPoint.z);
-		positions.push_back(currentPoint.x);
-		indexes.push_back(indexes.size());
-
-		positions.push_back(currentPoint.y);
-		positions.push_back(currentPoint.z -100);
-		positions.push_back(currentPoint.x);
-		indexes.push_back(indexes.size());
-
-		positions.push_back(nextPoint.y);
-		positions.push_back(nextPoint.z);
-		positions.push_back(nextPoint.x);
-		indexes.push_back(indexes.size());
-
-		// Triangle 2
-
-		positions.push_back(currentPoint.y);
-		positions.push_back(currentPoint.z - 100);
-		positions.push_back(currentPoint.x);
-		indexes.push_back(indexes.size());
-
-
-		positions.push_back(nextPoint.y);
-		positions.push_back(nextPoint.z-100);
-		positions.push_back(nextPoint.x);
-		indexes.push_back(indexes.size());
-
-		positions.push_back(nextPoint.y);
-		positions.push_back(nextPoint.z);
-		positions.push_back(nextPoint.x);
-		indexes.push_back(indexes.size());
-
-
-	}
-	
-	std::vector<float> data = positions;
-	
-	for(int i  = 0; i < positions.size(); i+=9)
-	{
-		Vector3 p0 (positions[i], positions[i+1], positions[i+2]);
-		Vector3 p1(positions[i+3], positions[i+4], positions[i+5]);
-		Vector3 p2(positions[i+6], positions[i+7], positions[i+8]);
-		Vector3 normal = (Vector3::crossProduct(p1-p0, p2-p0));
-		normal = normal/normal.Norm();
-		for (int j =0; j <3 ; ++j)
-		{
-			GENERAL_DEBUG(normal.x<<" "<<normal.y<<" "<<normal.z);
-			data.push_back(-normal.x/2.0 +0.5);
-			data.push_back(-normal.y/2.0 +0.5);
-			data.push_back(-normal.z/2.0 +0.5);
-		}
-	}
 	
 	GLuint VAO;
 	glGenVertexArrays (1, &VAO);
 	glBindVertexArray (VAO);
+
 	GLuint VBO;
-	GLuint IBO;
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*data.size(), &data[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*_mesh->nbVerts*3, _mesh->pos, GL_STATIC_DRAW);
+	GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
+	glEnableVertexAttribArray (posAtt);
+	glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
+	GLuint IBO;
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*indexes.size(), &indexes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*_mesh->nbFaces*3, _mesh->index, GL_STATIC_DRAW);
 
-	GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
+	GLuint FBO;
+	glGenBuffers(1, &FBO);
+	glBindBuffer(GL_ARRAY_BUFFER, FBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*_mesh->nbVerts*3, _mesh->normal, GL_STATIC_DRAW);
 	GLuint normalAtt = glGetAttribLocation(parShader.FProgramID, "normal");
-
-	glEnableVertexAttribArray (posAtt);
 	glEnableVertexAttribArray (normalAtt);
-
-	glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*indexes.size()*3));
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	newModel->vertexArray = VAO;
-	newModel->nbVertices = indexes.size();
+	newModel->nbVertices = _mesh->nbFaces*3;
 
 	return newModel;
 }
 
-Donut::TDrawableObject* GenerateDrawableMeshFromPoints(const std::vector<stingray::Vector3>& _points)
+Donut::TDrawableObject* GenerateDrawableMeshFromPoints( CityGeneration::TInputProfile& _input)
 {
-	TOutput* output = generateRoof(_points);
-
+	CityGeneration::TMesh* mesh =  CityGeneration::generateBuilding(_input);
 	Donut::TShader shader;
 	shader.FVertexShader = "shaders/uniform/vertex.glsl";
 	shader.FFragmentShader = "shaders/uniform/fragment.glsl";
 	Donut::ShaderManager::Instance().CreateShader(shader);
-	TModel* model = ComputeModel(output, shader, _points);
+	TModel* model = ComputeModel(mesh, shader);
 	Donut::TMesh* hat = new Donut::TMesh(shader,model);
 	return hat;
 }
@@ -180,43 +77,165 @@ Donut::TDrawableObject* GenerateDrawableMeshFromPoints(const std::vector<stingra
 
 int main()
 {
-
-	std::vector<std::vector<stingray::Vector3>> houses;
+	std::vector< CityGeneration::TInputProfile*> flatHouses;
 	
 	{
-		std::vector<stingray::Vector3> house;
-		house.push_back(stingray::vector3(-200.0, -100.0,0.0));
-		house.push_back(stingray::vector3(-50.0, -100.0,0.0));
-		house.push_back(stingray::vector3(-50.0, -150.0,0.0));
-		house.push_back(stingray::vector3(50, -150,0.0));
-		house.push_back(stingray::vector3(50, -100.0,0.0));
-		house.push_back(stingray::vector3(200, -100.0,0.0));
-		house.push_back(stingray::vector3(200.0, 100.0,0.0));
-		house.push_back(stingray::vector3(-200.0, 100.0,0.0));
-		houses.push_back(house);
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+		contour->type =  CityGeneration::TContourType::OUTER;
+		contour->points.push_back(stingray::vector3(-200.0, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(-50.0, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(-50.0, -150.0,0.0));
+		contour->points.push_back(stingray::vector3(50, -150,0.0));
+		contour->points.push_back(stingray::vector3(50, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200.0, 100.0,0.0));
+		contour->points.push_back(stingray::vector3(-200.0, 100.0,0.0));
+		house->AddContour(contour);
+		house->AddParameter("H", 100.0);
+		house->SetProfile( CityGeneration::TOSMProfile::FLAT);
+		flatHouses.push_back(house);
+	}
+	
+	
+	{
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::OUTER;
+			contour->points.push_back(stingray::vector3(-200.0, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(-50.0, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(-50.0, -150.0,0.0));
+			contour->points.push_back(stingray::vector3(50, -150,0.0));
+			contour->points.push_back(stingray::vector3(50, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200.0, 100.0,0.0));
+			contour->points.push_back(stingray::vector3(-200.0, 100.0,0.0));
+			house->AddContour(contour);
+		}
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::INNER;
+			contour->points.push_back(stingray::vector3(-150, -50.0,0.0));
+			contour->points.push_back(stingray::vector3(-150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, -50.0,0.0));
+			house->AddContour(contour);
+		}
+		house->AddParameter("H", 100.0);
+		house->AddParameter("H1", 50.0);
+		house->SetProfile( CityGeneration::TOSMProfile::FLAT_TERRACED);
+		flatHouses.push_back(house);
 	}
 
-		
+		{
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::OUTER;
+			contour->points.push_back(stingray::vector3(-200.0, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(-50.0, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(-50.0, -150.0,0.0));
+			contour->points.push_back(stingray::vector3(50, -150,0.0));
+			contour->points.push_back(stingray::vector3(50, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200.0, 100.0,0.0));
+			contour->points.push_back(stingray::vector3(-200.0, 100.0,0.0));
+			house->AddContour(contour);
+		}
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::INNER;
+			contour->points.push_back(stingray::vector3(-150, -50.0,0.0));
+			contour->points.push_back(stingray::vector3(-150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, -50.0,0.0));
+			house->AddContour(contour);
+		}
+		house->AddParameter("H", 100.0);
+		house->AddParameter("ALPHA", PI/4.0);
+		house->SetProfile( CityGeneration::TOSMProfile::HIPPED);
+		flatHouses.push_back(house);
+	}
+
 	{
-		std::vector<stingray::Vector3> house;
-		house.push_back(stingray::vector3(0.0, 0.0,0.0));
-		house.push_back(stingray::vector3(-50.0, -20.0,0.0));
-		house.push_back(stingray::vector3(50, -100.0,0.0));
-		house.push_back(stingray::vector3(120.0, -60,0.0));
-		house.push_back(stingray::vector3(100.0, 0.0,0.0));
-		houses.push_back(house);
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+		contour->type =  CityGeneration::TContourType::OUTER;
+		contour->points.push_back(stingray::vector3(-200.0, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(-50.0, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(-50.0, -150.0,0.0));
+		contour->points.push_back(stingray::vector3(50, -150,0.0));
+		contour->points.push_back(stingray::vector3(50, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200.0, 100.0,0.0));
+		contour->points.push_back(stingray::vector3(-200.0, 100.0,0.0));
+		house->AddContour(contour);
+		house->AddParameter("H", 100.0);
+		house->AddParameter("ALPHA", PI/4.0);
+		house->SetProfile( CityGeneration::TOSMProfile::EQUAL_HIPPED);
+		flatHouses.push_back(house);
+	}
+
+	{
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+		contour->type =  CityGeneration::TContourType::OUTER;
+		contour->points.push_back(stingray::vector3(0.0, 0.0,0.0));
+		contour->points.push_back(stingray::vector3(-50.0, -20.0,0.0));
+		contour->points.push_back(stingray::vector3(50, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(120.0, -60,0.0));
+		contour->points.push_back(stingray::vector3(100.0, 0.0,0.0));
+		house->AddContour(contour);
+		house->AddParameter("H", 100.0);
+		house->AddParameter("ALPHA", PI/4.0);
+		house->SetProfile( CityGeneration::TOSMProfile::EQUAL_HIPPED);
+		flatHouses.push_back(house);
 	} 
 	
 	{
-		std::vector<stingray::Vector3> house;
-		house.push_back(stingray::vector3(-200.0, -100.0,0.0));
-		house.push_back(stingray::vector3(200, -100.0,0.0));
-		house.push_back(stingray::vector3(200.0, 170.0,0.0));
-		house.push_back(stingray::vector3(150.0, 130.0,0.0));
-		house.push_back(stingray::vector3(-200.0, 100.0,0.0));
-		houses.push_back(house);
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+		contour->type =  CityGeneration::TContourType::OUTER;
+		contour->points.push_back(stingray::vector3(-200.0, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+		contour->points.push_back(stingray::vector3(200, 100,0.0));
+		contour->points.push_back(stingray::vector3(220.0, 190.0,0.0));
+		contour->points.push_back(stingray::vector3(150.0, 130.0,0.0));
+		contour->points.push_back(stingray::vector3(-200.0, 100.0,0.0));
+		house->AddContour(contour);
+		house->AddParameter("H", 100.0);
+		house->AddParameter("ALPHA", PI/4.0);
+		house->SetProfile( CityGeneration::TOSMProfile::EQUAL_HIPPED);
+		flatHouses.push_back(house);
 	}
-
+	
+	{
+		 CityGeneration::TInputProfile* house = new  CityGeneration::TInputProfile();
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::OUTER;
+			contour->points.push_back(stingray::vector3(-200, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200, -100.0,0.0));
+			contour->points.push_back(stingray::vector3(200, 100.0,0.0));
+			contour->points.push_back(stingray::vector3(-200, 100.0,0.0));
+			house->AddContour(contour);
+		}
+		{
+			 CityGeneration::TContour* contour = new  CityGeneration::TContour();
+			contour->type =  CityGeneration::TContourType::INNER;
+			contour->points.push_back(stingray::vector3(-150, -50.0,0.0));
+			contour->points.push_back(stingray::vector3(-150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, 50.0,0.0));
+			contour->points.push_back(stingray::vector3(150, -50.0,0.0));
+			house->AddContour(contour);
+		}
+		house->AddParameter("H", 100.0);
+		house->AddParameter("ALPHA", PI/4.0);
+		house->SetProfile( CityGeneration::TOSMProfile::EQUAL_HIPPED);
+		flatHouses.push_back(house);
+	}
+	
 
     Donut::TSugarLoader::Instance().Init("data");   
 	// Creating the rendering window
@@ -239,12 +258,12 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.1,5000.0);
-
+	camera->Translate(Vector3(0.0, -200.0,-400.0));
 	std::vector<Donut::TDrawableObject*> housesRenders;
 	int counter = 0;
-	for(auto houseIT = houses.begin(); houseIT != houses.end(); ++houseIT)
+	for(auto houseIT = flatHouses.begin(); houseIT != flatHouses.end(); ++houseIT)
 	{
-		Donut::TDrawableObject* newHouse = GenerateDrawableMeshFromPoints(*houseIT);
+		Donut::TDrawableObject* newHouse = GenerateDrawableMeshFromPoints(**houseIT);
 		Donut::TSceneNode* node = new Donut::TSceneNode();
 		node->Translate(TVec3(counter*300,0.0,-200.0));
 		node->AddDrawable(newHouse);
@@ -260,6 +279,7 @@ int main()
 		window->Draw();
 		Donut::FarmEvents();
 		inManager->Update(0.016);
+		Sleep(16);
 	}
 
 	for(auto houseDrawer = housesRenders.begin(); houseDrawer != housesRenders.end(); ++houseDrawer)
