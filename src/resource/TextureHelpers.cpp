@@ -97,9 +97,12 @@ namespace Donut
         if( !Filename )
             return NULL;
 
+#if __posix__
+        FILE* f = fopen(Filename, "rb");
+#elif WIN32
         FILE* f = NULL;
 		fopen_s(&f, Filename, "rb");
-
+#endif
         if(f==NULL)
         {
             INPUT_ERROR("Erreur ouverture fichier "<<Filename);  

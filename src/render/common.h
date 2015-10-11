@@ -30,6 +30,8 @@
 
 namespace Donut
 {
+	#define FLUSH_GL_ERROR "__FLUSH_ME_PLEASE"
+
 	#define __RENDER_PRINT_NAMESPACE "RENDER"
 	
 	// Printing macros

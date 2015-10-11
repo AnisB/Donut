@@ -64,10 +64,13 @@ namespace Donut
 
 		if (fn != NULL) 
 		{
+			#if __posix__
+			fp = fopen(fn,"w");
+			#elif WIN32
 			fopen_s(&fp,fn,"w");
-
-			if (fp != NULL) {
-				
+			#endif
+			if (fp != NULL) 
+			{
 				if (fwrite(s,sizeof(char),strlen(s),fp) == strlen(s))
 					status = true;
 				fclose(fp);
@@ -75,22 +78,14 @@ namespace Donut
 		}
 		return(status);
 	}
-	std::vector<std::string> split(const std::string& parString, char parSeparator, std::vector<std::string> &outStringTable) 
+	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out) 
 	{
 	    std::stringstream streamObj(parString);
 	    std::string item;
 	    while (std::getline(streamObj, item, parSeparator)) 
 	    {
-	        outStringTable.push_back(item);
+	        _out.push_back(item);
 	    }
-	    return outStringTable;
-	}
-
-	std::vector<std::string> split(const std::string& parString, char parSeparator)
-	{
-	    std::vector<std::string> stringTable;
-	    split(parString, parSeparator, stringTable);
-	    return stringTable;
 	}
 
 	std::string removeMultSpace(const std::string& parString) 

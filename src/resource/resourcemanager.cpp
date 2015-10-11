@@ -253,10 +253,12 @@
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
-			std::vector<std::string> sample = split(currentShape.info[0],' '); 
+			std::vector<std::string> sample;
+			split(currentShape.info[0], ' ', sample); 
 			int dimShape = sample.size();
 			ASSERT_MSG_NO_RELEASE((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4");
-			std::vector<std::string> sample2 = split(sample[2],'/');
+			std::vector<std::string> sample2;
+			split(sample[2],'/', sample2);
 			int nbInfo = sample2.size();
 
 			if(nbInfo==1)
@@ -265,7 +267,8 @@
 				int verticeCounter = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					// vertices.erase(vertices.begin());
 					foreach_macro(vertice, vertices)
 					{
@@ -310,12 +313,14 @@
 				int verticeCounter = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					ASSERT_MSG_NO_RELEASE(vertices.size()==3, *prim);
 					vertices.erase(vertices.begin());
 					foreach_macro(vertice, vertices)
 					{
-						std::vector<std::string> dataVert = split(*vertice,'/');
+						std::vector<std::string> dataVert;
+						split(*vertice,'/', dataVert);
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						data[verticeCounter*3] = point.val[0];
 						data[verticeCounter*3+1] = point.val[1];
@@ -364,10 +369,12 @@
 				int verticeCounter = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					foreach_macro(vertice, vertices)
 					{
-						std::vector<std::string> dataVert = split(*vertice,'/');
+						std::vector<std::string> dataVert;
+						split(*vertice, '/', dataVert);
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						data[verticeCounter*3] = point.val[0];
 						data[verticeCounter*3+1] = point.val[1];
@@ -511,11 +518,13 @@
 			TShape & currentShape = *shape;
 			int nbShape = currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
-			std::vector<std::string> sample = split(currentShape.info[0],' '); 
+			std::vector<std::string> sample;
+			split(currentShape.info[0],' ', sample); 
 			int dimShape = sample.size();
 			ASSERT_MSG_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
 	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
-			std::vector<std::string> sample2 = split(sample[2],'/');
+			std::vector<std::string> sample2;
+			split(sample[2],'/', sample2);
 			int nbInfo = sample2.size();
 
 			const int verticeSize = 9;
@@ -529,7 +538,8 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
@@ -557,12 +567,14 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						std::vector<std::string> dataVert = split(*vertice,'/');
+						std::vector<std::string> dataVert;
+						split(*vertice,'/', dataVert);
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = normalize(point.val[0]);
@@ -586,12 +598,14 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices = split(*prim,' ');
+					std::vector<std::string> vertices;
+					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						std::vector<std::string> dataVert = split(*vertice,'/');
+						std::vector<std::string> dataVert;
+						split(*vertice,'/', dataVert);
 						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = normalize(point.val[0]);

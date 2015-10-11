@@ -28,7 +28,7 @@ namespace Donut
 	// Writes s in f
 	bool WriteFile(char *fn, char *s);
 	// Splits parstring with parSeparator
-	std::vector<std::string> split(const std::string& parString, char parSeparator);
+	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
 	// removes multiple spaces in a string
 	std::string removeMultSpace(const std::string& parString); 
 

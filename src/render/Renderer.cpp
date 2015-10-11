@@ -101,7 +101,7 @@
 			#endif
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
-			CheckGLState("FLUSH");
+			CheckGLState(FLUSH_GL_ERROR);
 			FNbPasses = parNbPass; 
 	 		for(size_t count = 0; count < FNbPasses; ++count)
 	 		{

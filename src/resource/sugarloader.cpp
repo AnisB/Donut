@@ -52,31 +52,31 @@ namespace Donut
 
     ShaderDataType::Type stringToDataType(const std::string& parFile)
     {
-        if(parFile=="vec3")
+        if(parFile == TOKEN_VEC3)
         {
             return ShaderDataType::VEC3;
         }
-        else if(parFile=="vec4")
+        else if(parFile == TOKEN_VEC4)
         {
             return ShaderDataType::VEC4;
         }
-        else if(parFile=="mat3")
+        else if(parFile == TOKEN_MAT3)
         {
             return ShaderDataType::MAT3;
         }
-        else if(parFile=="mat4")
+        else if(parFile == TOKEN_MAT4)
         {
             return ShaderDataType::MAT4;
         }
-        else if(parFile=="float")
+        else if(parFile == TOKEN_FLOAT)
         {
             return ShaderDataType::FLOAT;
         }
-        else if(parFile=="bool")
+        else if(parFile== TOKEN_BOOL)
         {
             return ShaderDataType::BOOL;
         }
-        else if(parFile=="int")
+        else if(parFile == TOKEN_INT)
         {
             return ShaderDataType::INTEGER;
         }
@@ -122,7 +122,7 @@ namespace Donut
         if (! directory) 
         {
             RESOURCE_ERROR("Error in directory: "<< directoryName); 
-#if LINUX
+#if __posix__
             RESOURCE_ERROR("Error n°: "<< strerror (errno)); 
 #elif WIN32
 			char msg[20];
@@ -170,8 +170,9 @@ namespace Donut
         std::ifstream fin(parFileName.c_str());
         std::string file_line;
         std::getline(fin, file_line);
-        file_line=removeMultSpace(file_line);
-        std::vector<std::string> header = split(file_line,' ');
+        file_line = removeMultSpace(file_line);
+        std::vector<std::string> header;
+        split(file_line,' ', header);
 
         ASSERT_MSG((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
         sugar.name = header[1];
@@ -197,7 +198,8 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    std::vector<std::string> entete = split(file_line,' ');
+                    std::vector<std::string> entete;
+                    split(file_line,' ', entete);
                     TTextureInfo tex;
                     tex.index = index;
                     tex.name = entete[1];
@@ -214,7 +216,8 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    std::vector<std::string> entete = split(file_line,' ');
+                    std::vector<std::string> entete;
+                    split(file_line,' ', entete);
                     TCubeMapInfo cm;
                     cm.index = index;
                     cm.name = entete[1];
@@ -230,7 +233,8 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    std::vector<std::string> entete = split(file_line,' ');
+                    std::vector<std::string> entete;
+                    split(file_line,' ', entete);
                     TBuildIn bi;
                     bi.dataType = stringToDataType(entete[1]);
                     bi.name = entete[2];
@@ -244,7 +248,8 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    std::vector<std::string> entete = split(file_line,' ');
+                    std::vector<std::string> entete;
+                    split(file_line,' ', entete);
                     TUniform uni;
                     uni.dataType = stringToDataType(entete[1]);
                     uni.name = entete[2];
@@ -259,7 +264,8 @@ namespace Donut
                 getNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    std::vector<std::string> entete = split(file_line,' ');
+                    std::vector<std::string> entete;
+                    split(file_line,' ', entete);
                     if(entete[1]=="vertex")
                     {
                         sugar.shader.vertex = entete[2];
@@ -297,13 +303,14 @@ namespace Donut
 
     void TSugarLoader::LoadSugars_MultiThread()
     {
-        ASSERT_FAIL_MSG("NOT IMPLEMENTED YET");
+        ASSERT_NOT_IMPLEMENTED();
     }
+
     TSugar TSugarLoader::GetSugar(const std::string& parModel)
     {
-        RESOURCE_WARNING(parModel<<" is requested");
+        RESOURCE_INFO(parModel<<" is requested");
         auto ite = FSugars.find(parModel);
-        ASSERT_MSG_NO_RELEASE((ite!=FSugars.end()),"Sugar model not found: "<<parModel);
+        ASSERT_MSG((ite!=FSugars.end()), "Sugar model not found: "<<parModel);
         return ite->second;
     }
 

@@ -6,6 +6,10 @@ void CheckGLState(const std::string& desc)
 {
 
 	GLenum e = glGetError();
+
+	if(desc == FLUSH_GL_ERROR)
+		return;
+	
 	if (e != GL_NO_ERROR) 
 	{
 		RENDER_ERROR("OpenGL error in: "<<desc.c_str()<<" "<<e);
