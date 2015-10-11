@@ -27,8 +27,6 @@
  {
  	typedef int TStateId; 
  	typedef int TTransitionId;
- 	typedef unsigned u32; 
- 	typedef int i32; 
 
  	struct TStateEngineId
  	{
