@@ -82,7 +82,7 @@ namespace Donut
     void TEngineExample::Update(float dt)
     {
         TEngine::Update(dt);
-        inManager->Update(dt);  
+        inManager->Update();  
         FNode2->Yaw(dt*2);  
     }
 

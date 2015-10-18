@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.6)
 project(DonutEngine)
 
 
-#add_definitions( -DRELEASE )
+#add_definitions( -D_RELEASE )
 add_definitions( -D_DEBUG )
 
 add_definitions(-std=c++11) 

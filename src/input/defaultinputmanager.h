@@ -37,7 +37,7 @@ namespace Donut
 		void MouseMoved(float parX, float parY);
 		void MousePressed(TMouseCode::Type parButton);
 		void MouseReleased(TMouseCode::Type parButton);
-		void Update(float parTime);
+		double Update();
 
 	public:
 		Camera* FCamera;
@@ -45,6 +45,7 @@ namespace Donut
 		bool FInitDone;
 		float oldX;
 		float oldY;
+		double m_time;
 		std::map<TKeyCode::Type, bool> FKeys;
 	};
 }

@@ -68,12 +68,11 @@ int main()
 	window->RegisterToDraw(lego);
 
 
-	
 	while(window->IsRendering())
 	{
 		window->Draw();
 		Donut::FarmEvents();
-		inManager->Update(0.016);
+		inManager->Update();
 	}
 	window->UnRegisterToDraw(house);
 	delete house;

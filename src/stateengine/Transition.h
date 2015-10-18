@@ -44,7 +44,7 @@
  		TStateEngineId FStateEngineId;
 
 
- 		#ifdef DEBUG
+ 		#if _DEBUG
  		TStateId FOriginState;
  		#endif 
 

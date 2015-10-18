@@ -52,7 +52,7 @@ namespace Donut
  		FOutTransitions[parId] = parTransition;
  	}
 
- 	#ifdef DEBUG
+ 	#if _DEBUG
  	void TAtomicState::AddInTransition(const TTransition * parTransition)
  	{
  		// FInTransitions.push_back(parTransition)

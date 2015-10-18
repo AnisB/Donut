@@ -18,69 +18,74 @@
 
 namespace Donut
 {
-TDefaultInputManager::TDefaultInputManager()
-: FInitDone(false)
-{
-	FKeys[TKeyCode::W] = false;
-	FKeys[TKeyCode::S] = false;
-	FKeys[TKeyCode::A] = false;
-	FKeys[TKeyCode::D] = false;
-}
-
-TDefaultInputManager::~TDefaultInputManager()
-{
-
-}
-
-void TDefaultInputManager::KeyPressed(TKeyCode::Type parKey)
-{
-	FKeys[parKey] = true;
-}
-void TDefaultInputManager::KeyReleased(TKeyCode::Type parKey)
-{
-	FKeys[parKey] = false;
-}
-
-void TDefaultInputManager::MouseMoved(float parX, float parY)
-{
-	if(!FInitDone)
+	TDefaultInputManager::TDefaultInputManager()
+	: FInitDone(false)
 	{
+		FKeys[TKeyCode::W] = false;
+		FKeys[TKeyCode::S] = false;
+		FKeys[TKeyCode::A] = false;
+		FKeys[TKeyCode::D] = false;
+		m_time = glfwGetTime();
+	}
+
+	TDefaultInputManager::~TDefaultInputManager()
+	{
+
+	}
+
+	void TDefaultInputManager::KeyPressed(TKeyCode::Type parKey)
+	{
+		FKeys[parKey] = true;
+	}
+	void TDefaultInputManager::KeyReleased(TKeyCode::Type parKey)
+	{
+		FKeys[parKey] = false;
+	}
+
+	void TDefaultInputManager::MouseMoved(float parX, float parY)
+	{
+		if(!FInitDone)
+		{
+			oldX= parX;
+			oldY= parY;
+			FInitDone = true;
+			return;
+		}
+		FCamera->Yaw((parX-oldX)*3.14/180.0*20);
+		FCamera->Pitch((parY-oldY)*3.14/180.0*20);
 		oldX= parX;
 		oldY= parY;
-		FInitDone = true;
-		return;
 	}
-	FCamera->Yaw((parX-oldX)*3.14/180.0*20);
-	FCamera->Pitch((parY-oldY)*3.14/180.0*20);
-	oldX= parX;
-	oldY= parY;
-}
-void TDefaultInputManager::MousePressed(TMouseCode::Type parButton)
-{
+	void TDefaultInputManager::MousePressed(TMouseCode::Type parButton)
+	{
 
-}
-void TDefaultInputManager::MouseReleased(TMouseCode::Type parButton)
-{
-}
+	}
+	void TDefaultInputManager::MouseReleased(TMouseCode::Type parButton)
+	{
+	}
 
-	void TDefaultInputManager::Update(float parTime)
+	double TDefaultInputManager::Update()
 	{
-	if(FKeys[TKeyCode::W])
-	{
-		FCamera->Translate(Vector3(0.0,0.0,parTime*300));
-	}
-	if(FKeys[TKeyCode::S])
-	{
-		FCamera->Translate(Vector3(0.0,0.0,-parTime*300));
-	}	
-	if(FKeys[TKeyCode::A])
-	{
-		FCamera->Translate(Vector3(parTime*300,0.0,0.0));
-	}
-	if(FKeys[TKeyCode::D])
-	{
-		FCamera->Translate(Vector3(-parTime*300,0.0,0.0));
-	}
+		double next = glfwGetTime();
+		double delta = next-m_time;
+		if(FKeys[TKeyCode::W])
+		{
+			FCamera->Translate(Vector3(0.0,0.0,delta*50));
+		}
+		if(FKeys[TKeyCode::S])
+		{
+			FCamera->Translate(Vector3(0.0,0.0,-delta*50));
+		}	
+		if(FKeys[TKeyCode::A])
+		{
+			FCamera->Translate(Vector3(delta*50,0.0,0.0));
+		}
+		if(FKeys[TKeyCode::D])
+		{
+			FCamera->Translate(Vector3(-delta*50,0.0,0.0));
+		}
+		m_time =  next;
+		return delta;
 	}
 }
 

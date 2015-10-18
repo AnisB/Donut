@@ -52,7 +52,7 @@
  		}
 
  		int FId;
-	#ifdef DEBUG
+	#if _DEBUG
  		std::string FDebugStateEngineName;
 	#endif
  	};

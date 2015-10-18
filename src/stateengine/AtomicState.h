@@ -52,7 +52,7 @@
  		void Update(double dt);
 
 
- 	#ifdef DEBUG
+ 	#if _DEBUG
  		void AddInTransition(const TTransition * parTransition);
 	#endif
 
@@ -68,7 +68,7 @@
 
  		TStateId FId;
 
- 	#ifdef DEBUG
+ 	#if _DEBUG
  		std::list<TTransition*> FInTransitions;
  	#endif
 

@@ -222,8 +222,8 @@ void renderLoop()
 	{
 		window->Draw();
 		Donut::FarmEvents();
-		updateControlPoint(0.16);
-		inManager->Update(0.016);
+		double delta = inManager->Update();
+		updateControlPoint(delta);
 	}
 }
 

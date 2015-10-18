@@ -56,7 +56,7 @@ int main()
 	{
 		window->Draw();
 		Donut::FarmEvents();
-		inManager->Update(0.016);
+		inManager->Update();
 	}
 	window->UnRegisterToDraw(teapot);
 	delete teapot;

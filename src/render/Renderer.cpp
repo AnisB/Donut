@@ -93,7 +93,7 @@
  				return false;
 			}
 			
-			#ifdef DEBUG
+			#if _DEBUG
 			const GLubyte* renderer = glGetString (GL_RENDERER); 
 			const GLubyte* version = glGetString (GL_VERSION); 
 			RENDER_DEBUG("Renderer: "<<renderer);

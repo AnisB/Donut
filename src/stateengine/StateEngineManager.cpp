@@ -33,7 +33,7 @@ namespace Donut
   void TStateEngineManager::RegisterInstance(const TStateEngineId& parId, TStateEngine* parInstance)
   {
   	FInstances[parId] = parInstance;
-#ifdef DEBUG
+#if _DEBUG
   	STATE_ENGINE_DEBUG("Instance registered with id "<<parId.FId);
 #endif  
   }

@@ -19,6 +19,7 @@
 
 #ifdef __posix__
 #include <pthread.h>
+#include <unistd.h>
 #elif WIN32
 #include <windows.h>
 #endif 
