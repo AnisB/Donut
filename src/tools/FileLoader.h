@@ -24,7 +24,8 @@
 namespace Donut
 {
 	//Loads file , free with mallpoc
-	void readFile(char const* fn, std::string& _output);
+	void ReadFile(char const* fn, std::string& _output);
+	void ReadFile(char const* fn, std::vector<char>& _output);
 	// Writes s in f
 	bool WriteFile(char *fn, char *s);
 	// Splits parstring with parSeparator

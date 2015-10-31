@@ -36,7 +36,7 @@ namespace Donut
 		return (lhs == rhs) && (lhs == ' '); 
 	}
 
-	void readFile( char const* fn, std::string& _output) 
+	void ReadFile( char const* fn, std::string& _output) 
 	{
 		ASSERT_MSG(fn != NULL, "Empty file name to load");
 		std::ifstream fileReader (fn);
@@ -55,7 +55,21 @@ namespace Donut
 			ASSERT_FAIL_MSG("Failed could not be loaded "<<fn);
 		}
 	}
-
+	void ReadFile( char const* fn, std::vector<char>& _output) 
+	{
+		ASSERT_MSG(fn != NULL, "Empty file name to load");
+		std::ifstream fileReader (fn);
+		if (fileReader.is_open())
+		{
+			_output.insert(_output.end(),std::istreambuf_iterator<char>(fileReader), std::istreambuf_iterator<char>());
+			_output.push_back('\0');
+			fileReader.close();
+		}
+		else
+		{
+			ASSERT_FAIL_MSG("Failed could not be loaded "<<fn);
+		}
+	}	
 	bool WriteFile(char *fn, char *s) 
 	{
 

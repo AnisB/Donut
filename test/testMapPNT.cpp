@@ -50,8 +50,8 @@ int main()
 	Donut::TShader shader;
 	shader.FVertexShader = "shaders/test/testVertexPNT.glsl";
 	shader.FFragmentShader = "shaders/test/testFragmentPNT.glsl";
-	Donut::TCubeR* cube = new Donut::TCubeR(TVec3(0,0,-5),0.5,shader);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(TVec3(5,0,-5),1.0,shader);
+	Donut::TCubeR* cube = new Donut::TCubeR(Donut::vector3(0,0,-5),0.5,shader);
+	Donut::TCubeR* cube2 = new Donut::TCubeR(Donut::vector3(5,0,-5),1.0,shader);
 
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();

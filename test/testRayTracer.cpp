@@ -66,7 +66,7 @@ void init()
 	// On définit la perspective
 	camera->DefinePerspective(29.0,1280.0/720.0,1.0,500.0);
 	// On déplace la camera
-	camera->Translate(Vector3(0,0,-20));
+	camera->Translate(Donut::vector3(0,0,-20));
 }
 
 void initScene()
@@ -75,7 +75,7 @@ void initScene()
 	Donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position TVec3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = new Donut::TMesh(TVec3(0, 0, 0),"FSQuad");
+	surface = new Donut::TMesh(Donut::vector3(0, 0, 0),"FSQuad");
 	// On génère le shader associé a ce modèle
 	surface->GenerateShader();
 	// On crée les points de controle

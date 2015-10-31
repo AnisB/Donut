@@ -102,7 +102,7 @@ GENERATE_LIB("${SOURCES}/tracing" Tracing)
 SET(CORELIBS ${CORELIBS} Base Butter Engine Input MultiThread Objects Render Resource StateEngine Tools Tracing)
 
 # Adding the tests if we should
-IF(TEST_ACTIVE)
+IF(TESTS)
 add_subdirectory(${TEST})
 ENDIF()
 

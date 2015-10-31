@@ -14,7 +14,6 @@
  *
  **/
 
-#include <iostream>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
@@ -24,7 +23,8 @@
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Defines.h>
 #include <Render/SceneNode.h>
-
+#include <butter/vector3.h>
+#include <butter/vector4.h>
 
 int main()
 {
@@ -46,24 +46,24 @@ int main()
 	window->Init();
 
 	Donut::TLight* lightSource = new Donut::TLight();
-	lightSource->SetPosition(TVec3(0,0,0));
-	lightSource->SetColor(TVec4(0,0,1,1.0));
+	lightSource->SetPosition(Donut::vector3(0,0,0));
+	lightSource->SetColor(Donut::vector4(0,0,1,1.0));
 	window->AddLight(lightSource);
 
 	Donut::TLight* lightSource2 = new Donut::TLight();
-	lightSource2->SetPosition(TVec3(0.0,20,-60));
-	lightSource2->SetColor(TVec4(1.0,0,0,1.0));
+	lightSource2->SetPosition(Donut::vector3(0.0,20,-60));
+	lightSource2->SetColor(Donut::vector4(1.0,0,0,1.0));
 	window->AddLight(lightSource2);
 
 
 	Donut::TLight* lightSource3 = new Donut::TLight();
-	lightSource3->SetPosition(TVec3(0.0,-20,-50));
-	lightSource3->SetColor(TVec4(0.0,1,0,1.0));
+	lightSource3->SetPosition(Donut::vector3(0.0,-20,-50));
+	lightSource3->SetColor(Donut::vector4(0.0,1,0,1.0));
 	window->AddLight(lightSource3);
 
 	Donut::TLight* lightSource4 = new Donut::TLight();
-	lightSource4->SetPosition(TVec3(0.0,30,-50));
-	lightSource4->SetColor(TVec4(1,1,1,1.0));
+	lightSource4->SetPosition(Donut::vector3(0.0,30,-50));
+	lightSource4->SetColor(Donut::vector4(1,1,1,1.0));
 	window->AddLight(lightSource4);
 
 	Donut::TNode* root= window->GetRoot();
@@ -78,7 +78,7 @@ int main()
 	{
 		for (int j = 0; j< 10; j++)
 		{
-			Donut::TDrawableObject* teapot2 = new Donut::TMesh(TVec3(20*j,0,-40*i),"Teapot");
+			Donut::TDrawableObject* teapot2 = new Donut::TMesh(Donut::vector3(20*j,0,-40*i),"Teapot");
 			node->AddDrawable(teapot2);
 			window->RegisterToDraw(teapot2);
 		}

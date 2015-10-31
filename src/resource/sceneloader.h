@@ -23,6 +23,17 @@
 
 namespace Donut
 {
+
+	namespace TSceneFile
+	{
+		enum Type
+		{
+			JSon,
+			Xml,
+			UNKNOWN
+		};
+	}
+	
 	class TSceneLoader : public Singleton<TSceneLoader>
 	{
 	public:

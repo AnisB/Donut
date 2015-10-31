@@ -50,8 +50,8 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,5000.0);
-	camera->Translate(Vector3(0.0,-4, 15));
-	Donut::TDrawableObject* house = new Donut::TMesh(TVec3(0,0,-40),"House");
+	camera->Translate(Donut::vector3(0.0,-4, 15));
+	Donut::TDrawableObject* house = new Donut::TMesh(Donut::vector3(0,0,-40),"House");
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	house->GenerateShader();
 	house->Init();
@@ -59,7 +59,7 @@ int main()
 	root->AddChild(node);
 	window->RegisterToDraw(house);
 
-	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0.05,-40),"Lego");
+	Donut::TDrawableObject* lego = new Donut::TMesh(Donut::vector3(0,0.05,-40),"Lego");
 	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
 	lego->GenerateShader();
 	lego->Init();

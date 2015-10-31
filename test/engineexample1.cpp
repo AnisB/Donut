@@ -61,12 +61,12 @@ namespace Donut
         Donut::SetInputManager(inManager);
         inManager->FCamera = camera;
         camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-        FCubeR = new Donut::TCubeR(TVec3(0,0,-5),0.5);
-        FTeapot = new Donut::TMesh(TVec3(0,0,0),"Teapot");
+        FCubeR = new Donut::TCubeR(vector3(0,0,-5),0.5);
+        FTeapot = new Donut::TMesh(vector3(0,0,0),"Teapot");
 
         FNode1 = new Donut::TSceneNode();
         FNode2 = new Donut::TSceneNode();
-        FNode2->Translate(TVec3(-5,0,-40));
+        FNode2->Translate(vector3(-5,0,-40));
         FCubeR->GenerateShader();
         FCubeR->Init();
 
