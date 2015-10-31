@@ -46,7 +46,7 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
-	Donut::TDrawableObject* lego = new Donut::TMesh(TVec3(0,0,-10),"LegoSH");
+	Donut::TDrawableObject* lego = new Donut::TMesh(Donut::vector3(0,0,-10),"LegoSH");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	lego->GenerateShader();

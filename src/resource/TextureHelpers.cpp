@@ -15,7 +15,9 @@
  **/
 
 #include <base/common.h>
-
+#include <render/Common.h>
+#include <input/Common.h>
+#include <resource/Common.h>
 #include "TextureHelpers.h"
  
 #include <stdio.h>

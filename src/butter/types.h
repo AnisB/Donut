@@ -13,25 +13,63 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
-#ifndef DONUT_BASE_COMMON
-#define DONUT_BASE_COMMON
+#ifndef BUTTER_TYPES_H
+#define BUTTER_TYPES_H
 
-// Donut Includes
-#include "const.h"
-#include "exception.h"
-#include "macro.h"
-#include "security.h"
-#include "singleton.h"
-#include "printers.h"
 
 namespace Donut
 {
-	#define __GENERAL_PRINT_NAMESPACE "GENERAL"
-	
-	// Printing macros
-	#define GENERAL_DEBUG(ENONCE) PRINT_DEBUG (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_WARNING(ENONCE) PRINT_WARNING (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_INFO(ENONCE) PRINT_INFO (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_ERROR(ENONCE) PRINT_ERROR (__GENERAL_PRINT_NAMESPACE, ENONCE)
+	// Vector types
+	// doubles
+	struct Vector2
+	{
+		double x,y;
+	};
+	struct Vector3
+	{
+		double x,y,z;
+	};
+	struct Vector4
+	{
+		double x,y,z,w;
+	};
+
+	// Int
+	struct IVector2
+	{
+		int x,y;
+	};
+	struct IVector3
+	{
+		int x,y,z;
+	};
+	struct IVector4
+	{
+		int x,y,z,w;
+	};
+
+	// Matrix
+	struct Matrix3
+	{
+		inline Matrix3(){}
+		inline Matrix3(const Matrix3& _mat);
+		double m[9];
+	};
+	struct Matrix4
+	{
+		inline Matrix4(){}
+		inline Matrix4(const Matrix4& _mat);
+		double m[16];
+	};
+
+	namespace MatrixInit
+	{
+		enum Type
+		{
+			Zero,
+			Identity
+		};
+	}
 }
-#endif // DONUT_BASE_COMMON
+
+#endif // BUTTER_TYPES_H

@@ -28,12 +28,12 @@
 
 namespace Donut
 {
- 	TMesh::TMesh(TVec3 parPosition, const std::string& parSugarName, bool _autoInit)
+ 	TMesh::TMesh(const Vector3& parPosition, const std::string& parSugarName, bool _autoInit)
  	: TDrawableObject()
  	, FPosition(parPosition)
  	, FSugarModel(TSugarLoader::Instance().GetSugar(parSugarName))
  	{
- 		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
+ 		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		FShader.FVertexShader = FSugarModel.shader.vertex;
  		FShader.FTessControl = FSugarModel.shader.tesscontrol;
  		FShader.FTessEval = FSugarModel.shader.tesseval;
@@ -51,7 +51,7 @@ namespace Donut
 	, FModel(_model)
  	, FPosition()
  	{
- 		FModelMatrix = FModelMatrix*Matrix4::translate(FPosition);
+ 		FModelMatrix = FModelMatrix*Translate_M4(FPosition);
  		FShader = _shader;
  	}
 
@@ -80,7 +80,7 @@ namespace Donut
 
  	}
 
- 	void TMesh::SetPosition(const TVec3& parPos)
+ 	void TMesh::SetPosition(const Vector3& parPos)
  	{
  		FPosition = parPos;
  	}

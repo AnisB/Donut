@@ -13,25 +13,24 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
-#ifndef DONUT_BASE_COMMON
-#define DONUT_BASE_COMMON
+#include "sceneloader.h"
 
-// Donut Includes
-#include "const.h"
-#include "exception.h"
-#include "macro.h"
-#include "security.h"
-#include "singleton.h"
-#include "printers.h"
 
 namespace Donut
 {
-	#define __GENERAL_PRINT_NAMESPACE "GENERAL"
-	
-	// Printing macros
-	#define GENERAL_DEBUG(ENONCE) PRINT_DEBUG (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_WARNING(ENONCE) PRINT_WARNING (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_INFO(ENONCE) PRINT_INFO (__GENERAL_PRINT_NAMESPACE, ENONCE)
-	#define GENERAL_ERROR(ENONCE) PRINT_ERROR (__GENERAL_PRINT_NAMESPACE, ENONCE)
+	TSceneLoader::TSceneLoader()
+	{
+
+	}
+
+	TSceneLoader::~TSceneLoader()
+	{
+		
+	}
+
+	TNode* LoadScene(const std::string& _sceneFileName)
+	{
+		return nullptr;
+	}
+
 }
-#endif // DONUT_BASE_COMMON

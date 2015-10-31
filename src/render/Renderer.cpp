@@ -36,7 +36,7 @@
 
 	// Class TRenderer
  	TRenderer::TRenderer()
- 	: FWindowSize(TInt2())
+ 	: FWindowSize()
  	, FIsFullScreen(false)
  	, FWindow(NULL)
  	, FIsRendering(false)

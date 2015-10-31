@@ -21,6 +21,7 @@
  #include <render/helper.h>
  #include <stdlib.h>
  #include "Base/Macro.h"
+ #include "render/common.h"
  
 namespace Donut 
 {
@@ -172,16 +173,10 @@ namespace Donut
 	{
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x, parValue.y, parValue.z);
 	}
-	void ShaderManager::InjectVec3(const TShader& parProgram, const TVec3& parValue, const std::string& parName)
+	void ShaderManager::InjectVec4(const TShader& parProgram, const Vector4& parValue, const std::string& parName)
 	{
-	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.val[0], parValue.val[1], parValue.val[2]);
+	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x, parValue.y, parValue.z, parValue.w);
 	}
-	void ShaderManager::InjectVec4(const TShader& parProgram, const TVec4& parValue, const std::string& parName)
-	{
-	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.val[0], parValue.val[1], parValue.val[2],parValue.val[3]);
-
-	}
-
 	void ShaderManager::InjectInt(const TShader& parProgram, int parValue, const std::string& parName)
 	{
 		GLuint location = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
@@ -194,7 +189,7 @@ namespace Donut
 	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
 		float mat[16];
-		parValue.toTable(&mat[0]);
+		ToTable(parValue, &mat[0]);
 	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
 
 	}

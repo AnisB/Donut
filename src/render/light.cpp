@@ -16,17 +16,20 @@
 
 
 #include "light.h"
- 
+ #include <butter/vector4.h>
  namespace Donut
  {
 	TLight::TLight()
 	: FShader(0,LIGHT_VERTEX, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, LIGHT_FRAGMENT)
-	, FPosition(0.0,0.0,0.0)
-	, FDiff(1.0,1.0,1.0,1.0)
-	, FSpec(0.0,0.0,1.0,1.0)
+	, FPosition()
+	, FDiff()
+	, FSpec()
 	, FRayon(DEFAULT_RAY)
 	, FOutDate(true)
 	{
+		FPosition = vector3(0.0);
+		FDiff = vector4(1.0);
+		FSpec = vector4(0.0);
 		ShaderManager::Instance().CreateShader(FShader);
 		ShaderManager::Instance().InjectVec3(FShader, FPosition,"lightSource.position");
 		ShaderManager::Instance().InjectVec4(FShader, FDiff ,"lightSource.diffuse");
@@ -46,18 +49,18 @@
  	{
 		ShaderManager::Instance().DisableShader();
 	}
-	void TLight::Translate(const TVec3& parVector)
+	void TLight::Translate(const Vector3& parVector)
 	{
-		FPosition+=parVector;
+		FPosition= FPosition + parVector;
 		FOutDate = true;
 	}
 
-	void TLight::SetPosition(const TVec3& parVector)
+	void TLight::SetPosition(const Vector3& parVector)
 	{
 		FPosition=parVector;
 		FOutDate = true;	
 	}
-	void TLight::SetColor(const TVec4& parColor)
+	void TLight::SetColor(const Vector4& parColor)
 	{
 		FSpec=parColor;
 	}

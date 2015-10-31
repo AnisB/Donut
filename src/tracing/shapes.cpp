@@ -15,11 +15,12 @@
  **/
 
 #include <tracing/shapes.h>
-#include <math/const.h>
+#include <butter/const.h>
 #include <math.h>
 
 namespace Donut
 {
+	#define EPSILON 0.0000001
 	TTriangle::TTriangle()
 	{
 
@@ -37,11 +38,11 @@ namespace Donut
 	{
 		TIntersect intersect;
 
-	    TVec3 edge1 = v1.position - v0.position;
-	    TVec3 edge2 = v2.position - v0.position;
+	    Vector3 edge1 = v1.position - v0.position;
+	    Vector3 edge2 = v2.position - v0.position;
 
-	    TVec3 vecP = parRay.direction^edge2;
-	    float det = dot(edge1, vecP);
+	    Vector3 vecP = crossProd(parRay.direction,edge2);
+	    float det = dotProd(edge1, vecP);
 
 	    if(fabs(det)<EPSILON)
 	    {
@@ -49,19 +50,19 @@ namespace Donut
 	    }
 
 	    float invDet = 1.0 / det;
-	    TVec3 vecS = parRay.origin - v0.position;
+	    Vector3 vecS = parRay.origin - v0.position;
 
-	    float u = dot(vecS, vecP) * invDet;
+	    float u = dotProd(vecS, vecP) * invDet;
 	    if(u<0.0 || u>1.0)
 	        return intersect;
 
-	    TVec3 vecQ = vecS^edge1;
-	    float v = dot(parRay.direction, vecQ) * invDet;
+	    Vector3 vecQ = crossProd(vecS,edge1);
+	    float v = dotProd(parRay.direction, vecQ) * invDet;
 	    if(v<0.0f || u + v > 1.0f)
 	        return intersect;
 
-	    intersect.distance = dot(edge2, vecQ) * invDet;
-	    TVec3 I = parRay.origin + intersect.distance*parRay.direction;
+	    intersect.distance = dotProd(edge2, vecQ) * invDet;
+	    Vector3 I = parRay.origin + parRay.direction*intersect.distance;
 
 	    if(intersect.distance < EPSILON)
 	        return intersect;
@@ -70,10 +71,10 @@ namespace Donut
 	    // Calcul des données utiles
 	    intersect.point.position = I;
 
-	    intersect.point.uv = u*(v1.uv-v0.uv)+v*(v2.uv-v0.uv)+v0.uv;
-	    TVec3 normal = u*(v1.normal-v0.normal)+v*(v2.normal-v0.normal) + v0.normal;
+	    intersect.point.uv = (v1.uv-v0.uv)*u+(v2.uv-v0.uv)*v+v0.uv;
+	    Vector3 normal = (v1.normal-v0.normal)*u+(v2.normal-v0.normal)*v + v0.normal;
 
-	    if(dot(parRay.direction, normal) > 0)
+	    if(dotProd(parRay.direction, normal) > 0)
 	        intersect.point.normal = -normal;
 	    else
 	        intersect.point.normal = normal;

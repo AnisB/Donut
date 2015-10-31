@@ -21,9 +21,9 @@
  #include "Defines.h"
  #include <base/singleton.h>
  #include <resource/sugar.h>
- #include <Math/Vector3.h>
- #include <Math/Matrix4.h>
- #include <list>
+ #include <butter/Vector3.h>
+ #include <butter/Matrix4.h>
+ #include <vector>
 
  namespace Donut
  {
@@ -88,8 +88,7 @@
 		void InjectInt(const TShader& parProgram, int parValue, const std::string& parName);
 		void InjectFloat(const TShader& parProgram, float parValue, const std::string& parName);
 		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
-		void InjectVec3(const TShader& parProgram, const TVec3& parValue, const std::string& parName);
-		void InjectVec4(const TShader& parProgram, const TVec4& parValue, const std::string& parName);
+		void InjectVec4(const TShader& parProgram, const Vector4& parValue, const std::string& parName);
 		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
 		void InjectTex(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
 		void InjectCubeMap(const TShader& parProgram, size_t parIndexTex, const std::string& parName, GLuint parOffset);
@@ -99,7 +98,7 @@
 		void PreDrawSugarData(const TSugar&  parSugar);
 
  	private:
- 		std::list<TShader> FPrograms;
+ 		std::vector<TShader> FPrograms;
  	};
  }
 

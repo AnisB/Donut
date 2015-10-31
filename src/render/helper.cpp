@@ -1,6 +1,7 @@
 #include "helper.h"
 
 #include <base/common.h>
+#include "render/common.h"
 
 void CheckGLState(const std::string& desc)
 {

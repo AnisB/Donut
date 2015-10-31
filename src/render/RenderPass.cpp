@@ -15,6 +15,7 @@
  **/
 
 #include "RenderPass.h"
+#include "render/common.h"
 
 #include "Base/Common.h"
 #include "MultiThread/Defines.h"
@@ -55,14 +56,18 @@
 		if(FRenderToTexture)
 		{
 			Bind();
-			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
+			Matrix4 identity;
+			SetIdentity(identity);
+			FRoot->Draw(identity, FCamera);
 			FCamera->ChangeNoticed();
 			Unbind();
 			FFrameCanvas->Draw(FLights);
 		}
 		else
 		{
-			FRoot->Draw(Matrix4(MatrixInit::Identity), FCamera);
+			Matrix4 identity;
+			SetIdentity(identity);
+			FRoot->Draw(identity, FCamera);
 			FCamera->ChangeNoticed();
 		}
 	}

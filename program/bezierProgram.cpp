@@ -34,7 +34,7 @@
 #define NORMALIZE_VAL 40.0
 
 // Liste des points de contorle
-std::vector<Vector3> controlPoints;
+std::vector<Donut::Vector3> controlPoints;
 // La texture de points de controle
 TTexture* controlPointsTexture = NULL;
 // La fenetre de rendu
@@ -107,35 +107,35 @@ void updateControlPoint(float dt)
 void createControlPoints()
 {
 	// Creation de tout les points de controle
-	controlPoints.push_back(Vector3(5,5,5));
-	controlPoints.push_back(Vector3(0,5,0));
-	controlPoints.push_back(Vector3(0,10,0));
-	controlPoints.push_back(Vector3(0,15,0));
-	controlPoints.push_back(Vector3(0,20,0));
+	controlPoints.push_back(Donut::vector3(5,5,5));
+	controlPoints.push_back(Donut::vector3(0,5,0));
+	controlPoints.push_back(Donut::vector3(0,10,0));
+	controlPoints.push_back(Donut::vector3(0,15,0));
+	controlPoints.push_back(Donut::vector3(0,20,0));
 
-	controlPoints.push_back(Vector3(5,0,0));
-	controlPoints.push_back(Vector3(5,5,-10));
-	controlPoints.push_back(Vector3(5,10,0));
-	controlPoints.push_back(Vector3(5,15,0));
-	controlPoints.push_back(Vector3(5,20,0));
+	controlPoints.push_back(Donut::vector3(5,0,0));
+	controlPoints.push_back(Donut::vector3(5,5,-10));
+	controlPoints.push_back(Donut::vector3(5,10,0));
+	controlPoints.push_back(Donut::vector3(5,15,0));
+	controlPoints.push_back(Donut::vector3(5,20,0));
 
-	controlPoints.push_back(Vector3(10,0,0));
-	controlPoints.push_back(Vector3(10,5,0));
-	controlPoints.push_back(Vector3(10,10,20));
-	controlPoints.push_back(Vector3(10,15,0));
-	controlPoints.push_back(Vector3(10,20,0));
+	controlPoints.push_back(Donut::vector3(10,0,0));
+	controlPoints.push_back(Donut::vector3(10,5,0));
+	controlPoints.push_back(Donut::vector3(10,10,20));
+	controlPoints.push_back(Donut::vector3(10,15,0));
+	controlPoints.push_back(Donut::vector3(10,20,0));
 
-	controlPoints.push_back(Vector3(15,0,0));
-	controlPoints.push_back(Vector3(15,5,0));
-	controlPoints.push_back(Vector3(15,10,0));
-	controlPoints.push_back(Vector3(15,15,0));
-	controlPoints.push_back(Vector3(15,20,0));
+	controlPoints.push_back(Donut::vector3(15,0,0));
+	controlPoints.push_back(Donut::vector3(15,5,0));
+	controlPoints.push_back(Donut::vector3(15,10,0));
+	controlPoints.push_back(Donut::vector3(15,15,0));
+	controlPoints.push_back(Donut::vector3(15,20,0));
 
-	controlPoints.push_back(Vector3(20,0,0));
-	controlPoints.push_back(Vector3(20,5,0));
-	controlPoints.push_back(Vector3(20,10,0));
-	controlPoints.push_back(Vector3(20,15,30));
-	controlPoints.push_back(Vector3(20,15,0));
+	controlPoints.push_back(Donut::vector3(20,0,0));
+	controlPoints.push_back(Donut::vector3(20,5,0));
+	controlPoints.push_back(Donut::vector3(20,10,0));
+	controlPoints.push_back(Donut::vector3(20,15,30));
+	controlPoints.push_back(Donut::vector3(20,15,0));
 }
 
 
@@ -163,7 +163,7 @@ void init()
 	// On définit la perspective
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	// On déplace la camera
-	camera->Translate(Vector3(-10,0,0));
+	camera->Translate(Donut::vector3(-10,0,0));
 }
 
 void initScene()
@@ -171,15 +171,15 @@ void initScene()
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 
-	// On crée la surface 1 à la position TVec3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = new Donut::TMesh(TVec3(0,0,-70),"Plane");
+	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
+	surface = new Donut::TMesh(vector3(0,0,-70),"Plane");
 	// On génère le shader associé a ce modèle
 	surface->GenerateShader();
-	// On crée la surface 2 à la position TVec3(30,0,-70) en utilisant le modèle de nom "PlaneLess"
-	surface2 = new Donut::TMesh(TVec3(30,0,-70),"PlaneLess");
+	// On crée la surface 2 à la position vector3(30,0,-70) en utilisant le modèle de nom "PlaneLess"
+	surface2 = new Donut::TMesh(vector3(30,0,-70),"PlaneLess");
 	//etc.
 	surface2->GenerateShader();
-	surface3 = new Donut::TMesh(TVec3(-30,0,-70),"PlaneMore");
+	surface3 = new Donut::TMesh(vector3(-30,0,-70),"PlaneMore");
 	surface3->GenerateShader();
 	// On crée les points de controle
 	createControlPoints();

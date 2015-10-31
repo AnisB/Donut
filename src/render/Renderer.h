@@ -20,7 +20,7 @@
 
  #include "Defines.h"
  #include "RenderPass.h"
- #include <Math/int.h>
+ #include <butter/types.h>
  #include "multithread/usualthreadsafeobjects.h"
  #include <string>
  #include <vector>
@@ -88,7 +88,7 @@
 		bool FInitDone;
 		GLFWwindow * FWindow;
 		bool FIsFullScreen;
-		TInt2 FWindowSize;
+		IVector2 FWindowSize;
 		size_t FNbPasses;
 
 		// Is Rendering member

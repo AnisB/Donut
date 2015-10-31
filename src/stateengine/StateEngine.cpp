@@ -18,6 +18,7 @@
 
 #include "Defines.h"
 #include <Base/Common.h>
+#include <stateengine/Common.h>
 #include "StateEngineManager.h"
 #include "Base/Macro.h"
 

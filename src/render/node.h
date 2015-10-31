@@ -19,8 +19,8 @@
 
 
 // Std includes
-#include <list>
-#include <Math/Matrix4.h>
+#include <vector>
+#include <butter/Matrix4.h>
 #include "Camera.h"
 
 namespace Donut
@@ -40,12 +40,12 @@ namespace Donut
 		void Roll(float parAngle);
 		void Pitch(float parAngle);
 
-		void Translate(const TVec3& parVector);
-		const std::list<TNode*>& GetChildList();
+		void Translate(const Vector3& parVector);
+		const std::vector<TNode*>& GetChildList();
 		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
 
 	protected:
-		std::list<TNode*> FSons;
+		std::vector<TNode*> FSons;
 		TNode* FParent;
 		Matrix4 FModel;
 	};

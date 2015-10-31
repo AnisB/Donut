@@ -1,8 +1,8 @@
 #ifndef CAMERA_DONUT
 #define CAMERA_DONUT
 
-#include <Math/Matrix4.h>
-#include <Math/Vector3.h>
+#include <butter/Matrix4.h>
+#include <butter/Vector3.h>
 #include <MultiThread/UsualThreadSafeObjects.h>
 
 namespace Donut

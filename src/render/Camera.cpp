@@ -5,10 +5,12 @@
 namespace Donut 
 {
 	Camera::Camera()
-	: FViewMatrix(MatrixInit::Identity)
-	, FProjection(MatrixInit::Identity)
+	: FViewMatrix()
+	, FProjection()
 	, FHasChanged(true)
 	{
+		matrix4(FViewMatrix, MatrixInit::Identity);
+		matrix4(FProjection, MatrixInit::Identity);
 	}
 
 	Camera::~Camera()
@@ -17,34 +19,34 @@ namespace Donut
 	}
 	void Camera::DefinePerspective(float parFovy, float parAspect, float parNear, float parFar)
 	{
-		FProjection.AsPerspective(parFovy,parAspect,parNear,parFar);
+		AsPerspective(FProjection, parFovy,parAspect,parNear,parFar);
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
 	void Camera::Roll(double parAngle)
 	{
-		FViewMatrix = Matrix4::rotateZAxis(parAngle)*FViewMatrix;
+		FViewMatrix = RotateZAxis(parAngle)*FViewMatrix;
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
 
 	void Camera::Yaw(double parAngle)
 	{
-		FViewMatrix = Matrix4::rotateYAxis(parAngle)*FViewMatrix;
+		FViewMatrix = RotateYAxis(parAngle)*FViewMatrix;
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
 
 	void Camera::Pitch(double parAngle)
 	{
-		FViewMatrix = Matrix4::rotateXAxis(parAngle)*FViewMatrix;
+		FViewMatrix = RotateXAxis(parAngle)*FViewMatrix;
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
 
 	void Camera::Translate(const Vector3& parDir)
 	{
-		FViewMatrix = Matrix4::translate(parDir)*FViewMatrix;
+		FViewMatrix = Translate_M4(parDir)*FViewMatrix;
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}

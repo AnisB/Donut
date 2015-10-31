@@ -14,30 +14,34 @@
  *
  **/
 
-#include <math/vec.h>
+#include <butter/Vector3.h>
+#include <butter/Vector2.h>
 
-struct TVertice
+namespace Donut
 {
-	TVec3 position;
-	TVec3 normal;
-	TVec2 uv;
-};
-
-struct TRay
-{
-	TVec3 origin;
-	TVec3 direction;
-};
-
-
-struct TIntersect
-{
-	TIntersect()
+	struct TVertice
 	{
-		isValid = false;
-	}	
+		Vector3 position;
+		Vector3 normal;
+		Vector2 uv;
+	};
 
-	bool isValid;
-	float distance;
-	TVertice point;
-};
+	struct TRay
+	{
+		Vector3 origin;
+		Vector3 direction;
+	};
+
+
+	struct TIntersect
+	{
+		TIntersect()
+		{
+			isValid = false;
+		}	
+
+		bool isValid;
+		float distance;
+		TVertice point;
+	};
+}

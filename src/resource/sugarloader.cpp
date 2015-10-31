@@ -18,6 +18,7 @@
 
 
 #include <Base/Common.h>
+#include <resource/Common.h>
 
 #include <Tools/FileLoader.h>
 

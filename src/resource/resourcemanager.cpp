@@ -17,11 +17,11 @@
  #include "ResourceManager.h"
 
  #include "TextureHelpers.h"
- #include <Math/vec.h>
+ #include "resource/Common.h"
+ #include "input/Common.h"
  #include <Base/Common.h>
  #include <Render/Helper.h>
  #include <Tools/FileLoader.h>
- #include <math/helper.h>
  #include "Base/Macro.h"
 
  #include <fstream>
@@ -166,10 +166,10 @@
 		std::string model = parFileName.substr(1,parFileName.size());
   		RESOURCE_INFO("Trying to load Wavefront: "<<model); 
 		// Liste des vertices
-		std::vector<TVec3> listePoints;
+		std::vector<Vector3> listePoints;
 		// Liste des infos par point
-		std::vector<TVec3> normales;
-		std::vector<TVec2> uvList;
+		std::vector<Vector3> normales;
+		std::vector<Vector2> uvList;
 
 		// Gestion des infos
 		std::list<TShape> shapes;
@@ -192,10 +192,10 @@
 				    {
 		  				// INPUT_DEBUG("Nouveau vertice.");
 						stringstream s(line.substr(2));
-						TVec3 v; 
-						s >> v.val[0]; 
-						s >> v.val[1]; 
-						s >> v.val[2]; 
+						Vector3 v; 
+						s >> v.x; 
+						s >> v.y; 
+						s >> v.z; 
 						listePoints.push_back(v);
 				    }
 				    else if (line.substr(0,2)=="f ")
@@ -218,19 +218,19 @@
 						float u,v;
 						s >> u;
 						s >> v;
-						TVec2 map;
-						map.val[0] = u;
-						map.val[1] = v;
+						Vector2 map;
+						map.x = u;
+						map.y = v;
 				      	uvList.push_back(map);
 					}
 				    else if(line[0] == 'v' && line[1] == 'n') 
 				    { 
 				    	//INPUT_DEBUG("Normal.");
 						istringstream s(line.substr(2));
-						TVec3 normal;
-						s >> normal.val[0];
-						s >> normal.val[1];
-						s >> normal.val[2];
+						Vector3 normal;
+						s >> normal.x;
+						s >> normal.y;
+						s >> normal.z;
 				      	normales.push_back(normal);
 					}
 				}
@@ -272,10 +272,10 @@
 					// vertices.erase(vertices.begin());
 					foreach_macro(vertice, vertices)
 					{
-						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
-						data[verticeCounter*3] = point.val[0];
-						data[verticeCounter*3+1] = point.val[1];
-						data[verticeCounter*3+2] = point.val[2];
+						Vector3& point = listePoints[stringConvert<int>(*vertice)-1];
+						data[verticeCounter*3] = point.x;
+						data[verticeCounter*3+1] = point.y;
+						data[verticeCounter*3+2] = point.z;
 						verticeCounter++;
 					}	
 				}
@@ -321,14 +321,14 @@
 					{
 						std::vector<std::string> dataVert;
 						split(*vertice,'/', dataVert);
-						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
-						data[verticeCounter*3] = point.val[0];
-						data[verticeCounter*3+1] = point.val[1];
-						data[verticeCounter*3+2] = point.val[2];
+						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						data[verticeCounter*3] = point.x;
+						data[verticeCounter*3+1] = point.y;
+						data[verticeCounter*3+2] = point.z;
 
-						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[3*dimShape*nbShape+verticeCounter*2] = mapp.val[0];
-						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.val[1];
+						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						data[3*dimShape*nbShape+verticeCounter*2] = mapp.x;
+						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
 						verticeCounter++;
 					}	
 				}
@@ -375,19 +375,19 @@
 					{
 						std::vector<std::string> dataVert;
 						split(*vertice, '/', dataVert);
-						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
-						data[verticeCounter*3] = point.val[0];
-						data[verticeCounter*3+1] = point.val[1];
-						data[verticeCounter*3+2] = point.val[2];
+						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						data[verticeCounter*3] = point.x;
+						data[verticeCounter*3+1] = point.y;
+						data[verticeCounter*3+2] = point.z;
 
-						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[3*dimShape*nbShape+verticeCounter*2] = mapp.val[0];
-						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.val[1];
+						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						data[3*dimShape*nbShape+verticeCounter*2] = mapp.x;
+						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
 
-						TVec3& norm = normales[stringConvert<int>(dataVert[2])-1];
-						data[5*dimShape*nbShape+verticeCounter*3] = norm.val[0];
-						data[5*dimShape*nbShape+verticeCounter*3+1] = norm.val[1];
-						data[5*dimShape*nbShape+verticeCounter*3+2] = norm.val[2];
+						Vector3& norm = normales[stringConvert<int>(dataVert[2])-1];
+						data[5*dimShape*nbShape+verticeCounter*3] = norm.x;
+						data[5*dimShape*nbShape+verticeCounter*3+1] = norm.y;
+						data[5*dimShape*nbShape+verticeCounter*3+2] = norm.z;
 
 						verticeCounter++;
 					}	
@@ -437,10 +437,10 @@
 		std::string model = parFileName;
   		INPUT_ERROR("Loading obj file to texture: "<<model); 
 		// Liste des vertices
-		std::vector<TVec3> listePoints;
+		std::vector<Vector3> listePoints;
 		// Liste des infos par point
-		std::vector<TVec3> normales;
-		std::vector<TVec2> uvList;
+		std::vector<Vector3> normales;
+		std::vector<Vector2> uvList;
 
 		// Gestion des infos
 		std::list<TShape> shapes;
@@ -463,10 +463,10 @@
 				    {
 		  				// INPUT_DEBUG("Nouveau vertice.");
 						stringstream s(line.substr(2));
-						TVec3 v; 
-						s >> v.val[0]; 
-						s >> v.val[1]; 
-						s >> v.val[2]; 
+						Vector3 v; 
+						s >> v.x; 
+						s >> v.y; 
+						s >> v.z; 
 						listePoints.push_back(v);
 				    }
 				    else if (line.substr(0,2)=="f ")
@@ -490,19 +490,19 @@
 						float u,v;
 						s >> u;
 						s >> v;
-						TVec2 map;
-						map.val[0] = u;
-						map.val[1] = v;
+						Vector2 map;
+						map.x = u;
+						map.y = v;
 				      	uvList.push_back(map);
 					}
 				    else if(line[0] == 'v' && line[1] == 'n') 
 				    { 
 				    	//INPUT_DEBUG("Normal.");
 						istringstream s(line.substr(2));
-						TVec3 normal;
-						s >> normal.val[0];
-						s >> normal.val[1];
-						s >> normal.val[2];
+						Vector3 normal;
+						s >> normal.x;
+						s >> normal.y;
+						s >> normal.z;
 				      	normales.push_back(normal);
 					}
 				}
@@ -544,19 +544,19 @@
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						TVec3& point = listePoints[stringConvert<int>(*vertice)-1];
+						Vector3& point = listePoints[stringConvert<int>(*vertice)-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
-						data[decalage] = normalize(point.val[0]);
-						data[1+ decalage] = normalize(point.val[1]);
-						data[2+ decalage] = normalize(point.val[2]);
+						data[decalage] = PACK_DATA(point.x, 1000000.0);
+						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
+						data[2+ decalage] = PACK_DATA(point.z, 1000000.0);
 						// Vertex normal
-						data[3+decalage] = normalize(0.0);
-						data[4+decalage] = normalize(0.0);
-						data[5+decalage] = normalize(1.0);
+						data[3+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[4+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[5+decalage] = PACK_DATA(1.0, 1000000.0);
 
-						data[6+decalage] = normalize(0.0);
-						data[7+decalage] = normalize(0.0);
-						data[8+decalage] = normalize(0.0);
+						data[6+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[7+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[8+decalage] = PACK_DATA(0.0, 1000000.0);
 						verticeCounter++;
 					}
 					lineNumber++;	
@@ -575,19 +575,19 @@
 						// Vertex position
 						std::vector<std::string> dataVert;
 						split(*vertice,'/', dataVert);
-						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
-						data[decalage] = normalize(point.val[0]);
-						data[1+ decalage] = normalize(point.val[1]);
-						data[2+ decalage] = normalize(point.val[2]);
+						data[decalage] = PACK_DATA(point.x, 1000000.0);
+						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
+						data[2+ decalage] = PACK_DATA(point.z, 1000000.0);
 						// Vertex normal
-						data[3+decalage] = normalize(0.0);
-						data[4+decalage] = normalize(0.0);
-						data[5+decalage] = normalize(1.0);
-						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[6+decalage] = normalize(mapp.val[0]);
-						data[7+decalage] = normalize(mapp.val[1]);
-						data[8+decalage] = normalize(0.0);
+						data[3+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[4+decalage] = PACK_DATA(0.0, 1000000.0);
+						data[5+decalage] = PACK_DATA(1.0, 1000000.0);
+						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
+						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
+						data[8+decalage] = PACK_DATA(0.0, 1000000.0);
 						verticeCounter++;
 					}
 					lineNumber++;	
@@ -606,25 +606,25 @@
 						// Vertex position
 						std::vector<std::string> dataVert;
 						split(*vertice,'/', dataVert);
-						TVec3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
-						data[decalage] = normalize(point.val[0]);
-						data[1+ decalage] = normalize(point.val[1]);
-						data[2+ decalage] = normalize(point.val[2]);
+						data[decalage] = PACK_DATA(point.x, 1000000.0);
+						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
+						data[2+ decalage] = PACK_DATA(point.z, 1000000.0);
 						// std::cout<<"decalage "<<decalage<<std::endl;
-						// std::cout<<"Point "<<point.val[0]<<" "<<point.val[1]<<" "<<point.val[2]<<" "<<std::endl;
+						// std::cout<<"Point "<<point.x<<" "<<point.y<<" "<<point.z<<" "<<std::endl;
 						// Vertex normal
-						TVec3& norm = normales[stringConvert<int>(dataVert[2])-1];
-						data[3+decalage] = normalize(norm.val[0]);
-						data[4+decalage] = normalize(norm.val[1]);
-						data[5+decalage] = normalize(norm.val[2]);
-						// std::cout<<"Normale "<<norm.val[0]<<" "<<norm.val[1]<<" "<<norm.val[2]<<" "<<std::endl;
+						Vector3& norm = normales[stringConvert<int>(dataVert[2])-1];
+						data[3+decalage] = PACK_DATA(norm.x, 1000000.0);
+						data[4+decalage] = PACK_DATA(norm.y, 1000000.0);
+						data[5+decalage] = PACK_DATA(norm.z, 1000000.0);
+						// std::cout<<"Normale "<<norm.x<<" "<<norm.y<<" "<<norm.z<<" "<<std::endl;
 
-						TVec2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[6+decalage] = normalize(mapp.val[0]);
-						data[7+decalage] = normalize(mapp.val[1]);
-						data[8+decalage] = normalize(0.0);
-						// std::cout<<"TexCoord "<<mapp.val[0]<<" "<<mapp.val[1]<<std::endl;
+						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
+						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
+						data[8+decalage] = PACK_DATA(0.0, 1000000.0);
+						// std::cout<<"TexCoord "<<mapp.x<<" "<<mapp.y<<std::endl;
 						verticeCounter++;
 					}
 					// std::cout<<"ENDPRIMITIVE"<<std::endl;

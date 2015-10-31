@@ -16,10 +16,12 @@
 
 
  #include "FrameCanvas.h"
- #include "Render/Defines.h"
- #include <Render/Helper.h>
- #include <base/Common.h>
- #include "MultiThread/Defines.h"
+ #include "render/defines.h"
+ #include "render/common.h"
+ #include "render/helper.h"
+
+ #include <base/common.h>
+ #include <multiThread/defines.h>
 
 
 namespace Donut

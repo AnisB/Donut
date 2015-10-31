@@ -145,23 +145,23 @@ unsigned int cubeFacesL[36] =
 	21, 22, 23
 };
 
- 	TCubeR::TCubeR(TVec3 parPosition, float parDimension, bool _autoInit)
+ 	TCubeR::TCubeR(const Vector3& parPosition, float parDimension, bool _autoInit)
   	: TDrawableObject()
  	, FPosition(parPosition)
  	, FDimension(parDimension)
  	{
-		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
+		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		if (_autoInit)
  		{
  			Init();
  		}
  	}
- 	TCubeR::TCubeR(TVec3 parPosition, float parDimension, const TShader& _shader, bool _autoInit)
+ 	TCubeR::TCubeR(const Vector3& parPosition, float parDimension, const TShader& _shader, bool _autoInit)
  	: TDrawableObject(_shader)
  	, FPosition(parPosition)
  	, FDimension(parDimension)
  	{
- 		FModelMatrix = FModelMatrix*Matrix4::translate(parPosition);
+ 		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		if (_autoInit)
  		{
  			Init();
@@ -207,7 +207,7 @@ unsigned int cubeFacesL[36] =
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray (0);
  	}
- 	void TCubeR::SetPosition(const TVec3& parPos)
+ 	void TCubeR::SetPosition(const Vector3& parPos)
  	{
  		// CRITICAL_SECTION_BEGIN();
  		FPosition = parPos;

@@ -15,6 +15,7 @@
  **/
 
 #include "StateEngineManager.h"
+#include <stateengine/Common.h>
 #include <Base/Common.h>
 #include "Base/Macro.h"
 

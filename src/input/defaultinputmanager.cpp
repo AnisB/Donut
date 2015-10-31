@@ -15,7 +15,7 @@
 **/
 
 #include "DefaultInputManager.h"
-
+#include "butter/vector3.h"
 namespace Donut
 {
 	TDefaultInputManager::TDefaultInputManager()
@@ -70,19 +70,19 @@ namespace Donut
 		double delta = next-m_time;
 		if(FKeys[TKeyCode::W])
 		{
-			FCamera->Translate(Vector3(0.0,0.0,delta*50));
+			FCamera->Translate(vector3(0.0,0.0,delta*50));
 		}
 		if(FKeys[TKeyCode::S])
 		{
-			FCamera->Translate(Vector3(0.0,0.0,-delta*50));
+			FCamera->Translate(vector3(0.0,0.0,-delta*50));
 		}	
 		if(FKeys[TKeyCode::A])
 		{
-			FCamera->Translate(Vector3(delta*50,0.0,0.0));
+			FCamera->Translate(vector3(delta*50,0.0,0.0));
 		}
 		if(FKeys[TKeyCode::D])
 		{
-			FCamera->Translate(Vector3(-delta*50,0.0,0.0));
+			FCamera->Translate(vector3(-delta*50,0.0,0.0));
 		}
 		m_time =  next;
 		return delta;

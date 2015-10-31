@@ -15,10 +15,10 @@
  **/
 
 
- #ifndef DONUT_LIGHT
- #define DONUT_LIGHT
+#ifndef DONUT_LIGHT
+#define DONUT_LIGHT
 
-#include <Math/vec.h>
+#include <butter/Vector3.h>
 #include <Render/ShaderManager.h>
  
  namespace Donut
@@ -31,17 +31,17 @@
 		void Bind();
 		const TShader& GetShader() {return FShader;}
 		void Unbind();
-		void Translate(const TVec3& parVector);
-		void SetPosition(const TVec3& parVector);
-		void SetColor(const TVec4& parColor);
+		void Translate(const Vector3& parVector);
+		void SetPosition(const Vector3& parVector);
+		void SetColor(const Vector4& parColor);
 		void InjectData();
  		void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);
 
 
 	protected:
-		TVec3 FPosition;
-		TVec4 FDiff;
-		TVec4 FSpec;
+		Vector3 FPosition;
+		Vector4 FDiff;
+		Vector4 FSpec;
 		float FRayon;
 		bool FOutDate;
 

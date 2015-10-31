@@ -23,14 +23,16 @@
 namespace Donut{
  	TDrawableObject::TDrawableObject()
  	: FShader(0,BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER)
- 	, FModelMatrix(MatrixInit::Identity)
+ 	, FModelMatrix()
  	{
+ 		matrix4(FModelMatrix, MatrixInit::Identity);
  	}
  	
   	TDrawableObject::TDrawableObject(const TShader& _shader)
  	: FShader(_shader)
- 	, FModelMatrix(MatrixInit::Identity)
+ 	, FModelMatrix()
  	{
+ 		matrix4(FModelMatrix, MatrixInit::Identity);
  	}
 
  	TDrawableObject::~TDrawableObject()

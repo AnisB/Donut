@@ -19,6 +19,8 @@
 // ----------------------------------------
 // Donut includes
 #include "Engine.h"
+#include "engine/common.h"
+
 #include <base/common.h>
 
 // ----------------------------------------

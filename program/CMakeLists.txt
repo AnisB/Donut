@@ -2,12 +2,12 @@
 # SFML finding
 
 add_executable(realisticRendering ${PROGRAM}/realisticRendering)
-TARGET_LINK_LIBRARIES(realisticRendering Donut ${CORELIBS})
+TARGET_LINK_LIBRARIES(realisticRendering ${CORELIBS})
 
 add_executable(bezierProgram ${PROGRAM}/bezierProgram.cpp)
-TARGET_LINK_LIBRARIES(bezierProgram Donut ${CORELIBS})
+TARGET_LINK_LIBRARIES(bezierProgram ${CORELIBS})
 
 if(ROOF)
 add_executable(roofGeneration ${PROGRAM}/roofGeneration.cpp)
-TARGET_LINK_LIBRARIES(roofGeneration Donut ${CORELIBS})
+TARGET_LINK_LIBRARIES(roofGeneration ${CORELIBS})
 endif(ROOF)

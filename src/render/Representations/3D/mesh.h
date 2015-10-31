@@ -23,14 +23,13 @@
 #include "resource/model.h"
 #include "resource/texture.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/vec.h"
 
  namespace Donut
  {
 	class TMesh : public TDrawableObject, public TThreadSharedObject
 	{
 	public:
-	 	TMesh(TVec3 parPosition, const std::string& parSugarName, bool _autoInit = true);
+	 	TMesh(const Vector3& parPosition, const std::string& parSugarName, bool _autoInit = true);
 		TMesh(TShader& _shader, TModel* _model);
 
 	 	~TMesh();
@@ -39,11 +38,11 @@
 	 	virtual void Init();
 	 	virtual void Draw();
 
-	 	void SetPosition(const TVec3& parPos);
+	 	void SetPosition(const Vector3& parPos);
  		virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
 
 	protected:
-	 	TVec3 FPosition;
+	 	Vector3 FPosition;
 
 	 	// Model to draw
 	 	TSugar FSugarModel;

@@ -20,9 +20,9 @@
 namespace Donut
 {
 	TNode::TNode()
-	: FModel(MatrixInit::Identity)
+	: FModel()
 	{
-
+		matrix4(FModel, MatrixInit::Identity);
 	}
 
 	TNode::~TNode()
@@ -38,23 +38,22 @@ namespace Donut
 	}
 	bool TNode::RemoveChild(TNode* parNode)
 	{
-		size_t initial = FSons.size();
-		FSons.remove(parNode);
-		return (initial!=FSons.size());
+		ASSERT_NOT_IMPLEMENTED();
+		return false;
 	}
 
 	void TNode::Yaw(float parAngle)
 	{
-		FModel = FModel*Matrix4::rotateYAxis(parAngle);
+		FModel = FModel*RotateYAxis(parAngle);
 
 	}
 	void TNode::Roll(float parAngle)
 	{
-		FModel = FModel*Matrix4::rotateZAxis(parAngle);
+		FModel = FModel*RotateZAxis(parAngle);
 	}
 	void TNode::Pitch(float parAngle)
 	{
-		FModel = FModel*Matrix4::rotateXAxis(parAngle);
+		FModel = FModel*RotateXAxis(parAngle);
 	}	
 	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
 	{
@@ -63,12 +62,12 @@ namespace Donut
 			(*son)->Draw(parModelMatrix*FModel,parCamera);
 		}
 	}
-	void TNode::Translate(const TVec3& parVector)
+	void TNode::Translate(const Vector3& parVector)
 	{
- 		FModel = FModel*Matrix4::translate(parVector);
+ 		FModel = FModel*Translate_M4(parVector);
 	}
 
-	const std::list<TNode*>& TNode::GetChildList()
+	const std::vector<TNode*>& TNode::GetChildList()
 	{
 		return FSons;	
 	}

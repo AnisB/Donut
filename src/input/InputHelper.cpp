@@ -15,9 +15,11 @@
  **/
 
 // Donut includes
-#include <base/common.h>
+#include "input/common.h"
 #include "inputhelper.h"
 #include "defaultinputmanager.h"
+
+#include <base/common.h>
 
 namespace Donut
 {

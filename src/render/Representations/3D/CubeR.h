@@ -20,25 +20,24 @@
 
 #include "Render/DrawableObject.h"
 #include "MultiThread/ThreadSharedObject.h"
-#include "Math/vec.h"
 
  namespace Donut
  {
  class TCubeR : public TDrawableObject, public TThreadSharedObject
  {
  public:
- 	TCubeR(TVec3 parPosition, float parDimension, bool _autoInit = true);
- 	TCubeR(TVec3 parPosition, float parDimension, const TShader& _shader, bool _autoInit = true);
+ 	TCubeR(const Vector3& _vec, float parDimension, bool _autoInit = true);
+ 	TCubeR(const Vector3& _vec, float parDimension, const TShader& _shader, bool _autoInit = true);
  	~TCubeR();
 
  	virtual void UpdateInfoShader();
  	virtual void Init();
  	virtual void Draw();
 
- 	void SetPosition(const TVec3& parPos);
+ 	void SetPosition(const Vector3& parPos);
 
  protected:
- 	TVec3 FPosition;
+ 	Vector3 FPosition;
  	float FDimension;
 
  	// VBO & VAO

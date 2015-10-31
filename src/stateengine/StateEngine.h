@@ -16,7 +16,6 @@
 #ifndef STATE_ENGINE_STATEMANAGER
 #define STATE_ENGINE_STATEMANAGER
 
-#include <list>
 #include <map>
 #include "AtomicState.h"
 #include "Transition.h"
