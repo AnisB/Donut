@@ -17,10 +17,11 @@
 #ifndef DONUT_SCENE_NODE
 #define DONUT_SCENE_NODE
 
-
+// Library includes
 #include "node.h"
 #include "graphics/drawable.h"
-
+ 
+// STL includes
 #include <vector>
 
 namespace Donut

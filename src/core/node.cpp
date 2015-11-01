@@ -15,6 +15,7 @@
 **/
 #include "node.h"
 #include "base/common.h"
+#include "core/common.h"
 // STL includes
 #include <algorithm>
 
@@ -39,6 +40,7 @@ namespace Donut
 	}
 	bool TNode::RemoveChild(TNode* _node)
 	{
+		CORE_DEBUG("Maybe you should not call this function, preferably disabled");
 		auto nodeIT = std::find(FSons.begin(), FSons.end(), _node);
 		ASSERT(nodeIT != FSons.end());
 		if(nodeIT != FSons.end())

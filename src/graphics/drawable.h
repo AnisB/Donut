@@ -42,8 +42,6 @@ namespace Donut
 		virtual void UpdateModelMatrix(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix);
 		void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view);
 
-		const Matrix4& GetModelMatrix() {return FModelMatrix;}
-
 		const TShader& GetShader()
 		{
 			return FShader;
@@ -53,7 +51,6 @@ namespace Donut
 		virtual void GenerateShader();
 	protected:
 		TShader FShader;
-		Matrix4 FModelMatrix;
 	};
 }
  #endif // DONUT_DRAWABLE_OBJECT

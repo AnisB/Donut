@@ -30,22 +30,22 @@ namespace Donut
 			Camera();
 			~Camera();
 
-			// Rotations
+			// Utility functions
 			void Yaw(double parAngle);
 			void Pitch(double parAngle);
 			void Roll(double parAngle);
-
-			// Translation
 			void Translate(const Vector3& parDir);
 
+			// Accessors
 			const Matrix4& GetViewMatrix() const { return FViewMatrix;}
 			const Matrix4& GetProjectionMatrix() const{ return FProjection;}
 			const Matrix4& GetProjectionViewMatrix() const{ return FProjection;}
-
+			// Setting the projection matrix
 			void DefinePerspective(float parFovy, float parAspect, float parNear, float parFar);
+			
+			// Modification flags
 			void ChangeNoticed();
 			bool HasChanged() {return FHasChanged.GetValue();}
-
 			
 		protected:
 			Matrix4 FViewMatrix;

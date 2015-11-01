@@ -36,15 +36,17 @@ namespace Donut
 		~TNode();
 		// Adds a child to the tree
 		void AttachChild(TNode* parNode);
-		// You should preferably not call this, maybe disable your node?
+		// WARNING: You should preferably not call this, maybe disable your node?
 		bool RemoveChild(TNode* parNode);
 
+		// Utility functions
 		void Yaw(float parAngle);
 		void Roll(float parAngle);
 		void Pitch(float parAngle);
-
 		void Translate(const Vector3& parVector);
+		// Accessors
 		const std::vector<TNode*>& GetChildList();
+		
 		virtual void Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix);
 
 	protected:

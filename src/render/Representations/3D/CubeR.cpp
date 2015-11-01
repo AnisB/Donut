@@ -202,17 +202,6 @@ unsigned int cubeFacesL[36] =
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray (0);
  	}
- 	void TCubeR::SetPosition(const Vector3& parPos)
- 	{
- 		// CRITICAL_SECTION_BEGIN();
- 		FPosition = parPos;
- 		// CRITICAL_SECTION_END();	
- 	}
- 	
- 	void TCubeR::UpdateInfoShader()
- 	{
-		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
- 	}
 
  	void TCubeR::Draw()
  	{	

@@ -33,24 +33,21 @@ namespace Donut
 
 	void TSceneNode::Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix)
 	{	
+		const Matrix4& _currentModel = parModelMatrix*FModel;
 		foreach_macro(drawable,FDrawables)
 		{
 			TDrawable& drw = (**drawable);
 			drw.Bind();
-			drw.UpdateModelMatrix(parModelMatrix*FModel, _viewProjectionMatrix);
+			drw.UpdateModelMatrix(_currentModel, _viewProjectionMatrix);
 			drw.Draw();
 			drw.Unbind();
 		}
 
-		foreach_macro(son,FSons)
-		{
-			(*son)->Draw(parModelMatrix*FModel,_viewProjectionMatrix);
-		}
+		TNode::Draw(_currentModel, _viewProjectionMatrix);
 	}
 
 	void TSceneNode::AddDrawable(TDrawable* parDrawable)
 	{
 		FDrawables.push_back(parDrawable);
 	}
-
 }

@@ -58,7 +58,6 @@
 			Matrix4 identity;
 			SetIdentity(identity);
 			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
-			FCamera->ChangeNoticed();
 			Unbind();
 			FFrameCanvas->Draw(FLights);
 		}
@@ -67,7 +66,6 @@
 			Matrix4 identity;
 			SetIdentity(identity);
 			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
-			FCamera->ChangeNoticed();
 		}
 	}
 	void TRenderPass::Init()
@@ -138,10 +136,15 @@
 		FFrameCanvas->Disable();
 	}
 
-	void TRenderPass::RemoveDrawable(TDrawable* parDrawable)
+	void TRenderPass::RemoveDrawable(TDrawable* _drawable)
 	{
- 		GRAPHICS_DEBUG("Removing drawable");
-		ASSERT_NOT_IMPLEMENTED();
+		GRAPHICS_DEBUG("Maybe you should not call this function, preferably disabled");
+		auto drwblIT = std::find(FDrawables.begin(), FDrawables.end(), _drawable);
+		ASSERT(drwblIT != FDrawables.end());
+		if(drwblIT != FDrawables.end())
+		{
+			FDrawables.erase(drwblIT);
+		}
 	}
 	void TRenderPass::SetRenderType(FrameCanvasContent::Type parType)
 	{

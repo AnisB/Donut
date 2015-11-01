@@ -23,16 +23,12 @@ namespace Donut
 {
 	TDrawable::TDrawable()
 	: FShader()
-	, FModelMatrix()
 	{
-		matrix4(FModelMatrix, MatrixInit::Identity);
 	}
 
 	TDrawable::TDrawable(const TShader& _shader)
 	: FShader(_shader)
-	, FModelMatrix()
 	{
-		matrix4(FModelMatrix, MatrixInit::Identity);
 	}
 
 	TDrawable::~TDrawable()
@@ -49,16 +45,14 @@ namespace Donut
 	// Update model
 	void TDrawable::UpdateModelMatrix(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix)
 	{
-		Set(FModelMatrix, _drawingModelMatrix);
-		ShaderManager::Instance().InjectMat4(FShader,FModelMatrix,"model");
-		ShaderManager::Instance().InjectMat4(FShader, _viewProjectionMatrix * FModelMatrix,"modelviewprojection");
+		ShaderManager::Instance().InjectMat4(FShader,_drawingModelMatrix,"model");
+		ShaderManager::Instance().InjectMat4(FShader, _viewProjectionMatrix * _drawingModelMatrix,"modelviewprojection");
 	}
 
 	void TDrawable::UpdateCameraData(const Matrix4& _projection, const Matrix4& _view)
 	{
 		ShaderManager::Instance().InjectMat4(FShader, _view,"view");
 		ShaderManager::Instance().InjectMat4(FShader, _projection,"projection");
-		ShaderManager::Instance().InjectMat4(FShader, _projection * _view * FModelMatrix,"modelviewprojection");
 	}
 
 	void TDrawable::Unbind()

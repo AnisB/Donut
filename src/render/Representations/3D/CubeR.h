@@ -30,14 +30,11 @@
  	TCubeR(float parDimension, const TShader& _shader, bool _autoInit = true);
  	~TCubeR();
 
- 	virtual void UpdateInfoShader();
  	virtual void Init();
  	virtual void Draw();
 
- 	void SetPosition(const Vector3& parPos);
 
  protected:
- 	Vector3 FPosition;
  	float FDimension;
 
  	// VBO & VAO
