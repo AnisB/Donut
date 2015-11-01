@@ -1,5 +1,7 @@
 #include "Matrix4.h"
 #include "base/security.h"
+// STL includes
+#include <string.h>
 #include <math.h>
 
 namespace Donut

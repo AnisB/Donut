@@ -1,4 +1,7 @@
+// Library includes
 #include "matrix3.h"
+// STL includes
+#include <string.h>
 
 namespace Donut
 {

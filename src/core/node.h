@@ -35,7 +35,8 @@ namespace Donut
 		//Destructor
 		~TNode();
 		// Adds a child to the tree
-		void AddChild(TNode* parNode);
+		void AttachChild(TNode* parNode);
+		// You should preferably not call this, maybe disable your node?
 		bool RemoveChild(TNode* parNode);
 
 		void Yaw(float parAngle);

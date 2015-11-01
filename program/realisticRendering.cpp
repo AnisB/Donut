@@ -50,7 +50,7 @@ int main()
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(lego);
 	node->Translate(Donut::vector3(0,0,-10));
-	root->AddChild(node);
+	root->AttachChild(node);
 	window->RegisterToDraw(lego);
 	
 	while(window->IsRendering())

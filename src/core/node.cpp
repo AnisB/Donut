@@ -1,21 +1,22 @@
 /**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
- #include "Node.h"
- #include <Base/Common.h>
- #include "Base/Macro.h"
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+**/
+#include "node.h"
+#include "base/common.h"
+// STL includes
+#include <algorithm>
 
 namespace Donut
 {
@@ -32,14 +33,23 @@ namespace Donut
 			delete *child;
 		}
 	}
-	void TNode::AddChild(TNode* parNode)
+	void TNode::AttachChild(TNode* _node)
 	{
-		FSons.push_back(parNode);
+		FSons.push_back(_node);
 	}
-	bool TNode::RemoveChild(TNode* parNode)
+	bool TNode::RemoveChild(TNode* _node)
 	{
-		ASSERT_NOT_IMPLEMENTED();
-		return false;
+		auto nodeIT = std::find(FSons.begin(), FSons.end(), _node);
+		ASSERT(nodeIT != FSons.end());
+		if(nodeIT != FSons.end())
+		{
+			FSons.erase(nodeIT);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	void TNode::Yaw(float parAngle)
