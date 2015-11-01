@@ -16,8 +16,14 @@
 
 
 #include "light.h"
- #include <butter/vector4.h>
- namespace Donut
+#include <butter/vector4.h>
+
+#define LIGHT_VERTEX "shaders/light/vertex.glsl"
+#define LIGHT_GEOMETRY "shaders/light/geometry.glsl" 
+#define LIGHT_FRAGMENT "shaders/light/fragment.glsl" 
+
+#define DEFAULT_RAY 100 
+namespace Donut
  {
 	TLight::TLight()
 	: FShader(0,LIGHT_VERTEX, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, LIGHT_FRAGMENT)

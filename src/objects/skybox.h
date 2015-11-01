@@ -18,14 +18,14 @@
 #define DONUT_SKYBOX
 
 
-#include "Render/DrawableObject.h"
+#include "graphics/drawable.h"
 #include "MultiThread/ThreadSharedObject.h"
 #include "resource/texture.h"
 
 
 namespace Donut
 {
-	class TSkybox : public TDrawableObject, public TThreadSharedObject
+	class TSkybox : public TDrawable, public TThreadSharedObject
 	{
 	public:
 		TSkybox(TSkyboxData::Type parType, TImgType::Type parImageType,const std::string& parPath);

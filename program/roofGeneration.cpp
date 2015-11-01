@@ -62,7 +62,7 @@ TModel* ComputeModel( CityGeneration::TMesh* _mesh, const Donut::TShader& parSha
 	return newModel;
 }
 
-Donut::TDrawableObject* GenerateDrawableMeshFromPoints( CityGeneration::TInputProfile& _input)
+Donut::TDrawable* GenerateDrawableMeshFromPoints( CityGeneration::TInputProfile& _input)
 {
 	CityGeneration::TMesh* mesh =  CityGeneration::generateBuilding(_input);
 	Donut::TShader shader;
@@ -242,7 +242,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "roofGeneration";
 	window->CreateRenderWindow(newContext, 1);
 	window->SetVertexShader("shaders/canvas/ssaoV.glsl");
@@ -259,11 +259,11 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.1,5000.0);
 	camera->Translate(Vector3(0.0, -200.0,-400.0));
-	std::vector<Donut::TDrawableObject*> housesRenders;
+	std::vector<Donut::TDrawable*> housesRenders;
 	int counter = 0;
 	for(auto houseIT = flatHouses.begin(); houseIT != flatHouses.end(); ++houseIT)
 	{
-		Donut::TDrawableObject* newHouse = GenerateDrawableMeshFromPoints(**houseIT);
+		Donut::TDrawable* newHouse = GenerateDrawableMeshFromPoints(**houseIT);
 		Donut::TSceneNode* node = new Donut::TSceneNode();
 		node->Translate(TVec3(counter*300,0.0,-200.0));
 		node->AddDrawable(newHouse);

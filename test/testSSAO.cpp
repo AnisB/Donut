@@ -22,8 +22,7 @@
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -34,7 +33,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testSSAO";
 	window->CreateRenderWindow(newContext, 1);
 	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
@@ -51,18 +50,14 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,5000.0);
 	camera->Translate(Donut::vector3(0.0,-4, 15));
-	Donut::TDrawableObject* house = new Donut::TMesh(Donut::vector3(0,0,-40),"House");
+	Donut::TDrawable* house = new Donut::TMesh(/*Donut::vector3(0,0,-40),*/"House");
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	house->GenerateShader();
-	house->Init();
 	node->AddDrawable(house);
 	root->AddChild(node);
 	window->RegisterToDraw(house);
 
-	Donut::TDrawableObject* lego = new Donut::TMesh(Donut::vector3(0,0.05,-40),"Lego");
+	Donut::TDrawable* lego = new Donut::TMesh(/*Donut::vector3(0,0.05,-40),*/"Lego");
 	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
-	lego->GenerateShader();
-	lego->Init();
 	legoNode->AddDrawable(lego);
 	root->AddChild(legoNode);
 	window->RegisterToDraw(lego);

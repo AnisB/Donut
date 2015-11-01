@@ -19,7 +19,7 @@
 
 #include "StateData.h"
 #include "Defines.h"
-#include <list>
+#include <vector>
 #include <map>
 
  namespace Donut
@@ -69,7 +69,7 @@
  		TStateId FId;
 
  	#if _DEBUG
- 		std::list<TTransition*> FInTransitions;
+ 		std::vector<TTransition*> FInTransitions;
  	#endif
 
  	};

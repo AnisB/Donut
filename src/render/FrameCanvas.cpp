@@ -16,8 +16,8 @@
 
 
  #include "FrameCanvas.h"
- #include "render/defines.h"
- #include "render/common.h"
+ #include "graphics/common.h"
+ #include "graphics/settings.h"
  #include "render/helper.h"
 
  #include <base/common.h>
@@ -40,7 +40,7 @@ namespace Donut
 		1.0,1.0,
 	};
  	TFrameCanvas::TFrameCanvas()
- 	: TDrawableObject()
+ 	: TDrawable()
 	, FFrameBuffer(0)
 	, FAlbedoBuffer(0)
 	, FDepthBuffer(0)
@@ -91,7 +91,7 @@ namespace Donut
 		// Generation du buffer
 		FFrameBuffer = CreateFrameBuffer();
 		BindFrameBuffer(FFrameBuffer);
-		RENDER_DEBUG("Frame buffer init "<<FFrameBuffer);
+		GRAPHICS_DEBUG("Frame buffer init "<<FFrameBuffer);
 		if(FCanvasType==FrameCanvasContent::STANDARD)
 		{
 	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
@@ -102,11 +102,11 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
+	 			GRAPHICS_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
-			RENDER_DEBUG("Frame canvas created");
+			GRAPHICS_DEBUG("Frame canvas created");
 			
 	 		ShaderManager::Instance().EnableShader(FShader);
 	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
@@ -137,11 +137,11 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
+	 			GRAPHICS_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
-			RENDER_DEBUG("Frame canvas created");
+			GRAPHICS_DEBUG("Frame canvas created");
 			
 	 		ShaderManager::Instance().EnableShader(FShader);
 	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
@@ -175,11 +175,11 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+	 			GRAPHICS_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
-			RENDER_DEBUG("Frame gbuffer canvas created");
+			GRAPHICS_DEBUG("Frame gbuffer canvas created");
 			
 			FSecondFrameBuffer = CreateFrameBuffer();
 			BindFrameBuffer(FSecondFrameBuffer);
@@ -189,7 +189,7 @@ namespace Donut
 
 	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 	 		{
-	 			RENDER_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+	 			GRAPHICS_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
 	 		}
 
 	 		UnBindFrameBuffer();
@@ -269,7 +269,7 @@ namespace Donut
  		glDisable(GL_DEPTH_TEST);
  	}
 
- 	void TFrameCanvas::Draw(const std::list<TLight*>& parLights)
+ 	void TFrameCanvas::Draw(const std::vector<TLight*>& parLights)
  	{
 		if(FCanvasType==FrameCanvasContent::STANDARD)
 		{
@@ -347,7 +347,7 @@ namespace Donut
 
 	void TFrameCanvas::AttachTexture(TTexture* _texture, const std::string& _uniformVarName)
 	{
-		RENDER_INFO("Attaching texture "<<_texture->FFileName<<" to frame canvas");
+		GRAPHICS_INFO("Attaching texture "<<_texture->FFileName<<" to frame canvas");
 		FTextures.push_back(_texture);
 	 	FTextureCounter++;
  		ShaderManager::Instance().EnableShader(FShader);

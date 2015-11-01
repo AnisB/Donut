@@ -15,7 +15,7 @@
  **/
 
 #include <base/common.h>
-#include <render/Common.h>
+#include <graphics/Common.h>
 #include <input/Common.h>
 #include <resource/Common.h>
 #include "TextureHelpers.h"
@@ -387,7 +387,7 @@ namespace Donut
 
     void CreateDataTexture(TTexture* parTex)
     {
-        RENDER_INFO("Creating data texture "<<parTex->FWidth<<"x"<<parTex->FHeight);
+        GRAPHICS_INFO("Creating data texture "<<parTex->FWidth<<"x"<<parTex->FHeight);
 
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);

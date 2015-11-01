@@ -17,7 +17,7 @@
 #ifndef DONUT_INPUT_H
 #define DONUT_INPUT_H
 
-#include <render/common.h>
+#include <graphics/common.h>
 
 namespace Donut
 {

@@ -18,7 +18,8 @@
  #ifndef DONUT_GRAPHIC_RENDERER
  #define DONUT_GRAPHIC_RENDERER
 
- #include "Defines.h"
+ #include "graphics/common.h"
+ #include "graphics/settings.h"
  #include "RenderPass.h"
  #include <butter/types.h>
  #include "multithread/usualthreadsafeobjects.h"
@@ -47,7 +48,7 @@
 		TRenderer();
 		~TRenderer();
 
-		bool CreateRenderWindow(const TContextDetail& parContext, size_t parNbPass = DEFAULT_NB_PASSES);
+		bool CreateRenderWindow(const TGraphicsSettings& parContext, size_t parNbPass = DEFAULT_NB_PASSES);
 		void DestroyRenderWindow();
 
 		void HideRenderWindow();
@@ -58,8 +59,8 @@
 		void Draw();
 		void Clear();
 
-		void RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER = 0);
-		void UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER = 0);
+		void RegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER = 0);
+		void UnRegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER = 0);
 
 		// Rendering activation and disable
 		bool IsRendering();

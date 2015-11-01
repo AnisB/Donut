@@ -19,8 +19,8 @@
  #define DONUT_FRAME_CANVAS
 
 
-#include "DrawableObject.h"
-#include "ShaderManager.h"
+#include "graphics/drawable.h"
+#include "graphics/shaderManager.h"
 #include <Render/Light.h>
 #include <resource/texture.h>
 #include "MultiThread/ThreadSharedObject.h"
@@ -39,7 +39,7 @@
  		};
  	}
 
-	class TFrameCanvas :  public TDrawableObject, public TThreadSharedObject
+	class TFrameCanvas :  public TDrawable, public TThreadSharedObject
 	{
 	public:
 		TFrameCanvas();
@@ -54,7 +54,7 @@
 		void SetFragmentShader(const std::string& parFShader);
 		void SetVertexShader(const std::string& parVShader);
 		virtual void Draw() {}
-		virtual void Draw(const std::list<TLight*>& parLights);
+		virtual void Draw(const std::vector<TLight*>& parLights);
 		void InjectData(const TShader& parShader);
 
 		void Enable();

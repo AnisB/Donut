@@ -13,44 +13,32 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
- #include "scenenode.h"
 
- #include <Base/Common.h>
- #include "Base/Macro.h"
+#ifndef DONUT_SCENE_NODE
+#define DONUT_SCENE_NODE
 
+
+#include "node.h"
+#include "graphics/drawable.h"
+
+#include <vector>
 
 namespace Donut
 {
-	TSceneNode::TSceneNode()
+	class TSceneNode : public TNode
 	{
+	public:
+		// Consrtuctor
+		TSceneNode();
+		//Destructor
+		~TSceneNode();
+		// Adds a child to the tree
+		virtual void Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix);
 
-	}
+		virtual void AddDrawable(TDrawable* parDrawable);
 
-	TSceneNode::~TSceneNode()
-	{
-		
-	}
-
-	void TSceneNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
-	{	
-		foreach_macro(drawable,FDrawables)
-		{
-			TDrawableObject& drw = (**drawable);
-			drw.Bind();
-			drw.UpdateInfoShader(parModelMatrix*FModel,parCamera);
-			drw.Draw();
-			drw.Unbind();
-		}
-
-		foreach_macro(son,FSons)
-		{
-			(*son)->Draw(parModelMatrix*FModel,parCamera);
-		}
-	}
-
-	void TSceneNode::AddDrawable(TDrawableObject* parDrawable)
-	{
-		FDrawables.push_back(parDrawable);
-	}
-
+	protected:
+		std::vector<TDrawable*> FDrawables;
+	};
 }
+#endif //DONUT_SCENE_NODE

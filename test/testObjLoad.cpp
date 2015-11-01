@@ -21,8 +21,7 @@
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -32,7 +31,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testObjLoad";
 	window->CreateRenderWindow(newContext, 1);
 	//window->SetFragmentShader("shaders/canvas/outVertex.glsl");
@@ -46,15 +45,11 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* teapot = new Donut::TMesh(Donut::vector3(0,0,-40),"Teapot");
-	Donut::TDrawableObject* cube = new Donut::TCubeR(Donut::vector3(5,0,-5),0.5);
+	Donut::TDrawable* teapot = new Donut::TMesh("Teapot");
+	Donut::TDrawable* cube = new Donut::TCubeR(0.5);
 
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	cube->GenerateShader();
-	cube->Init();
-	teapot->GenerateShader();
-	teapot->Init();
 	node->AddDrawable(cube);
 	node->AddDrawable(teapot);
 	root->AddChild(node);

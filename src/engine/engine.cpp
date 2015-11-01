@@ -41,7 +41,7 @@ namespace Donut
  		delete FRenderer;
  	}
 
- 	void TEngine::LaunchRendering(const TContextDetail& parContext)
+ 	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
  		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.")
  		FRenderer->CreateRenderWindow(parContext);
@@ -103,12 +103,12 @@ namespace Donut
 		FarmEvents();
 	}
 
-	void TEngine::DrawObject(TDrawableObject * parObject)
+	void TEngine::DrawObject(TDrawable * parObject)
  	{
  		FRenderer->RegisterToDraw(parObject);
  	}
 
-	void TEngine::RemoveObject(TDrawableObject * parObject)
+	void TEngine::RemoveObject(TDrawable * parObject)
  	{
  		FRenderer->UnRegisterToDraw(parObject);
  	}

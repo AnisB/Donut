@@ -19,7 +19,7 @@
 #ifndef RESOURCE_MANAGER
 #define RESOURCE_MANAGER
 
-#include <Render/ShaderManager.h>
+#include "graphics/shaderManager.h"
 #include "base/singleton.h"
 #include "Texture.h"
 #include "model.h"

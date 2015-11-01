@@ -22,8 +22,7 @@
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -33,7 +32,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "Lego";
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
@@ -46,12 +45,11 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
-	Donut::TDrawableObject* lego = new Donut::TMesh(Donut::vector3(0,0,-10),"LegoSH");
+	Donut::TDrawable* lego = new Donut::TMesh("LegoSH");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	lego->GenerateShader();
-	lego->Init();
 	node->AddDrawable(lego);
+	node->Translate(Donut::vector3(0,0,-10));
 	root->AddChild(node);
 	window->RegisterToDraw(lego);
 	

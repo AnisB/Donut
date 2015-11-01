@@ -19,7 +19,6 @@
 
 #include "Base/Common.h"
 #include "Input/InputHelper.h"
-#include "Render/Defines.h"
 #include "Base/Macro.h"
 #include <Render/Helper.h>
  
@@ -31,7 +30,7 @@
 
 	static void error_callback(int error, const char* description)
 	{
-	    RENDER_ERROR(error<<" "<<description);
+	    GRAPHICS_ERROR(error<<" "<<description);
 	}
 
 	// Class TRenderer
@@ -53,14 +52,14 @@
  		}
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TContextDetail& parContext, size_t parNbPass)
+ 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext, size_t parNbPass)
  	{
  		if(!FInitDone)
  		{
 			// Init
  			if (!glfwInit())
  			{
- 				RENDER_ERROR("Failed during glfw init.");
+ 				GRAPHICS_ERROR("Failed during glfw init.");
  				return false;
  			}
 
@@ -78,7 +77,7 @@
  			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), parContext.fullScreen?glfwGetPrimaryMonitor():NULL, NULL);
  			if(FWindow==NULL)
  			{
- 				RENDER_ERROR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
+ 				GRAPHICS_ERROR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
  				return false;
  			}
  			// Setting context
@@ -89,15 +88,15 @@
 			GLenum glewReturn = glewInit();
 			if(glewReturn)
 			{
-			    RENDER_ERROR("Glew returned: "<<glewGetErrorString(glewReturn));
+			    GRAPHICS_ERROR("Glew returned: "<<glewGetErrorString(glewReturn));
  				return false;
 			}
 			
 			#if _DEBUG
 			const GLubyte* renderer = glGetString (GL_RENDERER); 
 			const GLubyte* version = glGetString (GL_VERSION); 
-			RENDER_DEBUG("Renderer: "<<renderer);
-			RENDER_DEBUG("Version: "<<version);
+			GRAPHICS_DEBUG("Renderer: "<<renderer);
+			GRAPHICS_DEBUG("Version: "<<version);
 			#endif
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
@@ -111,7 +110,7 @@
  		}
  		else
  		{
- 			RENDER_DEBUG("This window has already been created.");
+ 			GRAPHICS_DEBUG("This window has already been created.");
  			ASSERT(FWindow != NULL);
  			glfwShowWindow(FWindow);
  		}
@@ -119,21 +118,21 @@
  	}
  	void TRenderer::HideRenderWindow()
  	{
- 		RENDER_DEBUG("Hiding window.");	
+ 		GRAPHICS_DEBUG("Hiding window.");	
  		ASSERT(FWindow != NULL);
  		glfwHideWindow(FWindow);
  	}	
 
  	void TRenderer::ShowRenderWindow()
  	{
- 		RENDER_DEBUG("Showing window.");	
+ 		GRAPHICS_DEBUG("Showing window.");	
  		ASSERT(FWindow != NULL);
  		glfwShowWindow(FWindow);
  	}	
 
  	void TRenderer::DestroyRenderWindow()
  	{
- 		RENDER_DEBUG("Destroying window.");	
+ 		GRAPHICS_DEBUG("Destroying window.");	
  		ASSERT(FWindow != NULL);
  		glfwTerminate();
  		FWindow = NULL;
@@ -201,7 +200,7 @@
 	}
 
 
-	void TRenderer::RegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	void TRenderer::RegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER)
 	{
 		ASSERT(PASS_NUMBER < FNbPasses);
 		TRenderPass  & pass = (*FRenderPasses[PASS_NUMBER]);
@@ -210,7 +209,7 @@
 		CRITICAL_SECTION_OBJ_END(pass);
 	}
 
-	void TRenderer::UnRegisterToDraw(TDrawableObject * parDrawable, size_t PASS_NUMBER)
+	void TRenderer::UnRegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER)
 	{
 		ASSERT(PASS_NUMBER < FNbPasses);
 		TRenderPass & pass = (*FRenderPasses[PASS_NUMBER]);
@@ -263,12 +262,12 @@
 	{
 		TRenderer * realGraphicRenderer = (TRenderer*) parGraphicRenderer;
 		realGraphicRenderer->Init();
-		RENDER_DEBUG("Init is done.");
+		GRAPHICS_DEBUG("Init is done.");
 		while(realGraphicRenderer->IsRendering())
 		{
 			realGraphicRenderer->Draw();
 		}
-		RENDER_DEBUG("Window isn't rendering anymore");
+		GRAPHICS_DEBUG("Window isn't rendering anymore");
 		THREAD_EXIT(0);
 	}
 }

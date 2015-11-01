@@ -22,7 +22,7 @@
 namespace Donut
 {
 	TSkybox::TSkybox(TSkyboxData::Type parType, TImgType::Type parImageType,const std::string& parPath)
- 	: TDrawableObject()
+ 	: TDrawable()
  	, FType(parType)
  	, FImageType(parImageType)
     , FSkyboxLocation(parPath)

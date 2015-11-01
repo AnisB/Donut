@@ -16,9 +16,8 @@
 
 
  #include "CubeR.h"
- #include "Render/Defines.h"
- #include "Render/Const.h"
  #include "Base/Common.h"
+ #include "graphics/shadermanager.h"
  #include "MultiThread/Defines.h"
  #include <string.h>
 
@@ -145,23 +144,19 @@ unsigned int cubeFacesL[36] =
 	21, 22, 23
 };
 
- 	TCubeR::TCubeR(const Vector3& parPosition, float parDimension, bool _autoInit)
-  	: TDrawableObject()
- 	, FPosition(parPosition)
+ 	TCubeR::TCubeR(float parDimension, bool _autoInit)
+  	: TDrawable()
  	, FDimension(parDimension)
  	{
-		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		if (_autoInit)
  		{
  			Init();
  		}
  	}
- 	TCubeR::TCubeR(const Vector3& parPosition, float parDimension, const TShader& _shader, bool _autoInit)
- 	: TDrawableObject(_shader)
- 	, FPosition(parPosition)
+ 	TCubeR::TCubeR(float parDimension, const TShader& _shader, bool _autoInit)
+ 	: TDrawable(_shader)
  	, FDimension(parDimension)
  	{
- 		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		if (_autoInit)
  		{
  			Init();

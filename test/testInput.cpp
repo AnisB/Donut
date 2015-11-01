@@ -24,7 +24,7 @@ int main()
 	Donut::TEngine * engine = new Donut::TEngine();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testInput";
 	newContext.width = 1280;
 	newContext.lenght = 720;

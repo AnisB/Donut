@@ -19,7 +19,6 @@
 
 // Library includes
 #include "defines.h"
-#include <render/defines.h>
 #include <input/inputManager.h>
 
 namespace Donut

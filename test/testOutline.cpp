@@ -20,8 +20,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -30,7 +29,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testOuline";
 	newContext.width = 1280;
 	newContext.lenght = 720;
@@ -49,14 +48,10 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TCubeR* cube = new Donut::TCubeR(Donut::vector3(0,0,-5),0.5);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(Donut::vector3(5,0,-5),1.0);
+	Donut::TCubeR* cube = new Donut::TCubeR(0.5);
+	Donut::TCubeR* cube2 = new Donut::TCubeR(1.0);
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	cube->GenerateShader();
-	cube->Init();
-	cube2->GenerateShader();
-	cube2->Init();
 	node->AddDrawable(cube);
 	node->AddDrawable(cube2);
 	root->AddChild(node);

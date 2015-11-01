@@ -20,7 +20,7 @@
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -30,7 +30,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testTesselation";
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
@@ -43,11 +43,9 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawableObject* teapot = new Donut::TMesh(Donut::vector3(0,0,-80),"Tess");
+	Donut::TDrawable* teapot = new Donut::TMesh(/*Donut::vector3(0,0,-80),*/"Tess");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	teapot->GenerateShader();
-	teapot->Init();
 	node->AddDrawable(teapot);
 	root->AddChild(node);
 	window->RegisterToDraw(teapot);

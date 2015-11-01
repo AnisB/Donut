@@ -14,34 +14,31 @@
 *
 **/
 
-// Library includes
-#include "core/node.h"
-#include "base/singleton.h"
+#ifndef GRAPHICS_COMMON_H
+#define GRAPHICS_COMMON_H
 
-// STL includes
-#include <string.h>
+#include <GL/glew.h>
+
+#ifndef GLFW_INCLUDE_GL3
+#define GLFW_INCLUDE_GL3
+#endif
+ 
+#include <GLFW/glfw3.h>
+
+// Donut includes
+#include <base/printers.h>
 
 namespace Donut
 {
+	#define FLUSH_GL_ERROR "__FLUSH_ME_PLEASE"
 
-	namespace TSceneFile
-	{
-		enum Type
-		{
-			JSon,
-			Xml,
-			UNKNOWN
-		};
-	}
+	#define __GRAPHICS_PRINT_NAMESPACE "GRAPHICS"
 	
-	class TSceneLoader : public Singleton<TSceneLoader>
-	{
-	public:
-		TSceneLoader();
-		~TSceneLoader();
-
-		// This function reads the scene descriptor file
-		// and loads into memory the scene structures
-		TNode* LoadScene(const std::string& _sceneFileName);
-	};
+	// Printing macros
+	#define GRAPHICS_DEBUG(ENONCE) PRINT_DEBUG (__GRAPHICS_PRINT_NAMESPACE, ENONCE)
+	#define GRAPHICS_WARNING(ENONCE) PRINT_WARNING (__GRAPHICS_PRINT_NAMESPACE, ENONCE)
+	#define GRAPHICS_INFO(ENONCE) PRINT_INFO (__GRAPHICS_PRINT_NAMESPACE, ENONCE)
+	#define GRAPHICS_ERROR(ENONCE) PRINT_ERROR (__GRAPHICS_PRINT_NAMESPACE, ENONCE)	
 }
+
+#endif // GRAPHICS_COMMON_H

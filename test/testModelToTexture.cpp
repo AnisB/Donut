@@ -22,7 +22,7 @@
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>
 #include <Render/Representations/3D/Mesh.h>
-#include <Render/SceneNode.h>
+#include <core/sceneNode.h>
 #include <resource/texture.h>
 #include <resource/resourcemanager.h>
 

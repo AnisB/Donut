@@ -18,7 +18,8 @@
 
 // Donut includes
 #include "inputManager.h"
-#include <render/camera.h>
+#include "core/camera.h"
+
 // STL includes
 #include <map>
 

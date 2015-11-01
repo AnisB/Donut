@@ -22,7 +22,7 @@
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>
 #include <Render/Representations/3D/Mesh.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 #include <resource/texture.h>
 #include <resource/resourcemanager.h>
 
@@ -50,7 +50,7 @@ void init()
 	window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "bezierProgram";
 	newContext.width = 512;
 	newContext.lenght = 386;
@@ -75,9 +75,8 @@ void initScene()
 	Donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position TVec3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = new Donut::TMesh(Donut::vector3(0, 0, 0),"FSQuad");
+	surface = new Donut::TMesh("FSQuad");
 	// On génère le shader associé a ce modèle
-	surface->GenerateShader();
 	// On crée les points de controle
 	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");
 	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/test/cube.obj");
@@ -86,7 +85,6 @@ void initScene()
 	TextureHelpers::CreateDataTexture(triangles[0]);
 	// On l'injecte dans chacun des modèles
 	surface->AddTexture(triangles[0], "triangles");
-	surface->Init();
 	// On crée un noeud de scene
 	node = new Donut::TSceneNode();
 	// On lui ajoute chacun des drawable

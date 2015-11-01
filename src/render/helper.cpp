@@ -1,23 +1,20 @@
 #include "helper.h"
 
 #include <base/common.h>
-#include "render/common.h"
+#include "graphics/common.h"
 
 void CheckGLState(const std::string& desc)
 {
-
 	GLenum e = glGetError();
-
 	if(desc == FLUSH_GL_ERROR)
 		return;
-	
 	if (e != GL_NO_ERROR) 
 	{
-		RENDER_ERROR("OpenGL error in: "<<desc.c_str()<<" "<<e);
+		GRAPHICS_ERROR("OpenGL error in: "<<desc.c_str()<<" "<<e);
 	}
 	else
 	{
-		RENDER_DEBUG("No OpenGL errors@"<<desc);
+		GRAPHICS_DEBUG("No OpenGL errors@"<<desc);
 	}
 }
 
@@ -80,7 +77,7 @@ void BindToFrameBuffer(GLuint parTextureIndex, TextureNature::Type parTextureTyp
 
 void CreateTexture(GLuint& parTex, int parWidth, int parHeight, TextureNature::Type parType)
 {
-	RENDER_DEBUG("Creating GPU texture");
+	GRAPHICS_DEBUG("Creating GPU texture");
 	glGenTextures(1, &parTex);
 	glBindTexture(GL_TEXTURE_2D, parTex);
 	if(parType == TextureNature::COLOR)
@@ -97,5 +94,5 @@ void CreateTexture(GLuint& parTex, int parWidth, int parHeight, TextureNature::T
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	RENDER_DEBUG("GPU texture created...");
+	GRAPHICS_DEBUG("GPU texture created...");
 }

@@ -20,7 +20,7 @@
 
 #include <Engine/Engine.h>
 
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 #include <Render/Representations/3D/CubeR.h>
 #include <Render/Representations/3D/Mesh.h>

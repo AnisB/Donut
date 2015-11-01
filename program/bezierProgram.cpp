@@ -22,7 +22,7 @@
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>
 #include <Render/Representations/3D/Mesh.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 #include <resource/texture.h>
 
 // Autres includes
@@ -40,13 +40,11 @@ TTexture* controlPointsTexture = NULL;
 // La fenetre de rendu
 Donut::TRenderer * window = NULL;
 // Les surface a afficher
-Donut::TMesh* surface = NULL;
-Donut::TMesh* surface2 = NULL;
-Donut::TMesh* surface3 = NULL;
+Donut::TMesh *surface1, * surface2 = NULL, *surface3 = NULL;
 // Le gestionnaire d'input
 Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
-Donut::TSceneNode* node;
+Donut::TSceneNode *node1,*node2,*node3;
 //Temps global
 float totalTime = 0.0;
 // Resolution de la grille
@@ -147,7 +145,7 @@ void init()
 	window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "bezierProgram";
 	//Initialisation de la fenetre
 	window->CreateRenderWindow(newContext);
@@ -172,47 +170,42 @@ void initScene()
 	Donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = new Donut::TMesh(vector3(0,0,-70),"Plane");
-	// On génère le shader associé a ce modèle
-	surface->GenerateShader();
-	// On crée la surface 2 à la position vector3(30,0,-70) en utilisant le modèle de nom "PlaneLess"
-	surface2 = new Donut::TMesh(vector3(30,0,-70),"PlaneLess");
-	//etc.
-	surface2->GenerateShader();
-	surface3 = new Donut::TMesh(vector3(-30,0,-70),"PlaneMore");
-	surface3->GenerateShader();
+	surface1 = new Donut::TMesh("Plane");
+	surface2 = new Donut::TMesh("PlaneLess");
+	surface3 = new Donut::TMesh("PlaneMore");
 	// On crée les points de controle
 	createControlPoints();
 	// On génère la texture qui contiendra ces points de controle
 	generateTexture();
 	
 	// On l'injecte dans chacun des modèles
-	surface->AddTexture(controlPointsTexture, "controlPoints");
-	surface->Init();
+	surface1->AddTexture(controlPointsTexture, "controlPoints");
 	surface2->AddTexture(controlPointsTexture, "controlPoints");
-	surface2->Init();
 	surface3->AddTexture(controlPointsTexture, "controlPoints");
-	surface3->Init();
 	
 	// On crée un noeud de scene
-	node = new Donut::TSceneNode();
+	node1 = new Donut::TSceneNode();
+	node1->Translate(vector3(0,0,-70));
+	node2 = new Donut::TSceneNode();
+	node2->Translate(vector3(30,0,-70));
+	node3 = new Donut::TSceneNode();
+	node3->Translate(vector3(-30,0,-70));
 	// On lui ajoute chacun des drawable
-	node->AddDrawable(surface);
-	node->AddDrawable(surface2);
-	node->AddDrawable(surface3);
+	node1->AddDrawable(surface1);
+	node2->AddDrawable(surface2);
+	node3->AddDrawable(surface3);
 	// On ajoute le noeud créé au noeud racine
-	root->AddChild(node);
+	root->AddChild(node1);
+	root->AddChild(node2);
+	root->AddChild(node3);
 	// Petite acceleration qui permet de mettre a jour les donées uniformes pour un cout minimal
-	window->RegisterToDraw(surface);
+	window->RegisterToDraw(surface1);
 	window->RegisterToDraw(surface2);
 	window->RegisterToDraw(surface3);
 }
 // Fonction de destruction
 void destroy()
 {
-	window->UnRegisterToDraw(surface);
-	window->UnRegisterToDraw(surface2);
-	window->UnRegisterToDraw(surface3);
 	delete window;
 }
 // Loop de rendu

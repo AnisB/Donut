@@ -55,11 +55,11 @@ namespace Donut
 	{
 		FModel = FModel*RotateXAxis(parAngle);
 	}	
-	void TNode::Draw(const Matrix4& parModelMatrix, Camera* parCamera)
+	void TNode::Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix)
 	{
 		foreach_macro(son,FSons)
 		{
-			(*son)->Draw(parModelMatrix*FModel,parCamera);
+			(*son)->Draw(_modelMatrix*FModel, _viewProjectionMatrix);
 		}
 	}
 	void TNode::Translate(const Vector3& parVector)

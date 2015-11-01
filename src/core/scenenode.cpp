@@ -13,41 +13,44 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
+ #include "scenenode.h"
 
-#ifndef DONUT_NODE
-#define DONUT_NODE
+ #include "Base/Common.h"
+ #include "Base/Macro.h"
 
-
-// Std includes
-#include <vector>
-#include <butter/Matrix4.h>
-#include "Camera.h"
 
 namespace Donut
 {
-	class TNode
+	TSceneNode::TSceneNode()
 	{
-	public:
-		// Consrtuctor
-		TNode();
-		//Destructor
-		~TNode();
-		// Adds a child to the tree
-		void AddChild(TNode* parNode);
-		bool RemoveChild(TNode* parNode);
 
-		void Yaw(float parAngle);
-		void Roll(float parAngle);
-		void Pitch(float parAngle);
+	}
 
-		void Translate(const Vector3& parVector);
-		const std::vector<TNode*>& GetChildList();
-		virtual void Draw(const Matrix4& parModelMatrix, Camera* parCamera);
+	TSceneNode::~TSceneNode()
+	{
+		
+	}
 
-	protected:
-		std::vector<TNode*> FSons;
-		TNode* FParent;
-		Matrix4 FModel;
-	};
+	void TSceneNode::Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix)
+	{	
+		foreach_macro(drawable,FDrawables)
+		{
+			TDrawable& drw = (**drawable);
+			drw.Bind();
+			drw.UpdateModelMatrix(parModelMatrix*FModel, _viewProjectionMatrix);
+			drw.Draw();
+			drw.Unbind();
+		}
+
+		foreach_macro(son,FSons)
+		{
+			(*son)->Draw(parModelMatrix*FModel,_viewProjectionMatrix);
+		}
+	}
+
+	void TSceneNode::AddDrawable(TDrawable* parDrawable)
+	{
+		FDrawables.push_back(parDrawable);
+	}
+
 }
-#endif

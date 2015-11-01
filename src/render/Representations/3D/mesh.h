@@ -18,7 +18,7 @@
  #ifndef DONUT_MESH
  #define DONUT_MESH
 
-#include "Render/DrawableObject.h"
+#include "graphics/drawable.h"
 #include "resource/sugar.h"
 #include "resource/model.h"
 #include "resource/texture.h"
@@ -26,10 +26,10 @@
 
  namespace Donut
  {
-	class TMesh : public TDrawableObject, public TThreadSharedObject
+	class TMesh : public TDrawable, public TThreadSharedObject
 	{
 	public:
-	 	TMesh(const Vector3& parPosition, const std::string& parSugarName, bool _autoInit = true);
+	 	TMesh(const std::string& parSugarName, bool _autoInit = true);
 		TMesh(TShader& _shader, TModel* _model);
 
 	 	~TMesh();
@@ -38,12 +38,9 @@
 	 	virtual void Init();
 	 	virtual void Draw();
 
-	 	void SetPosition(const Vector3& parPos);
- 		virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
+ 		virtual void UpdateModelMatrix(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix);
 
 	protected:
-	 	Vector3 FPosition;
-
 	 	// Model to draw
 	 	TSugar FSugarModel;
 	 	TModel* FModel;

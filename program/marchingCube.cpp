@@ -44,7 +44,7 @@ void init()
 	window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "marchingCubes";
 	//Initialisation de la fenetre
 	window->CreateRenderWindow(newContext);

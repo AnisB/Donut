@@ -18,7 +18,6 @@
 #define DONUT_MODEL
 
 #include <string>
-#include <list>
 
 struct TModel
 {

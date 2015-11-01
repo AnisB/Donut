@@ -17,9 +17,10 @@
 #ifndef DONUT_SUGAR
 #define DONUT_SUGAR
 
-#include <render/defines.h>
+#include "graphics/shader.h"
+ 
 #include <string>
-#include <list>
+#include <vector>
 
 namespace ShaderDataType
 {
@@ -86,7 +87,7 @@ struct TCubeMapInfo
         cmID=parCubeMapInfo.cmID;
     }
 };
-struct TShaderDescr
+struct TShaderDescriptor
 {
     std::string vertex;
     std::string geometry;
@@ -94,7 +95,7 @@ struct TShaderDescr
     std::string tesseval;
     std::string fragment;
     bool isTesselated;
-    TShaderDescr()
+    TShaderDescriptor()
     {
         isTesselated =  false;
         vertex =  BASIC_SHADER;
@@ -109,15 +110,16 @@ struct TSugar
 {
     std::string               name;
 	std::string               model;
-    std::list<TBuildIn>       builtIns;
-    std::list<TUniform>       uniforms;
-    std::list<TTextureInfo>   textures;
-    std::list<TCubeMapInfo>   cubeMaps;
-    TShaderDescr              shader;
+    std::vector<TBuildIn>       builtIns;
+    std::vector<TUniform>       uniforms;
+    std::vector<TTextureInfo>   textures;
+    std::vector<TCubeMapInfo>   cubeMaps;
+    TShaderDescriptor              shader;
 
     TSugar( )
     {
     }
+
     TSugar( const TSugar& parSugar)
     {
         name = parSugar.name;

@@ -29,7 +29,7 @@ namespace Donut
  	public:
  		TEngine();
  		~TEngine();
- 		void LaunchRendering(const TContextDetail& parContext);
+ 		void LaunchRendering(const TGraphicsSettings& parContext);
  		void StopRendering();
  		void PauseRendering();
  		void ResumeRendering();
@@ -41,8 +41,8 @@ namespace Donut
  		virtual void PrepareNextFrame() {}
  		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
  		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
- 		void DrawObject(TDrawableObject * parObject);
- 		void RemoveObject(TDrawableObject * parObject);
+ 		void DrawObject(TDrawable * parObject);
+ 		void RemoveObject(TDrawable * parObject);
 
  	private:
  		// Data required to launch the rendering thread

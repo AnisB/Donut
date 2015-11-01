@@ -14,14 +14,12 @@
  *
  **/
 
-#include <iostream>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+#include <core/SceneNode.h>
 
 
 int main()
@@ -30,7 +28,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testDisplay";
 	newContext.width = 1280;
 	newContext.lenght = 720;
@@ -50,8 +48,8 @@ int main()
 	Donut::TShader shader;
 	shader.FVertexShader = "shaders/test/testVertexPNT.glsl";
 	shader.FFragmentShader = "shaders/test/testFragmentPNT.glsl";
-	Donut::TCubeR* cube = new Donut::TCubeR(Donut::vector3(0,0,-5),0.5,shader);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(Donut::vector3(5,0,-5),1.0,shader);
+	Donut::TCubeR* cube = new Donut::TCubeR(0.5,shader);
+	Donut::TCubeR* cube2 = new Donut::TCubeR(1.0,shader);
 
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();

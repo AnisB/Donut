@@ -16,8 +16,6 @@
 
 
  #include "Mesh.h"
- #include "Render/Defines.h"
- #include "Render/Const.h"
  #include "Render/Helper.h"
  #include "resource/resourcemanager.h"
  #include "resource/sugarloader.h"
@@ -28,12 +26,10 @@
 
 namespace Donut
 {
- 	TMesh::TMesh(const Vector3& parPosition, const std::string& parSugarName, bool _autoInit)
- 	: TDrawableObject()
- 	, FPosition(parPosition)
+ 	TMesh::TMesh(const std::string& parSugarName, bool _autoInit)
+ 	: TDrawable()
  	, FSugarModel(TSugarLoader::Instance().GetSugar(parSugarName))
  	{
- 		FModelMatrix = FModelMatrix*Translate_M4(parPosition);
  		FShader.FVertexShader = FSugarModel.shader.vertex;
  		FShader.FTessControl = FSugarModel.shader.tesscontrol;
  		FShader.FTessEval = FSugarModel.shader.tesseval;
@@ -47,11 +43,9 @@ namespace Donut
  	}
 
 	TMesh::TMesh(TShader& _shader, TModel* _model)
- 	: TDrawableObject()
+ 	: TDrawable()
 	, FModel(_model)
- 	, FPosition()
  	{
- 		FModelMatrix = FModelMatrix*Translate_M4(FPosition);
  		FShader = _shader;
  	}
 
@@ -60,7 +54,6 @@ namespace Donut
 
  	}
 
-
  	void TMesh::AddTexture(TTexture* parTex, const std::string& parName)
  	{
  		TTextureInfo newTex;
@@ -68,6 +61,9 @@ namespace Donut
 		newTex.index = FSugarModel.textures.size();
 		newTex.name = parName;
  		FSugarModel.textures.push_back(newTex);
+ 		Bind();
+ 		ShaderManager::Instance().InjectTex(FShader, newTex.texID, newTex.name, newTex.index);
+ 		Unbind();
  	}
 
  	void TMesh::Init()
@@ -80,15 +76,13 @@ namespace Donut
 
  	}
 
- 	void TMesh::SetPosition(const Vector3& parPos)
+ 	void TMesh::UpdateModelMatrix(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix)
  	{
- 		FPosition = parPos;
- 	}
-
- 	void TMesh::UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera)
- 	{
-		TDrawableObject::UpdateInfoShader(parModelMatrix, parCamera);
- 		ShaderManager::Instance().PreDrawSugarData(FSugarModel);
+		TDrawable::UpdateModelMatrix(_modelMatrix, _viewProjectionMatrix);
+		foreach_macro(tex, FSugarModel.textures)
+		{
+			ShaderManager::Instance().BindTex(tex->texID, tex->index);
+		}
  	}
 
  	void TMesh::Draw()

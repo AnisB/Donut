@@ -18,41 +18,42 @@
 #ifndef DONUT_DRAWABLE_OBJECT
 #define DONUT_DRAWABLE_OBJECT
 
+// Library includes
+#include "shader.h"
+#include "core/Camera.h"
 
-#include "Defines.h"
-#include "ShaderManager.h"
-#include "Camera.h"
 namespace Donut
 {
- class TDrawableObject
- {
- public:
- 	TDrawableObject();
- 	TDrawableObject(const TShader& _shader);
- 	virtual ~TDrawableObject();
+	class TDrawable
+	{
+	public:
+		TDrawable();
+		TDrawable(const TShader& _shader);
+		virtual ~TDrawable();
 
- 	virtual void Draw() = 0;
- 	virtual void Init() = 0;
+		virtual void Draw() = 0;
+		virtual void Init() = 0;
 
- 	void Bind();
- 	void Unbind();
+		void Bind();
+		void Unbind();
 
- 	virtual void GenerateShader();
- 	void SetShader(const TShader& _shader);
+		void SetShader(const TShader& _shader);
 
- 	virtual void UpdateInfoShader(const Matrix4& parModelMatrix, Camera* parCamera);
- 	virtual void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);
- 	
- 	const Matrix4& GetModelMatrix() {return FModelMatrix;}
+		virtual void UpdateModelMatrix(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix);
+		void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view);
 
- 	const TShader& GetShader()
- 	{
- 		return FShader;
- 	}
+		const Matrix4& GetModelMatrix() {return FModelMatrix;}
 
- public:
- 	TShader FShader;
- 	Matrix4 FModelMatrix;
- };
+		const TShader& GetShader()
+		{
+			return FShader;
+		}
+
+	//protected:
+		virtual void GenerateShader();
+	protected:
+		TShader FShader;
+		Matrix4 FModelMatrix;
+	};
 }
  #endif // DONUT_DRAWABLE_OBJECT

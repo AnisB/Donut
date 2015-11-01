@@ -24,7 +24,6 @@
 #include <resource/sugarloader.h>
 
 #include <Render/Renderer.h>
-#include <Render/Defines.h>
 
 // ----------------------------------------
 // Implementation
@@ -61,17 +60,12 @@ namespace Donut
         Donut::SetInputManager(inManager);
         inManager->FCamera = camera;
         camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-        FCubeR = new Donut::TCubeR(vector3(0,0,-5),0.5);
-        FTeapot = new Donut::TMesh(vector3(0,0,0),"Teapot");
+        FCubeR = new Donut::TCubeR(0.5);
+        FTeapot = new Donut::TMesh("Teapot");
 
         FNode1 = new Donut::TSceneNode();
         FNode2 = new Donut::TSceneNode();
         FNode2->Translate(vector3(-5,0,-40));
-        FCubeR->GenerateShader();
-        FCubeR->Init();
-
-        FTeapot->GenerateShader();
-        FTeapot->Init();
         FNode1->AddDrawable(FCubeR);
         FNode2->AddDrawable(FTeapot);
         root->AddChild(FNode1);
@@ -88,7 +82,7 @@ namespace Donut
 
     void TEngineExample::Init()
     {
-        Donut::TContextDetail newContext;
+        Donut::TGraphicsSettings newContext;
         newContext.windowName = "Engine example 1";
         newContext.width = 1280;
         newContext.lenght = 720;

@@ -15,9 +15,8 @@
  **/
 
 #include "RenderPass.h"
-#include "render/common.h"
-
-#include "Base/Common.h"
+#include "graphics/common.h"
+#include "base/Common.h"
 #include "MultiThread/Defines.h"
 #include "Base/Macro.h"
 #include "resource/resourcemanager.h"
@@ -58,7 +57,7 @@
 			Bind();
 			Matrix4 identity;
 			SetIdentity(identity);
-			FRoot->Draw(identity, FCamera);
+			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
 			FCamera->ChangeNoticed();
 			Unbind();
 			FFrameCanvas->Draw(FLights);
@@ -67,13 +66,13 @@
 		{
 			Matrix4 identity;
 			SetIdentity(identity);
-			FRoot->Draw(identity, FCamera);
+			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
 			FCamera->ChangeNoticed();
 		}
 	}
 	void TRenderPass::Init()
 	{
- 		//RENDER_DEBUG("Initing the canvas");
+ 		//GRAPHICS_DEBUG("Initing the canvas");
 		
 		if(FRenderToTexture)
 		{
@@ -81,12 +80,12 @@
 		}
 		foreach_macro(drawable,FDrawables)
 		{
-			(*drawable)->GenerateShader();
 			(*drawable)->Init();
 		}
+		
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
- 		//RENDER_DEBUG("Canvas created");
+ 		//GRAPHICS_DEBUG("Canvas created");
 	}
 
 	void TRenderPass::PreparePass()
@@ -95,9 +94,9 @@
 		{
 			foreach_macro(drawable,FDrawables)
 			{
-				TDrawableObject & drw = *(*drawable);
+				TDrawable & drw = *(*drawable);
 				drw.Bind();
-				drw.UpdateCamera(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
+				drw.UpdateCameraData(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
 				drw.Unbind();
 			}
 			foreach_macro(light,FLights)
@@ -111,10 +110,10 @@
 		}
 	}
 
-	void TRenderPass::AddDrawable(TDrawableObject* parDrawable)
+	void TRenderPass::AddDrawable(TDrawable* parDrawable)
 	{
 		FDrawables.push_back(parDrawable);
- 		RENDER_DEBUG("Drawable added "<< FDrawables.size());
+ 		GRAPHICS_DEBUG("TDrawable added "<< FDrawables.size());
 	}
 
 	void TRenderPass::Bind()
@@ -139,10 +138,10 @@
 		FFrameCanvas->Disable();
 	}
 
-	void TRenderPass::RemoveDrawable(TDrawableObject* parDrawable)
+	void TRenderPass::RemoveDrawable(TDrawable* parDrawable)
 	{
- 		RENDER_DEBUG("Removing drawable");
-		FDrawables.remove(parDrawable);
+ 		GRAPHICS_DEBUG("Removing drawable");
+		ASSERT_NOT_IMPLEMENTED();
 	}
 	void TRenderPass::SetRenderType(FrameCanvasContent::Type parType)
 	{
@@ -164,7 +163,8 @@
 	}
 	void TRenderPass::RemoveLight(TLight* parLight)
 	{
-		FLights.remove(parLight);
+		ASSERT_NOT_IMPLEMENTED();
+		//FLights.erase(parLight);
 	}
 
 	void TRenderPass::AddTexture(const std::string& _textureName, const std::string& _unifomName)

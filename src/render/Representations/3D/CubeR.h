@@ -18,16 +18,16 @@
  #ifndef DONUT_DUBE_R
  #define DONUT_DUBE_R
 
-#include "Render/DrawableObject.h"
+#include "graphics/drawable.h"
 #include "MultiThread/ThreadSharedObject.h"
 
  namespace Donut
  {
- class TCubeR : public TDrawableObject, public TThreadSharedObject
+ class TCubeR : public TDrawable, public TThreadSharedObject
  {
  public:
- 	TCubeR(const Vector3& _vec, float parDimension, bool _autoInit = true);
- 	TCubeR(const Vector3& _vec, float parDimension, const TShader& _shader, bool _autoInit = true);
+ 	TCubeR(float parDimension, bool _autoInit = true);
+ 	TCubeR(float parDimension, const TShader& _shader, bool _autoInit = true);
  	~TCubeR();
 
  	virtual void UpdateInfoShader();

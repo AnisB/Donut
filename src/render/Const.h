@@ -24,14 +24,5 @@ namespace Donut
     extern float cubeVertexLL[24];
 
     extern unsigned int cubeFacesLL[];
-
-    // Default context data
-    #define DEFAULT_MAJOR_VERSION 4
-    #define DEFAULT_MINOR_VERSION 1
-    #define DEFAULT_WINDOW_NAME 720
-    #define DEFAULT_WIDTH 1280 
-	#define DEFAULT_LENGHT 720
-	#define DEFAULT_NAME "Donut"
-	#define DEFAULT_FULLSCREEN false
 }
 #endif //DONUT_DEFINES

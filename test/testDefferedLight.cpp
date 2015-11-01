@@ -21,8 +21,8 @@
 #include <resource/sugarloader.h>
 #include <Render/Representations/3D/Mesh.h>
 #include <Render/Representations/3D/CubeR.h>
-#include <Render/Defines.h>
-#include <Render/SceneNode.h>
+ 
+#include <core/scenenode.h>
 #include <butter/vector3.h>
 #include <butter/vector4.h>
 
@@ -33,7 +33,7 @@ int main()
 	Donut::TRenderer * window = new Donut::TRenderer();
 
 	// Context info
-	Donut::TContextDetail newContext;
+	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testGbuffer";
 	newContext.width = 1280;
 	newContext.lenght = 720;
@@ -71,15 +71,15 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TSceneNode* node = new Donut::TSceneNode();
-	root->AddChild(node);
-	
 	for (int i = 0; i< 10; i++)
 	{
 		for (int j = 0; j< 10; j++)
 		{
-			Donut::TDrawableObject* teapot2 = new Donut::TMesh(Donut::vector3(20*j,0,-40*i),"Teapot");
+			Donut::TDrawable* teapot2 = new Donut::TMesh("Teapot");
+			Donut::TSceneNode* node = new Donut::TSceneNode();
+			node->Translate(Donut::vector3(20*j,0,-40*i));
 			node->AddDrawable(teapot2);
+			root->AddChild(node);
 			window->RegisterToDraw(teapot2);
 		}
 	}

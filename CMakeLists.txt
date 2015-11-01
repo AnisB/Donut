@@ -94,12 +94,14 @@ GENERATE_LIB("${SOURCES}/input" Input)
 GENERATE_LIB("${SOURCES}/multithread" MultiThread)
 GENERATE_LIB("${SOURCES}/objects" Objects)
 GENERATE_LIB("${SOURCES}/render" Render)
+GENERATE_LIB("${SOURCES}/core" Core)
+GENERATE_LIB("${SOURCES}/graphics" Graphics)
 GENERATE_LIB("${SOURCES}/resource" Resource)
 GENERATE_LIB("${SOURCES}/stateengine" StateEngine)
 GENERATE_LIB("${SOURCES}/tools" Tools)
 GENERATE_LIB("${SOURCES}/tracing" Tracing)
 
-SET(CORELIBS ${CORELIBS} Base Butter Engine Input MultiThread Objects Render Resource StateEngine Tools Tracing)
+SET(CORELIBS ${CORELIBS} Base Butter Engine Input Core MultiThread Objects Render Graphics Resource StateEngine Tools Tracing)
 
 # Adding the tests if we should
 IF(TESTS)

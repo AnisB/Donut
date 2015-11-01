@@ -19,16 +19,17 @@
  #define DONUT_2D_RENDER_PASS
 
 
-#include "DrawableObject.h"
+#include "graphics/drawable.h"
 
 #include <MultiThread/ThreadSharedObject.h>
-#include <Render/Camera.h>
-#include <Render/Light.h>
-#include "Node.h"
+#include "core/Camera.h"
+#include "core/node.h"
+ 
+#include "Render/Light.h"
 
 #include "FrameCanvas.h"
 
-#include <list>
+#include <vector>
  
  namespace Donut
  {
@@ -46,8 +47,8 @@
 		void AddLight(TLight* parLight);
 		void RemoveLight(TLight* parLight);
 
-		void AddDrawable(TDrawableObject* parDrawable);
-		void RemoveDrawable(TDrawableObject* parDrawable);
+		void AddDrawable(TDrawable* parDrawable);
+		void RemoveDrawable(TDrawable* parDrawable);
 
 		void SetFragmentShader(const std::string& parFShader);
 		void SetVertexShader(const std::string& parVShader);
@@ -74,8 +75,8 @@
 
 	protected:
 		TNode* FRoot;
-		std::list<TDrawableObject*> FDrawables;
-		std::list<TLight*> FLights;
+		std::vector<TDrawable*> FDrawables;
+		std::vector<TLight*> FLights;
 	};
 	// END CLASS DECLARATION
  }

@@ -14,31 +14,42 @@
 *
 **/
 
-#ifndef RENDER_COMMON_H
-#define RENDER_COMMON_H
+#ifndef DONUT_NODE
+#define DONUT_NODE
 
-#include <GL/glew.h>
 
-#ifndef GLFW_INCLUDE_GL3
-#define GLFW_INCLUDE_GL3
-#endif
- 
-#include <GLFW/glfw3.h>
+// Std includes
+#include "butter/matrix4.h"
+#include "camera.h"
 
-// Donut includes
-#include <base/printers.h>
+// STL includes
+#include <vector>
 
 namespace Donut
 {
-	#define FLUSH_GL_ERROR "__FLUSH_ME_PLEASE"
+	class TNode
+	{
+	public:
+		// Consrtuctor
+		TNode();
+		//Destructor
+		~TNode();
+		// Adds a child to the tree
+		void AddChild(TNode* parNode);
+		bool RemoveChild(TNode* parNode);
 
-	#define __RENDER_PRINT_NAMESPACE "RENDER"
-	
-	// Printing macros
-	#define RENDER_DEBUG(ENONCE) PRINT_DEBUG (__RENDER_PRINT_NAMESPACE, ENONCE)
-	#define RENDER_WARNING(ENONCE) PRINT_WARNING (__RENDER_PRINT_NAMESPACE, ENONCE)
-	#define RENDER_INFO(ENONCE) PRINT_INFO (__RENDER_PRINT_NAMESPACE, ENONCE)
-	#define RENDER_ERROR(ENONCE) PRINT_ERROR (__RENDER_PRINT_NAMESPACE, ENONCE)	
+		void Yaw(float parAngle);
+		void Roll(float parAngle);
+		void Pitch(float parAngle);
+
+		void Translate(const Vector3& parVector);
+		const std::vector<TNode*>& GetChildList();
+		virtual void Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix);
+
+	protected:
+		std::vector<TNode*> FSons;
+		TNode* FParent;
+		Matrix4 FModel;
+	};
 }
-
-#endif // RENDER_COMMON_H
+#endif
