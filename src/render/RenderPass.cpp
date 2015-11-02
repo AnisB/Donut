@@ -54,9 +54,11 @@
 		PreparePass();
 		if(FRenderToTexture)
 		{
+			Bind();
 			Matrix4 identity;
 			SetIdentity(identity);
 			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
+			Unbind();
 			FFrameCanvas->Draw(FLights);
 		}
 		else
@@ -69,12 +71,10 @@
 	void TRenderPass::Init()
 	{
  		//GRAPHICS_DEBUG("Initing the canvas");
-		
 		if(FRenderToTexture)
 		{
 			FFrameCanvas->Init();
 		}
-		
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
  		//GRAPHICS_DEBUG("Canvas created");

@@ -88,8 +88,6 @@
 
 		//Shader
 		TShader FShader;
-
-
 	};
 	// END CLASS DECLARATION
  }

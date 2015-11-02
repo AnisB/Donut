@@ -56,7 +56,7 @@
 		TShader(const std::string& _vertex, const std::string& _fragment)
 		{
 			FIsTesselated = false;
-			FProgramID =  -1;
+			FProgramID =  0;
 			FVertexShader = _vertex;
 			FTessControl = BASIC_SHADER;
 			FTessEval = BASIC_SHADER;
