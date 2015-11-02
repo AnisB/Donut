@@ -39,7 +39,7 @@
  		};
  	}
 
-	class TFrameCanvas :  public TDrawable, public TThreadSharedObject
+	class TFrameCanvas
 	{
 	public:
 		TFrameCanvas();

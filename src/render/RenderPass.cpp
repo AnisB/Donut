@@ -54,11 +54,9 @@
 		PreparePass();
 		if(FRenderToTexture)
 		{
-			Bind();
 			Matrix4 identity;
 			SetIdentity(identity);
 			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
-			Unbind();
 			FFrameCanvas->Draw(FLights);
 		}
 		else
@@ -76,10 +74,6 @@
 		{
 			FFrameCanvas->Init();
 		}
-		foreach_macro(drawable,FDrawables)
-		{
-			(*drawable)->Init();
-		}
 		
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
@@ -93,9 +87,7 @@
 			foreach_macro(drawable,FDrawables)
 			{
 				TDrawable & drw = *(*drawable);
-				drw.Bind();
 				drw.UpdateCameraData(FCamera->GetProjectionMatrix(),FCamera->GetViewMatrix());
-				drw.Unbind();
 			}
 			foreach_macro(light,FLights)
 			{	

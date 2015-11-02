@@ -122,7 +122,8 @@ namespace Donut
 			glCompileShader(tessControlShader);
 			CheckShader(tessControlShader, parShader.FTessControl);
 			glAttachShader(programID, tessControlShader);
-			shaderFlags &= TESS_CONTROL_FLAG;			
+			shaderFlags &= TESS_CONTROL_FLAG;
+			parShader.FIsTesselated =true;	
 		}
 
 		if(parShader.FTessEval!=BASIC_SHADER)
@@ -135,7 +136,8 @@ namespace Donut
 			glCompileShader(tessEvalShader);
 			CheckShader(tessEvalShader, parShader.FTessEval);
 			glAttachShader(programID, tessEvalShader);
-			shaderFlags &= TESS_EVAL_FLAG;			
+			shaderFlags &= TESS_EVAL_FLAG;	
+			parShader.FIsTesselated =true;	
 		}
 
 		if(parShader.FGeometryShader!=BASIC_SHADER)

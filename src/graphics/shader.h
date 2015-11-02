@@ -43,6 +43,7 @@
 		friend class ShaderManager;
 		TShader()
 		{
+			FIsTesselated = false;
 			FProgramID = 0;
 			FVertexShader = BASIC_SHADER;
 			FTessControl = BASIC_SHADER;
@@ -52,19 +53,20 @@
 			FActive = false;
 		}
 
-		TShader(GLuint parID, const std::string& parVShader, const std::string& parTCShader, const std::string& parTEShader, const std::string& parGShader, const std::string& parFShader)
+		TShader(const std::string& _vertex, const std::string& _fragment)
 		{
-			FProgramID = parID;
-			FVertexShader = parVShader;
-			FTessControl = parTCShader;
-			FTessEval = parTEShader;
-			FGeometryShader = parGShader;
-			FFragmentShader = parFShader;
+			FIsTesselated = false;
+			FProgramID =  -1;
+			FVertexShader = _vertex;
+			FTessControl = BASIC_SHADER;
+			FTessEval = BASIC_SHADER;
+			FGeometryShader = BASIC_SHADER;
+			FFragmentShader = _fragment;
 			FActive = false;
 		}
-		
 		TShader(const TShader& parShader)
 		{
+			FIsTesselated = parShader.FIsTesselated;
 			FProgramID = parShader.FProgramID;
 			FVertexShader = parShader.FVertexShader;
 			FTessControl = parShader.FTessControl;
@@ -79,6 +81,7 @@
 		std::string FTessEval;
 		std::string FGeometryShader;
 		std::string FFragmentShader;
+		bool 		FIsTesselated;
 		GLuint FProgramID;
 
 		inline bool IsActive() {return FActive;}

@@ -21,7 +21,7 @@
 #include <Input/DefaultInputManager.h>
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>
-#include <Render/Representations/3D/Mesh.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 #include <resource/texture.h>
 
@@ -170,9 +170,9 @@ void initScene()
 	Donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface1 = new Donut::TMesh("Plane");
-	surface2 = new Donut::TMesh("PlaneLess");
-	surface3 = new Donut::TMesh("PlaneMore");
+	surface1 = Donut::CreateSugarInstance("Plane");
+	surface2 = Donut::CreateSugarInstance("PlaneLess");
+	surface3 = Donut::CreateSugarInstance("PlaneMore");
 	// On crée les points de controle
 	createControlPoints();
 	// On génère la texture qui contiendra ces points de controle

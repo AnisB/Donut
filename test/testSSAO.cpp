@@ -20,8 +20,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
@@ -36,29 +35,31 @@ int main()
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testSSAO";
 	window->CreateRenderWindow(newContext, 1);
-	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
-	window->SetVertexShader("shaders/canvas/ssaoV.glsl");
-	window->SetFragmentShader("shaders/canvas/ssaoF.glsl");
+	//window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
+	//window->SetVertexShader("shaders/canvas/ssaoV.glsl");
+	//window->SetFragmentShader("shaders/canvas/ssaoF.glsl");
 	window->Init();
 
 	// Getting the camera
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
-	pass->AddTexture("data/textures/random.jpg", "random");
+	//pass->AddTexture("data/textures/random.jpg", "random");
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,5000.0);
 	camera->Translate(Donut::vector3(0.0,-4, 15));
-	Donut::TDrawable* house = new Donut::TMesh(/*Donut::vector3(0,0,-40),*/"House");
+	Donut::TDrawable* house = Donut::CreateSugarInstance("House");
 	Donut::TSceneNode* node = new Donut::TSceneNode();
+	node->Translate(Donut::vector3(0,0,-40));
 	node->AddDrawable(house);
 	root->AttachChild(node);
 	window->RegisterToDraw(house);
 
-	Donut::TDrawable* lego = new Donut::TMesh(/*Donut::vector3(0,0.05,-40),*/"Lego");
+	Donut::TDrawable* lego = Donut::CreateSugarInstance("Lego");
 	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
 	legoNode->AddDrawable(lego);
+	node->Translate(Donut::vector3(0,0.05,-40));
 	root->AttachChild(legoNode);
 	window->RegisterToDraw(lego);
 

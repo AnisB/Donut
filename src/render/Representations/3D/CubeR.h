@@ -23,6 +23,7 @@
 
  namespace Donut
  {
+ 	/*
  class TCubeR : public TDrawable, public TThreadSharedObject
  {
  public:
@@ -42,5 +43,6 @@
  	GLuint FVBO;
  	GLuint FIBO;
  };
+ */
 }
  #endif // DONUT_DUBE_R

@@ -19,8 +19,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
  
 #include <core/scenenode.h>
 #include <butter/vector3.h>
@@ -74,7 +73,7 @@ int main()
 	{
 		for (int j = 0; j< 10; j++)
 		{
-			Donut::TDrawable* teapot2 = new Donut::TMesh("Teapot");
+			Donut::TDrawable* teapot2 = Donut::CreateSugarInstance("Teapot");
 			Donut::TSceneNode* node = new Donut::TSceneNode();
 			node->Translate(Donut::vector3(30*j,0,-40*i));
 			node->AddDrawable(teapot2);

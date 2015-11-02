@@ -22,57 +22,11 @@
 namespace Donut
 {
 	TDrawable::TDrawable()
-	: FShader()
-	{
-	}
-
-	TDrawable::TDrawable(const TShader& _shader)
-	: FShader(_shader)
 	{
 	}
 
 	TDrawable::~TDrawable()
 	{
 
-	}
-
-	void TDrawable::Bind()
-	{
-		ASSERT_NO_RELEASE(FShader.IsActive());
-		ShaderManager::Instance().EnableShader(FShader);
-	}
-
-	// Update model
-	void TDrawable::UpdateModelMatrix(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix)
-	{
-		ShaderManager::Instance().InjectMat4(FShader,_drawingModelMatrix,"model");
-		ShaderManager::Instance().InjectMat4(FShader, _viewProjectionMatrix * _drawingModelMatrix,"modelviewprojection");
-	}
-
-	void TDrawable::UpdateCameraData(const Matrix4& _projection, const Matrix4& _view)
-	{
-		ShaderManager::Instance().InjectMat4(FShader, _view,"view");
-		ShaderManager::Instance().InjectMat4(FShader, _projection,"projection");
-	}
-
-	void TDrawable::Unbind()
-	{
-		ASSERT_NO_RELEASE(FShader.IsActive());
-		ShaderManager::Instance().DisableShader();
-	}
-
-	void TDrawable::SetShader(const TShader& _shader)
-	{
-		// TODO: Remove one reference from the previous shader in the shader manager
-		FShader = _shader;
-		if(!FShader.IsActive())
-		{
-			GenerateShader();
-		}
-	}
-
-	void TDrawable::GenerateShader()
-	{
-		ShaderManager::Instance().CreateShader(FShader);
 	}
 }

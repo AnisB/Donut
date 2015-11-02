@@ -18,13 +18,13 @@
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
 int main()
 {
+	/*
 	Donut::TSugarLoader::Instance().Init("data");
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
@@ -43,7 +43,7 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawable* teapot = new Donut::TMesh(/*Donut::vector3(0,0,-80),*/"Tess");
+	Donut::TDrawable* teapot = new Donut::TMesh(Donut::vector3(0,0,-80),"Tess");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(teapot);
@@ -59,6 +59,7 @@ int main()
 	window->UnRegisterToDraw(teapot);
 	delete teapot;
 	delete window;
+	*/
 	return 0;
 
 }

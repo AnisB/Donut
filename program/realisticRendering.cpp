@@ -20,8 +20,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
@@ -45,7 +44,7 @@ int main()
 	Donut::SetInputManager(inManager);
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,0.01,500.0);
-	Donut::TDrawable* lego = new Donut::TMesh("LegoSH");
+	Donut::TDrawable* lego = Donut::CreateSugarInstance("LegoSH");
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(lego);

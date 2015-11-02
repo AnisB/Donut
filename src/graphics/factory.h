@@ -14,25 +14,12 @@
 *
 **/
 
-
-#ifndef DONUT_DRAWABLE_OBJECT
-#define DONUT_DRAWABLE_OBJECT
-
 // Library includes
-#include "shader.h"
-#include "core/Camera.h"
+#include "graphics/mesh.h"
 
 namespace Donut
 {
-	class TDrawable
-	{
-	public:
-		TDrawable();
-		virtual ~TDrawable();
-		// To be overloaded
-		virtual void Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix) = 0;
-		// Updating camera data
-		virtual void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view) = 0;
-	};
+	TMesh* CreateCube(double _length);
+	TMesh* CreateSphere(double _radius);
+	TMesh* CreateSugarInstance(const std::string& _sugarName);
 }
- #endif // DONUT_DRAWABLE_OBJECT

@@ -20,9 +20,10 @@
 #define RESOURCE_MANAGER
 
 #include "graphics/shaderManager.h"
+#include "graphics/geometry.h"
+
 #include "base/singleton.h"
 #include "Texture.h"
-#include "model.h"
 #include "sugar.h"
 #include <string>
 #include <vector>
@@ -44,13 +45,13 @@
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);
 		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
 
-		TModel* LoadObj(const TShader& parShader, const std::string&  parObjName);
+		TGeometry* GetGeometry(const TShader& parShader, const std::string&  parObjName);
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
-		void LoadSugarData(const TShader& parShader, TSugar&  parSugar);
+		void LoadMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;
-		std::map<std::string, TModel*> FModels;
+		std::map<std::string, TGeometry*> FGeometries;
 		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;
 	};
 }

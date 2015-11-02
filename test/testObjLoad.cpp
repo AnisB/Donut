@@ -19,8 +19,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
-#include <Render/Representations/3D/Mesh.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
@@ -45,15 +44,15 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawable* teapot = new Donut::TMesh("Teapot");
-	Donut::TDrawable* cube = new Donut::TCubeR(0.5);
+	Donut::TDrawable* teapot = Donut::CreateSugarInstance("Teapot");
+	//Donut::TDrawable* cube = new Donut::TCubeR(0.5);
 
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	node->AddDrawable(cube);
+	//node->AddDrawable(cube);
 	node->AddDrawable(teapot);
 	root->AttachChild(node);
-	window->RegisterToDraw(cube);
+	//window->RegisterToDraw(cube);
 	window->RegisterToDraw(teapot);
 	
 	while(window->IsRendering())
@@ -62,10 +61,10 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update();
 	}
-	window->UnRegisterToDraw(cube);
+	//window->UnRegisterToDraw(cube);
 	window->UnRegisterToDraw(teapot);
 	delete teapot;
-	delete cube;
+	//delete cube;
 
 	delete window;
 	return 0;

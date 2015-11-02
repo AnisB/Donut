@@ -25,6 +25,7 @@
 
 namespace Donut
 {
+	/*
 	class TSkybox : public TDrawable, public TThreadSharedObject
 	{
 	public:
@@ -39,5 +40,6 @@ namespace Donut
 		TSkyboxTexture* FTexture;
 		std::string FSkyboxLocation;
 	};
+	*/
 }
 #endif

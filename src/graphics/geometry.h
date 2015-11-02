@@ -14,22 +14,27 @@
  *
  **/
 
-#ifndef DONUT_MODEL
-#define DONUT_MODEL
+#ifndef GEOMETRY_GRAPHICS_DONUT
+#define GEOMETRY_GRAPHICS_DONUT
 
-#include <string>
+#include "graphics/common.h"
 
-struct TModel
+namespace Donut
 {
-    std::string name;
-    GLuint vertexArray;
-    int nbVertices;
-    bool isTesselated;
-    TModel()
-    {
-    	isTesselated = false;
-    }
-};
+	class TMesh;
+	struct TGeometry
+	{
+	    GLuint vertexArray;
+	    int nbVertices;
+	    TGeometry();
 
-#endif // DONUT_MODEL
+	    // You should not call this
+	private:
+		friend class TMesh;
+	    void Draw(bool _isTess);
+	};	
+}
+
+
+#endif // GEOMETRY_GRAPHICS_DONUT
  

@@ -14,35 +14,41 @@
  *
  **/
 
-#ifndef SUGAR_GRAPHICS_DONUT
-#define SUGAR_GRAPHICS_DONUT
+#ifndef MATERIAL_GRAPHICS_DONUT
+#define MATERIAL_GRAPHICS_DONUT
 
 // Library includes
+#include "graphics/shaderdata.h"
 #include "graphics/shader.h"
-#include "graphics/material.h"
+// STL inlcudes
+#include <string>
+#include <vector>
 
 namespace Donut
 {
-    struct TSugar
+    struct TMaterial
     {
-        std::string     name;
-        std::string     geometry;
-        TMaterial       material;
-        bool            isTesselated;
-
-        TSugar( )
-        : isTesselated(false)
+        TMaterial()
         {
         }
 
-        TSugar( const TSugar& _sugar)
+        TMaterial(const TMaterial& _mat)
         {
-            name = _sugar.name;
-            geometry = _sugar.geometry;
-            material = _sugar.material;
+            builtIns = _mat.builtIns;
+            uniforms = _mat.uniforms;
+            textures = _mat.textures;
+            cubeMaps = _mat.cubeMaps;
+            shader = _mat.shader;
         }
+
+        // Attributes
+        TShader                     shader;
+        std::vector<TBuildIn>       builtIns;
+        std::vector<TUniform>       uniforms;
+        std::vector<TTextureInfo>   textures;
+        std::vector<TCubeMapInfo>   cubeMaps;
     };
 }
 
-#endif // SUGAR_GRAPHICS_DONUT
+#endif // MATERIAL_GRAPHICS_DONUT
  

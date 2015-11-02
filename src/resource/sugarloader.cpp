@@ -51,37 +51,37 @@ namespace Donut
         }
     }
 
-    ShaderDataType::Type stringToDataType(const std::string& parFile)
+    TShaderData::Type stringToDataType(const std::string& parFile)
     {
         if(parFile == TOKEN_VEC3)
         {
-            return ShaderDataType::VEC3;
+            return TShaderData::VEC3;
         }
         else if(parFile == TOKEN_VEC4)
         {
-            return ShaderDataType::VEC4;
+            return TShaderData::VEC4;
         }
         else if(parFile == TOKEN_MAT3)
         {
-            return ShaderDataType::MAT3;
+            return TShaderData::MAT3;
         }
         else if(parFile == TOKEN_MAT4)
         {
-            return ShaderDataType::MAT4;
+            return TShaderData::MAT4;
         }
         else if(parFile == TOKEN_FLOAT)
         {
-            return ShaderDataType::FLOAT;
+            return TShaderData::FLOAT;
         }
         else if(parFile== TOKEN_BOOL)
         {
-            return ShaderDataType::BOOL;
+            return TShaderData::BOOL;
         }
         else if(parFile == TOKEN_INT)
         {
-            return ShaderDataType::INTEGER;
+            return TShaderData::INTEGER;
         }
-        return ShaderDataType::TYPE;
+        return TShaderData::TYPE;
     }
     TSugarLoader::TSugarLoader()
     : FFinished(false)
@@ -189,7 +189,7 @@ namespace Donut
                 while(file_line.find("}")== std::string::npos)
                 {
                     // RESOURCE_DEBUG("The model is: "<<file_line);
-                    sugar.model=file_line;
+                    sugar.geometry=file_line;
                     getNonEmptyLine(fin, file_line);
                 }
             }
@@ -202,10 +202,10 @@ namespace Donut
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
                     TTextureInfo tex;
-                    tex.index = index;
+                    tex.offset = index;
                     tex.name = entete[1];
                     tex.file = entete[2];
-                    sugar.textures.push_back(tex);
+                    sugar.material.textures.push_back(tex);
                     //RESOURCE_DEBUG(tex.index<<" "<<tex.name<<" "<<tex.file);
                     index++;
                     getNonEmptyLine(fin, file_line);
@@ -220,10 +220,10 @@ namespace Donut
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
                     TCubeMapInfo cm;
-                    cm.index = index;
+                    cm.offset = index;
                     cm.name = entete[1];
                     cm.path = entete[2];
-                    sugar.cubeMaps.push_back(cm);
+                    sugar.material.cubeMaps.push_back(cm);
                     //RESOURCE_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
                     index++;
                     getNonEmptyLine(fin, file_line);
@@ -239,7 +239,7 @@ namespace Donut
                     TBuildIn bi;
                     bi.dataType = stringToDataType(entete[1]);
                     bi.name = entete[2];
-                    sugar.builtIns.push_back(bi);
+                    sugar.material.builtIns.push_back(bi);
                     //RESOURCE_DEBUG(bi.dataType<<" "<<bi.name);
                     getNonEmptyLine(fin, file_line);
                 }                
@@ -255,7 +255,7 @@ namespace Donut
                     uni.dataType = stringToDataType(entete[1]);
                     uni.name = entete[2];
                     uni.value = entete[3];
-                    sugar.uniforms.push_back(uni);
+                    sugar.material.uniforms.push_back(uni);
                     // RESOURCE_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
                     getNonEmptyLine(fin, file_line);
                 }                
@@ -269,29 +269,27 @@ namespace Donut
                     split(file_line,' ', entete);
                     if(entete[1]=="vertex")
                     {
-                        sugar.shader.vertex = entete[2];
-                        //RESOURCE_DEBUG("vertex "<<sugar.shader.vertex);
+                        sugar.material.shader.FVertexShader = entete[2];
+                        //RESOURCE_DEBUG("vertex "<<sugar.material.shader.vertex);
                     }
                     else if(entete[1]=="tesscontrol")
                     {
-                        sugar.shader.tesscontrol = entete[2];
-                        // RESOURCE_ERROR("tesscontrol "<<sugar.shader.tesscontrol);
-                        sugar.shader.isTesselated = true;
+                        sugar.material.shader.FTessControl = entete[2];
+                        // RESOURCE_ERROR("tesscontrol "<<sugar.material.shader.tesscontrol);
                     }
                     else if(entete[1]=="tesseval")
                     {
-                        sugar.shader.tesseval = entete[2];
-                        // RESOURCE_ERROR("tesseval "<<sugar.shader.tesseval);
-                        sugar.shader.isTesselated = true;
+                        sugar.material.shader.FTessEval = entete[2];
+                        // RESOURCE_ERROR("tesseval "<<sugar.material.shader.tesseval);
                     }
                     else if(entete[1]=="geometry")
                     {
-                        sugar.shader.geometry = entete[2];
+                        sugar.material.shader.FGeometryShader = entete[2];
                     }
                     else if(entete[1]=="fragment")
                     {
-                        sugar.shader.fragment = entete[2];
-                        //RESOURCE_DEBUG("fragment "<<sugar.shader.fragment);
+                        sugar.material.shader.FFragmentShader = entete[2];
+                        //RESOURCE_DEBUG("fragment "<<sugar.material.shader.fragment);
                     }
 
                     getNonEmptyLine(fin, file_line);

@@ -24,7 +24,7 @@
 
 namespace Donut
 {
-
+/*
 GLfloat cubeVertexL[216] = { 
 
 	// 0 1 2 / 1 2 3
@@ -212,4 +212,5 @@ unsigned int cubeFacesL[36] =
 	  	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 	  	glBindVertexArray (0);
  	}
+ 	*/
  }

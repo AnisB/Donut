@@ -13,36 +13,25 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
-
-#ifndef SUGAR_GRAPHICS_DONUT
-#define SUGAR_GRAPHICS_DONUT
-
-// Library includes
-#include "graphics/shader.h"
-#include "graphics/material.h"
+#include "geometry.h"
 
 namespace Donut
 {
-    struct TSugar
+    TGeometry::TGeometry()
     {
-        std::string     name;
-        std::string     geometry;
-        TMaterial       material;
-        bool            isTesselated;
+    }
 
-        TSugar( )
-        : isTesselated(false)
-        {
-        }
-
-        TSugar( const TSugar& _sugar)
-        {
-            name = _sugar.name;
-            geometry = _sugar.geometry;
-            material = _sugar.material;
-        }
-    };
+    void TGeometry::Draw(bool _isTess)
+    {
+	  	glBindVertexArray (vertexArray);
+	  	if(_isTess)
+	  	{
+	  		glDrawElements(GL_PATCHES, nbVertices, GL_UNSIGNED_INT, 0);
+	  	}
+	  	else
+	  	{
+	  		glDrawElements(GL_TRIANGLES, nbVertices, GL_UNSIGNED_INT, 0);
+	  	}
+	  	glBindVertexArray (0);
+    }
 }
-
-#endif // SUGAR_GRAPHICS_DONUT
- 

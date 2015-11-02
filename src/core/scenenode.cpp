@@ -36,11 +36,7 @@ namespace Donut
 		const Matrix4& _currentModel = parModelMatrix*FModel;
 		foreach_macro(drawable,FDrawables)
 		{
-			TDrawable& drw = (**drawable);
-			drw.Bind();
-			drw.UpdateModelMatrix(_currentModel, _viewProjectionMatrix);
-			drw.Draw();
-			drw.Unbind();
+			(*drawable)->Draw(_currentModel, _viewProjectionMatrix);
 		}
 
 		TNode::Draw(_currentModel, _viewProjectionMatrix);

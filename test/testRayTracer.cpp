@@ -21,7 +21,7 @@
 #include <Input/DefaultInputManager.h>
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>
-#include <Render/Representations/3D/Mesh.h>
+#include "graphics/factory.h"
 #include <core/SceneNode.h>
 #include <resource/texture.h>
 #include <resource/resourcemanager.h>
@@ -75,7 +75,7 @@ void initScene()
 	Donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position TVec3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = new Donut::TMesh("FSQuad");
+	surface = Donut::CreateSugarInstance("FSQuad");
 	// On génère le shader associé a ce modèle
 	// On crée les points de controle
 	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");

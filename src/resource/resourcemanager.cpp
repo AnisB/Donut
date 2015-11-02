@@ -154,11 +154,11 @@
  		return NULL;
 	}
 
-	TModel* ResourceManager::LoadObj(const TShader& parShader, const std::string&  parFileName)
+	TGeometry* ResourceManager::GetGeometry(const TShader& parShader, const std::string&  parFileName)
 	{
 		// Looking in the databaseModel
- 		auto it = FModels.find(parFileName);
- 		if(it != FModels.end())
+ 		auto it = FGeometries.find(parFileName);
+ 		if(it != FGeometries.end())
  		{
   			RESOURCE_INFO(parFileName<<" already loaded"); 
  			return it->second;
@@ -240,8 +240,7 @@
 		    	// Commentaire
 			}
 		}
-	 	TModel * newModel = new TModel();
-	 	newModel->name = parFileName;
+	 	TGeometry * newModel = new TGeometry();
 	 	GLfloat * data;
 	 	unsigned int* indices;
 		GLuint VAO;
@@ -428,7 +427,7 @@
 			}	
 		}
 		glBindVertexArray (0);
-		FModels[parFileName] = newModel;
+		FGeometries[parFileName] = newModel;
 		return newModel;
 	}
 	std::vector<int> ResourceManager::LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable)
@@ -643,31 +642,31 @@
 		}
 		return nbShapes;
 	}
-	void ResourceManager::LoadSugarData(const TShader& parShader,  TSugar&  parSugar)
+	void ResourceManager::LoadMaterial(const TShader& parShader,  const TMaterial&  _material)
 	{
-		foreach_macro(uni,parSugar.uniforms)
+		foreach_macro(uni, _material.uniforms)
 		{
 			switch(uni->dataType)
 			{
-				case ShaderDataType::INTEGER:
+				case TShaderData::INTEGER:
 					ShaderManager::Instance().InjectInt(parShader,stringConvert<int>(uni->value), uni->name);
 				break;
-				case ShaderDataType::FLOAT:
+				case TShaderData::FLOAT:
 					ShaderManager::Instance().InjectFloat(parShader, stringConvert<float>(uni->value),uni->name);
 				break;
 				default:
 				break;
 			}
 		}
-		foreach_macro(tex,parSugar.textures)
+		foreach_macro(tex, _material.textures)
 		{
-			ShaderManager::Instance().InjectTex(parShader,tex->texID, tex->name,tex->index);
+			ShaderManager::Instance().InjectTex(parShader,tex->texID, tex->name,tex->offset);
 		}
 	}
 	void ResourceManager::LoadTextures(TSugar&  parSugar)
 	{
 		RESOURCE_INFO("Loading textures for "<<parSugar.name)
-		foreach_macro(tex,parSugar.textures)
+		foreach_macro(tex,parSugar.material.textures)
 		{
 			TTexture* texPtr = LoadTexture(tex->file);
   			tex->texID =texPtr->FID;

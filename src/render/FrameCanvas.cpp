@@ -40,13 +40,12 @@ namespace Donut
 		1.0,1.0,
 	};
  	TFrameCanvas::TFrameCanvas()
- 	: TDrawable()
-	, FFrameBuffer(0)
+ 	: FFrameBuffer(0)
 	, FAlbedoBuffer(0)
 	, FDepthBuffer(0)
 	, FNormalBuffer(0)
 	, FSpecularBuffer(0)
- 	, FShader(0,CANVAS_VERTEX_SHADER, BASIC_SHADER, BASIC_SHADER, BASIC_SHADER, CANVAS_FRAGMENT_SHADER)
+ 	, FShader(CANVAS_VERTEX_SHADER, CANVAS_FRAGMENT_SHADER)
  	, FCanvasType(FrameCanvasContent::STANDARD)
  	, FTextureCounter(0)
  	{

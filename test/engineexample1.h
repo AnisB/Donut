@@ -21,10 +21,7 @@
 #include <Engine/Engine.h>
 
 #include <core/SceneNode.h>
-
-#include <Render/Representations/3D/CubeR.h>
-#include <Render/Representations/3D/Mesh.h>
-
+#include <graphics/factory.h>
 #include <Input/DefaultInputManager.h>
 
 
@@ -45,7 +42,7 @@
 
      protected:
          Donut::TMesh* FTeapot;
-         Donut::TCubeR* FCubeR;
+         //Donut::TCubeR* FCubeR;
          TSceneNode * FNode1;
          TSceneNode * FNode2;
          bool FIsRendering;
