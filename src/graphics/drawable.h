@@ -47,7 +47,7 @@ namespace Donut
 			return FShader;
 		}
 
-	//protected:
+	protected:
 		virtual void GenerateShader();
 	protected:
 		TShader FShader;

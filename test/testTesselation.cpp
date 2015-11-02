@@ -47,7 +47,7 @@ int main()
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(teapot);
-	root->AddChild(node);
+	root->AttachChild(node);
 	window->RegisterToDraw(teapot);
 	
 	while(window->IsRendering())

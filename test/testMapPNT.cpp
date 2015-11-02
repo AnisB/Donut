@@ -55,7 +55,7 @@ int main()
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(cube);
 	node->AddDrawable(cube2);
-	root->AddChild(node);
+	root->AttachChild(node);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(cube2);
 	while(window->IsRendering())

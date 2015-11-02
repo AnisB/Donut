@@ -33,7 +33,8 @@
 		void Unbind();
 		void Translate(const Vector3& parVector);
 		void SetPosition(const Vector3& parVector);
-		void SetColor(const Vector4& parColor);
+		void SetSpecular(const Vector4& parColor);
+		void SetDiffuse(const Vector4& parColor);
 		void InjectData();
  		void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);
 

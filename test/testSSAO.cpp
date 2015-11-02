@@ -53,13 +53,13 @@ int main()
 	Donut::TDrawable* house = new Donut::TMesh(/*Donut::vector3(0,0,-40),*/"House");
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(house);
-	root->AddChild(node);
+	root->AttachChild(node);
 	window->RegisterToDraw(house);
 
 	Donut::TDrawable* lego = new Donut::TMesh(/*Donut::vector3(0,0.05,-40),*/"Lego");
 	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
 	legoNode->AddDrawable(lego);
-	root->AddChild(legoNode);
+	root->AttachChild(legoNode);
 	window->RegisterToDraw(lego);
 
 

@@ -68,8 +68,8 @@ namespace Donut
         FNode2->Translate(vector3(-5,0,-40));
         FNode1->AddDrawable(FCubeR);
         FNode2->AddDrawable(FTeapot);
-        root->AddChild(FNode1);
-        root->AddChild(FNode2);
+        root->AttachChild(FNode1);
+        root->AttachChild(FNode2);
         FRenderer->RegisterToDraw(FCubeR);
         FRenderer->RegisterToDraw(FTeapot);
     }

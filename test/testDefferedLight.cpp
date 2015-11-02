@@ -46,24 +46,23 @@ int main()
 	window->Init();
 
 	Donut::TLight* lightSource = new Donut::TLight();
-	lightSource->SetPosition(Donut::vector3(0,0,0));
-	lightSource->SetColor(Donut::vector4(0,0,1,1.0));
+	lightSource->SetPosition(Donut::vector3(0,20,0));
+	lightSource->SetDiffuse(Donut::vector4(0,0,1,1.0));
 	window->AddLight(lightSource);
-
+	
 	Donut::TLight* lightSource2 = new Donut::TLight();
-	lightSource2->SetPosition(Donut::vector3(0.0,20,-60));
-	lightSource2->SetColor(Donut::vector4(1.0,0,0,1.0));
+	lightSource2->SetPosition(Donut::vector3(0.0,20,-120));
+	lightSource2->SetDiffuse(Donut::vector4(1.0,0,0,1.0));
 	window->AddLight(lightSource2);
 
-
 	Donut::TLight* lightSource3 = new Donut::TLight();
-	lightSource3->SetPosition(Donut::vector3(0.0,-20,-50));
-	lightSource3->SetColor(Donut::vector4(0.0,1,0,1.0));
+	lightSource3->SetPosition(Donut::vector3(120.0,25,0));
+	lightSource3->SetDiffuse(Donut::vector4(0.0,1,0,1.0));
 	window->AddLight(lightSource3);
 
 	Donut::TLight* lightSource4 = new Donut::TLight();
-	lightSource4->SetPosition(Donut::vector3(0.0,30,-50));
-	lightSource4->SetColor(Donut::vector4(1,1,1,1.0));
+	lightSource4->SetPosition(Donut::vector3(200.0,30,-200));
+	lightSource4->SetDiffuse(Donut::vector4(1,1,1,1.0));
 	window->AddLight(lightSource4);
 
 	Donut::TNode* root= window->GetRoot();
@@ -77,9 +76,9 @@ int main()
 		{
 			Donut::TDrawable* teapot2 = new Donut::TMesh("Teapot");
 			Donut::TSceneNode* node = new Donut::TSceneNode();
-			node->Translate(Donut::vector3(20*j,0,-40*i));
+			node->Translate(Donut::vector3(30*j,0,-40*i));
 			node->AddDrawable(teapot2);
-			root->AddChild(node);
+			root->AttachChild(node);
 			window->RegisterToDraw(teapot2);
 		}
 	}

@@ -52,7 +52,7 @@ int main()
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(cube);
 	node->AddDrawable(teapot);
-	root->AddChild(node);
+	root->AttachChild(node);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(teapot);
 	

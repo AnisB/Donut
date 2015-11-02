@@ -66,9 +66,13 @@ namespace Donut
 		FPosition=parVector;
 		FOutDate = true;	
 	}
-	void TLight::SetColor(const Vector4& parColor)
+	void TLight::SetSpecular(const Vector4& parColor)
 	{
 		FSpec=parColor;
+	}
+	void TLight::SetDiffuse(const Vector4& parColor)
+	{
+		FDiff=parColor;
 	}
  	void TLight::UpdateCamera(const Matrix4& parProjection, const Matrix4& parView)
  	{

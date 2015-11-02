@@ -79,6 +79,7 @@ namespace Donut
         GLuint texID;   
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
+        glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
@@ -376,6 +377,7 @@ namespace Donut
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, parTex->FWidth, parTex->FHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, parTex->FData);
         if(parTex->FType == TImgType::BMP || parTex->FType == TImgType::JPG)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, parTex->FData);
+        glGenerateMipmap(GL_TEXTURE_2D);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -391,6 +393,7 @@ namespace Donut
 
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
+        glTexStorage2D(GL_TEXTURE_2D, 4, GL_RGBA8, parTex->FWidth, parTex->FHeight);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);

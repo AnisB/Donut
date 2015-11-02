@@ -163,7 +163,7 @@ void initScene()
 	node->AddDrawable(surface2);
 	node->AddDrawable(surface3);
 	// On ajoute le noeud créé au noeud racine
-	root->AddChild(node);
+	root->AttachChild(node);
 	// Petite acceleration qui permet de mettre a jour les donées uniformes pour un cout minimal
 	window->RegisterToDraw(surface);
 	window->RegisterToDraw(surface2);

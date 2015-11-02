@@ -267,7 +267,7 @@ int main()
 		Donut::TSceneNode* node = new Donut::TSceneNode();
 		node->Translate(TVec3(counter*300,0.0,-200.0));
 		node->AddDrawable(newHouse);
-		root->AddChild(node);
+		root->AttachChild(node);
 		window->RegisterToDraw(newHouse);
 		housesRenders.push_back(newHouse);
 		counter++;
