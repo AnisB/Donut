@@ -14,18 +14,16 @@
  *
  **/
 
-#include <iostream>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
 int main()
 {
-	/*
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -49,13 +47,20 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TCubeR* cube = new Donut::TCubeR(0.5);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(1.0);
+	Donut::TShader uniformShader;
+	uniformShader.FVertexShader = "shaders/uniform/vertex.glsl";
+	uniformShader.FFragmentShader = "shaders/uniform/fragment.glsl";
+	Donut::TMesh* cube = CreateCube(5.0, uniformShader);
+	Donut::TMesh* cube2 = CreateCube(2.5, uniformShader);
 
-	Donut::TSceneNode* node = new Donut::TSceneNode();
-	node->AddDrawable(cube);
-	node->AddDrawable(cube2);
-	root->AttachChild(node);
+	Donut::TSceneNode* node1 = new Donut::TSceneNode();
+	node1->Translate(Donut::vector3(10,0, -20));
+	Donut::TSceneNode* node2 = new Donut::TSceneNode();
+	node2->Translate(Donut::vector3(20,0, -20));
+	node1->AddDrawable(cube);
+	node2->AddDrawable(cube2);
+	root->AttachChild(node1);
+	root->AttachChild(node2);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(cube2);
 
@@ -72,7 +77,6 @@ int main()
 	delete cube2;
 
 	delete window;
-	*/
 	return 0;
 
 }

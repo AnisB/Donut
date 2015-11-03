@@ -106,6 +106,37 @@
  		}
  	}
 
+	TGeometry* ResourceManager::CreateGeometry(const std::string& _name, const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	{
+		TGeometry * newModel = new TGeometry();
+		glGenVertexArrays (1, &newModel->vertexArray);
+		glBindVertexArray (newModel->vertexArray);
+		
+		glGenBuffers(1, &newModel->vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert*9, _dataArray, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &newModel->indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*num_faces*3, _indexArray, GL_STATIC_DRAW);
+		GLuint posAtt = glGetAttribLocation(_shader.FProgramID, "position");
+		GLuint normalAtt = glGetAttribLocation(_shader.FProgramID, "normal");
+		GLuint texCoordAtt = glGetAttribLocation(_shader.FProgramID, "tex_coord");
+		glEnableVertexAttribArray (posAtt);
+		glEnableVertexAttribArray (normalAtt);
+		glEnableVertexAttribArray (texCoordAtt);
+		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*3));
+		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*6));
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray (0);
+		newModel->nbVertices = num_faces*3;
+		FGeometries[_name] = newModel;
+		return newModel;
+	}
+
+
  	TTexture* ResourceManager::GetTexture(const std::string&  _textureName)
  	{
  		auto it = FTextures.find(_textureName);
@@ -336,14 +367,12 @@
 				{
 					indices[i]=i;
 				}
-				GLuint VBO;
-				GLuint IBO;
-				glGenBuffers(1, &VBO);
-				glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				glGenBuffers(1, &newModel->vertexBuffer);
+				glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*8, data, GL_STATIC_DRAW);
 
-				glGenBuffers(1, &IBO);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+				glGenBuffers(1, &newModel->indexBuffer);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*verticeCounter, indices, GL_STATIC_DRAW);
 
 				GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
@@ -396,14 +425,12 @@
 				{
 					indices[i]=i;
 				}
-				GLuint VBO;
-				GLuint IBO;
-				glGenBuffers(1, &VBO);
-				glBindBuffer(GL_ARRAY_BUFFER, VBO);
+				glGenBuffers(1, &newModel->vertexBuffer);
+				glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*8, data, GL_STATIC_DRAW);
 
-				glGenBuffers(1, &IBO);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+				glGenBuffers(1, &newModel->indexBuffer);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
 				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*verticeCounter, indices, GL_STATIC_DRAW);
 
 				GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");

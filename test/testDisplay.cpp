@@ -18,7 +18,7 @@
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
@@ -46,8 +46,8 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TCubeR* cube = new Donut::TCubeR(0.5);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(1.0);
+	Donut::TMesh* cube = Donut::CreateCube(0.5);
+	Donut::TMesh* cube2 = Donut::CreateCube(1.0);
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(cube);

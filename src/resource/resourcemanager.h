@@ -44,6 +44,7 @@
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName);
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);
 		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
+		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
 		TGeometry* GetGeometry(const TShader& parShader, const std::string&  parObjName);
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);

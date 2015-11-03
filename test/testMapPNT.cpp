@@ -14,17 +14,19 @@
  *
  **/
 
+#include <resource/sugarloader.h>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
-#include <Render/Representations/3D/CubeR.h>
+#include <graphics/factory.h>
 #include <core/SceneNode.h>
 
 
 int main()
 {
-	/*
+	
+	Donut::TSugarLoader::Instance().Init("data");	
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -49,14 +51,19 @@ int main()
 	Donut::TShader shader;
 	shader.FVertexShader = "shaders/test/testVertexPNT.glsl";
 	shader.FFragmentShader = "shaders/test/testFragmentPNT.glsl";
-	Donut::TCubeR* cube = new Donut::TCubeR(0.5,shader);
-	Donut::TCubeR* cube2 = new Donut::TCubeR(1.0,shader);
+	Donut::TMesh* cube = CreateCube(0.5,shader);
+	Donut::TMesh* cube2 = CreateCube(1.0,shader);
 
 
-	Donut::TSceneNode* node = new Donut::TSceneNode();
-	node->AddDrawable(cube);
-	node->AddDrawable(cube2);
-	root->AttachChild(node);
+	Donut::TSceneNode* node1 = new Donut::TSceneNode();
+	node1->Translate(Donut::vector3(10,0, -20));
+	Donut::TSceneNode* node2 = new Donut::TSceneNode();
+	node2->Translate(Donut::vector3(20,0, -20));
+
+	node1->AddDrawable(cube);
+	node2->AddDrawable(cube2);
+	root->AttachChild(node1);
+	root->AttachChild(node2);
 	window->RegisterToDraw(cube);
 	window->RegisterToDraw(cube2);
 	while(window->IsRendering())
@@ -71,8 +78,6 @@ int main()
 	delete cube2;
 
 	delete window;
-
-	*/
 	return 0;
 
 }

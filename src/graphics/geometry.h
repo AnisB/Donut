@@ -25,6 +25,8 @@ namespace Donut
 	struct TGeometry
 	{
 	    GLuint vertexArray;
+	    GLuint vertexBuffer;
+	    GLuint indexBuffer;
 	    int nbVertices;
 	    TGeometry();
 
