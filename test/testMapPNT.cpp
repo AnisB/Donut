@@ -54,7 +54,6 @@ int main()
 	Donut::TMesh* cube = CreateCube(0.5,shader);
 	Donut::TMesh* cube2 = CreateCube(1.0,shader);
 
-
 	Donut::TSceneNode* node1 = new Donut::TSceneNode();
 	node1->Translate(Donut::vector3(10,0, -20));
 	Donut::TSceneNode* node2 = new Donut::TSceneNode();

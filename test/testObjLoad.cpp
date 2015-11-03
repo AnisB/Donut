@@ -33,8 +33,6 @@ int main()
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testObjLoad";
 	window->CreateRenderWindow(newContext, 1);
-	//window->SetFragmentShader("shaders/canvas/outVertex.glsl");
-	//window->SetFragmentShader("shaders/canvas/outFragment.glsl");
 	window->Init();
 
 	// Getting the camera
@@ -45,14 +43,10 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	Donut::TDrawable* teapot = Donut::CreateSugarInstance("Teapot");
-	//Donut::TDrawable* cube = new Donut::TCubeR(0.5);
-
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
-	//node->AddDrawable(cube);
 	node->AddDrawable(teapot);
 	root->AttachChild(node);
-	//window->RegisterToDraw(cube);
 	window->RegisterToDraw(teapot);
 	
 	while(window->IsRendering())
@@ -61,10 +55,8 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update();
 	}
-	//window->UnRegisterToDraw(cube);
 	window->UnRegisterToDraw(teapot);
 	delete teapot;
-	//delete cube;
 
 	delete window;
 	return 0;
