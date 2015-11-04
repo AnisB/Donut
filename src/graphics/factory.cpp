@@ -23,6 +23,7 @@
 
 namespace Donut
 {
+	// Cube Data
 	GLfloat cubeVertexL[216] = { 
 		// Vertex Data
 	1.0f, -1.0f, -1.0f, // 0
@@ -133,6 +134,31 @@ namespace Donut
 		21, 22, 23
 	};
 
+
+	// Plane Data
+	GLfloat planeVertexBuffer[32] = { 
+		// Vertex Data
+	1.0f, 0.0f, -1.0f, // 0
+	-1.0f, 0.0f, -1.0f,// 3
+	1.0f, 0.0f, 1.0f,  // 1
+	-1.0f, 0.0f, 1.0f, // 2
+
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+	0.0,1.0,0.0,
+
+	0.0,0.0,
+	0.0,1.0,
+	1.0,0.0,
+	1.0,1.0,	
+	};
+	unsigned int planeIndexBuffer[6] = 
+	{ 
+		0, 1, 2,
+		2, 1, 3
+	};
+
 	TMesh* CreateCube(double _length, const TShader& _shader)
 	{
 		static int cubeCounter = 0;
@@ -149,6 +175,30 @@ namespace Donut
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); // THIS SHOULD KEEP TRACK OF SHADER THAT USETHE SAME FILES AND RETURN A REFERENCE IF CREATED
 		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 24, cubeFacesL, 12);
+		TMesh* newMesh = new TMesh(defaultMat, geometry);
+		return newMesh;
+	}
+
+	TMesh* CreatePlane(double _with, double _length, const TShader& _shader)
+	{
+		static int planeCounter = 0;
+ 		GLfloat data[32];
+ 		memcpy(&data ,&planeVertexBuffer, 32*sizeof(float));
+ 		for(int i = 0; i<4; ++i)
+ 		{
+ 			data[3*i]*=_with;
+ 		}
+ 		for(int i = 0; i<4; ++i)
+ 		{
+ 			data[3*i+2]*=_length;
+ 		}
+ 		std::string meshName = "Plane_";
+ 		TMaterial defaultMat;
+ 		defaultMat.shader = _shader;
+ 		meshName += std::to_string(planeCounter++);
+ 		GRAPHICS_DEBUG("Creating plane "<<meshName);
+		ShaderManager::Instance().CreateShader(defaultMat.shader); // THIS SHOULD KEEP TRACK OF SHADER THAT USETHE SAME FILES AND RETURN A REFERENCE IF CREATED
+		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 4, planeIndexBuffer, 2);
 		TMesh* newMesh = new TMesh(defaultMat, geometry);
 		return newMesh;
 	}

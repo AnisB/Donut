@@ -19,6 +19,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
+#include <resource/resourcemanager.h>
 #include <graphics/factory.h>
  
 #include <core/scenenode.h>
@@ -68,12 +69,26 @@ int main()
 	Donut::Camera* camera = window->GetCamera();
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
+
+	Donut::TShader shader;
+	shader.FVertexShader =  "shaders/basetex/vertex.glsl";
+    shader.FGeometryShader =  "shaders/basetex/geometry.glsl";
+    shader.FFragmentShader = "shaders/basetex/fragment.glsl";
+
+	Donut::TMesh* basePlane = Donut::CreatePlane(175, 200, shader);
+	basePlane->AddTexture(Donut::ResourceManager::Instance().LoadTexture("data/textures/farmhouse.jpg"), "textureCmp");
+	Donut::TSceneNode* nodePlane = new Donut::TSceneNode();
+	nodePlane->Translate(Donut::vector3(150, -10, -175));
+	nodePlane->AddDrawable(basePlane);
+	root->AttachChild(nodePlane);
+	window->RegisterToDraw(basePlane);
+
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
 	for (int i = 0; i< 10; i++)
 	{
 		for (int j = 0; j< 10; j++)
 		{
-			Donut::TDrawable* teapot2 = Donut::CreateSugarInstance("Teapot");
+			Donut::TMesh* teapot2 = Donut::CreateSugarInstance("Teapot");
 			Donut::TSceneNode* node = new Donut::TSceneNode();
 			node->Translate(Donut::vector3(30*j,0,-40*i));
 			node->AddDrawable(teapot2);

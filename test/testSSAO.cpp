@@ -59,10 +59,9 @@ int main()
 	Donut::TDrawable* lego = Donut::CreateSugarInstance("Lego");
 	Donut::TSceneNode* legoNode = new Donut::TSceneNode();
 	legoNode->AddDrawable(lego);
-	node->Translate(Donut::vector3(0,0.05,-40));
+	legoNode->Translate(Donut::vector3(0,0.05,-40));
 	root->AttachChild(legoNode);
 	window->RegisterToDraw(lego);
-
 
 	while(window->IsRendering())
 	{

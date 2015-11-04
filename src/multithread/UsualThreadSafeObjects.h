@@ -16,10 +16,11 @@
 
 #ifndef DONUT_MULTI_THREAD_USUAL_OBJECTS
 #define DONUT_MULTI_THREAD_USUAL_OBJECTS
-
+//Library includes
 #include "ThreadSharedObject.h"
 #include "Defines.h"
-
+// STL includes
+#include <string>
 
 namespace Donut 
 {

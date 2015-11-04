@@ -21,5 +21,6 @@ namespace Donut
 {
 	TMesh* CreateCube(double _length, const TShader& _shader);
 	TMesh* CreateSphere(double _radius);
+	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
 	TMesh* CreateSugarInstance(const std::string& _sugarName);
 }

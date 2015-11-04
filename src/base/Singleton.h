@@ -14,12 +14,11 @@
 *
 **/
 
-#ifndef DONUT_BASE_SINGLETON
-#define DONUT_BASE_SINGLETON
+#ifndef SINGLETON_BASE_DONUT
+#define SINGLETON_BASE_DONUT
 
-#include <iostream>
- namespace Donut
- {
+namespace Donut
+{
   template <typename T>
   class Singleton
   {
@@ -28,42 +27,42 @@
     ~Singleton () { }
 
   public:
-  // Interface publique
+    // Interface publique
     static T *Instance_Ptr ()
     {
-      if (FInstance == NULL)
+      if (FInstance == nullptr)
       {
         FInstance = new T;
       }
 
       return (static_cast<T*> (FInstance));
     }
+
     static T &Instance ()
     {
-      if (NULL == FInstance)
+      if (FInstance == nullptr)
       {
         FInstance = new T;
       }
-
       return *(static_cast<T*> (FInstance));
     }
 
     static void Destroy ()
     {
-      if (NULL != FInstance)
+      if (FInstance != nullptr)
       {
         delete FInstance;
-        FInstance = NULL;
+        FInstance = nullptr;
       }
     }
 
   private:
-  // Unique instance
-    static T *FInstance;
+    // Unique instance
+    static T* FInstance;
   };
 
-template <typename T>
-  T *Singleton<T>::FInstance = NULL;
+  template <typename T>
+  T* Singleton<T>::FInstance = nullptr;
 }
 
-#endif // DONUT_BASE_SINGLETON
+#endif // SINGLETON_BASE_DONUT
