@@ -86,4 +86,9 @@ namespace Donut
 	{
 		return (_v1.x * _v1.x + _v1.y * _v1.y + _v1.z * _v1.z);
 	}
+
+	Vector3 normalize(const Vector3& _v1)
+	{
+		return _v1/length(_v1);
+	}
 }

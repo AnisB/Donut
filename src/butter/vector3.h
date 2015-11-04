@@ -38,6 +38,7 @@ namespace Donut
 	inline Vector3 crossProd(const Vector3& _v1, const Vector3& _v2);
 	inline double length(const Vector3& _v1);
 	inline double length2(const Vector3& _v1);
+	inline Vector3 normalize(const Vector3& _v1);
 
 	// Default values;
 	extern const Vector3 v3_ZERO;

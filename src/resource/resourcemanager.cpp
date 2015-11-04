@@ -86,6 +86,7 @@
  	{
 
  	}
+
  	TTexture* ResourceManager::LoadTexture(const std::string&  _textureName)
  	{
  		auto it = FTextures.find(_textureName);
@@ -114,7 +115,7 @@
 		
 		glGenBuffers(1, &newModel->vertexBuffer);
 		glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert*9, _dataArray, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert*8, _dataArray, GL_STATIC_DRAW);
 
 		glGenBuffers(1, &newModel->indexBuffer);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
@@ -271,12 +272,9 @@
 		    	// Commentaire
 			}
 		}
-	 	TGeometry * newModel = new TGeometry();
+	 	TGeometry * newModel = nullptr;
 	 	GLfloat * data;
 	 	unsigned int* indices;
-		GLuint VAO;
-		glGenVertexArrays (1, &VAO);
-		glBindVertexArray (VAO);
 
 		foreach_macro(shape,shapes)
 		{
@@ -291,105 +289,129 @@
 			split(sample[2],'/', sample2);
 			int nbInfo = sample2.size();
 
+			// We only get the pos buffer from the obj
 			if(nbInfo==1)
 			{
-				data = new GLfloat[3*dimShape*nbShape];
+				GLfloat* vertexArray = new GLfloat[8*dimShape*nbShape];
+				GLfloat* normalArray = vertexArray + 3*dimShape*nbShape;
+				GLfloat* texCoord = normalArray + 3*dimShape*nbShape;
+
 				int verticeCounter = 0;
 				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices;
 					split(*prim,' ', vertices);
-					// vertices.erase(vertices.begin());
-					foreach_macro(vertice, vertices)
+					int primSize = vertices.size();
+					if(vertices.size() == 3)
 					{
-						Vector3& point = listePoints[stringConvert<int>(*vertice)-1];
-						data[verticeCounter*3] = point.x;
-						data[verticeCounter*3+1] = point.y;
-						data[verticeCounter*3+2] = point.z;
-						verticeCounter++;
-					}	
+						Vector3 points[3];
+						points[0] = listePoints[stringConvert<int>(vertices[0])-1];
+						points[1] = listePoints[stringConvert<int>(vertices[1])-1];
+						points[2] = listePoints[stringConvert<int>(vertices[2])-1];
+
+						const Vector3& v0 = points[1]-points[0];
+						const Vector3& v1 = points[2]-points[0];
+						const Vector3& normal =  normalize(crossProd(v0,v1));
+
+						for(int i = 0; i < 3; ++i)
+						{
+							vertexArray[(verticeCounter+i)*3] = points[i].x;
+							vertexArray[(verticeCounter+i)*3+1] = points[i].y;
+							vertexArray[(verticeCounter+i)*3+2] = points[i].z;
+
+							normalArray[(verticeCounter+i)*3] = normal.x;
+							normalArray[(verticeCounter+i)*3+1] = normal.y;
+							normalArray[(verticeCounter+i)*3+2] = normal.z;
+						}
+						verticeCounter += primSize;
+					}
+					else // 4
+					{
+						/*
+						const Vector3& point0 = listePoints[stringConvert<int>(vertices[0]-1];
+						const Vector3& point1 = listePoints[stringConvert<int>(vertices[1]-1];
+						const Vector3& point2 = listePoints[stringConvert<int>(vertices[2]-1];
+						const Vector3& point3 = listePoints[stringConvert<int>(vertices[3]-1];
+						*/
+						ASSERT_NOT_IMPLEMENTED();
+					}
 				}
+				// Creating the IBO
 				indices = new unsigned int[verticeCounter];
 				for(int i=0; i < verticeCounter;i++)
 				{
 					indices[i]=i;
 				}
-				GLuint VBO;
-				GLuint IBO;
-				glGenBuffers(1, &VBO);
-				glBindBuffer(GL_ARRAY_BUFFER, VBO);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*3, data, GL_STATIC_DRAW);
-
-				glGenBuffers(1, &IBO);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*verticeCounter, indices, GL_STATIC_DRAW);
-
-				GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
-
-				glEnableVertexAttribArray (posAtt);
-
-				glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
 				delete [] data;
 				delete [] indices;
-				newModel->vertexArray = VAO;
-				newModel->nbVertices = verticeCounter;
 			}
 			else if(nbInfo==2)
 			{
-				data = new GLfloat[5*dimShape*nbShape];
+				GLfloat* vertexArray = new GLfloat[8*dimShape*nbShape];
+				GLfloat* normalArray = vertexArray + 3*dimShape*nbShape;
+				GLfloat* texCoordArray = normalArray + 3*dimShape*nbShape;
+
 				int verticeCounter = 0;
 				foreach_macro(prim, currentShape.info)
 				{
 					std::vector<std::string> vertices;
 					split(*prim,' ', vertices);
-					ASSERT_MSG_NO_RELEASE(vertices.size()==3, *prim);
-					vertices.erase(vertices.begin());
-					foreach_macro(vertice, vertices)
+					int primSize = vertices.size();
+					if(primSize == 3)
 					{
-						std::vector<std::string> dataVert;
-						split(*vertice,'/', dataVert);
-						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
-						data[verticeCounter*3] = point.x;
-						data[verticeCounter*3+1] = point.y;
-						data[verticeCounter*3+2] = point.z;
+						Vector3 points[3];
+						std::vector<std::string> dataVert0, dataVert1, dataVert2;
+						split(vertices[0],'/', dataVert0);
+						split(vertices[1],'/', dataVert1);
+						split(vertices[2],'/', dataVert2);
+						points[0] = listePoints[stringConvert<int>(dataVert0[0])-1];
+						points[1] = listePoints[stringConvert<int>(dataVert1[0])-1];
+						points[2] = listePoints[stringConvert<int>(dataVert2[0])-1];
 
-						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[3*dimShape*nbShape+verticeCounter*2] = mapp.x;
-						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
-						verticeCounter++;
-					}	
+						Vector2 texCoord[3];
+						texCoord[0] = uvList[stringConvert<int>(dataVert0[1])-1];
+						texCoord[1] = uvList[stringConvert<int>(dataVert1[1])-1];
+						texCoord[2] = uvList[stringConvert<int>(dataVert2[1])-1];
+
+						const Vector3& v0 = points[1]-points[0];
+						const Vector3& v1 = points[2]-points[0];
+						const Vector3& normal =  normalize(crossProd(v0,v1));
+
+						for(int i = 0; i < 3; ++i)
+						{
+							vertexArray[(verticeCounter+i)*3] = points[i].x;
+							vertexArray[(verticeCounter+i)*3+1] = points[i].y;
+							vertexArray[(verticeCounter+i)*3+2] = points[i].z;
+
+							normalArray[(verticeCounter+i)*3] = normal.x;
+							normalArray[(verticeCounter+i)*3+1] = normal.y;
+							normalArray[(verticeCounter+i)*3+2] = normal.z;
+
+							texCoordArray[(verticeCounter+i)*2] = texCoord[i].x;
+							texCoordArray[(verticeCounter+i)*2+1] = texCoord[i].y;
+						}
+						verticeCounter += primSize;
+					}
+					else // 4
+					{
+						/*
+						const Vector3& point0 = listePoints[stringConvert<int>(vertices[0]-1];
+						const Vector3& point1 = listePoints[stringConvert<int>(vertices[1]-1];
+						const Vector3& point2 = listePoints[stringConvert<int>(vertices[2]-1];
+						const Vector3& point3 = listePoints[stringConvert<int>(vertices[3]-1];
+						*/
+						ASSERT_NOT_IMPLEMENTED();
+					}
 				}
 				indices = new unsigned int[verticeCounter];
 				for(int i=0; i < verticeCounter;i++)
 				{
 					indices[i]=i;
 				}
-				glGenBuffers(1, &newModel->vertexBuffer);
-				glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*8, data, GL_STATIC_DRAW);
-
-				glGenBuffers(1, &newModel->indexBuffer);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*verticeCounter, indices, GL_STATIC_DRAW);
-
-				GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
-				GLuint texCoordAtt = glGetAttribLocation(parShader.FProgramID, "tex_coord");
-
-				glEnableVertexAttribArray (posAtt);
-				glEnableVertexAttribArray (texCoordAtt);
-
-				glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-				glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*verticeCounter*3));
-
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
 				delete [] data;
 				delete [] indices;
-				newModel->vertexArray = VAO;
-				newModel->nbVertices = verticeCounter;
 			}
 			else if(nbInfo==3)
 			{
@@ -425,32 +447,9 @@
 				{
 					indices[i]=i;
 				}
-				glGenBuffers(1, &newModel->vertexBuffer);
-				glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT)*verticeCounter*8, data, GL_STATIC_DRAW);
-
-				glGenBuffers(1, &newModel->indexBuffer);
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
-				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned int)*verticeCounter, indices, GL_STATIC_DRAW);
-
-				GLuint posAtt = glGetAttribLocation(parShader.FProgramID, "position");
-				GLuint normalAtt = glGetAttribLocation(parShader.FProgramID, "normal");
-				GLuint texCoordAtt = glGetAttribLocation(parShader.FProgramID, "tex_coord");
-
-				glEnableVertexAttribArray (posAtt);
-				glEnableVertexAttribArray (normalAtt);
-				glEnableVertexAttribArray (texCoordAtt);
-
-				glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-				glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*verticeCounter*3));
-				glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*verticeCounter*5));
-
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
 				delete [] data;
 				delete [] indices;
-				newModel->vertexArray = VAO;
-				newModel->nbVertices = verticeCounter;
 			}	
 		}
 		glBindVertexArray (0);
