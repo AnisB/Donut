@@ -1,22 +1,6 @@
-cmake_minimum_required(VERSION 2.6)
- 
+cmake_minimum_required(VERSION 2.8)
+
 project(DonutEngine)
-
-MACRO(GENERATE_LIB LIB_PATH LIB_NAME)
-  SET(${Source_File} "")
-file(
-  GLOB_RECURSE 
-  Source_File 
-  ${LIB_PATH}/*.h
-  ${LIB_PATH}/*.ih
-  ${LIB_PATH}/*.cpp
-    )
-add_library(${LIB_NAME} ${Source_File})
-include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${EXTERNAL_LIBS} )
-ENDMACRO()
-
-
-
 
 #add_definitions( -D_RELEASE )
 add_definitions( -D_DEBUG )
@@ -26,6 +10,7 @@ add_definitions(-std=c++11)
 set(CMAKE_BUILD_TYPE "Debug")
 IF (NOT WIN32)
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+SET(CMAKE_MACRO_DIRS "${PROJECT_SOURCE_DIR}/cmake/")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
 ENDIF()
 link_directories(${CMAKE_BINARY_DIR})
@@ -48,6 +33,8 @@ IF(WIN32)
 set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/windows")
 set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/windows")
 ENDIF()
+
+include(${CMAKE_MACRO_DIRS}/Macros.cmake)
 
 # Setting the needs
 IF(UNIX AND NOT APPLE)

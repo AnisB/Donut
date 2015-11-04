@@ -17,8 +17,8 @@
 #include "tools/fileloader.h"
 #include "resource/common.h"
 #include "base/common.h"
-#include "3rdparty/picojson.h"
-#include "3rdparty/rapidxml.hpp"
+#include "picojson.h"
+#include "rapidxml.hpp"
 
 #include <fstream>
 
