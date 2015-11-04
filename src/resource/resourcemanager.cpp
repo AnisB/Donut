@@ -342,7 +342,7 @@
 				{
 					indices[i]=i;
 				}
-				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter/3);
 				delete [] data;
 				delete [] indices;
 			}
@@ -409,7 +409,7 @@
 				{
 					indices[i]=i;
 				}
-				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter/3);
 				delete [] data;
 				delete [] indices;
 			}
@@ -430,14 +430,16 @@
 						data[verticeCounter*3+1] = point.y;
 						data[verticeCounter*3+2] = point.z;
 
-						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[3*dimShape*nbShape+verticeCounter*2] = mapp.x;
-						data[3*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
 
 						Vector3& norm = normales[stringConvert<int>(dataVert[2])-1];
-						data[5*dimShape*nbShape+verticeCounter*3] = norm.x;
-						data[5*dimShape*nbShape+verticeCounter*3+1] = norm.y;
-						data[5*dimShape*nbShape+verticeCounter*3+2] = norm.z;
+						data[3*dimShape*nbShape+verticeCounter*3] = norm.x;
+						data[3*dimShape*nbShape+verticeCounter*3+1] = norm.y;
+						data[3*dimShape*nbShape+verticeCounter*3+2] = norm.z;
+
+						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						data[6*dimShape*nbShape+verticeCounter*2] = mapp.x;
+						data[6*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
+
 
 						verticeCounter++;
 					}	
@@ -447,12 +449,11 @@
 				{
 					indices[i]=i;
 				}
-				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter);
+				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter/3);
 				delete [] data;
 				delete [] indices;
 			}	
 		}
-		glBindVertexArray (0);
 		FGeometries[parFileName] = newModel;
 		return newModel;
 	}
