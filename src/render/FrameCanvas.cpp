@@ -18,7 +18,7 @@
  #include "FrameCanvas.h"
  #include "graphics/common.h"
  #include "graphics/settings.h"
- #include "render/helper.h"
+ #include "graphics/glfactory.h"
 
  #include <base/common.h>
  #include <multiThread/defines.h>

@@ -20,7 +20,7 @@
 #include "Base/Common.h"
 #include "Input/InputHelper.h"
 #include "Base/Macro.h"
-#include <Render/Helper.h>
+#include "graphics/glfactory.h"
  
 #include <stdlib.h>
 #include <stdio.h>

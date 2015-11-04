@@ -18,7 +18,6 @@
 #include "shadermanager.h"
 #include "base/common.h"
 #include "graphics/common.h"
-#include "render/helper.h"
 #include "base/macro.h"
 
 #include "tools/fileloader.h"

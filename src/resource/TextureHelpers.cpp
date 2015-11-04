@@ -16,6 +16,7 @@
 
 #include <base/common.h>
 #include <graphics/Common.h>
+#include <graphics/glfactory.h>
 #include <input/Common.h>
 #include <resource/Common.h>
 #include "TextureHelpers.h"
@@ -410,9 +411,10 @@ namespace Donut
     {
 #if __posix__
         unsigned char *pdata = new unsigned char[1280*720*3];
-        glReadPixels(0, 0, 1280, 720, GL_RGB, GL_UNSIGNED_BYTE, pdata);
 
+        ReadRGBFrameBuffer(1280, 720, pdata);
         FILE *outfile;
+
         if ((outfile = fopen(parFileName.c_str(), "wb")) == NULL) 
         {
             printf("can't open %s",parFileName.c_str());

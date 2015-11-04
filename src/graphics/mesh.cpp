@@ -16,7 +16,6 @@
 
 
  #include "Mesh.h"
- #include "Render/Helper.h"
  #include "resource/resourcemanager.h"
  #include "resource/sugarloader.h"
  #include "Base/Common.h"
