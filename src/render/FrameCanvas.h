@@ -21,6 +21,7 @@
 
 #include "graphics/drawable.h"
 #include "graphics/shaderManager.h"
+#include "graphics/material.h"
 #include <Render/Light.h>
 #include <resource/texture.h>
 #include "MultiThread/ThreadSharedObject.h"
@@ -87,7 +88,7 @@
 	 	GLuint FVBO;
 
 		//Shader
-		TShader FShader;
+		TMaterial FMaterial;
 	};
 	// END CLASS DECLARATION
  }

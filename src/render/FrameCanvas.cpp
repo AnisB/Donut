@@ -45,11 +45,11 @@ namespace Donut
 	, FDepthBuffer(0)
 	, FNormalBuffer(0)
 	, FSpecularBuffer(0)
- 	, FShader(CANVAS_VERTEX_SHADER, CANVAS_FRAGMENT_SHADER)
+ 	, FMaterial()
  	, FCanvasType(FrameCanvasContent::STANDARD)
  	, FTextureCounter(0)
  	{
-
+ 		FMaterial.shader = TShader(CANVAS_VERTEX_SHADER, CANVAS_FRAGMENT_SHADER);
  	}
 
  	TFrameCanvas::~TFrameCanvas()
@@ -58,7 +58,7 @@ namespace Donut
 
 	void TFrameCanvas::createShader()
 	{
- 		ShaderManager::Instance().CreateShader(FShader);
+ 		ShaderManager::Instance().CreateShader(FMaterial.shader);
 	}
 
 	void TFrameCanvas::createVAO()
@@ -71,8 +71,8 @@ namespace Donut
 		glBindBuffer(GL_ARRAY_BUFFER, FVBO);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(fullScreenQuad), fullScreenQuad, GL_STATIC_DRAW);
-		GLuint posAtt = glGetAttribLocation(FShader.FProgramID, "position");
-		GLuint texCoordAtt = glGetAttribLocation(FShader.FProgramID, "tex_coord");
+		GLuint posAtt = glGetAttribLocation(FMaterial.shader.FProgramID, "position");
+		GLuint texCoordAtt = glGetAttribLocation(FMaterial.shader.FProgramID, "tex_coord");
 		glEnableVertexAttribArray (posAtt);
 		glEnableVertexAttribArray (texCoordAtt);
 		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
@@ -107,12 +107,12 @@ namespace Donut
 	 		UnBindFrameBuffer();
 			GRAPHICS_DEBUG("Frame canvas created");
 			
-	 		ShaderManager::Instance().EnableShader(FShader);
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 1 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 1 );
 	 		FTextureCounter = 2;
 	 		ShaderManager::Instance().DisableShader();
 		}
@@ -142,15 +142,15 @@ namespace Donut
 	 		UnBindFrameBuffer();
 			GRAPHICS_DEBUG("Frame canvas created");
 			
-	 		ShaderManager::Instance().EnableShader(FShader);
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "nbuffer", 1 );
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "specbuffer", 2 );
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "posbuffer", 3 );
-	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 4 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "nbuffer", 1 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "specbuffer", 2 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "posbuffer", 3 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 4 );
 	 		ShaderManager::Instance().DisableShader();
 		}
 		else if (FCanvasType==FrameCanvasContent::DEFFERED)
@@ -192,14 +192,14 @@ namespace Donut
 	 		}
 
 	 		UnBindFrameBuffer();
-	 		ShaderManager::Instance().EnableShader(FShader);
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FShader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
-	 		ShaderManager::Instance().InjectTex(FShader, FFinalBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FShader, FAlbedoBuffer, "diff", 1 );
-	 		ShaderManager::Instance().InjectTex(FShader, FDepthBuffer, "depth", 2 );
-	 		ShaderManager::Instance().InjectTex(FShader, FPosBuffer, "posbuffer", 3 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FFinalBuffer, "canvas", 0 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "diff", 1 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 2 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FPosBuffer, "posbuffer", 3 );
 	 		ShaderManager::Instance().DisableShader();
 
 		}
@@ -208,7 +208,7 @@ namespace Donut
 
 	void TFrameCanvas::SetShader(const TShader& _shader)
 	{
-		FShader = _shader;
+		FMaterial.shader = _shader;
 
 	}
 
@@ -270,7 +270,7 @@ namespace Donut
 		{
  			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
  			ShaderManager::Instance().BindTex(FDepthBuffer,1);
-	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
 		  	glBindVertexArray (FVertexArrayID);
 		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
 		  	glBindVertexArray (0);
@@ -286,12 +286,12 @@ namespace Donut
  			ShaderManager::Instance().BindTex(FPosBuffer,3);
  			ShaderManager::Instance().BindTex(FDepthBuffer,4);
  			int counter = FTextureCounter-(int)FTextures.size()-1;
- 			foreach_macro(tex, FTextures)
+ 			foreach_macro(tex, FMaterial.textures)
  			{
- 				ShaderManager::Instance().BindTex((*tex)->FID,counter);
+ 				ShaderManager::Instance().BindTex(tex->texID,counter);
  				counter++;
  			}
-	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
 		  	glBindVertexArray (FVertexArrayID);
 		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
 		  	glBindVertexArray (0);
@@ -331,7 +331,7 @@ namespace Donut
  			ShaderManager::Instance().BindTex(FFinalBuffer,0);
  			ShaderManager::Instance().BindTex(FAlbedoBuffer,1);
  			ShaderManager::Instance().BindTex(FDepthBuffer,2);
-	 		ShaderManager::Instance().EnableShader(FShader);
+	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
 		  	glBindVertexArray (FVertexArrayID);
 		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
 		  	glBindVertexArray (0);
@@ -345,8 +345,8 @@ namespace Donut
 		GRAPHICS_INFO("Attaching texture "<<_texture->FFileName<<" to frame canvas");
 		FTextures.push_back(_texture);
 	 	FTextureCounter++;
- 		ShaderManager::Instance().EnableShader(FShader);
- 		ShaderManager::Instance().InjectTex(FShader, _texture->FID, _uniformVarName, FTextureCounter);
+ 		ShaderManager::Instance().EnableShader(FMaterial.shader);
+ 		ShaderManager::Instance().InjectTex(FMaterial.shader, _texture->FID, _uniformVarName, FTextureCounter);
  		ShaderManager::Instance().DisableShader();
 	}
  }
