@@ -111,6 +111,16 @@ namespace Donut
 		str.erase(new_end, str.end());  
 	    return str;
 	}
+
+	// Geometry container writer
+	std::ofstream& operator<<(std::ofstream& _stream, TGeometryContainer* _container)
+	{
+		_stream.write((char*)&_container->nbVertices, sizeof(int));
+		_stream.write((char*)_container->vertsNormalsUVs, sizeof(float)*8*_container->nbVertices);
+		_stream.write((char*)&_container->nbFaces, sizeof(int));
+		_stream.write((char*)&_container->faces, sizeof(unsigned int)*3*_container->nbFaces);
+		return _stream;
+	}
 }
 
 

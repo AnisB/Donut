@@ -16,6 +16,9 @@
 #ifndef DONUT_FILE_LOADER
 #define DONUT_FILE_LOADER
 
+// LIbrary includes
+ #include "resource/geometrycontainer.h"
+
 // Std includes
 #include <vector>
 #include <string>
@@ -32,6 +35,9 @@ namespace Donut
 	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
 	// removes multiple spaces in a string
 	std::string removeMultSpace(const std::string& parString); 
+
+	// Geometry container writer
+	std::ofstream& operator<<(std::ofstream& _stream, TGeometryContainer* _container);
 
 	// Converters from string
 	template<typename T>

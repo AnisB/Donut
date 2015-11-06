@@ -19,12 +19,16 @@
 #ifndef RESOURCE_MANAGER_DONUT
 #define RESOURCE_MANAGER_DONUT
 
+// Library includes
 #include "graphics/shaderManager.h"
 #include "graphics/geometry.h"
 
 #include "base/singleton.h"
-#include "Texture.h"
+#include "texture.h"
+#include "geometrycontainer.h"
 #include "sugar.h"
+
+// STL includes
 #include <string>
 #include <vector>
 #include <map>
@@ -47,6 +51,8 @@
 		TGeometry* FetchGeometry(const TShader& parShader, const std::string&  parObjName);
 		// Creates a geometry and registers it with a given name
 		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
+		// Reads a given file and serializes its content as a geometry container
+		TGeometryContainer* ReadWavefront(const std::string&  parObjName);
 		// Binds into GPU memory a given material
 		void BindMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 

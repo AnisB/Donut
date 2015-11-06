@@ -47,7 +47,7 @@ void main()
 	// Computing light source position (view space)
 	vec3 lightPos = (view*vec4(lightSource.position,1.0)).xyz;
 	// Fetching xyz position (view space)
-	vec4 pixelPos = texture(posbuffer,texCoord).xyz;
+	vec3 pixelPos = texture(posbuffer,texCoord).xyz;
 
 	// Computing the light direction
 	vec3 l = lightPos - pixelPos;

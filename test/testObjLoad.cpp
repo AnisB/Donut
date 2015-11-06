@@ -23,8 +23,9 @@
 #include <core/SceneNode.h>
 
 
-int main()
+int main(int argc, char** argv)
 {
+	ASSERT(argc==2);
 	Donut::TSugarLoader::Instance().Init("data");
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
@@ -42,7 +43,7 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawable* teapot = Donut::CreateSugarInstance("Teapot");
+	Donut::TDrawable* teapot = Donut::CreateSugarInstance(argv[1]);
 
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(teapot);

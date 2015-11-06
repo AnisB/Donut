@@ -48,3 +48,6 @@ TARGET_LINK_LIBRARIES(testSSAO ${CORELIBS})
 
 add_executable(testSceneLoad ${TEST}/testSceneLoad.cpp)
 TARGET_LINK_LIBRARIES(testSceneLoad ${CORELIBS})
+
+add_executable(testDOF ${TEST}/testDOF.cpp)
+TARGET_LINK_LIBRARIES(testDOF ${CORELIBS})
