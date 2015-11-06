@@ -41,7 +41,7 @@ namespace Donut
 			const Matrix4& GetProjectionMatrix() const{ return FProjection;}
 			const Matrix4& GetProjectionViewMatrix() const{ return FProjection;}
 			// Setting the projection matrix
-			void DefinePerspective(float parFovy, float parAspect, float parNear, float parFar);
+			void DefinePerspective(double parFovy, double parAspect, double parNear, double parFar);
 			
 			// Modification flags
 			void ChangeNoticed();

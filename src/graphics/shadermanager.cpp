@@ -244,11 +244,11 @@ namespace Donut
 	// Injections
 	void ShaderManager::InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
 	{
-	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x,parValue.y,parValue.z);
+	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 	}
 	void ShaderManager::InjectVec4(const TShader& parProgram, const Vector4& parValue, const std::string& parName)
 	{
-	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue.x,parValue.y,parValue.z, parValue.w);
+	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z, (GLfloat)parValue.w);
 	}
 	void ShaderManager::InjectInt(const TShader& parProgram, int parValue, const std::string& parName)
 	{

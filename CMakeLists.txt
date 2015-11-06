@@ -6,13 +6,13 @@ project(DonutEngine)
 add_definitions( -D_DEBUG )
 
 # Setting the compiler data
-add_definitions(-std=c++11) 
 set(CMAKE_BUILD_TYPE "Debug")
 IF (NOT WIN32)
+add_definitions(-std=c++11) 
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
+ENDIF()
 SET(CMAKE_MACRO_DIRS "${PROJECT_SOURCE_DIR}/cmake/")
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
-ENDIF()
 link_directories(${CMAKE_BINARY_DIR})
 
 # Setting the folder data

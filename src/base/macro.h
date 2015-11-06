@@ -22,7 +22,7 @@ namespace Donut
 	#define foreach_macro(IT, X) for ( auto IT = X.begin(); IT != X.end(); ++IT )
 	#define tryget(IT, LIST, ELEM) auto IT = LIST.find(ELEM);
 
-	#define PACK_DATA(VAL,MAXVAL) (VAL/MAXVAL+0.5)
+	#define PACK_DATA(VAL,MAXVAL) ((GLfloat)((VAL/MAXVAL+0.5)))
 	#define UNPACK_DATA(VAL,MAXVAL) ((VAL-0.5)*MAXVAL)
 }
 

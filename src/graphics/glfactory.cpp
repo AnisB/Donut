@@ -69,7 +69,7 @@ namespace Donut
 	void DeleteFrameBuffers(std::vector<GLuint>& _frameBuffers)
 	{
 		#if LINUX | WIN32
-		glDeleteFramebuffers(_frameBuffers.size(), &_frameBuffers[0]);
+		glDeleteFramebuffers((GLsizei)_frameBuffers.size(), &_frameBuffers[0]);
 		#endif
 		
 		#ifdef MACOSX
@@ -137,7 +137,7 @@ namespace Donut
 	void DeleteTextures(std::vector<GLuint>& _textures)
 	{
 		#if LINUX | WIN32
-		glDeleteTextures(_textures.size(), &_textures[0]);
+		glDeleteTextures((GLsizei)_textures.size(), &_textures[0]);
 		#endif
 		
 		#ifdef MACOSX

@@ -19,7 +19,7 @@
 namespace Donut
 {
 	TDefaultInputManager::TDefaultInputManager()
-	: FInitDone(false)
+	: m_initDone(false)
 	{
 		FKeys[TKeyCode::W] = false;
 		FKeys[TKeyCode::S] = false;
@@ -42,19 +42,19 @@ namespace Donut
 		FKeys[parKey] = false;
 	}
 
-	void TDefaultInputManager::MouseMoved(float parX, float parY)
+	void TDefaultInputManager::MouseMoved(double parX, double parY)
 	{
-		if(!FInitDone)
+		if(!m_initDone)
 		{
-			oldX= parX;
-			oldY= parY;
-			FInitDone = true;
+			m_oldX= parX;
+			m_oldY= parY;
+			m_initDone = true;
 			return;
 		}
-		FCamera->Yaw((parX-oldX)*3.14/180.0*20);
-		FCamera->Pitch((parY-oldY)*3.14/180.0*20);
-		oldX= parX;
-		oldY= parY;
+		FCamera->Yaw((parX-m_oldX)*3.14/180.0*20);
+		FCamera->Pitch((parY-m_oldY)*3.14/180.0*20);
+		m_oldX= parX;
+		m_oldY= parY;
 	}
 	void TDefaultInputManager::MousePressed(TMouseCode::Type parButton)
 	{

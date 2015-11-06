@@ -82,9 +82,9 @@ namespace Donut
 	    ASSERT_NO_RELEASE(InManager != NULL);
 	    int width, height;
 	    glfwGetFramebufferSize(window, &width, &height);
-	    float ratio = width / (float) height;
-	    float x = ratio*(2*xpos/(float)width - 1);
-	    float y = 2*-ypos/(float)height + 1;
+	    double ratio = width / (float) height;
+	    double x = ratio*(2*xpos/(float)width - 1);
+	    double y = 2*-ypos/(float)height + 1;
 	    InManager->MouseMoved(x,y);
  	}
 }

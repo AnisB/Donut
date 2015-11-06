@@ -42,22 +42,22 @@ namespace Donut
 	    Vector3 edge2 = v2.position - v0.position;
 
 	    Vector3 vecP = crossProd(parRay.direction,edge2);
-	    float det = dotProd(edge1, vecP);
+	    double det = dotProd(edge1, vecP);
 
 	    if(fabs(det)<EPSILON)
 	    {
 	        return intersect;
 	    }
 
-	    float invDet = 1.0 / det;
+	    double invDet = 1.0 / det;
 	    Vector3 vecS = parRay.origin - v0.position;
 
-	    float u = dotProd(vecS, vecP) * invDet;
+	    double u = dotProd(vecS, vecP) * invDet;
 	    if(u<0.0 || u>1.0)
 	        return intersect;
 
 	    Vector3 vecQ = crossProd(vecS,edge1);
-	    float v = dotProd(parRay.direction, vecQ) * invDet;
+	    double v = dotProd(parRay.direction, vecQ) * invDet;
 	    if(v<0.0f || u + v > 1.0f)
 	        return intersect;
 

@@ -26,7 +26,7 @@ namespace Donut
 	void matrix4(Matrix4& _mat, MatrixInit::Type _init = MatrixInit::Zero);
 	void SetIdentity(Matrix4& _matrix);
 	void ResetToZero(Matrix4& _matrix);
-	void AsPerspective(Matrix4& _mat, float parFovy, float parAspect, float parNear, float parFar);
+	void AsPerspective(Matrix4& _mat, double parFovy, double parAspect, double parNear, double parFar);
 
 	// Access functions
 	Vector3 GetTranslate(const Matrix4& _matrix);

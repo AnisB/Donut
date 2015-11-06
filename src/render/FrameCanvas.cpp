@@ -289,7 +289,7 @@ namespace Donut
  			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
  			ShaderManager::Instance().BindTex(FPosBuffer,3);
  			ShaderManager::Instance().BindTex(FDepthBuffer,4);
- 			int counter = FTextureCounter-FTextures.size()-1;
+ 			int counter = FTextureCounter-(int)FTextures.size()-1;
  			foreach_macro(tex, FTextures)
  			{
  				ShaderManager::Instance().BindTex((*tex)->FID,counter);

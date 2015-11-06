@@ -41,7 +41,7 @@ namespace Donut
  	{
  		TTextureInfo newTex;
 		newTex.texID = parTex->FID;
-		newTex.offset = FMaterial.textures.size();
+		newTex.offset = (int)FMaterial.textures.size();
 		newTex.name = parName;
  		FMaterial.textures.push_back(newTex);
  	}

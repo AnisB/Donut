@@ -31,7 +31,7 @@ namespace Donut
 		virtual void KeyPressed(TKeyCode::Type parKey) = 0;
 		virtual void KeyReleased(TKeyCode::Type parKey) = 0;
 
-		virtual void MouseMoved(float parX, float parY) = 0;
+		virtual void MouseMoved(double parX, double parY) = 0;
 		virtual void MousePressed(TMouseCode::Type parButton) = 0;
 		virtual void MouseReleased(TMouseCode::Type parButton) = 0;
 	};

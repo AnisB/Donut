@@ -32,7 +32,7 @@ namespace Donut
 		
 	}
 
-	void Camera::DefinePerspective(float parFovy, float parAspect, float parNear, float parFar)
+	void Camera::DefinePerspective(double parFovy, double parAspect, double parNear, double parFar)
 	{
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;

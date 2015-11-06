@@ -41,7 +41,7 @@ namespace Donut
 		}	
 
 		bool isValid;
-		float distance;
+		double distance;
 		TVertice point;
 	};
 }

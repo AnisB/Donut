@@ -19,10 +19,10 @@ namespace Donut
 		memcpy(m, _mat.m,16*sizeof(double));
 	}
 
-	void AsPerspective(Matrix4& _mat, float parFovy, float parAspect, float parNear, float parFar)
+	void AsPerspective(Matrix4& _mat, double parFovy, double parAspect, double parNear, double parFar)
 	{
 		std::fill_n(_mat.m, 16, 0);
-		float f = 1/tan(parFovy*3.14/360.0);
+		double f = 1/tan(parFovy*3.14/360.0);
 		_mat.m[0] = f/parAspect;
 		_mat.m[5] = f;
 		_mat.m[10] = (parFar+parNear)/(parNear-parFar);
@@ -267,7 +267,7 @@ namespace Donut
 	{
 		for(int i = 0; i < 16; ++i)
 		{
-			content[i] = _mat.m[i];
+			content[i] = (float)_mat.m[i];
 		}
 	}
 

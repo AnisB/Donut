@@ -46,7 +46,7 @@ Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
 Donut::TSceneNode *node1,*node2,*node3;
 //Temps global
-float totalTime = 0.0;
+double totalTime = 0.0;
 // Resolution de la grille
 #define RESOLUTION_GRID 5 
 
@@ -79,7 +79,7 @@ void generateTexture()
 }
 
 
-void updateControlPoint(float dt)
+void updateControlPoint(double dt)
 {
 	// Mise a jours du temps total
 	totalTime+=dt;

@@ -279,15 +279,15 @@
 		foreach_macro(shape,shapes)
 		{
 			TShape & currentShape = *shape;
-			int nbShape = currentShape.info.size();
+			int nbShape = (int)currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
 			std::vector<std::string> sample;
 			split(currentShape.info[0], ' ', sample); 
-			int dimShape = sample.size();
+			int dimShape = (int)sample.size();
 			ASSERT_MSG_NO_RELEASE((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4");
 			std::vector<std::string> sample2;
 			split(sample[2],'/', sample2);
-			int nbInfo = sample2.size();
+			int nbInfo = (int)sample2.size();
 
 			// We only get the pos buffer from the obj
 			if(nbInfo==1)
@@ -301,7 +301,7 @@
 				{
 					std::vector<std::string> vertices;
 					split(*prim,' ', vertices);
-					int primSize = vertices.size();
+					int primSize = (int)vertices.size();
 					if(vertices.size() == 3)
 					{
 						Vector3 points[3];
@@ -315,13 +315,13 @@
 
 						for(int i = 0; i < 3; ++i)
 						{
-							vertexArray[(verticeCounter+i)*3] = points[i].x;
-							vertexArray[(verticeCounter+i)*3+1] = points[i].y;
-							vertexArray[(verticeCounter+i)*3+2] = points[i].z;
+							vertexArray[(verticeCounter+i)*3] = (GLfloat)points[i].x;
+							vertexArray[(verticeCounter+i)*3+1] = (GLfloat)points[i].y;
+							vertexArray[(verticeCounter+i)*3+2] = (GLfloat)points[i].z;
 
-							normalArray[(verticeCounter+i)*3] = normal.x;
-							normalArray[(verticeCounter+i)*3+1] = normal.y;
-							normalArray[(verticeCounter+i)*3+2] = normal.z;
+							normalArray[(verticeCounter+i)*3] = (GLfloat)normal.x;
+							normalArray[(verticeCounter+i)*3+1] = (GLfloat)normal.y;
+							normalArray[(verticeCounter+i)*3+2] = (GLfloat)normal.z;
 						}
 						verticeCounter += primSize;
 					}
@@ -357,7 +357,7 @@
 				{
 					std::vector<std::string> vertices;
 					split(*prim,' ', vertices);
-					int primSize = vertices.size();
+					int primSize = (int)vertices.size();
 					if(primSize == 3)
 					{
 						Vector3 points[3];
@@ -380,16 +380,16 @@
 
 						for(int i = 0; i < 3; ++i)
 						{
-							vertexArray[(verticeCounter+i)*3] = points[i].x;
-							vertexArray[(verticeCounter+i)*3+1] = points[i].y;
-							vertexArray[(verticeCounter+i)*3+2] = points[i].z;
+							vertexArray[(verticeCounter+i)*3] = (GLfloat)points[i].x;
+							vertexArray[(verticeCounter+i)*3+1] = (GLfloat)points[i].y;
+							vertexArray[(verticeCounter+i)*3+2] = (GLfloat)points[i].z;
 
-							normalArray[(verticeCounter+i)*3] = normal.x;
-							normalArray[(verticeCounter+i)*3+1] = normal.y;
-							normalArray[(verticeCounter+i)*3+2] = normal.z;
+							normalArray[(verticeCounter+i)*3] = (GLfloat)normal.x;
+							normalArray[(verticeCounter+i)*3+1] = (GLfloat)normal.y;
+							normalArray[(verticeCounter+i)*3+2] = (GLfloat)normal.z;
 
-							texCoordArray[(verticeCounter+i)*2] = texCoord[i].x;
-							texCoordArray[(verticeCounter+i)*2+1] = texCoord[i].y;
+							texCoordArray[(verticeCounter+i)*2] = (GLfloat)texCoord[i].x;
+							texCoordArray[(verticeCounter+i)*2+1] = (GLfloat)texCoord[i].y;
 						}
 						verticeCounter += primSize;
 					}
@@ -426,19 +426,19 @@
 						std::vector<std::string> dataVert;
 						split(*vertice, '/', dataVert);
 						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
-						data[verticeCounter*3] = point.x;
-						data[verticeCounter*3+1] = point.y;
-						data[verticeCounter*3+2] = point.z;
+						data[verticeCounter*3] = (GLfloat)point.x;
+						data[verticeCounter*3+1] = (GLfloat)point.y;
+						data[verticeCounter*3+2] = (GLfloat)point.z;
 
 
 						Vector3& norm = normales[stringConvert<int>(dataVert[2])-1];
-						data[3*dimShape*nbShape+verticeCounter*3] = norm.x;
-						data[3*dimShape*nbShape+verticeCounter*3+1] = norm.y;
-						data[3*dimShape*nbShape+verticeCounter*3+2] = norm.z;
+						data[3*dimShape*nbShape+verticeCounter*3] = (GLfloat)norm.x;
+						data[3*dimShape*nbShape+verticeCounter*3+1] = (GLfloat)norm.y;
+						data[3*dimShape*nbShape+verticeCounter*3+2] = (GLfloat)norm.z;
 
 						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
-						data[6*dimShape*nbShape+verticeCounter*2] = mapp.x;
-						data[6*dimShape*nbShape+verticeCounter*2+1] = mapp.y;
+						data[6*dimShape*nbShape+verticeCounter*2] = (GLfloat)mapp.x;
+						data[6*dimShape*nbShape+verticeCounter*2+1] = (GLfloat)mapp.y;
 
 
 						verticeCounter++;
@@ -542,16 +542,16 @@
 		foreach_macro(shape, shapes)
 		{
 			TShape & currentShape = *shape;
-			int nbShape = currentShape.info.size();
+			int nbShape = (int)currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
 			std::vector<std::string> sample;
 			split(currentShape.info[0],' ', sample); 
-			int dimShape = sample.size();
+			int dimShape = (int)sample.size();
 			ASSERT_MSG_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
 	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
 			std::vector<std::string> sample2;
 			split(sample[2],'/', sample2);
-			int nbInfo = sample2.size();
+			int nbInfo = (int)sample2.size();
 
 			const int verticeSize = 9;
 			const int lineSize = verticeSize*3; // (NORMAL(3)+POSITION(3)+UV(2))*NB_PTS(3)

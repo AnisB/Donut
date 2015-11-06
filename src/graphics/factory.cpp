@@ -166,7 +166,7 @@ namespace Donut
  		memcpy(&data ,&cubeVertexL, 216*sizeof(float));
  		for(int i = 0; i<72; ++i)
  		{
- 			data[i]*=_length;
+ 			data[i]*=(GLfloat)_length;
  		}
  		std::string meshName = "Cube_";
  		TMaterial defaultMat;
@@ -186,11 +186,11 @@ namespace Donut
  		memcpy(&data ,&planeVertexBuffer, 32*sizeof(float));
  		for(int i = 0; i<4; ++i)
  		{
- 			data[3*i]*=_with;
+ 			data[3*i]*=(GLfloat)_with;
  		}
  		for(int i = 0; i<4; ++i)
  		{
- 			data[3*i+2]*=_length;
+ 			data[3*i+2]*=(GLfloat)_length;
  		}
  		std::string meshName = "Plane_";
  		TMaterial defaultMat;
