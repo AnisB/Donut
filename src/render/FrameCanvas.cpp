@@ -206,16 +206,12 @@ namespace Donut
 
  	}
 
-	void TFrameCanvas::SetFragmentShader(const std::string& parFShader)
+	void TFrameCanvas::SetShader(const TShader& _shader)
 	{
-		FShader.FFragmentShader = parFShader;
+		FShader = _shader;
 
 	}
 
-	void TFrameCanvas::SetVertexShader(const std::string& parVShader)
-	{
-		FShader.FVertexShader = parVShader;
-	}	
 
 	void TFrameCanvas::InjectData(const TShader& parShader)
 	{

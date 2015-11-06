@@ -111,15 +111,9 @@
 		FFrameCanvas->Enable();
 	}
 
-	void TRenderPass::SetFragmentShader(const std::string& parFragShader)
+	void TRenderPass::SetShader(const TShader& _shader)
 	{
-		FFrameCanvas->SetFragmentShader(parFragShader);
-		FRenderToTexture = true;
-	}
-
-	void TRenderPass::SetVertexShader(const std::string& parFragShader)
-	{
-		FFrameCanvas->SetVertexShader(parFragShader);
+		FFrameCanvas->SetShader(_shader);
 		FRenderToTexture = true;
 	}
 

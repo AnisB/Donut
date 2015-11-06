@@ -88,14 +88,9 @@ namespace Donut
  		return FRenderer->IsRendering();
  	}
 
-	void TEngine::SetVertexShader(const std::string& parVertex, int parNbPass)
+	void TEngine::SetShader(const TShader& _shader, int parNbPass)
 	{
-		FRenderer->SetVertexShader(parVertex, parNbPass);
-	}
-
-	void TEngine::SetFragmentShader(const std::string& parFrag, int parNbPass)
-	{
-		FRenderer->SetFragmentShader(parFrag, parNbPass);
+		FRenderer->SetShader(_shader, parNbPass);
 	}
 
 	void TEngine::Update(float dt)

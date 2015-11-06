@@ -14,14 +14,14 @@
  *
  **/
 
+// Library includes
 #include "sugarloader.h"
+#include "base/Common.h"
+#include "resource/shaderfilehandler.h"
+#include "resource/Common.h"
+#include "tools/fileloader.h"
 
-
-#include <Base/Common.h>
-#include <resource/Common.h>
-
-#include <Tools/FileLoader.h>
-
+// STL includes
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -269,26 +269,26 @@ namespace Donut
                     split(file_line,' ', entete);
                     if(entete[1]=="vertex")
                     {
-                        sugar.material.shader.FVertexShader = entete[2];
+						sugar.material.shader.FVertexShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
                         //RESOURCE_DEBUG("vertex "<<sugar.material.shader.vertex);
                     }
                     else if(entete[1]=="tesscontrol")
                     {
-                        sugar.material.shader.FTessControl = entete[2];
+                        sugar.material.shader.FTessControl = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
                         // RESOURCE_ERROR("tesscontrol "<<sugar.material.shader.tesscontrol);
                     }
                     else if(entete[1]=="tesseval")
                     {
-                        sugar.material.shader.FTessEval = entete[2];
+                        sugar.material.shader.FTessEval = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
                         // RESOURCE_ERROR("tesseval "<<sugar.material.shader.tesseval);
                     }
                     else if(entete[1]=="geometry")
                     {
-                        sugar.material.shader.FGeometryShader = entete[2];
+                        sugar.material.shader.FGeometryShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
                     }
                     else if(entete[1]=="fragment")
                     {
-                        sugar.material.shader.FFragmentShader = entete[2];
+                        sugar.material.shader.FFragmentShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
                         //RESOURCE_DEBUG("fragment "<<sugar.material.shader.fragment);
                     }
 

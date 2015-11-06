@@ -17,7 +17,6 @@
 #ifndef SHADER_MANAGER_DONUT 
 #define SHADER_MANAGER_DONUT
 
-
 // Library includes
 #include "shader.h"
 
@@ -27,7 +26,7 @@
 
 
 // STL includes
-#include <vector>
+#include <unordered_set>
 
 namespace Donut
 {
@@ -63,7 +62,7 @@ namespace Donut
 		void InjectTex(const TShader& parProgram, GLuint _texID, const std::string& parName, GLuint parOffset);
 		void InjectCubeMap(const TShader& parProgram, GLuint _texID, const std::string& parName, GLuint parOffset);
  	private:
- 		std::vector<TShader> FPrograms;
+ 		std::unordered_set<TShader,TShaderHasher> FPrograms;
  	};
  }
 

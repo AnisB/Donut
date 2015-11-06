@@ -36,8 +36,8 @@ int main()
 	newContext.windowName = "testSSAO";
 	window->CreateRenderWindow(newContext, 1);
 	window->SetRenderType(Donut::FrameCanvasContent::GBUFFER);
-	window->SetVertexShader("shaders/canvas/ssaoV.glsl");
-	window->SetFragmentShader("shaders/canvas/ssaoF.glsl");
+	Donut::TShader rpShader("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
+	window->SetShader(rpShader);
 	window->Init();
 
 	// Getting the camera

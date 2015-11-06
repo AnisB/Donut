@@ -39,8 +39,7 @@ namespace Donut
  		// in your implementation of the rendering engine
  		virtual void Update(float dt);
  		virtual void PrepareNextFrame() {}
- 		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
- 		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
+ 		void SetShader(const TShader& _shader, int parNbPass = 0);
  		void DrawObject(TDrawable * parObject);
  		void RemoveObject(TDrawable * parObject);
 

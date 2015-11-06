@@ -40,8 +40,8 @@ int main()
 	newContext.major = 4;
 	newContext.minor = 1;
 	window->CreateRenderWindow(newContext, 1);
-	window->SetFragmentShader("shaders/canvas/vertex.glsl");
-	window->SetFragmentShader("shaders/canvas/lightfragment.glsl");
+	Donut::TShader rpShader("shaders/canvas/vertex.glsl", "shaders/canvas/lightfragment.glsl");
+	window->SetShader(rpShader);
 	window->SetRenderType(Donut::FrameCanvasContent::DEFFERED);
 	window->Init();
 
@@ -70,10 +70,7 @@ int main()
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
 
-	Donut::TShader shader;
-	shader.FVertexShader =  "shaders/basetex/vertex.glsl";
-    shader.FGeometryShader =  "shaders/basetex/geometry.glsl";
-    shader.FFragmentShader = "shaders/basetex/fragment.glsl";
+	Donut::TShader shader("shaders/basetex/vertex.glsl", "shaders/basetex/geometry.glsl","shaders/basetex/fragment.glsl");
 
 	Donut::TMesh* basePlane = Donut::CreatePlane(175, 200, shader);
 	basePlane->AddTexture(Donut::ResourceManager::Instance().LoadTexture("data/textures/farmhouse.jpg"), "textureCmp");

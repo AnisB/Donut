@@ -68,8 +68,7 @@
 
 
  		void SetRenderType(FrameCanvasContent::Type parType, int parNbPass = 0);
- 		void SetVertexShader(const std::string& parVertex, int parNbPass = 0);
- 		void SetFragmentShader(const std::string& parFrag, int parNbPass = 0);
+ 		void SetShader(const TShader& _shader, int parNbPass = 0);
 
 
  		TNode* GetRoot(int parNbPass = 0);

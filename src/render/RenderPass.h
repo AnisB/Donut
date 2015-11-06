@@ -50,8 +50,8 @@
 		void AddDrawable(TDrawable* parDrawable);
 		void RemoveDrawable(TDrawable* parDrawable);
 
-		void SetFragmentShader(const std::string& parFShader);
-		void SetVertexShader(const std::string& parVShader);
+		void SetShader(const TShader& _shader);
+
 		void PreparePass();
 		void IsFramedCanvas(bool parVal)
 		{

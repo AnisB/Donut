@@ -51,8 +51,8 @@
 		{
 			FCanvasType = parType;
 		}
-		void SetFragmentShader(const std::string& parFShader);
-		void SetVertexShader(const std::string& parVShader);
+		void SetShader(const TShader& _shader);
+
 		virtual void Draw() {}
 		virtual void Draw(const std::vector<TLight*>& parLights);
 		void InjectData(const TShader& parShader);

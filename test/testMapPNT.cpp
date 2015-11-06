@@ -48,9 +48,7 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TShader shader;
-	shader.FVertexShader = "shaders/test/testVertexPNT.glsl";
-	shader.FFragmentShader = "shaders/test/testFragmentPNT.glsl";
+	Donut::TShader shader("shaders/test/testVertexPNT.glsl","shaders/test/testFragmentPNT.glsl");
 	Donut::TMesh* cube = CreateCube(0.5,shader);
 	Donut::TMesh* cube2 = CreateCube(1.0,shader);
 

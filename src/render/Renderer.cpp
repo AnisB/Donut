@@ -237,14 +237,10 @@
 	{
 		return FRenderPasses[parNbPass]->GetCamera();
 	}
-	void TRenderer::SetVertexShader(const std::string& parVertex, int parNbPass)
-	{
-		FRenderPasses[parNbPass]->SetVertexShader(parVertex);
-	}
 
-	void TRenderer::SetFragmentShader(const std::string& parFrag, int parNbPass)
+	void TRenderer::SetShader(const TShader& _shader, int parNbPass)
 	{
-		FRenderPasses[parNbPass]->SetFragmentShader(parFrag);
+		FRenderPasses[parNbPass]->SetShader(_shader);
 	}
 	
 	void TRenderer::SetRenderType(FrameCanvasContent::Type parType, int parNbPass)

@@ -86,8 +86,19 @@ namespace Donut
 		}
 	}
 
-	bool ShaderManager::CreateShader(TShader& parShader)
+	bool ShaderManager::CreateShader(TShader& _shader)
 	{
+		// We make shure the shader was not created before
+		tryget(result, FPrograms, _shader);
+		if(result != FPrograms.end())
+		{
+			_shader.FProgramID = result->FProgramID;
+			_shader.FActive = result->FActive;
+			return true;
+		}
+
+		// If it is not, we create it
+		TShaderFileHandler& shaderFileHandler = TShaderFileHandler::Instance();
 		GRAPHICS_DEBUG("Creating shader kernel");
 		GLuint programID = 0;
 		GLuint vertexShader = 0;
@@ -98,68 +109,73 @@ namespace Donut
 
 		programID = glCreateProgram();
 		char shaderFlags = 0;
-		if(parShader.FVertexShader!=BASIC_SHADER)
+		if(_shader.FVertexShader!=BASIC_SHADER)
 		{
 			std::string vsFile;
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			ReadFile(parShader.FVertexShader.c_str(),vsFile);
+			const std::string& vertexShaderFileName = shaderFileHandler.GetShaderFile(_shader.FVertexShader);
+			ReadFile(vertexShaderFileName.c_str(),vsFile);
 			const char * vsFile_ptr = vsFile.c_str();
 			glShaderSource(vertexShader, 1, (const char **)&vsFile_ptr, NULL);
 			glCompileShader(vertexShader);
-			CheckShader(vertexShader, parShader.FVertexShader);
+			CheckShader(vertexShader, vertexShaderFileName);
 			glAttachShader(programID, vertexShader);
 			shaderFlags &= VERTEX_FLAG;			
 
 		}
-		if(parShader.FTessControl!=BASIC_SHADER)
+		if(_shader.FTessControl!=BASIC_SHADER)
 		{
 			std::string tcsFile;
+			const std::string& tessControlShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessControl);
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
-			ReadFile(parShader.FTessControl.c_str(), tcsFile);
+			ReadFile(tessControlShaderFileName.c_str(), tcsFile);
 			const char * tcsFile_ptr = tcsFile.c_str();
 			glShaderSource(tessControlShader, 1, (const char **)&tcsFile_ptr, NULL);
 			glCompileShader(tessControlShader);
-			CheckShader(tessControlShader, parShader.FTessControl);
+			CheckShader(tessControlShader, tessControlShaderFileName);
 			glAttachShader(programID, tessControlShader);
 			shaderFlags &= TESS_CONTROL_FLAG;
-			parShader.FIsTesselated =true;	
+			_shader.FIsTesselated =true;	
 		}
 
-		if(parShader.FTessEval!=BASIC_SHADER)
+		if(_shader.FTessEval!=BASIC_SHADER)
 		{
 			std::string tesFile;
+			const std::string& tessEvalShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessEval);
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-			ReadFile(parShader.FTessEval.c_str(), tesFile);
+			ReadFile(tessEvalShaderFileName.c_str(), tesFile);
 			const char * tesFile_ptr = tesFile.c_str();
 			glShaderSource(tessEvalShader, 1, (const char **)&tesFile_ptr, NULL);
 			glCompileShader(tessEvalShader);
-			CheckShader(tessEvalShader, parShader.FTessEval);
+			CheckShader(tessEvalShader, tessEvalShaderFileName);
 			glAttachShader(programID, tessEvalShader);
 			shaderFlags &= TESS_EVAL_FLAG;	
-			parShader.FIsTesselated =true;	
+			_shader.FIsTesselated =true;	
 		}
 
-		if(parShader.FGeometryShader!=BASIC_SHADER)
+		if(_shader.FGeometryShader!=BASIC_SHADER)
 		{
 			std::string gsFile;
+			const std::string& geometryShaderFileName = shaderFileHandler.GetShaderFile(_shader.FGeometryShader);
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			ReadFile(parShader.FGeometryShader.c_str(), gsFile);
+			ReadFile(geometryShaderFileName.c_str(), gsFile);
 			const char * gsFile_ptr = gsFile.c_str();
 			glShaderSource(geometryShader, 1, (const char **)&gsFile_ptr, NULL);
 			glCompileShader(geometryShader);
-			CheckShader(geometryShader, parShader.FGeometryShader);
+			CheckShader(geometryShader, geometryShaderFileName);
 			glAttachShader(programID, geometryShader);
 			shaderFlags &= GEOMETRY_FLAG;			
 		}
-		if(parShader.FFragmentShader!=BASIC_SHADER)
+		if(_shader.FFragmentShader!=BASIC_SHADER)
 		{
 			std::string fsFile;
+			const std::string& fragmentShaderFileName = shaderFileHandler.GetShaderFile(_shader.FFragmentShader);
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			ReadFile(parShader.FFragmentShader.c_str(), fsFile);
+			ReadFile(fragmentShaderFileName.c_str(), fsFile);
 			const char * fsFile_ptr = fsFile.c_str();
 			glShaderSource(fragmentShader, 1, (const char **)&fsFile_ptr, NULL);
 			glCompileShader(fragmentShader);
-			CheckShader(fragmentShader, parShader.FFragmentShader);
+			CheckShader(fragmentShader, fragmentShaderFileName);
 			glAttachShader(programID, fragmentShader);
 			shaderFlags &= FRAGMENT_FLAG;			
 		}
@@ -167,9 +183,9 @@ namespace Donut
 		glLinkProgram(programID);
 		if(CheckProgram(programID))
 		{
-			parShader.FProgramID = programID;
-			parShader.FActive = true;
-			FPrograms.push_back(parShader);
+			_shader.FProgramID = programID;
+			_shader.FActive = true;
+			FPrograms.insert(_shader);
 			GRAPHICS_DEBUG("Shader created");
 			// Cleaning up the memory required for compilation
 			if(shaderFlags & VERTEX_FLAG)

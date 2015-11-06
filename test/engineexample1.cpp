@@ -50,8 +50,8 @@ namespace Donut
 
     void TEngineExample::InitScene()
     {
-        FRenderer->SetFragmentShader("shaders/canvas/outVertex.glsl");
-        FRenderer->SetFragmentShader("shaders/canvas/outFragment.glsl");
+		Donut::TShader rpShader("shaders/canvas/outVertex.glsl", "shaders/canvas/outFragment.glsl");
+		FRenderer->SetShader(rpShader);
 
         Donut::TRenderPass* pass= FRenderer->GetPasses()[0];
         Donut::TNode* root= pass->GetRoot();
