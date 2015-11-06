@@ -33,9 +33,11 @@ namespace Donut
 	#define ASSERT_FAIL_MSG_NO_RELEASE(MSG) ASSERT_FAIL_MSG(MSG)
 	#define ASSERT_NO_RELEASE(Enonce) ASSERT(Enonce)
 	#define ASSERT_MSG_NO_RELEASE(Enonce, MSG) ASSERT_MSG(Enonce, MSG)
-#elif _RELEASE 
+#else
 	#define ASSERT_NO_RELEASE(Enonce) {}
 	#define ASSERT_MSG_NO_RELEASE(Enonce) {}
+	#define ASSERT_FAIL_NO_RELEASE() {}
+	#define ASSERT_FAIL_MSG_NO_RELEASE(MSG) {}
 #endif
 }
 

@@ -43,7 +43,7 @@ namespace Donut
 
  	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
- 		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.")
+ 		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.");
  		FRenderer->CreateRenderWindow(parContext);
  		InitScene();
 #if __posix__

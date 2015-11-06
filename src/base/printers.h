@@ -47,7 +47,7 @@ namespace Donut
 	// General purpose MACROS
 	#if _DEBUG
 	#define PRINT_DEBUG(TYPE, ENONCE) PRINT_GENERAL(BLUE, TYPE, ENONCE)
-	#elif _RELEASE
+	#else
 	#define PRINT_DEBUG(TYPE, ENONCE) {}
 	#endif
 	#define PRINT_INFO(TYPE, ENONCE) PRINT_GENERAL(GREEN, TYPE, ENONCE)
