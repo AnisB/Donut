@@ -158,7 +158,7 @@
 
 	void TRenderPass::AddTexture(const std::string& _textureName, const std::string& _unifomName)
 	{
-		TTexture* texture  = ResourceManager::Instance().LoadTexture(_textureName);
+		TTexture* texture  = ResourceManager::Instance().FetchTexture(_textureName);
 		FFrameCanvas->AttachTexture(texture, _unifomName);
 	}
 	// END CLASS IMPLEMENTATION

@@ -73,7 +73,7 @@ int main()
 	Donut::TShader shader("shaders/basetex/vertex.glsl", "shaders/basetex/geometry.glsl","shaders/basetex/fragment.glsl");
 
 	Donut::TMesh* basePlane = Donut::CreatePlane(175, 200, shader);
-	basePlane->AddTexture(Donut::ResourceManager::Instance().LoadTexture("data/textures/farmhouse.jpg"), "textureCmp");
+	basePlane->AddTexture(Donut::ResourceManager::Instance().FetchTexture("data/textures/farmhouse.jpg"), "textureCmp");
 	Donut::TSceneNode* nodePlane = new Donut::TSceneNode();
 	nodePlane->Translate(Donut::vector3(150, -10, -175));
 	nodePlane->AddDrawable(basePlane);

@@ -48,7 +48,7 @@ namespace Donut
  	void TMesh::Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix)
  	{	
  		Bind();
- 		ResourceManager::Instance().LoadMaterial(FMaterial.shader, FMaterial);
+ 		ResourceManager::Instance().BindMaterial(FMaterial.shader, FMaterial);
  		ShaderManager::Instance().InjectMat4(FMaterial.shader,_drawingModelMatrix,"model");
 		ShaderManager::Instance().InjectMat4(FMaterial.shader, _viewProjectionMatrix * _drawingModelMatrix,"modelviewprojection");
 	  	FGeometry->Draw(FMaterial.shader.FIsTesselated);

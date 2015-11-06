@@ -28,10 +28,8 @@ namespace Donut
         std::string     name;
         std::string     geometry;
         TMaterial       material;
-        bool            isTesselated;
-
+        
         TSugar( )
-        : isTesselated(false)
         {
         }
 

@@ -87,7 +87,7 @@
 
  	}
 
- 	TTexture* ResourceManager::LoadTexture(const std::string&  _textureName)
+ 	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)
  	{
  		auto it = FTextures.find(_textureName);
  		if(it != FTextures.end())
@@ -105,48 +105,6 @@
  			texture->FNbRef++;
  			return texture;
  		}
- 	}
-
-	TGeometry* ResourceManager::CreateGeometry(const std::string& _name, const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
-	{
-		TGeometry * newModel = new TGeometry();
-		glGenVertexArrays (1, &newModel->vertexArray);
-		glBindVertexArray (newModel->vertexArray);
-		
-		glGenBuffers(1, &newModel->vertexBuffer);
-		glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert*8, _dataArray, GL_STATIC_DRAW);
-
-		glGenBuffers(1, &newModel->indexBuffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*num_faces*3, _indexArray, GL_STATIC_DRAW);
-		GLuint posAtt = glGetAttribLocation(_shader.FProgramID, "position");
-		GLuint normalAtt = glGetAttribLocation(_shader.FProgramID, "normal");
-		GLuint texCoordAtt = glGetAttribLocation(_shader.FProgramID, "tex_coord");
-		glEnableVertexAttribArray (posAtt);
-		glEnableVertexAttribArray (normalAtt);
-		glEnableVertexAttribArray (texCoordAtt);
-		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*3));
-		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*6));
-		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray (0);
-		newModel->nbVertices = num_faces*3;
-		FGeometries[_name] = newModel;
-		return newModel;
-	}
-
-
- 	TTexture* ResourceManager::GetTexture(const std::string&  _textureName)
- 	{
- 		auto it = FTextures.find(_textureName);
- 		if(it != FTextures.end())
- 		{
- 			return it->second;
- 			it->second->FNbRef++;
- 		}
- 		return NULL;
  	}
 
 	TSkyboxTexture* ResourceManager::LoadSkybox(const std::string&  parTextureName)
@@ -186,7 +144,7 @@
  		return NULL;
 	}
 
-	TGeometry* ResourceManager::GetGeometry(const TShader& parShader, const std::string&  parFileName)
+	TGeometry* ResourceManager::FetchGeometry(const TShader& parShader, const std::string&  parFileName)
 	{
 		// Looking in the databaseModel
  		auto it = FGeometries.find(parFileName);
@@ -343,6 +301,7 @@
 					indices[i]=i;
 				}
 				newModel = CreateGeometry(parFileName, parShader, data, verticeCounter, indices, verticeCounter/3);
+
 				delete [] data;
 				delete [] indices;
 			}
@@ -669,17 +628,24 @@
 		}
 		return nbShapes;
 	}
-	void ResourceManager::LoadMaterial(const TShader& parShader,  const TMaterial&  _material)
+
+	TGeometry* ResourceManager::CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	{
+		TGeometry* geo = ::Donut::CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
+		FGeometries[_name] = geo;
+		return geo;
+	}
+	void ResourceManager::BindMaterial(const TShader& _shader,  const TMaterial&  _material)
 	{
 		foreach_macro(uni, _material.uniforms)
 		{
 			switch(uni->dataType)
 			{
 				case TShaderData::INTEGER:
-					ShaderManager::Instance().InjectInt(parShader,stringConvert<int>(uni->value), uni->name);
+					ShaderManager::Instance().InjectInt(_shader,stringConvert<int>(uni->value), uni->name);
 				break;
 				case TShaderData::FLOAT:
-					ShaderManager::Instance().InjectFloat(parShader, stringConvert<float>(uni->value),uni->name);
+					ShaderManager::Instance().InjectFloat(_shader, stringConvert<float>(uni->value),uni->name);
 				break;
 				default:
 				break;
@@ -687,16 +653,7 @@
 		}
 		foreach_macro(tex, _material.textures)
 		{
-			ShaderManager::Instance().InjectTex(parShader,tex->texID, tex->name,tex->offset);
-		}
-	}
-	void ResourceManager::LoadTextures(TSugar&  parSugar)
-	{
-		RESOURCE_INFO("Loading textures for "<<parSugar.name)
-		foreach_macro(tex,parSugar.material.textures)
-		{
-			TTexture* texPtr = LoadTexture(tex->file);
-  			tex->texID =texPtr->FID;
+			ShaderManager::Instance().InjectTex(_shader,tex->texID, tex->name,tex->offset);
 		}
 	}
 }

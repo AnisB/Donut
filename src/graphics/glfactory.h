@@ -19,6 +19,8 @@
 
 //Library includes
 #include "graphics/common.h"
+#include "graphics/geometry.h"
+#include "graphics/shader.h"
 // STL includes
 #include <vector>
 
@@ -52,6 +54,10 @@ namespace Donut
 
 	// Reading from currentFrameBuffer
 	void ReadRGBFrameBuffer(int _width, int _length, unsigned char* _output);
+
+	// Creates a geometry into the GPU
+	TGeometry* CreateGeometry(const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
+
 }
 
 

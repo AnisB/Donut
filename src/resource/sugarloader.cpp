@@ -16,9 +16,9 @@
 
 // Library includes
 #include "sugarloader.h"
-#include "base/Common.h"
+#include "base/common.h"
+#include "resource/common.h"
 #include "resource/shaderfilehandler.h"
-#include "resource/Common.h"
 #include "tools/fileloader.h"
 
 // STL includes
@@ -40,18 +40,20 @@
 
 namespace Donut
 {
-    void getNonEmptyLine(std::ifstream& file, std::string& parFile)
+    // Returns the first non empty line within a given file stream
+    void GetNonEmptyLine(std::ifstream& file, std::string& _outString)
     {
-        std::getline(file, parFile);
-        parFile=removeMultSpace(parFile);
-        while(parFile=="")
+        getline(file, _outString);
+        _outString = removeMultSpace(_outString);
+        while(_outString == "")
         {
-            std::getline(file, parFile);
-            parFile=removeMultSpace(parFile);
+            getline(file, _outString);
+            _outString = removeMultSpace(_outString);
         }
     }
 
-    TShaderData::Type stringToDataType(const std::string& parFile)
+    // Returns the enumeration that matches a given string    
+    TShaderData::Type ToDataType(const std::string& parFile)
     {
         if(parFile == TOKEN_VEC3)
         {
@@ -83,6 +85,7 @@ namespace Donut
         }
         return TShaderData::TYPE;
     }
+
     TSugarLoader::TSugarLoader()
     : FFinished(false)
     {
@@ -178,25 +181,25 @@ namespace Donut
         ASSERT_MSG((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
         sugar.name = header[1];
 
-        getNonEmptyLine(fin, file_line);
+        GetNonEmptyLine(fin, file_line);
         ASSERT_MSG(!(file_line.find("{")>=file_line.size()),"Wrong token@"<< file_line);
         while(!fin.eof())
         {
-            getNonEmptyLine(fin, file_line);
+            GetNonEmptyLine(fin, file_line);
             if(file_line.find("model{")!= std::string::npos)
             {
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     // RESOURCE_DEBUG("The model is: "<<file_line);
                     sugar.geometry=file_line;
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }
             }
             else if(file_line.find("textures{")!= std::string::npos)
             {
                 int index = 0;
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete;
@@ -208,13 +211,13 @@ namespace Donut
                     sugar.material.textures.push_back(tex);
                     //RESOURCE_DEBUG(tex.index<<" "<<tex.name<<" "<<tex.file);
                     index++;
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }                
             }
             else if(file_line.find("cubemaps{")!= std::string::npos)
             {
                 int index = 0;
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete;
@@ -226,43 +229,43 @@ namespace Donut
                     sugar.material.cubeMaps.push_back(cm);
                     //RESOURCE_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
                     index++;
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }                
             }
             else if(file_line.find("built_in_data{")!= std::string::npos)
             {
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
                     TBuildIn bi;
-                    bi.dataType = stringToDataType(entete[1]);
+                    bi.dataType = ToDataType(entete[1]);
                     bi.name = entete[2];
                     sugar.material.builtIns.push_back(bi);
                     //RESOURCE_DEBUG(bi.dataType<<" "<<bi.name);
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }                
             }
             else if(file_line.find("extern_data{")!= std::string::npos)
             {
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
                     TUniform uni;
-                    uni.dataType = stringToDataType(entete[1]);
+                    uni.dataType = ToDataType(entete[1]);
                     uni.name = entete[2];
                     uni.value = entete[3];
                     sugar.material.uniforms.push_back(uni);
                     // RESOURCE_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }                
             }
             else if(file_line.find("shader{")!= std::string::npos)
             {
-                getNonEmptyLine(fin, file_line);
+                GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
                     std::vector<std::string> entete;
@@ -270,17 +273,14 @@ namespace Donut
                     if(entete[1]=="vertex")
                     {
 						sugar.material.shader.FVertexShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                        //RESOURCE_DEBUG("vertex "<<sugar.material.shader.vertex);
                     }
                     else if(entete[1]=="tesscontrol")
                     {
                         sugar.material.shader.FTessControl = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                        // RESOURCE_ERROR("tesscontrol "<<sugar.material.shader.tesscontrol);
                     }
                     else if(entete[1]=="tesseval")
                     {
                         sugar.material.shader.FTessEval = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                        // RESOURCE_ERROR("tesseval "<<sugar.material.shader.tesseval);
                     }
                     else if(entete[1]=="geometry")
                     {
@@ -289,10 +289,9 @@ namespace Donut
                     else if(entete[1]=="fragment")
                     {
                         sugar.material.shader.FFragmentShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                        //RESOURCE_DEBUG("fragment "<<sugar.material.shader.fragment);
                     }
 
-                    getNonEmptyLine(fin, file_line);
+                    GetNonEmptyLine(fin, file_line);
                 }                
             }
         }
@@ -305,7 +304,7 @@ namespace Donut
         ASSERT_NOT_IMPLEMENTED();
     }
 
-    TSugar TSugarLoader::GetSugar(const std::string& parModel)
+    TSugar TSugarLoader::FetchSugar(const std::string& parModel)
     {
         RESOURCE_INFO(parModel<<" is requested");
         auto ite = FSugars.find(parModel);

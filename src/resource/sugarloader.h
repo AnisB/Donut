@@ -33,15 +33,25 @@ namespace Donut
             TSugarLoader();
             ~TSugarLoader();
             
-            // Init
+            // This functions sets the "media" dictory where every 
+            // resource will be looked for. After that it takes every element 
+            // in this directory and determines either or not it is a sugar file, 
+            // if it is registers it into memory
             void Init(const std::string& parDirectory);
+
+            // This function searches for a given sugar file and determines either or 
+            // not it has been found and returns it if it has.
+            TSugar FetchSugar(const std::string& parModel);
         protected:
+            // Sets the media directory
             void SetDirectory(const std::string& parDirectory);
+            // Parses the sugar sub_directory
             void LoadSugars();
+            // Parses the sugar sub_directory mutlithreaded
             void LoadSugars_MultiThread();
-        public:
-            TSugar GetSugar(const std::string& parModel);
+            // Parses a sugar file
             TSugar ParseFile(const std::string& parFileName);
+
         protected:
             std::string FMediaPath;
             std::map<std::string, TSugar> FSugars;

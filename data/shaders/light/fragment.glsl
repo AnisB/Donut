@@ -29,31 +29,28 @@ uniform TLight lightSource;
 void main()
 {
 	// Fecthing albedo
-	vec4 diffColor = texture(canvas,texCoord);
+	vec4 albedo = texture(canvas,texCoord);
 	// Fetching normal (view space)
-	vec3 normal = texture(nbuffer,texCoord).xyz;
-	// Remapping it
-	normal = (normal-vec3(0.5))*2.0;
-	normal = normalize(normal);
-
+	vec3 normal = texture(nbuffer, texCoord).xyz;
 	// Getting specularity
 	float specCoeff = 1.0 - texture(specbuffer,texCoord).r;
+
 	// Getting detph
 	float profondeur = texture(depth,texCoord).r;
 	if(profondeur==1.0)
 	{
 		// Far away => albedo
-		frag_color= diffColor;
+		frag_color = albedo;
 		return;
 	}
+
 	// Computing light source position (view space)
 	vec3 lightPos = (view*vec4(lightSource.position,1.0)).xyz;
 	// Fetching xyz position (view space)
-	vec4 pixelPosFull = texture(posbuffer,texCoord);
-	pixelPosFull = (pixelPosFull-vec4(0.5,0.5,0.5,0.0))*2.0;
-	vec3 pixelPos = (pixelPosFull/pixelPosFull.w).xyz;
+	vec4 pixelPos = texture(posbuffer,texCoord).xyz;
+
 	// Computing the light direction
-	vec3 l = lightPos-pixelPos;
+	vec3 l = lightPos - pixelPos;
 	// Computing the attenuation
  	float att = clamp(1.0-length(l)/lightSource.ray,0.0,1.0)*clamp(dot(l,normal),0.0,1.0);
 	// Noramlizing it
@@ -62,7 +59,6 @@ void main()
 	vec3 v = normalize(-pixelPos);
 	// Computing the half vector
 	vec3 h = normalize(v + l);
-
 	// Illumination coeffs
     float Idiff = 2.0*clamp(dot(l, normal),0.0,1.0);	
     float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);

@@ -160,4 +160,33 @@ namespace Donut
 	{
 		glReadPixels(0, 0, _width, _length, GL_RGB, GL_UNSIGNED_BYTE, _output);
 	}
+
+	TGeometry* CreateGeometry(const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	{
+		TGeometry * newModel = new TGeometry();
+		glGenVertexArrays (1, &newModel->vertexArray);
+		glBindVertexArray (newModel->vertexArray);
+		
+		glGenBuffers(1, &newModel->vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert*8, _dataArray, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &newModel->indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*num_faces*3, _indexArray, GL_STATIC_DRAW);
+		GLuint posAtt = glGetAttribLocation(_shader.FProgramID, "position");
+		GLuint normalAtt = glGetAttribLocation(_shader.FProgramID, "normal");
+		GLuint texCoordAtt = glGetAttribLocation(_shader.FProgramID, "tex_coord");
+		glEnableVertexAttribArray (posAtt);
+		glEnableVertexAttribArray (normalAtt);
+		glEnableVertexAttribArray (texCoordAtt);
+		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glVertexAttribPointer (normalAtt, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*3));
+		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*_numVert*6));
+		
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray (0);
+		newModel->nbVertices = num_faces*3;
+		return newModel;
+	}
 }

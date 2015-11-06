@@ -16,8 +16,8 @@
 
 
 
-#ifndef RESOURCE_MANAGER
-#define RESOURCE_MANAGER
+#ifndef RESOURCE_MANAGER_DONUT
+#define RESOURCE_MANAGER_DONUT
 
 #include "graphics/shaderManager.h"
 #include "graphics/geometry.h"
@@ -36,19 +36,26 @@
  	public:
  		ResourceManager();
  		~ResourceManager();
-		TTexture* LoadTexture(const std::string&  parTextureName);
-		TTexture* GetTexture(const std::string&  parTextureName);
-		void LoadTextures(TSugar&  parSugar);
+
+ 		// Returns a pointer to a given texture (using its filepath)
+ 		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
+ 		// Else it returns a pointer to what has been loaded
+		TTexture* FetchTexture(const std::string&  parTextureName);
+		// Returns a pointer to a given wavefrontFile (using its filepath)
+ 		// If it has not been loaded yet, it loads the geometry into the GPU RAM
+ 		// Else it returns a pointer to what has been loaded
+		TGeometry* FetchGeometry(const TShader& parShader, const std::string&  parObjName);
+		// Creates a geometry and registers it with a given name
+		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
+		// Binds into GPU memory a given material
+		void BindMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 
 
+		// Still to refactor
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName);
 		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);
 		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
-		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
-
-		TGeometry* GetGeometry(const TShader& parShader, const std::string&  parObjName);
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
-		void LoadMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 
 	protected:
 		std::map<std::string, TTexture*> FTextures;
@@ -57,4 +64,4 @@
 	};
 }
 
-#endif // RESOURCE_MANAGER
+#endif // RESOURCE_MANAGER_DONUT

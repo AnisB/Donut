@@ -32,7 +32,6 @@ namespace Donut
 		Vector3 direction;
 	};
 
-
 	struct TIntersect
 	{
 		TIntersect()

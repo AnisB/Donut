@@ -173,7 +173,7 @@ namespace Donut
  		defaultMat.shader = _shader;
  		meshName += std::to_string(cubeCounter++);
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
-		ShaderManager::Instance().CreateShader(defaultMat.shader); // THIS SHOULD KEEP TRACK OF SHADER THAT USETHE SAME FILES AND RETURN A REFERENCE IF CREATED
+		ShaderManager::Instance().CreateShader(defaultMat.shader);
 		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 24, cubeFacesL, 12);
 		TMesh* newMesh = new TMesh(defaultMat, geometry);
 		return newMesh;
@@ -197,7 +197,7 @@ namespace Donut
  		defaultMat.shader = _shader;
  		meshName += std::to_string(planeCounter++);
  		GRAPHICS_DEBUG("Creating plane "<<meshName);
-		ShaderManager::Instance().CreateShader(defaultMat.shader); // THIS SHOULD KEEP TRACK OF SHADER THAT USETHE SAME FILES AND RETURN A REFERENCE IF CREATED
+		ShaderManager::Instance().CreateShader(defaultMat.shader); 
 		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 4, planeIndexBuffer, 2);
 		TMesh* newMesh = new TMesh(defaultMat, geometry);
 		return newMesh;
@@ -211,10 +211,14 @@ namespace Donut
 
 	TMesh* CreateSugarInstance(const std::string& _sugarName)
 	{
-		TSugar sugar = TSugarLoader::Instance().GetSugar(_sugarName);
-		ResourceManager::Instance().LoadTextures(sugar);
-		ShaderManager::Instance().CreateShader(sugar.material.shader); // THIS SHOULD KEEP TRACK OF SHADER THAT USETHE SAME FILES AND RETURN A REFERENCE IF CREATED
-		TGeometry* geometry = ResourceManager::Instance().GetGeometry(sugar.material.shader, sugar.geometry);
+		TSugar sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
+		foreach_macro(tex, sugar.material.textures)
+		{
+			TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
+  			tex->texID = texPtr->FID;
+		}
+		ShaderManager::Instance().CreateShader(sugar.material.shader); 
+		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(sugar.material.shader, sugar.geometry);
 		TMesh* newMesh = new TMesh(sugar.material, geometry);
 		return newMesh;
 	}
