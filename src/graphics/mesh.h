@@ -35,7 +35,7 @@
 	 	// Attach a texture to a mesh => should be moved somewhere where it makes sense
 	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
 	 	// Drawing a mesh
-	 	virtual void Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix);
+	 	virtual void Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler);
 		virtual void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view);
  	protected:
  		void Bind();

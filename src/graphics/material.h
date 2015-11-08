@@ -42,11 +42,11 @@ namespace Donut
         }
 
         // Attributes
-        TShader                     shader;
-        std::vector<TBuildIn>       builtIns;
-        std::vector<TUniform>       uniforms;
-        std::vector<TTextureInfo>   textures;
-        std::vector<TCubeMapInfo>   cubeMaps;
+        TShader                         shader;
+        std::vector<TBuildIn>           builtIns;
+        std::vector<TUniformHandler>    uniforms;
+        std::vector<TTextureInfo>       textures;
+        std::vector<TCubeMapInfo>       cubeMaps;
     };
 }
 

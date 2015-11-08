@@ -20,6 +20,7 @@
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 #include "tools/fileloader.h"
+#include "butter/types.h"
 
 // STL includes
 #include <stdlib.h>
@@ -53,37 +54,36 @@ namespace Donut
     }
 
     // Returns the enumeration that matches a given string    
-    TShaderData::Type ToDataType(const std::string& parFile)
+    void DataTypeToUniform(const std::string& _type, const std::string& _name, const std::string& _value, TUniformHandler& _handler)
     {
-        if(parFile == TOKEN_VEC3)
+        if(_type == TOKEN_VEC3)
         {
-            return TShaderData::VEC3;
+            _handler.SetValue(TShaderData::VEC3, _name, Vector3());
         }
-        else if(parFile == TOKEN_VEC4)
+        else if(_type == TOKEN_VEC4)
         {
-            return TShaderData::VEC4;
+            _handler.SetValue(TShaderData::VEC4, _name, Vector4());
         }
-        else if(parFile == TOKEN_MAT3)
+        else if(_type == TOKEN_MAT3)
         {
-            return TShaderData::MAT3;
+            _handler.SetValue(TShaderData::MAT3, _name, Matrix3());
         }
-        else if(parFile == TOKEN_MAT4)
+        else if(_type == TOKEN_MAT4)
         {
-            return TShaderData::MAT4;
+            _handler.SetValue(TShaderData::MAT4, _name, Matrix4());
         }
-        else if(parFile == TOKEN_FLOAT)
+        else if(_type == TOKEN_FLOAT)
         {
-            return TShaderData::FLOAT;
+            _handler.SetValue(TShaderData::FLOAT, _name, stringConvert<float>(_value));
         }
-        else if(parFile== TOKEN_BOOL)
+        else if(_type == TOKEN_INT)
         {
-            return TShaderData::BOOL;
+            _handler.SetValue(TShaderData::INTEGER, _name, stringConvert<int>(_value));
         }
-        else if(parFile == TOKEN_INT)
+        else
         {
-            return TShaderData::INTEGER;
+            ASSERT_FAIL_MSG("Unsupported uniform type "<<_type);
         }
-        return TShaderData::TYPE;
     }
 
     TSugarLoader::TSugarLoader()
@@ -191,7 +191,7 @@ namespace Donut
                 GetNonEmptyLine(fin, file_line);
                 while(file_line.find("}")== std::string::npos)
                 {
-                    // RESOURCE_DEBUG("The model is: "<<file_line);
+                    RESOURCE_DEBUG("The model is: "<<file_line);
                     sugar.geometry=file_line;
                     GetNonEmptyLine(fin, file_line);
                 }
@@ -240,7 +240,7 @@ namespace Donut
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
                     TBuildIn bi;
-                    bi.dataType = ToDataType(entete[1]);
+                    //bi.dataType = ToDataType(entete[1]);
                     bi.name = entete[2];
                     sugar.material.builtIns.push_back(bi);
                     //RESOURCE_DEBUG(bi.dataType<<" "<<bi.name);
@@ -254,12 +254,9 @@ namespace Donut
                 {
                     std::vector<std::string> entete;
                     split(file_line,' ', entete);
-                    TUniform uni;
-                    uni.dataType = ToDataType(entete[1]);
-                    uni.name = entete[2];
-                    uni.value = entete[3];
+                    TUniformHandler uni;
+                    DataTypeToUniform(entete[1], entete[2], entete[3], uni);
                     sugar.material.uniforms.push_back(uni);
-                    // RESOURCE_DEBUG(uni.dataType<<" "<<uni.name<<" "<<uni.value);
                     GetNonEmptyLine(fin, file_line);
                 }                
             }

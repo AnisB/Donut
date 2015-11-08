@@ -5,10 +5,12 @@ layout(triangle_strip, max_vertices=3) out;
 in vec2 texCoordV[];
 in vec3 fnormalV[];
 in vec4 ecPosV[];
+in float flogzG[];
 
 out vec2 texCoord;
 out vec3 fnormal;
 out vec4 ecPos;
+out float flogz;
 
 void main()
 { 
@@ -18,6 +20,7 @@ void main()
     texCoord = texCoordV[i];
     fnormal = fnormalV[i];
     ecPos = ecPosV[i];
+    flogz = flogzG[i];
     EmitVertex();
   }
   EndPrimitive();

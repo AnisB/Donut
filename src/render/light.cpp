@@ -37,10 +37,10 @@ namespace Donut
 		FDiff = vector4(1.0);
 		FSpec = vector4(0.0);
 		ShaderManager::Instance().CreateShader(FShader);
-		ShaderManager::Instance().InjectVec3(FShader, FPosition,"lightSource.position");
-		ShaderManager::Instance().InjectVec4(FShader, FDiff ,"lightSource.diffuse");
-		ShaderManager::Instance().InjectVec4(FShader, FSpec ,"lightSource.specular");	
-		ShaderManager::Instance().InjectFloat(FShader, FRayon ,"lightSource.ray");	
+		ShaderManager::Instance().Inject<Vector3>(FShader, FPosition,"lightSource.position");
+		ShaderManager::Instance().Inject<Vector4>(FShader, FDiff ,"lightSource.diffuse");
+		ShaderManager::Instance().Inject<Vector4>(FShader, FSpec ,"lightSource.specular");	
+		ShaderManager::Instance().Inject<float>(FShader, FRayon ,"lightSource.ray");	
 	}
 	TLight::~TLight()
 	{
@@ -76,17 +76,17 @@ namespace Donut
 	}
  	void TLight::UpdateCamera(const Matrix4& parProjection, const Matrix4& parView)
  	{
-		ShaderManager::Instance().InjectMat4(FShader,parView,"view");
-		ShaderManager::Instance().InjectMat4(FShader,parProjection,"projection");
+		ShaderManager::Instance().Inject<Matrix4>(FShader,parView,"view");
+		ShaderManager::Instance().Inject<Matrix4>(FShader,parProjection,"projection");
  	}
 	void TLight::InjectData()
 	{
 		if(FOutDate)
 		{
-			ShaderManager::Instance().InjectVec3(FShader, FPosition,"lightSource.position");
-			ShaderManager::Instance().InjectVec4(FShader, FDiff ,"lightSource.diffuse");
-			ShaderManager::Instance().InjectVec4(FShader, FSpec ,"lightSource.specular");	
-			ShaderManager::Instance().InjectFloat(FShader, FRayon ,"lightSource.ray");	
+			ShaderManager::Instance().Inject<Vector3>(FShader, FPosition,"lightSource.position");
+			ShaderManager::Instance().Inject<Vector4>(FShader, FDiff ,"lightSource.diffuse");
+			ShaderManager::Instance().Inject<Vector4>(FShader, FSpec ,"lightSource.specular");	
+			ShaderManager::Instance().Inject<float>(FShader, FRayon ,"lightSource.ray");	
 		}
 	}
  }

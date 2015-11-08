@@ -10,6 +10,7 @@ namespace Donut
 	void ResetToZero(Matrix3& _mat);
 		
 	double Det(Matrix3& _mat);
+	void ToTable(const Matrix3& _matrix, float* content);
 	Matrix3 Inverse(const Matrix3& parMatrix);
 	std::ostream& operator<< (std::ostream& os, const Matrix3& obj);
 }

@@ -52,13 +52,13 @@ namespace Donut
 	struct Matrix3
 	{
 		inline Matrix3(){}
-		inline Matrix3(const Matrix3& _mat);
+		Matrix3(const Matrix3& _mat);
 		double m[9];
 	};
 	struct Matrix4
 	{
 		inline Matrix4(){}
-		inline Matrix4(const Matrix4& _mat);
+		Matrix4(const Matrix4& _mat);
 		double m[16];
 	};
 

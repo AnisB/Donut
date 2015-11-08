@@ -46,12 +46,16 @@ namespace Donut
 			// Modification flags
 			void ChangeNoticed();
 			bool HasChanged() {return FHasChanged.GetValue();}
-			
+			double GetFCoeff() {return m_fcoeff;}
+
 		protected:
 			Matrix4 FViewMatrix;
 			Matrix4 FProjection;
 			Matrix4 FProjectionView;
 			TThreadSafeBolean FHasChanged;
+			double m_near;
+			double m_far;
+			double m_fcoeff;
 	};
 }
 

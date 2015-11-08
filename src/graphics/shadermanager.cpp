@@ -19,6 +19,7 @@
 #include "base/common.h"
 #include "graphics/common.h"
 #include "base/macro.h"
+#include "butter/matrix3.h"
 
 #include "tools/fileloader.h"
 
@@ -258,30 +259,47 @@ namespace Donut
 	}
 
 	// Injections
-	void ShaderManager::InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
+	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
 	{
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 	}
-	void ShaderManager::InjectVec4(const TShader& parProgram, const Vector4& parValue, const std::string& parName)
+	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const Vector4& parValue, const std::string& parName)
 	{
 	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z, (GLfloat)parValue.w);
 	}
-	void ShaderManager::InjectInt(const TShader& parProgram, int parValue, const std::string& parName)
+	
+ 	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const int& _value, const std::string& parName)
 	{
 		GLuint location = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
-	    glUniform1i(location, parValue);
+	    glUniform1i(location, _value);
 	}
-	void ShaderManager::InjectFloat(const TShader& parProgram, float parValue, const std::string& parName)
+
+ 	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const float& _value, const std::string& parName)
 	{
-	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), parValue);
+	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), _value);
 	}
-	void ShaderManager::InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
+
+ 	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
 		float mat[16];
 		ToTable(parValue, &mat[0]);
 	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
+	}
+
+ 	template <>
+	void ShaderManager::Inject(const TShader& parProgram, const Matrix3& parValue, const std::string& parName)
+	{
+		float mat[9];
+		ToTable(parValue, &mat[0]);
+	    glUniformMatrix3fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
 
 	}
+
 	void ShaderManager::InjectTex(const TShader& parProgram, GLuint _textureID, const std::string& parName, GLuint _spot)
 	{
 	    BindTex(_textureID, _spot);

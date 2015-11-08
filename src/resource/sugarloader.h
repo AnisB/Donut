@@ -17,9 +17,10 @@
 #ifndef DONUT_SUGAR_LOADER
 #define DONUT_SUGAR_LOADER
 
-#include <base/singleton.h>
-#include <multithread/usualthreadsafeobjects.h>
-#include <resource/sugar.h>
+#include "base/singleton.h"
+#include "graphics/uniformhandler.h"
+#include "resource/sugar.h"
+#include "multithread/usualthreadsafeobjects.h"
 
 #include <list>
 #include <map>

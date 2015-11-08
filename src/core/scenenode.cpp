@@ -31,15 +31,15 @@ namespace Donut
 		
 	}
 
-	void TSceneNode::Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix)
+	void TSceneNode::Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler)
 	{	
 		const Matrix4& _currentModel = parModelMatrix*FModel;
 		foreach_macro(drawable,FDrawables)
 		{
-			(*drawable)->Draw(_currentModel, _viewProjectionMatrix);
+			(*drawable)->Draw(_currentModel, _viewProjectionMatrix, _handler);
 		}
 
-		TNode::Draw(_currentModel, _viewProjectionMatrix);
+		TNode::Draw(_currentModel, _viewProjectionMatrix, _handler);
 	}
 
 	void TSceneNode::AddDrawable(TDrawable* parDrawable)

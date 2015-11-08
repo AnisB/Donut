@@ -57,15 +57,23 @@
 			Bind();
 			Matrix4 identity;
 			SetIdentity(identity);
-			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
+			std::vector<TUniformHandler> values;
+			TUniformHandler fcoeff;
+			fcoeff.SetValue<float>(TShaderData::FLOAT, "fcoef", FCamera->GetFCoeff());
+			values.push_back(fcoeff);
+			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix(),values);
 			Unbind();
 			FFrameCanvas->Draw(FLights);
 		}
 		else
 		{
 			Matrix4 identity;
+			TUniformHandler fcoeff;
+			std::vector<TUniformHandler> values;
+			fcoeff.SetValue<float>(TShaderData::FLOAT, "fcoef", FCamera->GetFCoeff());
+			values.push_back(fcoeff);
 			SetIdentity(identity);
-			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix());
+			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix(), values);
 		}
 	}
 	void TRenderPass::Init()

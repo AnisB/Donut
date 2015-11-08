@@ -108,8 +108,8 @@ namespace Donut
 			GRAPHICS_DEBUG("Frame canvas created");
 			
 	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 1 );
@@ -143,8 +143,8 @@ namespace Donut
 			GRAPHICS_DEBUG("Frame canvas created");
 			
 	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "nbuffer", 1 );
@@ -193,8 +193,8 @@ namespace Donut
 
 	 		UnBindFrameBuffer();
 	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(FMaterial.shader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FFinalBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "diff", 1 );
@@ -218,8 +218,8 @@ namespace Donut
 		if(FCanvasType==FrameCanvasContent::DEFFERED)
 		{
 	 		ShaderManager::Instance().EnableShader(parShader);
-	 		ShaderManager::Instance().InjectInt(parShader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().InjectInt(parShader, DEFAULT_LENGHT, "lenght");
+	 		ShaderManager::Instance().Inject<int>(parShader, DEFAULT_WIDTH, "width");
+	 		ShaderManager::Instance().Inject<int>(parShader, DEFAULT_LENGHT, "lenght");
 
 	 		ShaderManager::Instance().InjectTex(parShader, FAlbedoBuffer, "canvas", 0 );
 	 		ShaderManager::Instance().InjectTex(parShader, FNormalBuffer, "nbuffer", 1 );

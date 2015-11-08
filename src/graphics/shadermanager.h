@@ -46,11 +46,8 @@ namespace Donut
  		void DisableShader( );
 
  		// Data injection
-		void InjectInt(const TShader& parProgram, int parValue, const std::string& parName);
-		void InjectFloat(const TShader& parProgram, float parValue, const std::string& parName);
-		void InjectVec3(const TShader& parProgram, const Vector3& parValue, const std::string& parName);
-		void InjectVec4(const TShader& parProgram, const Vector4& parValue, const std::string& parName);
-		void InjectMat4(const TShader& parProgram, const Matrix4& parValue, const std::string& parName);
+ 		template <typename T>
+ 		void Inject(const TShader& parProgram, const T& _value, const std::string& parName);
 		
 		// Texture binding/unbinding functions
 		void BindTex(GLuint _texID, GLuint parOffset);

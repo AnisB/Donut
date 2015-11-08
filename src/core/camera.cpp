@@ -22,6 +22,9 @@ namespace Donut
 	: FViewMatrix()
 	, FProjection()
 	, FHasChanged(true)
+	, m_near(0.1)
+	, m_far(1000.0)
+
 	{
 		matrix4(FViewMatrix, MatrixInit::Identity);
 		matrix4(FProjection, MatrixInit::Identity);
@@ -34,6 +37,9 @@ namespace Donut
 
 	void Camera::DefinePerspective(double parFovy, double parAspect, double parNear, double parFar)
 	{
+		m_near = parNear;
+		m_far = parFar;
+		m_fcoeff = 2.0 / log2(m_far + 1.0);
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);

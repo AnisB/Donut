@@ -19,6 +19,7 @@
 
 // Library includes
 #include "graphics/common.h"
+#include "graphics/uniformhandler.h"
 
 // STL includes
 #include <string.h>
@@ -26,34 +27,11 @@
 
 namespace Donut
 {
-    namespace TShaderData
-    {
-        enum Type
-        {
-            INTEGER = 0,
-            FLOAT = 1,
-            BOOL = 2,
-            VEC3 = 3,
-            VEC4 = 4,
-            MAT3 = 5,
-            MAT4 = 6,
-            TYPE = 7
-        };
-    }
-
     struct TBuildIn
     {
         TShaderData::Type dataType;
         std::string name;
     };
-
-    struct TUniform
-    {
-        TShaderData::Type dataType;
-        std::string name;
-        std::string value;
-    };
-
 
     struct TTextureInfo
     {

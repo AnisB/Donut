@@ -21,6 +21,7 @@
 // Library includes
 #include "shader.h"
 #include "core/Camera.h"
+#include "graphics/uniformhandler.h"
 
 namespace Donut
 {
@@ -30,7 +31,7 @@ namespace Donut
 		TDrawable();
 		virtual ~TDrawable();
 		// To be overloaded
-		virtual void Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix) = 0;
+		virtual void Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler) = 0;
 		// Updating camera data
 		virtual void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view) = 0;
 	};

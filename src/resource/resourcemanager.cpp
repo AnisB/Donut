@@ -663,17 +663,7 @@
 	{
 		foreach_macro(uni, _material.uniforms)
 		{
-			switch(uni->dataType)
-			{
-				case TShaderData::INTEGER:
-					ShaderManager::Instance().InjectInt(_shader,stringConvert<int>(uni->value), uni->name);
-				break;
-				case TShaderData::FLOAT:
-					ShaderManager::Instance().InjectFloat(_shader, stringConvert<float>(uni->value),uni->name);
-				break;
-				default:
-				break;
-			}
+			uni->Inject(_shader);
 		}
 		foreach_macro(tex, _material.textures)
 		{

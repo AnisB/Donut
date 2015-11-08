@@ -7,7 +7,7 @@ namespace Donut
 {
 	Matrix3::Matrix3(const Matrix3& _mat)
 	{
-		memcpy(m, _mat.m, 9);
+		memcpy(m, _mat.m, 9*sizeof(double));
 	}
 
 	void SetIdentity(Matrix3& _mat)
@@ -55,6 +55,14 @@ namespace Donut
 		inverseMatrix.m[5] = -(_mat.m[0]*_mat.m[7]-_mat.m[6]*_mat.m[1])*invdet;
 		inverseMatrix.m[8] =  (_mat.m[0]*_mat.m[4]-_mat.m[3]*_mat.m[1])*invdet;
 		return inverseMatrix;
+	}
+
+	void ToTable(const Matrix3& _mat, float* content)
+	{
+		for(int i = 0; i < 9; ++i)
+		{
+			content[i] = (float)_mat.m[i];
+		}
 	}
 
 	std::ostream& operator<< (std::ostream& os, const Matrix3& obj) 
