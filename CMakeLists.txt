@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 
 project(DonutEngine)
 
@@ -116,6 +116,23 @@ add_custom_command(
     COMMAND ln -sf ${PROJECT_SOURCE_DIR}/models ${PROJECT_BINARY_DIR}
 )
 ENDIF(UNIX)
+
+
+IF(WIN32)
+#sources
+file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/data/shaders" link1)
+file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/data" link2)
+#global target
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/shaders" programShaders)
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/data" programData)
+
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/shaders" testShaders)
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/data" testData)
+execute_process( COMMAND cmd.exe /c mklink /D ${programData} ${link2})
+execute_process( COMMAND cmd.exe /c mklink /D ${programShaders} ${link1})
+execute_process( COMMAND cmd.exe /c mklink /D ${testData} ${link2})
+execute_process( COMMAND cmd.exe /c mklink /D ${testShaders} ${link1})
+ENDIF(WIN32)
 
 
  
