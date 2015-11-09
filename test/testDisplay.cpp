@@ -45,7 +45,7 @@ int main()
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
-	Donut::TShader uniformShader("shaders/uniform/vertex.glsl","shaders/uniform/fragment.glsl");
+	Donut::TShader uniformShader("shaders/base/vertex.glsl", "shaders/base/geometry.glsl", "shaders/base/fragment.glsl");
 	Donut::TMesh* cube = CreateCube(5.0, uniformShader);
 	Donut::TMesh* cube2 = CreateCube(2.5, uniformShader);
 

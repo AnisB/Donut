@@ -26,16 +26,20 @@
 
  	//CLASS IMPLEMENTATION
 	TRenderPass::TRenderPass()
+	: m_canvas(nullptr)
+	, m_vfx(nullptr)
+	, FRenderToTexture(false)
 	{
-		FRenderToTexture = false;
-		FFrameCanvas = new TFrameCanvas();
 		FCamera = new Camera();
 		FRoot = new TNode();
 	}
 	TRenderPass::~TRenderPass()
 	{
+		if(m_canvas)
+			delete m_canvas;
+		if(m_vfx)
+			delete m_vfx;
 		delete FCamera;
-		delete FFrameCanvas;
 		delete FRoot;
  		foreach_macro(drawable, FDrawables)
  		{
@@ -63,7 +67,7 @@
 			values.push_back(fcoeff);
 			FRoot->Draw(identity, FCamera->GetProjectionMatrix()*FCamera->GetViewMatrix(),values);
 			Unbind();
-			FFrameCanvas->Draw(FLights);
+			m_vfx->Draw(m_canvas->Result());
 		}
 		else
 		{
@@ -81,7 +85,7 @@
  		//GRAPHICS_DEBUG("Initing the canvas");
 		if(FRenderToTexture)
 		{
-			FFrameCanvas->Init();
+			m_canvas->Init();
 		}
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LEQUAL);
@@ -116,18 +120,18 @@
 
 	void TRenderPass::Bind()
 	{
-		FFrameCanvas->Enable();
+		m_canvas->Enable();
 	}
 
 	void TRenderPass::SetShader(const TShader& _shader)
 	{
-		FFrameCanvas->SetShader(_shader);
+		m_canvas->SetShader(_shader);
 		FRenderToTexture = true;
 	}
 
 	void TRenderPass::Unbind()
 	{
-		FFrameCanvas->Disable();
+		m_canvas->Disable();
 	}
 
 	void TRenderPass::RemoveDrawable(TDrawable* _drawable)
@@ -140,11 +144,7 @@
 			FDrawables.erase(drwblIT);
 		}
 	}
-	void TRenderPass::SetRenderType(FrameCanvasContent::Type parType)
-	{
-		FFrameCanvas->SetType(parType);
-		FRenderToTexture = true;
-	}
+
 	void TRenderPass::Clear()
 	{
 		CRITICAL_SECTION_BEGIN();

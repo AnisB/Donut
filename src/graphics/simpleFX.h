@@ -14,14 +14,26 @@
 *
 **/
 
-// Library includes
-#include "graphics/mesh.h"
 
+#ifndef SIMPLE_FX_GRAPHICS_DONUT
+#define SIMPLE_FX_GRAPHICS_DONUT
+
+// Library includes
+#include "graphics/visualeffect.h"
 namespace Donut
 {
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TMesh* CreateSugarInstance(const std::string& _sugarName);
+	class TSimpleFX : public TVFX
+	{
+	public:
+		// Creation/Destruction
+		TSimpleFX();
+		TSimpleFX(const TShader& _shader);
+		~TSimpleFX();
+		// Init
+		virtual void Init();
+		// Drawing it
+		void Draw(const TBufferOutput& _previous);
+	};
 }
+
+#endif // SIMPLE_FX_GRAPHICS_DONUT

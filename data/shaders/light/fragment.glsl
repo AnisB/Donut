@@ -1,21 +1,29 @@
 #version 410 
 
+// This is a gbuffer light vertex pipeline
+
+// out color (just the light contribution)
 out vec4 frag_color;
 
+// View and projection matrices
 uniform mat4 view; 
 uniform mat4 projection;
 
-uniform sampler2D canvas;
-uniform sampler2D nbuffer;
-uniform sampler2D specbuffer;
-uniform sampler2D posbuffer;
+// Input Gbuffer Data
+uniform sampler2D albedo;
+uniform sampler2D normal;
+uniform sampler2D specular;
+uniform sampler2D position;
 uniform sampler2D depth;
 
+// Additional data
 uniform int width;
 uniform int lenght;
 
+// input data
 in vec2 texCoord;
 
+// The light source data
 struct TLight
 {
 	vec3 position;
@@ -23,31 +31,31 @@ struct TLight
 	vec4 specular;
 	float ray;
 };
+// Delcaring the light source
 uniform TLight lightSource;
 
 
 void main()
 {
-	// Fecthing albedo
-	vec4 albedo = texture(canvas,texCoord);
+	// Fecthing albedo color
+	vec4 albedo = texture(albedo, texCoord);
 	// Fetching normal (view space)
-	vec3 normal = texture(nbuffer, texCoord).xyz;
-	// Getting specularity
-	float specCoeff = 1.0 - texture(specbuffer,texCoord).r;
+	vec3 normal = texture(normal, texCoord).xyz;
+	// Fetching specularity
+	float specCoeff = 1.0 - texture(specular,texCoord).r;
 
 	// Getting detph
 	float profondeur = texture(depth,texCoord).r;
-	if(profondeur==1.0)
+	if(profondeur == 1.0)
 	{
-		// Far away => albedo
-		frag_color = albedo;
-		return;
+		// Far away => discard
+		discard;
 	}
 
 	// Computing light source position (view space)
 	vec3 lightPos = (view*vec4(lightSource.position,1.0)).xyz;
 	// Fetching xyz position (view space)
-	vec3 pixelPos = texture(posbuffer,texCoord).xyz;
+	vec3 pixelPos = texture(position,texCoord).xyz;
 
 	// Computing the light direction
 	vec3 l = lightPos - pixelPos;
@@ -62,5 +70,5 @@ void main()
 	// Illumination coeffs
     float Idiff = 2.0*clamp(dot(l, normal),0.0,1.0);	
     float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);
-    frag_color = att*(Idiff*lightSource.diffuse + Ispec*lightSource.specular);
+    frag_color = albedo*att*(Idiff*lightSource.diffuse + Ispec*lightSource.specular);
 }

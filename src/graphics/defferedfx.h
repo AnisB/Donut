@@ -14,14 +14,32 @@
 *
 **/
 
+
+#ifndef DEFFERED_FX_GRAPHICS_DONUT
+#define DEFFERED_FX_GRAPHICS_DONUT
+
 // Library includes
-#include "graphics/mesh.h"
+#include "graphics/visualeffect.h"
+#include "render/light.h"
 
 namespace Donut
 {
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TMesh* CreateSugarInstance(const std::string& _sugarName);
+	class TDefferedFX : public TVFX
+	{
+	public:
+		// Creation/Destruction
+		TDefferedFX();
+		TDefferedFX(const TShader& _shader);
+		virtual ~TDefferedFX();
+		// Init
+		virtual void Init();
+		// Drawing it
+		void Draw(const TBufferOutput& _previous);
+
+	protected:
+		GLuint m_annexeFrameBuffer;
+		std::vector<TLight*> m_lights;
+	};
 }
+
+#endif // DEFFERED_FX_GRAPHICS_DONUT

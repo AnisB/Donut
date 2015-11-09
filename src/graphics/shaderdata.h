@@ -33,23 +33,36 @@ namespace Donut
         std::string name;
     };
 
+
+    // Should be moved to texture when it will be refactored
+    namespace TTextureNature 
+    {
+        enum Type
+        {
+            COLOR,
+            DEPTH
+        };
+    };
+
     struct TTextureInfo
     {
         int offset;
         std::string name;
         std::string file;
         GLuint texID;
+        TTextureNature::Type type;
         TTextureInfo()
         {
             offset=0;
             texID=0;
         }
-        TTextureInfo(const TTextureInfo& parTextureInfo)
+        TTextureInfo(const TTextureInfo& _texture)
         {
-            offset=parTextureInfo.offset;
-            name=parTextureInfo.name;
-            file=parTextureInfo.file;
-            texID=parTextureInfo.texID;
+            offset = _texture.offset;
+            name = _texture.name;
+            file = _texture.file;
+            texID = _texture.texID;
+            type = _texture.type;
         }
     };
 

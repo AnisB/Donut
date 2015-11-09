@@ -15,13 +15,41 @@
 **/
 
 // Library includes
-#include "graphics/mesh.h"
+#include "simplefx.h"
+#include "graphics/geometry.h"
+#include "graphics/shadermanager.h"
 
 namespace Donut
 {
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TMesh* CreateSugarInstance(const std::string& _sugarName);
+	// Constructor
+	TSimpleFX::TSimpleFX()
+	: TVFX(TShader(CANVAS_VERTEX_SHADER, CANVAS_FRAGMENT_SHADER))
+	{
+
+	}
+	TSimpleFX::TSimpleFX(const TShader& _shader)
+	: TVFX(_shader)
+	{
+	}
+
+	// Destructor
+	TSimpleFX::~TSimpleFX()
+	{
+
+	}
+
+	// Init
+	void TSimpleFX::Init()
+	{
+		TVFX::Init();
+	}
+
+	void TSimpleFX::Draw(const TBufferOutput& _previous)
+	{
+		ShaderManager::Instance().EnableShader(m_material.shader);
+		BindBufferOutput(_previous);
+	  	m_fsq->Draw(false);
+ 		ShaderManager::Instance().DisableShader();
+		glFlush ();
+	}
 }

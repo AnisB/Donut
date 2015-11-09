@@ -158,6 +158,25 @@ namespace Donut
 		0, 1, 2,
 		2, 1, 3
 	};
+	// Full screen Quad Data
+	GLfloat FSQVertex[32] = { 
+		-1.0f, -1.0f, 0.0f, 
+		-1.0f, 1.0f, 0.0f, 
+		1.0f, -1.0f, 0.0f, 
+		1.0f, 1.0f, 0.0f,
+		0.0, 0.0, 1.0, 
+		0.0, 0.0, 1.0, 
+		0.0, 0.0, 1.0, 
+		0.0, 0.0, 1.0, 
+		0.0,0.0,
+		0.0,1.0,
+		1.0,0.0,
+		1.0,1.0,
+	};
+	unsigned int FSQIndex[32] = { 
+		0, 1, 2,
+		1, 2, 3
+	};
 
 	TMesh* CreateCube(double _length, const TShader& _shader)
 	{
@@ -221,6 +240,19 @@ namespace Donut
 		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(sugar.material.shader, sugar.geometry);
 		TMesh* newMesh = new TMesh(sugar.material, geometry);
 		return newMesh;
+	}
+
+	TGeometry* CreateFullScreenQuad(const TShader& _shader)
+	{
+		static int FSQCounter = 0;
+		TMaterial defaultMat;
+ 		defaultMat.shader = _shader;
+ 		std::string meshName = "FSQ_";
+ 		meshName += std::to_string(FSQCounter++);
+ 		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
+		ShaderManager::Instance().CreateShader(defaultMat.shader); 
+		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
+		return geometry;
 	}
 
 }

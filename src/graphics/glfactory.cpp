@@ -65,7 +65,21 @@ namespace Donut
 		glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 		#endif
 	}
+	bool CheckFrameBuffer()
+	{
+		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+ 		{
+ 			GRAPHICS_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
+ 			return true;
+ 		}
+ 		return false;
+	}
 
+	void ClearBuffer()
+	{
+ 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	}
+	 		
 	void DeleteFrameBuffers(std::vector<GLuint>& _frameBuffers)
 	{
 		#if LINUX | WIN32
@@ -88,44 +102,49 @@ namespace Donut
 		#endif
 	}
 
-	void BindToFrameBuffer(GLuint parTextureIndex, TextureNature::Type parTextureType, GLuint parOffset)
+	void BindToFrameBuffer(const TTextureInfo& _tex)
 	{
-	 		if(parTextureType == TextureNature::COLOR)
+ 		switch(_tex.type)
+ 		{
+			case TTextureNature::COLOR:
 			{
 				#if LINUX | WIN32
-		 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+parOffset,  GL_TEXTURE_2D, parTextureIndex,0);
+		 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0+_tex.offset,  GL_TEXTURE_2D, _tex.texID,0);
 		 		#endif
 
 		 		#ifdef MACOSX
-		 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT+parOffset, parTextureIndex,0);
+		 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT+_tex.offset, _tex.texID,0);
 		 		#endif
 			}
-	 		else if(parTextureType == TextureNature::DEPTH)
+			break;
+	 		case TTextureNature::DEPTH:
 	 		{
 				#if LINUX | WIN32
-		 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, parTextureIndex,0);
+		 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _tex.texID,0);
 		 		#endif
 		 		
 		 		#ifdef MACOSX
-		 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, parTextureIndex, 0);
+		 		glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _tex.texID, 0);
 		 		#endif
 	 		}
-
+	 		break;
+	 		default:
+	 			GRAPHICS_ERROR("Unsuported texture nature");
+	 	}
 	}
-	void CreateTexture(GLuint& parTex, int parWidth, int parHeight, TextureNature::Type parType)
+	void CreateTexture(TTextureInfo& _tex, int parWidth, int parHeight)
 	{
 		GRAPHICS_DEBUG("Creating GPU texture");
-		glGenTextures(1, &parTex);
-		glBindTexture(GL_TEXTURE_2D, parTex);
-		if(parType == TextureNature::COLOR)
+		glGenTextures(1, &_tex.texID);
+		glBindTexture(GL_TEXTURE_2D, _tex.texID);
+		if(_tex.type == TTextureNature::COLOR)
 		{
 			glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, parWidth, parHeight, 0,GL_RGBA, GL_FLOAT, 0);
 		}
-		else if(parType == TextureNature::DEPTH)
+		else if(_tex.type == TTextureNature::DEPTH)
 		{
 			glTexImage2D(GL_TEXTURE_2D,0, GL_DEPTH_COMPONENT24, parWidth, parHeight, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 		}
-
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -145,14 +164,14 @@ namespace Donut
 		#endif
 	}
 
-	void DeleteTexture(GLuint& _tex)
+	void DeleteTexture(TTextureInfo& _tex)
 	{
 		#if LINUX | WIN32
-		glDeleteTextures(1, &_tex);
+		glDeleteTextures(1, &_tex.texID);
 		#endif
 		
 		#ifdef MACOSX
-		glDeleteTexturesEXT(1, &_tex);
+		glDeleteTexturesEXT(1, &_tex.texID);
 		#endif
 	}
 

@@ -242,16 +242,6 @@
 	{
 		FRenderPasses[parNbPass]->SetShader(_shader);
 	}
-	
-	void TRenderer::SetRenderType(FrameCanvasContent::Type parType, int parNbPass)
-	{
-		FRenderPasses[parNbPass]->SetRenderType(parType);
-	}
-
-	void TRenderer::AddLight(TLight* parLight, int parNbPass)
-	{
-		FRenderPasses[parNbPass]->AddLight(parLight);
-	}
 	// END CLASS DECLARATION
 	
 	void *CreateRenderingThread(void* parGraphicRenderer)

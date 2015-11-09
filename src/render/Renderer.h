@@ -66,8 +66,6 @@
 		bool IsRendering();
 		void SetRendering(bool parVal);
 
-
- 		void SetRenderType(FrameCanvasContent::Type parType, int parNbPass = 0);
  		void SetShader(const TShader& _shader, int parNbPass = 0);
 
 

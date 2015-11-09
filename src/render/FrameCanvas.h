@@ -21,6 +21,7 @@
 
 #include "graphics/drawable.h"
 #include "graphics/shaderManager.h"
+#include "graphics/mesh.h"
 #include "graphics/material.h"
 #include <Render/Light.h>
 #include <resource/texture.h>
@@ -35,7 +36,6 @@
  		enum Type
  		{
  			STANDARD, // DIFF+DEPTH
- 			GBUFFER, //DIFF+DEPTH+NORMAL+SPEC
  			DEFFERED // Deferred lightning
  		};
  	}
@@ -54,7 +54,6 @@
 		}
 		void SetShader(const TShader& _shader);
 
-		virtual void Draw() {}
 		virtual void Draw(const std::vector<TLight*>& parLights);
 		void InjectData(const TShader& parShader);
 
@@ -64,29 +63,21 @@
 		void AttachTexture(TTexture* _texture, const std::string& _uniformVarName);
 
 	protected:
-		void createShader();
-		void createVAO();
+		void CreateShader();
 	protected:
 
 		// Buffer Data
 		GLuint FFrameBuffer;
 		FrameCanvasContent::Type FCanvasType;
 
-		GLuint FAlbedoBuffer;
-		GLuint FPosBuffer;
-		GLuint FNormalBuffer;
-		GLuint FSpecularBuffer;
-		GLuint FDepthBuffer;
+		// Gbuffer data, should be moved to the material
+		TTextureInfo m_buffers[5];
+		// Textures, should be moved to the Material
 		std::vector<TTexture*> FTextures;
 		int FTextureCounter;
-		
-		GLuint FSecondFrameBuffer;
-		GLuint FFinalBuffer;
 
 		// Quad
-	 	GLuint FVertexArrayID;
-	 	GLuint FVBO;
-
+	 	TGeometry* m_fsq;
 		//Shader
 		TMaterial FMaterial;
 	};

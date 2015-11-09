@@ -19,6 +19,7 @@
  #include "graphics/common.h"
  #include "graphics/settings.h"
  #include "graphics/glfactory.h"
+ #include "graphics/factory.h"
 
  #include <base/common.h>
  #include <multiThread/defines.h>
@@ -29,22 +30,8 @@ namespace Donut
 	#define CANVAS_VERTEX_SHADER "shaders/canvas/vertex.glsl"
 	#define CANVAS_FRAGMENT_SHADER "shaders/canvas/fragment.glsl"
 
-	GLfloat fullScreenQuad[20] = { 
-		-1.0f, -1.0f, 0.0f, 
-		-1.0f, 1.0f, 0.0f, 
-		1.0f, -1.0f, 0.0f, 
-		1.0f, 1.0f, 0.0f, 
-		0.0,0.0,
-		0.0,1.0,
-		1.0,0.0,
-		1.0,1.0,
-	};
  	TFrameCanvas::TFrameCanvas()
  	: FFrameBuffer(0)
-	, FAlbedoBuffer(0)
-	, FDepthBuffer(0)
-	, FNormalBuffer(0)
-	, FSpecularBuffer(0)
  	, FMaterial()
  	, FCanvasType(FrameCanvasContent::STANDARD)
  	, FTextureCounter(0)
@@ -56,36 +43,10 @@ namespace Donut
  	{
  	}
 
-	void TFrameCanvas::createShader()
-	{
- 		ShaderManager::Instance().CreateShader(FMaterial.shader);
-	}
-
-	void TFrameCanvas::createVAO()
-	{
- 		// Full screen quad VAO
-		glGenVertexArrays (1, &FVertexArrayID);
-		glBindVertexArray (FVertexArrayID);
-		
-		glGenBuffers(1, &FVBO);
-		glBindBuffer(GL_ARRAY_BUFFER, FVBO);
-
-		glBufferData(GL_ARRAY_BUFFER, sizeof(fullScreenQuad), fullScreenQuad, GL_STATIC_DRAW);
-		GLuint posAtt = glGetAttribLocation(FMaterial.shader.FProgramID, "position");
-		GLuint texCoordAtt = glGetAttribLocation(FMaterial.shader.FProgramID, "tex_coord");
-		glEnableVertexAttribArray (posAtt);
-		glEnableVertexAttribArray (texCoordAtt);
-		glVertexAttribPointer (posAtt, 3, GL_FLOAT, GL_FALSE, 0, 0);
-		glVertexAttribPointer (texCoordAtt, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof (GLfloat)*12));
-		
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindVertexArray (0);
-	}
-
 	void TFrameCanvas::Init()
  	{
- 		createShader();
-		createVAO();
+ 		ShaderManager::Instance().CreateShader(FMaterial.shader);
+		m_fsq = CreateFullScreenQuad(FMaterial.shader);
 
 		// Generation du buffer
 		FFrameBuffer = CreateFrameBuffer();
@@ -93,17 +54,20 @@ namespace Donut
 		GRAPHICS_DEBUG("Frame buffer init "<<FFrameBuffer);
 		if(FCanvasType==FrameCanvasContent::STANDARD)
 		{
-	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
+			TTextureInfo& albedo = m_buffers[0];
+			albedo.name = "albedo";
+			albedo.type = TTextureNature::COLOR;
+			albedo.offset = 0;
+			CreateTexture(albedo, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(albedo);
 
-	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
-	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
-
-	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	 		{
-	 			GRAPHICS_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
-	 		}
-
+			TTextureInfo& depth = m_buffers[4];
+			depth.name = "depth";
+			depth.type = TTextureNature::DEPTH;
+			depth.offset = 0;
+			CreateTexture(depth, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(depth);
+ 			CheckFrameBuffer();
 	 		UnBindFrameBuffer();
 			GRAPHICS_DEBUG("Frame canvas created");
 			
@@ -111,64 +75,52 @@ namespace Donut
 	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
 	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
 
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 1 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, albedo.texID, "albedo", 0 );
+	 		ShaderManager::Instance().InjectTex(FMaterial.shader, depth.texID, "depth", 1 );
 	 		FTextureCounter = 2;
-	 		ShaderManager::Instance().DisableShader();
-		}
-		else if (FCanvasType==FrameCanvasContent::GBUFFER)
-		{
-	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
-
-	 		CreateTexture(FNormalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FNormalBuffer, TextureNature::COLOR, 1);
-
-	 		CreateTexture(FSpecularBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FSpecularBuffer, TextureNature::COLOR, 2);
-
-	 		CreateTexture(FPosBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FPosBuffer, TextureNature::COLOR, 3);
-
-	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
-	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
-	 		FTextureCounter = 4;
-
-	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	 		{
-	 			GRAPHICS_ERROR("There is a problem with your standard frame buffer dude "<<glGetError());
-	 		}
-
-	 		UnBindFrameBuffer();
-			GRAPHICS_DEBUG("Frame canvas created");
-			
-	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
-
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "nbuffer", 1 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "specbuffer", 2 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "posbuffer", 3 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 4 );
 	 		ShaderManager::Instance().DisableShader();
 		}
 		else if (FCanvasType==FrameCanvasContent::DEFFERED)
 		{
-	 		CreateTexture(FAlbedoBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FAlbedoBuffer, TextureNature::COLOR, 0);
+			// The abledo buffer
+			TTextureInfo& albedo = m_buffers[0];
+			albedo.name = "albedo";
+			albedo.type = TTextureNature::COLOR;
+			albedo.offset = 0;
+			CreateTexture(albedo, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(albedo);
 
-	 		CreateTexture(FNormalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FNormalBuffer, TextureNature::COLOR, 1);
+	 		// The normal buffer
+			TTextureInfo& normal = m_buffers[1];
+			normal.name = "normal";
+			normal.type = TTextureNature::COLOR;
+			normal.offset = 1;
+			CreateTexture(normal, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(normal);
 
-	 		CreateTexture(FSpecularBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FSpecularBuffer, TextureNature::COLOR, 2);
+	 		// The specular buffer
+			TTextureInfo& specular = m_buffers[2];
+			specular.name = "specular";
+			specular.type = TTextureNature::COLOR;
+			specular.offset = 2;
+			CreateTexture(specular, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(specular);
 
-	 		CreateTexture(FPosBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FPosBuffer, TextureNature::COLOR, 3);
+	 		// Position Buffer
+			TTextureInfo& position = m_buffers[3];
+			position.name = "position";
+			position.type = TTextureNature::COLOR;
+			position.offset = 3;
+			CreateTexture(position, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(position);
 
-	 		CreateTexture(FDepthBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::DEPTH);
-	 		BindToFrameBuffer(FDepthBuffer, TextureNature::DEPTH, 0);
+	 		// Depth buffer
+			TTextureInfo& depth = m_buffers[4];
+			depth.name = "depth";
+			depth.type = TTextureNature::DEPTH;
+			depth.offset = 0;
+			CreateTexture(depth, DEFAULT_WIDTH, DEFAULT_LENGHT);
+	 		BindToFrameBuffer(depth);
 
 	 		FTextureCounter = 4;
 
@@ -179,29 +131,6 @@ namespace Donut
 
 	 		UnBindFrameBuffer();
 			GRAPHICS_DEBUG("Frame gbuffer canvas created");
-			
-			FSecondFrameBuffer = CreateFrameBuffer();
-			BindFrameBuffer(FSecondFrameBuffer);
-
-	 		CreateTexture(FFinalBuffer, DEFAULT_WIDTH, DEFAULT_LENGHT, TextureNature::COLOR);
-	 		BindToFrameBuffer(FFinalBuffer, TextureNature::COLOR, 0);
-
-	 		if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-	 		{
-	 			GRAPHICS_ERROR("There is a problem with your gbuffer frame buffer dude "<<glGetError());
-	 		}
-
-	 		UnBindFrameBuffer();
-	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_WIDTH, "width");
-	 		ShaderManager::Instance().Inject<int>(FMaterial.shader, DEFAULT_LENGHT, "lenght");
-
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FFinalBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FAlbedoBuffer, "diff", 1 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FDepthBuffer, "depth", 2 );
-	 		ShaderManager::Instance().InjectTex(FMaterial.shader, FPosBuffer, "posbuffer", 3 );
-	 		ShaderManager::Instance().DisableShader();
-
 		}
 
  	}
@@ -217,15 +146,21 @@ namespace Donut
 	{
 		if(FCanvasType==FrameCanvasContent::DEFFERED)
 		{
+			TTextureInfo& albedo = m_buffers[0];
+			TTextureInfo& normal = m_buffers[1];
+			TTextureInfo& specular = m_buffers[2];
+			TTextureInfo& position = m_buffers[3];
+			TTextureInfo& depth = m_buffers[4];
+
 	 		ShaderManager::Instance().EnableShader(parShader);
 	 		ShaderManager::Instance().Inject<int>(parShader, DEFAULT_WIDTH, "width");
 	 		ShaderManager::Instance().Inject<int>(parShader, DEFAULT_LENGHT, "lenght");
 
-	 		ShaderManager::Instance().InjectTex(parShader, FAlbedoBuffer, "canvas", 0 );
-	 		ShaderManager::Instance().InjectTex(parShader, FNormalBuffer, "nbuffer", 1 );
-	 		ShaderManager::Instance().InjectTex(parShader, FSpecularBuffer, "specbuffer", 2 );
-	 		ShaderManager::Instance().InjectTex(parShader, FPosBuffer, "posbuffer", 3 );
-	 		ShaderManager::Instance().InjectTex(parShader, FDepthBuffer, "depth", 4 );
+	 		ShaderManager::Instance().InjectTex(parShader, albedo.texID, "albedo", 0 );
+	 		ShaderManager::Instance().InjectTex(parShader, normal.texID, "normal", 1 );
+	 		ShaderManager::Instance().InjectTex(parShader, specular.texID, "specular", 2 );
+	 		ShaderManager::Instance().InjectTex(parShader, position.texID, "position", 3 );
+	 		ShaderManager::Instance().InjectTex(parShader, depth.texID, "depth", 4 );
 	 		ShaderManager::Instance().DisableShader();		
 		}
 
@@ -237,24 +172,13 @@ namespace Donut
  		glBindFramebufferEXT(GL_FRAMEBUFFER, FFrameBuffer);
  		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
  		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (FCanvasType==FrameCanvasContent::GBUFFER || FCanvasType==FrameCanvasContent::DEFFERED)
+		if (FCanvasType==FrameCanvasContent::DEFFERED)
 		{
 			GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, 
                           GL_COLOR_ATTACHMENT2_EXT ,GL_COLOR_ATTACHMENT3_EXT };
     		glDrawBuffers(4, buffers);
 		}
  	}
-
- 	void TFrameCanvas::EnableSecond()
- 	{
- 		glEnable(GL_DEPTH_TEST);
- 		glBindFramebufferEXT(GL_FRAMEBUFFER, FSecondFrameBuffer);
- 		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
- 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT};
-		glDrawBuffers(1, buffers);
- 	}
-
  	void TFrameCanvas::Disable()
  	{
  		glPopAttrib();
@@ -268,39 +192,18 @@ namespace Donut
  	{
 		if(FCanvasType==FrameCanvasContent::STANDARD)
 		{
- 			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
- 			ShaderManager::Instance().BindTex(FDepthBuffer,1);
+			TTextureInfo& albedo = m_buffers[0];
+			TTextureInfo& depth = m_buffers[4];
+ 			ShaderManager::Instance().BindTex(albedo.texID,0);
+ 			ShaderManager::Instance().BindTex(depth.texID,1);
 	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-		  	glBindVertexArray (FVertexArrayID);
-		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
-		  	glBindVertexArray (0);
+		  	m_fsq->Draw(false);
 	 		ShaderManager::Instance().DisableShader();
  			glFlush ();
 
 		}
-		else if (FCanvasType==FrameCanvasContent::GBUFFER)
-		{
-			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
- 			ShaderManager::Instance().BindTex(FNormalBuffer,1);
- 			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
- 			ShaderManager::Instance().BindTex(FPosBuffer,3);
- 			ShaderManager::Instance().BindTex(FDepthBuffer,4);
- 			int counter = FTextureCounter-(int)FTextures.size()-1;
- 			foreach_macro(tex, FMaterial.textures)
- 			{
- 				ShaderManager::Instance().BindTex(tex->texID,counter);
- 				counter++;
- 			}
-	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-		  	glBindVertexArray (FVertexArrayID);
-		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
-		  	glBindVertexArray (0);
-	 		ShaderManager::Instance().DisableShader();
- 			glFlush ();
-		}
 		else if (FCanvasType==FrameCanvasContent::DEFFERED)
 		{
-			EnableSecond();
 			glEnable (GL_BLEND); // --- could reject background frags!
 			glBlendEquation (GL_FUNC_ADD);
 			glBlendFunc (GL_ONE, GL_ONE); // addition each time
@@ -308,34 +211,28 @@ namespace Donut
 			glDisable (GL_DEPTH_TEST);
 			glDepthMask (GL_FALSE);
 
-			ShaderManager::Instance().BindTex(FAlbedoBuffer,0);
- 			ShaderManager::Instance().BindTex(FNormalBuffer,1);
- 			ShaderManager::Instance().BindTex(FSpecularBuffer,2);
- 			ShaderManager::Instance().BindTex(FPosBuffer,3);
- 			ShaderManager::Instance().BindTex(FDepthBuffer,4);
+			TTextureInfo& albedo = m_buffers[0];
+			TTextureInfo& normal = m_buffers[1];
+			TTextureInfo& specular = m_buffers[2];
+			TTextureInfo& position = m_buffers[3];
+			TTextureInfo& depth = m_buffers[4];
+
+			ShaderManager::Instance().BindTex(albedo.texID,0);
+ 			ShaderManager::Instance().BindTex(normal.texID,1);
+ 			ShaderManager::Instance().BindTex(specular.texID,2);
+ 			ShaderManager::Instance().BindTex(position.texID,3);
+ 			ShaderManager::Instance().BindTex(depth.texID,4);
  			foreach_macro(light,parLights )
 			{
 
 				(*light)->Bind();
 				(*light)->InjectData();
-			  	glBindVertexArray (FVertexArrayID);
-			  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
-			  	glBindVertexArray (0);	
+			  	m_fsq->Draw(false);
 				(*light)->Unbind();
 			}
 			glEnable (GL_DEPTH_TEST);
 			glDepthMask (GL_TRUE);
 			glDisable (GL_BLEND);
-			Disable();
-
- 			ShaderManager::Instance().BindTex(FFinalBuffer,0);
- 			ShaderManager::Instance().BindTex(FAlbedoBuffer,1);
- 			ShaderManager::Instance().BindTex(FDepthBuffer,2);
-	 		ShaderManager::Instance().EnableShader(FMaterial.shader);
-		  	glBindVertexArray (FVertexArrayID);
-		  	glDrawArrays(GL_TRIANGLE_STRIP, 0,4);
-		  	glBindVertexArray (0);
-	 		ShaderManager::Instance().DisableShader();
  			glFlush ();
 		}
  	}

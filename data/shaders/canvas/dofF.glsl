@@ -19,7 +19,6 @@ vec4 blurr(vec2 texPos)
 {
   vec4 sum = vec4(0.0);
   float depthV =  texture(depth, texCoord).r;
-  depthV = pow(depthV, 2.0);
   sum += texture(canvas, vec2(texCoord.x - 4.0*blurSize*depthV, texCoord.y)) * 0.05;
   sum += texture(canvas, vec2(texCoord.x - 3.0*blurSize*depthV, texCoord.y)) * 0.09;
   sum += texture(canvas, vec2(texCoord.x - 2.0*blurSize*depthV, texCoord.y)) * 0.12;

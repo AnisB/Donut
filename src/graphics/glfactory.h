@@ -21,6 +21,7 @@
 #include "graphics/common.h"
 #include "graphics/geometry.h"
 #include "graphics/shader.h"
+#include "graphics/shaderdata.h"
 // STL includes
 #include <vector>
 
@@ -33,24 +34,16 @@ namespace Donut
 	GLuint CreateFrameBuffer();
 	void BindFrameBuffer(GLuint parFrameBuffer);
 	void UnBindFrameBuffer();
+	bool CheckFrameBuffer();
 	void DeleteFrameBuffers(std::vector<GLuint>& _frameBuffers);
 	void DeleteFrameBuffer(GLuint& _frameBuffer);
-
-	// Should be moved to texture when it will be refactored
-	namespace TextureNature 
-	{
-		enum Type
-		{
-			COLOR,
-			DEPTH
-		};
-	};
-	void BindToFrameBuffer(GLuint parTextureIndex, TextureNature::Type parTextureType, GLuint parOffset = 0);
+	void BindToFrameBuffer(const TTextureInfo& _tex);
+	void ClearBuffer();
 
 	// Texture creation and deletion
-	void CreateTexture(GLuint& parTex, int parWidth, int parHeight, TextureNature::Type parType);
+	void CreateTexture(TTextureInfo& _tex, int parWidth, int parHeight);
 	void DeleteTextures(std::vector<GLuint>& _textures);
-	void DeleteTexture(GLuint& _tex);
+	void DeleteTexture(TTextureInfo& _tex);
 
 	// Reading from currentFrameBuffer
 	void ReadRGBFrameBuffer(int _width, int _length, unsigned char* _output);

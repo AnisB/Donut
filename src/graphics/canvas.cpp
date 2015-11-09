@@ -15,13 +15,28 @@
 **/
 
 // Library includes
-#include "graphics/mesh.h"
+#include "canvas.h"
+#include "graphics/shaderdata.h"
+#include "graphics/shaderdata.h"
+
+// STL includes
 
 namespace Donut
 {
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TMesh* CreateSugarInstance(const std::string& _sugarName);
+	// Init and delete
+	TCanvas::TCanvas(int _width, int _height)
+	: m_width(_width)
+	, m_height(_height)
+	{
+	}
+
+	TCanvas::~TCanvas()
+	{
+
+	}
+
+	const TBufferOutput& TCanvas::Result()
+	{
+		return m_output;
+	}
 }

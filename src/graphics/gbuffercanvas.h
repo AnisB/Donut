@@ -14,14 +14,26 @@
 *
 **/
 
+#ifndef GBUFFER_FRAME_CANVAS_GRAPHICS
+#define GBUFFER_FRAME_CANVAS_GRAPHICS
+
 // Library includes
-#include "graphics/mesh.h"
+#include "canvas.h"
 
 namespace Donut
 {
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TMesh* CreateSugarInstance(const std::string& _sugarName);
+	class TGBufferCanvas : public TCanvas
+	{
+	public:
+		// Creation
+		TGBufferCanvas(const TShader& _shader, int _width, int _height);
+		~TGBufferCanvas();
+
+		// Inheritance exigences
+		virtual void Init();
+		virtual void Enable();
+		virtual void Disable();
+	};
+	// END CLASS DECLARATION
 }
+#endif // GBUFFER_FRAME_CANVAS_GRAPHICS

@@ -29,11 +29,12 @@ namespace Donut
 	    GLuint indexBuffer;
 	    int nbVertices;
 	    TGeometry();
+	    void Draw(bool _isTess);
 
 	    // You should not call this
 	private:
 		friend class TMesh;
-	    void Draw(bool _isTess);
+		friend class TFrameCanvas;
 	};	
 }
 
