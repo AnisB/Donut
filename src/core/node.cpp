@@ -67,12 +67,16 @@ namespace Donut
 	{
 		FModel = FModel*RotateXAxis(parAngle);
 	}	
-	void TNode::Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler)
+	void TNode::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
+		Matrix4& parentModel = _values["model"].GetValue<Matrix4>();
+		Matrix4 save = parentModel;
+		parentModel = parentModel * FModel;
 		foreach_macro(son,FSons)
 		{
-			(*son)->Draw(_modelMatrix*FModel, _viewProjectionMatrix, _handler);
+			(*son)->Draw(_values, _previousData);
 		}
+		parentModel = save;
 	}
 	void TNode::Translate(const Vector3& parVector)
 	{

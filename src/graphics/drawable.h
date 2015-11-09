@@ -22,6 +22,7 @@
 #include "shader.h"
 #include "core/Camera.h"
 #include "graphics/uniformhandler.h"
+#include "graphics/canvas.h"
 
 namespace Donut
 {
@@ -31,9 +32,7 @@ namespace Donut
 		TDrawable();
 		virtual ~TDrawable();
 		// To be overloaded
-		virtual void Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler) = 0;
-		// Updating camera data
-		virtual void UpdateCameraData(const Matrix4& _projection, const Matrix4& _view) = 0;
+		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
 	};
 }
  #endif // DONUT_DRAWABLE_OBJECT

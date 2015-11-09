@@ -15,65 +15,54 @@
 **/
 
 
-#ifndef DONUT_2D_RENDER_PASS
-#define DONUT_2D_RENDER_PASS
+#ifndef GEOMETRY_PASS_GRAPHICS
+#define GEOMETRY_PASS_GRAPHICS
 
 
 // Library includes
 #include "graphics/drawable.h"
-
-#include <MultiThread/ThreadSharedObject.h>
-#include "core/Camera.h"
+#include "core/camera.h"
+#include "graphics/pass.h"
 #include "core/node.h"
- 
 #include "Render/Light.h"
 #include "graphics/canvas.h"
 #include "graphics/visualeffect.h"
+
 // STL includes
 #include <vector>
  
  namespace Donut
  {
-
-	class TRenderPass : public TThreadSharedObject
+	class TGeometryPass : public TPass
 	{
 	public:
-		TRenderPass();
-		~TRenderPass();
-
-		void Init();
-
-		void Draw();
-		void Clear();
-
-		void AddDrawable(TDrawable* parDrawable);
-		void RemoveDrawable(TDrawable* parDrawable);
-
-		void SetShader(const TShader& _shader);
-
-		void PreparePass();
-
-		TNode* GetRoot();
-		Camera* GetCamera(){return FCamera;}
-
-		void AddTexture(const std::string& _textureName, const std::string& _unifomName);
+		// Constructor destructor
+		TGeometryPass();
+		~TGeometryPass();
 		
-	private:
+		// Setting the pass content
+		void Set(TCanvas* _canvas, TNode* _root);
+		void Init();
+		// Setting and disabling the canvas
 		void Bind();
 		void Unbind();
 
+		// Render the VFX (using the canvas data)
+		void Draw(const TBufferOutput& _previousData);
+
+		// Getting the pass output
+		const TBufferOutput* GetOutput();
+
+		Camera* GetCamera() {return FCamera;}
 	private:
-		TCanvas * m_canvas;
-		TVFX * m_vfx;
+		// Internal data
+		Matrix4 m_reference;
 		Camera * FCamera;
 
-		bool FRenderToTexture;
-
-	protected:
-		TNode* FRoot;
-		std::vector<TDrawable*> FDrawables;
-		std::vector<TLight*> FLights;
+		// Rendering data
+		TCanvas * m_canvas;
+		TNode* m_root;
 	};
 	// END CLASS DECLARATION
  }
- #endif // DONUT_2D_RENDER_PASS
+ #endif // GEOMETRY_PASS_GRAPHICS

@@ -34,7 +34,7 @@ int main()
 	engine->LaunchRendering(newContext);
 	while(engine->IsRendering())
 	{
-		engine->Update(0.016);
+		engine->Update((float)0.016);
 	}
 	delete engine;
 	return 0;

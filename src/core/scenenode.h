@@ -34,7 +34,7 @@ namespace Donut
 		//Destructor
 		~TSceneNode();
 		// Adds a child to the tree
-		virtual void Draw(const Matrix4& parModelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler);
+		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 		virtual void AddDrawable(TDrawable* parDrawable);
 

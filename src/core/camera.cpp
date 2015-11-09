@@ -14,7 +14,11 @@
 *
 **/
 
+// Library includes
 #include "Camera.h"
+
+// STL inlcudes
+#include <math.h>
 
 namespace Donut 
 {
@@ -39,7 +43,11 @@ namespace Donut
 	{
 		m_near = parNear;
 		m_far = parFar;
+#if __posix__
 		m_fcoeff = 2.0 / log2(m_far + 1.0);
+#else
+		m_fcoeff = 2.0 / log(m_far + 1.0)/log(2);
+#endif
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
@@ -75,5 +83,25 @@ namespace Donut
 	void Camera::ChangeNoticed()
 	{
 		FHasChanged.SetValue(false);
+	}
+
+	void Camera::AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms)
+	{
+		// Injecting view matrix
+		TUniformHandler view;
+		view.SetValue(TShaderData::MAT4, "view", FViewMatrix);
+		_uniforms["view"] = view;
+		// Injecting projection matrix
+		TUniformHandler projection;
+		projection.SetValue(TShaderData::MAT4, "projection", FProjection);
+		_uniforms["projection"] = projection;
+		// Injecting projection matrix
+		TUniformHandler viewprojection;
+		viewprojection.SetValue(TShaderData::MAT4, "viewprojection", FProjection*FViewMatrix);
+		_uniforms["viewprojection"] = viewprojection;
+		// Injecting zbuffer fcoef
+		TUniformHandler fcoef;
+		fcoef.SetValue(TShaderData::FLOAT, "fcoef", m_fcoeff);
+		_uniforms["fcoef"] = fcoef;
 	}
 }

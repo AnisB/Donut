@@ -42,7 +42,6 @@ int main()
 	window->CreateRenderWindow(newContext, 1);
 	Donut::TShader rpShader("shaders/canvas/vertex.glsl", "shaders/canvas/lightfragment.glsl");
 	window->SetShader(rpShader);
-	window->SetRenderType(Donut::FrameCanvasContent::DEFFERED);
 	window->Init();
 
 	Donut::TLight* lightSource = new Donut::TLight();

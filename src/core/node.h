@@ -21,6 +21,7 @@
 // Std includes
 #include "butter/matrix4.h"
 #include "graphics/uniformhandler.h"
+#include "graphics/canvas.h"
 #include "camera.h"
 
 // STL includes
@@ -48,7 +49,7 @@ namespace Donut
 		// Accessors
 		const std::vector<TNode*>& GetChildList();
 		
-		virtual void Draw(const Matrix4& _modelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handler);
+		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 	protected:
 		std::vector<TNode*> FSons;

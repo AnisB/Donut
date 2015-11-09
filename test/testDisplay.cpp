@@ -21,12 +21,9 @@
 #include <graphics/factory.h>
 #include <core/SceneNode.h>
 
-
+using namespace Donut;
 int main()
 {
-	// Creating the rendering window
-	Donut::TRenderer * window = new Donut::TRenderer();
-
 	// Context info
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testDisplay";
@@ -34,10 +31,16 @@ int main()
 	newContext.lenght = 720;
 	newContext.major = 4;
 	newContext.minor = 1;
+
+	// Creating the rendering window
+	Donut::TRenderer * window = new Donut::TRenderer();
 	window->CreateRenderWindow(newContext, 1);
 	window->Init();
 
 	// Getting the camera
+	std::vector<TPass*> passes;
+	TNode* root =  new TNode();
+	TGeometryPass* geometryPass = new TGeometryPass();
 	Donut::TRenderPass* pass= window->GetPasses()[0];
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();

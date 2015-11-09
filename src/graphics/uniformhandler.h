@@ -73,6 +73,10 @@ namespace Donut
 		// Setting value
 		template <typename T>
 		void SetValue(TShaderData::Type _type, const std::string& _name, const T& _value);
+		
+		template <typename T>
+		T& GetValue();
+
 		// InjectValue
 		void Inject(const TShader& _shader) const;
 		TShaderData::Type GetType() const;
@@ -87,6 +91,12 @@ namespace Donut
 		if(m_uniform)
 			delete m_uniform;
 		m_uniform = new TUniform<T>(_type, _name, _value);
+	}
+	template <typename T>
+	T& TUniformHandler::GetValue()
+	{
+		TUniform<T>* casted = static_cast<TUniform<T>*>(m_uniform);
+		return casted->value;
 	}
 }
 

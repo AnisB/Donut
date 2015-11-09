@@ -20,7 +20,12 @@
 // Library includes
 #include "butter/matrix4.h"
 #include "butter/vector3.h"
+#include "graphics/uniformhandler.h"
 #include "multithread/usualthreadsafeobjects.h"
+
+// STL includes
+#include <vector>
+#include <map>
 
 namespace Donut
 {
@@ -47,6 +52,7 @@ namespace Donut
 			void ChangeNoticed();
 			bool HasChanged() {return FHasChanged.GetValue();}
 			double GetFCoeff() {return m_fcoeff;}
+			void AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms);
 
 		protected:
 			Matrix4 FViewMatrix;

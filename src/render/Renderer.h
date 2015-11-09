@@ -20,14 +20,11 @@
 
  #include "graphics/common.h"
  #include "graphics/settings.h"
- #include "RenderPass.h"
+ #include "graphics/pass.h"
  #include <butter/types.h>
  #include "multithread/usualthreadsafeobjects.h"
  #include <string>
  #include <vector>
-
-
-
 
  namespace Donut
  {
@@ -40,15 +37,14 @@
  			LINE
  		};
  	}
- 	#define DEFAULT_NB_PASSES 1
-
+	
 	class TRenderer
 	{
 	public:
 		TRenderer();
 		~TRenderer();
 
-		bool CreateRenderWindow(const TGraphicsSettings& parContext, size_t parNbPass = DEFAULT_NB_PASSES);
+		bool CreateRenderWindow(const TGraphicsSettings& parContext, std::vector<TPass*>& _passes);
 		void DestroyRenderWindow();
 
 		void HideRenderWindow();
@@ -72,9 +68,8 @@
  		TNode* GetRoot(int parNbPass = 0);
  		Camera* GetCamera(int parNbPass = 0);
  		void AddLight(TLight* parLight, int parNbPass = 0);
- 		std::vector<TRenderPass*>& GetPasses(){return FRenderPasses;}
 
- 		// Tool
+ 		// DEBUG
  		void SetLook(const TRenderingLook::Type parLook);
 
  	private:
@@ -87,13 +82,11 @@
 		GLFWwindow * FWindow;
 		bool FIsFullScreen;
 		IVector2 FWindowSize;
-		size_t FNbPasses;
 
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;
 
-		std::vector<TRenderPass*> FRenderPasses;
-
+		std::vector<TPass*> m_passes;
 	};
 	// END CLASS DECLARATION
 

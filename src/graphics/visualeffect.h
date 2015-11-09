@@ -21,6 +21,8 @@
 // Library includes
 #include "graphics/shader.h"
 #include "graphics/canvas.h"
+// STL include
+#include <map>
 
 namespace Donut
 {
@@ -36,7 +38,7 @@ namespace Donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		virtual void Draw(const TBufferOutput& _previous) = 0;
+		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
 		// Attaching a texture to a vfx
 	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
 	protected:

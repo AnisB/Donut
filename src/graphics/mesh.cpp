@@ -45,27 +45,20 @@ namespace Donut
 		newTex.name = parName;
  		FMaterial.textures.push_back(newTex);
  	}
- 	void TMesh::Draw(const Matrix4& _drawingModelMatrix, const Matrix4& _viewProjectionMatrix, const std::vector<TUniformHandler>& _handlers)
+ 	void TMesh::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
  	{	
  		Bind();
+		const Matrix4& model = _values["model"].GetValue<Matrix4>();
+		const Matrix4& viewprojection = _values["viewprojection"].GetValue<Matrix4>();
  		ResourceManager::Instance().BindMaterial(FMaterial.shader, FMaterial);
- 		foreach_macro(uniform, _handlers)
+ 		foreach_macro(uniform, _values)
  		{
- 			uniform->Inject(FMaterial.shader);
+ 			uniform->second.Inject(FMaterial.shader);
  		}
- 		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader,_drawingModelMatrix,"model");
-		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader, _viewProjectionMatrix * _drawingModelMatrix,"modelviewprojection");
+		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader, viewprojection * model,"modelviewprojection");
 	  	FGeometry->Draw(FMaterial.shader.FIsTesselated);
  		Unbind();
  	}
-
-	void TMesh::UpdateCameraData(const Matrix4& _projection, const Matrix4& _view)
-	{
- 		Bind();
-		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader, _view,"view");
-		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader, _projection,"projection");
- 		Unbind();
-	}
 
 	void TMesh::Bind()
 	{

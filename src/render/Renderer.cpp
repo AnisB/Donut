@@ -52,7 +52,7 @@
  		}
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext, size_t parNbPass)
+ 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext, std::vector<TPass*>& _passes)
  	{
  		if(!FInitDone)
  		{
@@ -101,11 +101,7 @@
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
 			CheckGLState(FLUSH_GL_ERROR);
-			FNbPasses = parNbPass; 
-	 		for(size_t count = 0; count < FNbPasses; ++count)
-	 		{
-	 			FRenderPasses.push_back(new TRenderPass());
-	 		}
+	 		m_passes = _passes;
    			glfwSetInputMode(FWindow,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
  		}
  		else
@@ -147,13 +143,12 @@
 		glfwMakeContextCurrent(FWindow);
  		// initing the inputs
  		InputInit();
-		foreach_macro(pass,FRenderPasses)
-		{
-			(*pass)->Init();
-		}
  		glClearColor(0.0,0.0,0.0,0.0); 	
- 		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_FRONT_AND_BACK);
+		int nbPasses = m_passes.size();
+        for(size_t pass = 0; pass < nbPasses; ++pass)
+        {
+        	m_passes[pass]->Init();
+        }
 		return isOk;
  	}
 	void TRenderer::SetLook(const TRenderingLook::Type parLook)
@@ -170,13 +165,19 @@
 
  	void TRenderer::Draw()
  	{ 	 
- 		//Inits
- 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        for(size_t pass = 0; pass < FNbPasses; ++pass)
+		// We clear the global buffer
+ 		ClearBuffer();
+		const TBufferOutput* output;
+		int nbPasses = m_passes.size();
+        for(size_t pass = 0; pass < nbPasses; ++pass)
         {
-        	TRenderPass & passIter = (*FRenderPasses[pass]);
-        	passIter.Draw();
+        	TPass * currentPass = m_passes[pass];
+			currentPass->Bind();
+			currentPass->Draw(*output);
+			currentPass->Unbind();
+        	output = currentPass->GetOutput();
         }
+		// Swap front and back buffer
 	  	glfwSwapBuffers (FWindow);
     }
 
@@ -199,36 +200,6 @@
 		FIsRendering.SetValue(parVal);
 	}
 
-
-	void TRenderer::RegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER)
-	{
-		ASSERT(PASS_NUMBER < FNbPasses);
-		TRenderPass  & pass = (*FRenderPasses[PASS_NUMBER]);
-		CRITICAL_SECTION_OBJ_BEGIN(pass);
-		pass.AddDrawable(parDrawable);
-		CRITICAL_SECTION_OBJ_END(pass);
-	}
-
-	void TRenderer::UnRegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER)
-	{
-		ASSERT(PASS_NUMBER < FNbPasses);
-		TRenderPass & pass = (*FRenderPasses[PASS_NUMBER]);
-		CRITICAL_SECTION_OBJ_BEGIN(pass);
-		pass.RemoveDrawable(parDrawable);
-		CRITICAL_SECTION_OBJ_END(pass);
-	}
-
-	void TRenderer::Clear()
-	{
-        for(size_t pass = 0; pass < FNbPasses; ++pass)
-        {
-        	TRenderPass & passIter = (*FRenderPasses[pass]);
-        	CRITICAL_SECTION_OBJ_BEGIN(passIter);
-        	passIter.Clear();
-        	CRITICAL_SECTION_OBJ_END(passIter);
-        }
-	}
-
 	TNode* TRenderer::GetRoot(int parNbPass)
 	{
 		return FRenderPasses[parNbPass]->GetRoot();
@@ -238,10 +209,6 @@
 		return FRenderPasses[parNbPass]->GetCamera();
 	}
 
-	void TRenderer::SetShader(const TShader& _shader, int parNbPass)
-	{
-		FRenderPasses[parNbPass]->SetShader(_shader);
-	}
 	// END CLASS DECLARATION
 	
 	void *CreateRenderingThread(void* parGraphicRenderer)

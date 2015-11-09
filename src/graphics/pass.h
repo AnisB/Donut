@@ -13,37 +13,41 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
+#ifndef PASS_GRAPHICS
+#define PASS_GRAPHICS
 
 
-#ifndef DONUT_MESH
-#define DONUT_MESH
-
+// Library includes
 #include "graphics/drawable.h"
-#include "graphics/geometry.h"
+#include "core/camera.h"
+#include "core/node.h"
+#include "Render/Light.h"
 #include "graphics/canvas.h"
-#include "graphics/material.h"
-#include "resource/texture.h"
+#include "graphics/visualeffect.h"
 
+// STL includes
+#include <vector>
+ 
  namespace Donut
  {
-	class TMesh : public TDrawable
+	class TPass
 	{
 	public:
-	 	// Creating a mesh
-		TMesh(TMaterial& _material, TGeometry* _model);
-		// Dstructor
-	 	virtual ~TMesh();
-	 	// Attach a texture to a mesh => should be moved somewhere where it makes sense
-	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
-	 	// Drawing a mesh
-	 	virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
- 	protected:
- 		void Bind();
- 		void Unbind();
-	protected:
-	 	// Model to draw
-	 	TMaterial FMaterial;
-	 	TGeometry* FGeometry;
-	 };
-}
- #endif // DONUT_MESH
+		// Constructor destructor
+		TPass();
+		~TPass();
+		// Allocating all the CPU and GPU required memory
+		virtual void Init() = 0;
+		// Setting and disabling the canvas
+		virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+
+		// Render the VFX (using the canvas data)
+		virtual void Draw(const TBufferOutput& _previousData) = 0;
+
+		// Getting the pass output
+		virtual const TBufferOutput* GetOutput() = 0;
+	};
+	// END CLASS DECLARATION
+ }
+ #endif // PASS_GRAPHICS
