@@ -15,41 +15,35 @@
 **/
 
 // Library includes
-#include "simplefx.h"
-#include "graphics/geometry.h"
-#include "graphics/shadermanager.h"
+#include "emptycanvas.h"
+#include "graphics/glfactory.h"
 
 namespace Donut
 {
-	// Constructor
-	TSimpleFX::TSimpleFX(const std::string& _vertex, const std::string& _fragment)
-	: TVFX(TShader(_vertex, _fragment))
-	{
-
-	}
-	TSimpleFX::TSimpleFX(const TShader& _shader)
-	: TVFX(_shader)
+	// Creation
+	TEmptyCanvas::TEmptyCanvas(int _width, int _height)
+	: TCanvas(_width, _height)
 	{
 	}
-
-	// Destructor
-	TSimpleFX::~TSimpleFX()
+	// Deletion
+	TEmptyCanvas::~TEmptyCanvas()
 	{
 
 	}
 
-	// Init
-	void TSimpleFX::Init()
+	// Inheritance exigences
+	void TEmptyCanvas::Init()
 	{
-		TVFX::Init();
 	}
 
-	void TSimpleFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TEmptyCanvas::Enable()
 	{
-		ShaderManager::Instance().EnableShader(m_material.shader);
-		BindBufferOutput(_values, _previousData);
-	  	m_fsq->Draw(false);
- 		ShaderManager::Instance().DisableShader();
-		glFlush ();
+		glEnable(GL_DEPTH_TEST);
 	}
+
+	void TEmptyCanvas::Disable()
+	{
+ 		glDisable(GL_DEPTH_TEST);
+	}
+	// END CLASS DECLARATION
 }

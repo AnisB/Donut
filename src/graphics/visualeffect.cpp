@@ -17,6 +17,7 @@
 // Library includes
 #include "visualeffect.h"
 #include "graphics/shadermanager.h"
+#include "resource/resourcemanager.h"
 #include "graphics/factory.h"
 #include "base/macro.h"
 
@@ -42,16 +43,24 @@ namespace Donut
 		m_fsq = CreateFullScreenQuad(m_material.shader);
 	}
 
-	void TVFX::BindBufferOutput(const TBufferOutput& _previous)
+	void TVFX::BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous)
 	{
 		// Injecting frame size
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.width, "width");
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.height, "height");
  		// Injecting buffers
+ 		ResourceManager::Instance().BindMaterial(m_material.shader, m_material);
+
  		foreach_macro(buffer, _previous.buffers)
  		{
- 			ShaderManager::Instance().InjectTex(m_material.shader, buffer->texID, buffer->name, buffer->offset );
+ 			ShaderManager::Instance().InjectTex(m_material.shader, buffer->texID, buffer->name, buffer->offset + m_material.textures.size() );
  		}
+		foreach_macro(uniform, _values)
+ 		{
+ 			TUniformHandler& handler = uniform->second;
+ 			handler.Inject(m_material.shader);
+ 		}
+ 		
 	}
 
 	void TVFX::AddTexture(TTexture* parTex, const std::string& parName)

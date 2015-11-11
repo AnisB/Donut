@@ -35,50 +35,9 @@ namespace Donut
 		}
 	}
 
-	TUniformHandler::TUniformHandler(const TUniformHandler& _uniform)
+	TUniformHandler::TUniformHandler(const TUniformHandler& _uniformHandler)
 	{
-		TShaderData::Type val = _uniform.GetType();
-		switch (val)
-		{
-			case TShaderData::INTEGER:
-			{
-				TUniform<int>* convert = static_cast<TUniform<int>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<int>(*convert);
-			}
-			break;
-			case TShaderData::FLOAT:
-			{
-				TUniform<float>* convert = static_cast<TUniform<float>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<float>(*convert);
-			}
-			break;
-			case TShaderData::MAT4:
-			{
-				TUniform<Matrix4>* convert = static_cast<TUniform<Matrix4>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<Matrix4>(*convert);
-			}
-			break;
-			case TShaderData::VEC3:
-			{
-				TUniform<Vector3>* convert = static_cast<TUniform<Vector3>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<Vector3>(*convert);
-			}
-			break;
-			case TShaderData::VEC4:
-			{
-				TUniform<Vector4>* convert = static_cast<TUniform<Vector4>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<Vector4>(*convert);
-			}
-			break;
-			case TShaderData::MAT3:
-			{
-				TUniform<Matrix3>* convert = static_cast<TUniform<Matrix3>*>(_uniform.m_uniform);
-				m_uniform = new TUniform<Matrix3>(*convert);
-			}
-			break;
-			default:
-				ASSERT_FAIL_MSG("Unsupported uniform type "<<val);
-		}
+		m_uniform = _uniformHandler.m_uniform->Clone();
 	}
 
 	TShaderData::Type TUniformHandler::GetType() const
@@ -133,7 +92,7 @@ namespace Donut
 			}
 			break;
 			default:
-				ASSERT_FAIL_MSG("Unsupported uniform type");
+				ASSERT_FAIL_MSG("Unsupported uniform type "<<val);
 		}
 	}
 }

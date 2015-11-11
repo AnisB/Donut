@@ -20,11 +20,8 @@
 
 
 // Library includes
-#include "graphics/drawable.h"
 #include "graphics/pass.h"
 #include "core/camera.h"
-#include "core/node.h"
-#include "Render/Light.h"
 #include "graphics/canvas.h"
 #include "graphics/visualeffect.h"
 
@@ -37,12 +34,13 @@
 	{
 	public:
 		// Constructor destructor
-		TVFXPass();
+		TVFXPass(TCanvas* _canvas, TVFX* _vfx);
 		~TVFXPass();
 		
 		// Setting the pass content
-		void Set(TCanvas* _canvas, TVFX* _vfx);
 		void Init();
+		void SetCamera(Camera* _camera) { m_camera = _camera; }
+		
 		// Setting and disabling the canvas
 		void Bind();
 		void Unbind();
@@ -55,6 +53,7 @@
 
 	private:
 		// Rendering data
+		Camera * m_camera;
 		TCanvas * m_canvas;
 		TVFX* m_vfx;
 	};

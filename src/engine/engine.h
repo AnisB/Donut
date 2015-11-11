@@ -39,9 +39,6 @@ namespace Donut
  		// in your implementation of the rendering engine
  		virtual void Update(float dt);
  		virtual void PrepareNextFrame() {}
- 		void SetShader(const TShader& _shader, int parNbPass = 0);
- 		void DrawObject(TDrawable * parObject);
- 		void RemoveObject(TDrawable * parObject);
 
  	private:
  		// Data required to launch the rendering thread

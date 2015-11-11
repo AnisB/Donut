@@ -14,26 +14,26 @@
 *
 **/
 
-
-#ifndef SIMPLE_FX_GRAPHICS_DONUT
-#define SIMPLE_FX_GRAPHICS_DONUT
+#ifndef EMPTY_FRAME_CANVAS_GRAPHICS
+#define EMPTY_FRAME_CANVAS_GRAPHICS
 
 // Library includes
-#include "graphics/visualeffect.h"
+#include "canvas.h"
+
 namespace Donut
 {
-	class TSimpleFX : public TVFX
+	class TEmptyCanvas : public TCanvas
 	{
 	public:
-		// Creation/Destruction
-		TSimpleFX(const std::string& _vertex, const std::string& _fragment);
-		TSimpleFX(const TShader& _shader);
-		~TSimpleFX();
-		// Init
-		virtual void Init();
-		// Drawing it
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
-	};
-}
+		// Creation
+		TEmptyCanvas(int _width, int _height);
+		virtual ~TEmptyCanvas();
 
-#endif // SIMPLE_FX_GRAPHICS_DONUT
+		// Inheritance exigences
+		virtual void Init();
+		virtual void Enable();
+		virtual void Disable();
+	};
+	// END CLASS DECLARATION
+}
+#endif // EMPTY_FRAME_CANVAS_GRAPHICS

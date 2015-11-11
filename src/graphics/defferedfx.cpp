@@ -21,9 +21,12 @@
 
 namespace Donut
 {
+	#define DEFFERED_VERTEX "shaders/light/vertex.glsl"
+	#define DEFFERED_GEOMETRY "shaders/light/geometry.glsl" 
+	#define DEFFERED_FRAGMENT "shaders/light/fragment.glsl" 
 	// Constructor
 	TDefferedFX::TDefferedFX()
-	: TVFX(TShader(CANVAS_VERTEX_SHADER, CANVAS_FRAGMENT_SHADER))
+	: TVFX(TShader(DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
 	{
 
 	}
@@ -44,24 +47,21 @@ namespace Donut
 		TVFX::Init();
 	}
 
-	void TDefferedFX::Draw(const TBufferOutput& _previous)
+	void TDefferedFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
 		glEnable (GL_BLEND); // --- could reject background frags!
 		glBlendEquation (GL_FUNC_ADD);
 		glBlendFunc (GL_ONE, GL_ONE); // addition each time
-
 		glDisable (GL_DEPTH_TEST);
 		glDepthMask (GL_FALSE);
-
-		BindBufferOutput(_previous);
+		ShaderManager::Instance().EnableShader(m_material.shader);
+		BindBufferOutput(_values, _previousData);
 		foreach_macro(light, m_lights )
 		{
-
-			(*light)->Bind();
-			(*light)->InjectData();
+			(*light)->InjectData(m_material.shader);
 		  	m_fsq->Draw(false);
-			(*light)->Unbind();
 		}
+ 		ShaderManager::Instance().DisableShader();
 		glEnable (GL_DEPTH_TEST);
 		glDepthMask (GL_TRUE);
 		glDisable (GL_BLEND);

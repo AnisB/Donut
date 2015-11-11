@@ -24,6 +24,7 @@
 
 int main()
 {
+	/*
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -75,6 +76,7 @@ int main()
 	delete cube2;
 
 	delete window;
+	*/
 	return 0;
 
 }

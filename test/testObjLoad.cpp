@@ -14,41 +14,52 @@
  *
  **/
 
+#include <graphics/pipeline.h>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
+#include <resource/resourcemanager.h>
 #include <graphics/factory.h>
-#include <core/SceneNode.h>
-
+ 
+#include <core/scenenode.h>
+#include <butter/vector3.h>
+#include <butter/vector4.h>
 
 int main(int argc, char** argv)
 {
-	ASSERT(argc==2);
-	Donut::TSugarLoader::Instance().Init("data");
+	ASSERT(argc == 2);
+	Donut::TSugarLoader::Instance().Init("data");	
+
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
-
 	// Context info
 	Donut::TGraphicsSettings newContext;
-	newContext.windowName = "testObjLoad";
-	window->CreateRenderWindow(newContext, 1);
-	window->Init();
+	newContext.windowName = "testSugarLoad";
+	newContext.width = 1280;
+	newContext.lenght = 720;
+	newContext.major = 4;
+	newContext.minor = 1;
+	window->CreateRenderWindow(newContext);
 
-	// Getting the camera
-	Donut::TRenderPass* pass= window->GetPasses()[0];
-	Donut::TNode* root= pass->GetRoot();
-	Donut::Camera* camera = pass->GetCamera();
+	// Light source declaration
+	std::vector<Donut::TLight*> lights;
+
+	Donut::TNode* root = new Donut::TNode();
+	Donut::TMesh* sugar = Donut::CreateSugarInstance(argv[1]);
+	Donut::TSceneNode* node = new Donut::TSceneNode();
+	node->AddDrawable(sugar);
+	root->AttachChild(node);
+
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SIMPLE);
+	window->SetPipeline(renderingPipeline);
+	window->Init();
+	
+	Donut::Camera* camera = renderingPipeline->camera;
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	Donut::TDrawable* teapot = Donut::CreateSugarInstance(argv[1]);
-
-	Donut::TSceneNode* node = new Donut::TSceneNode();
-	node->AddDrawable(teapot);
-	root->AttachChild(node);
-	window->RegisterToDraw(teapot);
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
 	
 	while(window->IsRendering())
 	{
@@ -56,10 +67,7 @@ int main(int argc, char** argv)
 		Donut::FarmEvents();
 		inManager->Update();
 	}
-	window->UnRegisterToDraw(teapot);
-	delete teapot;
 
 	delete window;
 	return 0;
-
 }

@@ -20,7 +20,7 @@
 
 // Library includes
 #include "graphics/visualeffect.h"
-#include "render/light.h"
+#include "graphics/light.h"
 
 namespace Donut
 {
@@ -34,10 +34,10 @@ namespace Donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		void Draw(const TBufferOutput& _previous);
+		void SetLights(std::vector<TLight*>& _lights) {m_lights = _lights;}
+		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 	protected:
-		GLuint m_annexeFrameBuffer;
 		std::vector<TLight*> m_lights;
 	};
 }

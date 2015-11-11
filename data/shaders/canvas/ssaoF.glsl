@@ -58,6 +58,6 @@ void main()
   
   float ao = 1.0 - total_strength * occlusion * (1.0 / samples);
   vec4 albedo = texture(canvas, texCoord);
-  frag_color =  vec4(vec3(ao+base)*albedo.xyz,1.0);
+  frag_color =  vec4(vec3(ao),1.0);
 
 }

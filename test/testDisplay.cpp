@@ -14,16 +14,25 @@
  *
  **/
 
+#include <graphics/pipeline.h>
 #include <Render/Renderer.h>
 #include <Input/InputHelper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
+#include <resource/sugarloader.h>
+#include <resource/resourcemanager.h>
 #include <graphics/factory.h>
-#include <core/SceneNode.h>
+ 
+#include <core/scenenode.h>
+#include <butter/vector3.h>
+#include <butter/vector4.h>
 
-using namespace Donut;
 int main()
 {
+	Donut::TSugarLoader::Instance().Init("data");	
+
+	// Creating the rendering window
+	Donut::TRenderer * window = new Donut::TRenderer();
 	// Context info
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testDisplay";
@@ -31,27 +40,15 @@ int main()
 	newContext.lenght = 720;
 	newContext.major = 4;
 	newContext.minor = 1;
+	window->CreateRenderWindow(newContext);
 
-	// Creating the rendering window
-	Donut::TRenderer * window = new Donut::TRenderer();
-	window->CreateRenderWindow(newContext, 1);
-	window->Init();
+	// Light source declaration
+	std::vector<Donut::TLight*> lights;
 
-	// Getting the camera
-	std::vector<TPass*> passes;
-	TNode* root =  new TNode();
-	TGeometryPass* geometryPass = new TGeometryPass();
-	Donut::TRenderPass* pass= window->GetPasses()[0];
-	Donut::TNode* root= pass->GetRoot();
-	Donut::Camera* camera = pass->GetCamera();
-	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
-	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	
+	Donut::TNode* root = new Donut::TNode();
 	Donut::TShader uniformShader("shaders/base/vertex.glsl", "shaders/base/geometry.glsl", "shaders/base/fragment.glsl");
 	Donut::TMesh* cube = CreateCube(5.0, uniformShader);
 	Donut::TMesh* cube2 = CreateCube(2.5, uniformShader);
-
 	Donut::TSceneNode* node1 = new Donut::TSceneNode();
 	node1->Translate(Donut::vector3(10,0, -20));
 	Donut::TSceneNode* node2 = new Donut::TSceneNode();
@@ -60,9 +57,15 @@ int main()
 	node2->AddDrawable(cube2);
 	root->AttachChild(node1);
 	root->AttachChild(node2);
-	window->RegisterToDraw(cube);
-	window->RegisterToDraw(cube2);
 
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SIMPLE);
+	window->SetPipeline(renderingPipeline);
+	window->Init();
+	
+	Donut::Camera* camera = renderingPipeline->camera;
+	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
+	inManager->FCamera = camera;
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
 	
 	while(window->IsRendering())
 	{
@@ -70,12 +73,7 @@ int main()
 		Donut::FarmEvents();
 		inManager->Update();
 	}
-	window->UnRegisterToDraw(cube);
-	window->UnRegisterToDraw(cube2);
-	delete cube;
-	delete cube2;
 
 	delete window;
 	return 0;
-
 }

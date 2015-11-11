@@ -46,13 +46,9 @@
  	TRenderer::~TRenderer()
  	{
 		FIsRendering.SetValue(false);
- 		foreach_macro(pass, FRenderPasses)
- 		{
- 			delete *pass;
- 		}
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext, std::vector<TPass*>& _passes)
+ 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext)
  	{
  		if(!FInitDone)
  		{
@@ -101,7 +97,6 @@
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
 			CheckGLState(FLUSH_GL_ERROR);
-	 		m_passes = _passes;
    			glfwSetInputMode(FWindow,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
  		}
  		else
@@ -112,6 +107,16 @@
  		}
  		return true;
  	}
+ 	
+ 	void TRenderer::DestroyRenderWindow()
+ 	{
+ 		GRAPHICS_DEBUG("Destroying window.");	
+ 		ASSERT(FWindow != NULL);
+ 		glfwTerminate();
+ 		FWindow = NULL;
+ 		FInitDone = false;
+ 	}	
+
  	void TRenderer::HideRenderWindow()
  	{
  		GRAPHICS_DEBUG("Hiding window.");	
@@ -126,16 +131,6 @@
  		glfwShowWindow(FWindow);
  	}	
 
- 	void TRenderer::DestroyRenderWindow()
- 	{
- 		GRAPHICS_DEBUG("Destroying window.");	
- 		ASSERT(FWindow != NULL);
- 		glfwTerminate();
- 		FWindow = NULL;
- 		FInitDone = false;
-
- 	}	
-
  	bool TRenderer::Init()
  	{
  		bool isOk = true;
@@ -144,10 +139,10 @@
  		// initing the inputs
  		InputInit();
  		glClearColor(0.0,0.0,0.0,0.0); 	
-		int nbPasses = m_passes.size();
+		int nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {
-        	m_passes[pass]->Init();
+        	m_pipeline->passes[pass]->Init();
         }
 		return isOk;
  	}
@@ -168,10 +163,10 @@
 		// We clear the global buffer
  		ClearBuffer();
 		const TBufferOutput* output;
-		int nbPasses = m_passes.size();
+		int nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {
-        	TPass * currentPass = m_passes[pass];
+        	TPass * currentPass = m_pipeline->passes[pass];
 			currentPass->Bind();
 			currentPass->Draw(*output);
 			currentPass->Unbind();
@@ -198,15 +193,6 @@
 	void TRenderer::SetRendering(bool parVal)
 	{
 		FIsRendering.SetValue(parVal);
-	}
-
-	TNode* TRenderer::GetRoot(int parNbPass)
-	{
-		return FRenderPasses[parNbPass]->GetRoot();
-	}
-	Camera* TRenderer::GetCamera(int parNbPass)
-	{
-		return FRenderPasses[parNbPass]->GetCamera();
 	}
 
 	// END CLASS DECLARATION

@@ -8,7 +8,6 @@ layout(triangle_strip, max_vertices=3) out;
 
 // Intput Data
 in vec2 texCoordV[];
-in vec3 ecPosV[];
 
 // Output Data
 out vec2 texCoord;

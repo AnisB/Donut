@@ -26,7 +26,7 @@ namespace Donut
 	{
 	public:
 		// Creation
-		TSimpleCanvas(const TShader& _shader, int _width, int _height);
+		TSimpleCanvas(int _width, int _height);
 		virtual ~TSimpleCanvas();
 
 		// Inheritance exigences

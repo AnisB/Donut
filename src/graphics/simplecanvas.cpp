@@ -15,24 +15,24 @@
 **/
 
 // Library includes
-#include "gbuffercanvas.h"
+#include "simplecanvas.h"
 #include "graphics/glfactory.h"
 
 namespace Donut
 {
 	// Creation
-	TGBufferCanvas::TGBufferCanvas(const TShader& _shader, int _width, int _height)
+	TSimpleCanvas::TSimpleCanvas(int _width, int _height)
 	: TCanvas(_width, _height)
 	{
 	}
 	// Deletion
-	TGBufferCanvas::~TGBufferCanvas()
+	TSimpleCanvas::~TSimpleCanvas()
 	{
 
 	}
 
 	// Inheritance exigences
-	void TGBufferCanvas::Init()
+	void TSimpleCanvas::Init()
 	{
 		// Drawable data
 		m_output.width = m_width; 
@@ -47,17 +47,17 @@ namespace Donut
 
 		// The abledo buffer
 		TTextureInfo& color = m_output.buffers[0];
-		color.name = "color";
+		color.name = "canvas";
 		color.type = TTextureNature::COLOR;
 		color.offset = 0;
 		CreateTexture(color, m_width, m_height);
  		BindToFrameBuffer(color);
 
  		// Depth buffer
-		TTextureInfo& depth = m_output.buffers[4];
+		TTextureInfo& depth = m_output.buffers[1];
 		depth.name = "depth";
 		depth.type = TTextureNature::DEPTH;
-		depth.offset = 0;
+		depth.offset = 1;
 		CreateTexture(depth, m_width, m_height);
  		BindToFrameBuffer(depth);
  		// Making sure everything is OK
@@ -65,7 +65,7 @@ namespace Donut
  		UnBindFrameBuffer();
 	}
 
-	void TGBufferCanvas::Enable()
+	void TSimpleCanvas::Enable()
 	{
 		glEnable(GL_DEPTH_TEST);
  		BindFrameBuffer(m_frameBuffer);
@@ -75,7 +75,7 @@ namespace Donut
     	glDrawBuffers(1, buffers);
 	}
 
-	void TGBufferCanvas::Disable()
+	void TSimpleCanvas::Disable()
 	{
 		glPopAttrib();
  		UnBindFrameBuffer();

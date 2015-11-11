@@ -42,7 +42,7 @@ namespace Donut
 		// Attaching a texture to a vfx
 	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
 	protected:
-		void BindBufferOutput(const TBufferOutput& _previous);
+		void BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous);
 	protected:
 		// Material
 		TMaterial m_material;

@@ -40,12 +40,25 @@ namespace Donut
 
 	struct TUniformGeneric
 	{
+		// Data constructor
 		TUniformGeneric(TShaderData::Type _type, const std::string& _name)
 		: type(_type)
 		, name (_name)
 		{
+		}
+		// Copy constructor		
+		TUniformGeneric(const TUniformGeneric& _uniformGeneric)
+		: type(_uniformGeneric.type)
+		, name (_uniformGeneric.name)
+		{
 
 		}
+		// Virtual destructor
+		virtual ~TUniformGeneric() {}
+
+		// Clone function, must be overloaded
+		virtual TUniformGeneric* Clone() = 0;
+		// Data
 		std::string name;
 	    TShaderData::Type type;
 	};
@@ -58,6 +71,16 @@ namespace Donut
 		, value(_value)
 		{
 
+		}
+		TUniform(const TUniform& _uniform)
+		: TUniformGeneric(_uniform.type, _uniform.name)
+		, value (_uniform.value)
+		{
+
+		}
+		TUniformGeneric* Clone()
+		{
+			return (new TUniform<T> (type, name, value));
 		}
 		T value;
 	    const T& GetValue() { return value;}
@@ -96,6 +119,7 @@ namespace Donut
 	T& TUniformHandler::GetValue()
 	{
 		TUniform<T>* casted = static_cast<TUniform<T>*>(m_uniform);
+		ASSERT_NO_RELEASE(casted != nullptr);
 		return casted->value;
 	}
 }

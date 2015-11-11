@@ -28,7 +28,7 @@
 
 // Autres includes
 #include <cmath> 
-
+/*
 using namespace Donut;
 
 // La texture de points de controle
@@ -112,12 +112,14 @@ void renderLoop()
 	}
 }
 
-
+*/
 int main()
 {
+	/*
 	init();
 	initScene();
 	renderLoop();
 	destroy();
+	*/
 	return 0;
 }

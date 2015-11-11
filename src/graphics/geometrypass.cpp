@@ -24,23 +24,18 @@
  {
 
  	//CLASS IMPLEMENTATION
-	TGeometryPass::TGeometryPass()
-	: m_canvas(nullptr)
-	, m_root(nullptr)
+	TGeometryPass::TGeometryPass(TCanvas* _canvas, TNode* _root)
+	: m_canvas(_canvas)
+	, m_root(_root)
 	, m_reference()
+	, m_camera(nullptr)
 	{
-		FCamera = new Camera();
 		SetIdentity(m_reference);
 	}
 	TGeometryPass::~TGeometryPass()
 	{
-		delete FCamera;
-	}
-
-	void TGeometryPass::Set(TCanvas* _canvas, TNode* _root)
-	{
-		m_canvas = _canvas;
-		m_root = _root;
+		delete m_canvas;
+		delete m_root;
 	}
 	
 	void TGeometryPass::Init()
@@ -52,10 +47,8 @@
 	{
 		// Building common uniforms
 		std::map<std::string, TUniformHandler> values;
-		FCamera->AppendUniforms(values);
-		TUniformHandler model;
-		model.SetValue(TShaderData::MAT4, "model", m_reference);
-		values["model"] = model;
+		m_camera->AppendUniforms(values);
+		values["model"].SetValue(TShaderData::MAT4, "model", m_reference);
 		// Drawing me
 		m_root->Draw(values, _previousData);
 	}

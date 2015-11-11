@@ -137,38 +137,23 @@ void createControlPoints()
 }
 
 
-void init()
+Donut::TGraphicsSettings init()
 {
 	// Spécifie le répertoire de chargement des modèles
     Donut::TSugarLoader::Instance().Init("data");    
 	// Creating the rendering window
 	window = new Donut::TRenderer();
-
 	// Context info
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "bezierProgram";
 	//Initialisation de la fenetre
 	window->CreateRenderWindow(newContext);
-	window->Init();
-
-	// Getting the camera
-	Donut::Camera* camera = window->GetCamera();
-	// On définit un gestionnaire d'input
-	inManager = new Donut::TDefaultInputManager();
-	Donut::SetInputManager(inManager);
-	// On donne la camera a l'input manager
-	inManager->FCamera = camera;
-	// On définit la perspective
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-	// On déplace la camera
-	camera->Translate(Donut::vector3(-10,0,0));
+	return newContext;
 }
 
-void initScene()
+Donut::TNode* createScene()
 {
-	Donut::TRenderPass* pass= window->GetPasses()[0];
-	Donut::TNode* root= pass->GetRoot();
-
+	Donut::TNode* root= new Donut::TNode();
 	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
 	surface1 = Donut::CreateSugarInstance("Plane");
 	surface2 = Donut::CreateSugarInstance("PlaneLess");
@@ -198,11 +183,10 @@ void initScene()
 	root->AttachChild(node1);
 	root->AttachChild(node2);
 	root->AttachChild(node3);
-	// Petite acceleration qui permet de mettre a jour les donées uniformes pour un cout minimal
-	window->RegisterToDraw(surface1);
-	window->RegisterToDraw(surface2);
-	window->RegisterToDraw(surface3);
+
+	return root;
 }
+
 // Fonction de destruction
 void destroy()
 {
@@ -211,6 +195,7 @@ void destroy()
 // Loop de rendu
 void renderLoop()
 {
+	window->Init();
 	while(window->IsRendering())
 	{
 		window->Draw();
@@ -223,8 +208,14 @@ void renderLoop()
 
 int main()
 {
-	init();
-	initScene();
+	const Donut::TGraphicsSettings& settings = init();
+	Donut::TNode* root = createScene();
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, std::vector<Donut::TLight*>(), settings.width, settings.lenght, Donut::TPipelineTAG::SIMPLE);
+	window->SetPipeline(renderingPipeline);
+	Donut::Camera* camera = renderingPipeline->camera;
+	inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
+	inManager->FCamera = camera;
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
 	renderLoop();
 	destroy();
 	return 0;

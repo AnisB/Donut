@@ -19,10 +19,13 @@
  #define DONUT_GRAPHIC_RENDERER
 
  #include "graphics/common.h"
+ #include "graphics/pipeline.h"
  #include "graphics/settings.h"
  #include "graphics/pass.h"
  #include <butter/types.h>
  #include "multithread/usualthreadsafeobjects.h"
+ #include "graphics/drawable.h"
+ #include "core/node.h"
  #include <string>
  #include <vector>
 
@@ -41,33 +44,28 @@
 	class TRenderer
 	{
 	public:
+		// Construction/Destruction
 		TRenderer();
 		~TRenderer();
 
-		bool CreateRenderWindow(const TGraphicsSettings& parContext, std::vector<TPass*>& _passes);
+		// Initialisation/Destruction and context settings
+		bool CreateRenderWindow(const TGraphicsSettings& parContext);
 		void DestroyRenderWindow();
 
+		// Hiding and showing back the renderwindow
 		void HideRenderWindow();
 		void ShowRenderWindow();
 
+		// Setting the pipeline
+		void SetPipeline(TPipeline * _renderingPipeline) {m_pipeline = _renderingPipeline;}
 
+		// Drawing the pipline
 		bool Init();
 		void Draw();
-		void Clear();
-
-		void RegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER = 0);
-		void UnRegisterToDraw(TDrawable * parDrawable, size_t PASS_NUMBER = 0);
 
 		// Rendering activation and disable
 		bool IsRendering();
 		void SetRendering(bool parVal);
-
- 		void SetShader(const TShader& _shader, int parNbPass = 0);
-
-
- 		TNode* GetRoot(int parNbPass = 0);
- 		Camera* GetCamera(int parNbPass = 0);
- 		void AddLight(TLight* parLight, int parNbPass = 0);
 
  		// DEBUG
  		void SetLook(const TRenderingLook::Type parLook);
@@ -86,7 +84,7 @@
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;
 
-		std::vector<TPass*> m_passes;
+		TPipeline* m_pipeline;
 	};
 	// END CLASS DECLARATION
 

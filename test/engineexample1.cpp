@@ -40,38 +40,12 @@ namespace Donut
     TEngineExample::~TEngineExample()
     {
        // delete FNode1;
-        delete FNode2;
-        //FRenderer->UnRegisterToDraw(FCubeR);
-        //delete FCubeR;   
-        FRenderer->UnRegisterToDraw(FTeapot);
-        delete FTeapot; 
         delete inManager;  
     }
 
     void TEngineExample::InitScene()
     {
-		Donut::TShader rpShader("shaders/canvas/outVertex.glsl", "shaders/canvas/outFragment.glsl");
-		FRenderer->SetShader(rpShader);
 
-        Donut::TRenderPass* pass= FRenderer->GetPasses()[0];
-        Donut::TNode* root= pass->GetRoot();
-        Donut::Camera* camera = pass->GetCamera();
-        inManager = new Donut::TDefaultInputManager();
-        Donut::SetInputManager(inManager);
-        inManager->FCamera = camera;
-        camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
-        //FCubeR = new Donut::TCubeR(0.5);
-        FTeapot = CreateSugarInstance("Teapot");
-
-        //FNode1 = new Donut::TSceneNode();
-        FNode2 = new Donut::TSceneNode();
-        FNode2->Translate(vector3(-5,0,-40));
-        //FNode1->AddDrawable(FCubeR);
-        FNode2->AddDrawable(FTeapot);
-        //root->AttachChild(FNode1);
-        root->AttachChild(FNode2);
-        //FRenderer->RegisterToDraw(FCubeR);
-        FRenderer->RegisterToDraw(FTeapot);
     }
     void TEngineExample::Update(float dt)
     {

@@ -88,20 +88,12 @@ namespace Donut
 	void Camera::AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms)
 	{
 		// Injecting view matrix
-		TUniformHandler view;
-		view.SetValue(TShaderData::MAT4, "view", FViewMatrix);
-		_uniforms["view"] = view;
+		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", FViewMatrix);
 		// Injecting projection matrix
-		TUniformHandler projection;
-		projection.SetValue(TShaderData::MAT4, "projection", FProjection);
-		_uniforms["projection"] = projection;
+		_uniforms["projection"].SetValue<Matrix4>(TShaderData::MAT4, "projection", FProjection);
 		// Injecting projection matrix
-		TUniformHandler viewprojection;
-		viewprojection.SetValue(TShaderData::MAT4, "viewprojection", FProjection*FViewMatrix);
-		_uniforms["viewprojection"] = viewprojection;
+		_uniforms["viewprojection"].SetValue<Matrix4>(TShaderData::MAT4, "viewprojection", FProjection*FViewMatrix);
 		// Injecting zbuffer fcoef
-		TUniformHandler fcoef;
-		fcoef.SetValue(TShaderData::FLOAT, "fcoef", m_fcoeff);
-		_uniforms["fcoef"] = fcoef;
+		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
 	}
 }

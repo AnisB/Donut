@@ -7,12 +7,12 @@
 in vec3 position;
 in vec2 tex_coord;
 // Output
-out vec2 texCoord;
+out vec2 texCoordV;
 
 void main()
 {
 	// Mirror position
     gl_Position = vec4(position,1.0);
     // Texcoord
-    texCoord = tex_coord;
+    texCoordV = tex_coord;
 }

@@ -53,7 +53,8 @@ namespace Donut
  		ResourceManager::Instance().BindMaterial(FMaterial.shader, FMaterial);
  		foreach_macro(uniform, _values)
  		{
- 			uniform->second.Inject(FMaterial.shader);
+ 			TUniformHandler& handler = uniform->second;
+ 			handler.Inject(FMaterial.shader);
  		}
 		ShaderManager::Instance().Inject<Matrix4>(FMaterial.shader, viewprojection * model,"modelviewprojection");
 	  	FGeometry->Draw(FMaterial.shader.FIsTesselated);

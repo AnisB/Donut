@@ -44,7 +44,9 @@ namespace Donut
  	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
  		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.");
+ 		TPipeline* pipeline = GenerateGraphicPipeline(new TNode(), std::vector<TLight*>(), parContext.width, parContext.lenght, 0 );
  		FRenderer->CreateRenderWindow(parContext);
+ 		FRenderer->SetPipeline(pipeline);
  		InitScene();
 #if __posix__
  		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
@@ -88,23 +90,8 @@ namespace Donut
  		return FRenderer->IsRendering();
  	}
 
-	void TEngine::SetShader(const TShader& _shader, int parNbPass)
-	{
-		FRenderer->SetShader(_shader, parNbPass);
-	}
-
 	void TEngine::Update(float dt)
 	{
 		FarmEvents();
 	}
-
-	void TEngine::DrawObject(TDrawable * parObject)
- 	{
- 		FRenderer->RegisterToDraw(parObject);
- 	}
-
-	void TEngine::RemoveObject(TDrawable * parObject)
- 	{
- 		FRenderer->UnRegisterToDraw(parObject);
- 	}
 }

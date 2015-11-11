@@ -18,12 +18,7 @@
 
 
 // Library includes
-#include "graphics/drawable.h"
-#include "core/camera.h"
-#include "core/node.h"
-#include "Render/Light.h"
 #include "graphics/canvas.h"
-#include "graphics/visualeffect.h"
 
 // STL includes
 #include <vector>
@@ -34,8 +29,8 @@
 	{
 	public:
 		// Constructor destructor
-		TPass();
-		~TPass();
+		TPass() {}
+		virtual ~TPass() {}
 		// Allocating all the CPU and GPU required memory
 		virtual void Init() = 0;
 		// Setting and disabling the canvas

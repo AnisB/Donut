@@ -28,25 +28,17 @@
 	public:
 		TLight();
 		~TLight();
-		void Bind();
-		const TShader& GetShader() {return FShader;}
-		void Unbind();
 		void Translate(const Vector3& parVector);
 		void SetPosition(const Vector3& parVector);
 		void SetSpecular(const Vector4& parColor);
 		void SetDiffuse(const Vector4& parColor);
-		void InjectData();
- 		void UpdateCamera(const Matrix4& parProjection, const Matrix4& parView);
-
+		void InjectData(const TShader& _shader);
 
 	protected:
 		Vector3 FPosition;
 		Vector4 FDiff;
 		Vector4 FSpec;
 		float FRayon;
-		bool FOutDate;
-
-		TShader FShader;
 	};
  }
  #endif // DONUT_LIGHT

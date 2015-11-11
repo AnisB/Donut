@@ -26,7 +26,7 @@ namespace Donut
 	{
 	public:
 		// Creation
-		TGBufferCanvas(const TShader& _shader, int _width, int _height);
+		TGBufferCanvas(int _width, int _height);
 		~TGBufferCanvas();
 
 		// Inheritance exigences

@@ -26,45 +26,28 @@
 namespace Donut
  {
 	TLight::TLight()
-	: FShader(LIGHT_VERTEX, LIGHT_FRAGMENT)
-	, FPosition()
+	: FPosition()
 	, FDiff()
 	, FSpec()
 	, FRayon(DEFAULT_RAY)
-	, FOutDate(true)
 	{
 		FPosition = vector3(0.0);
 		FDiff = vector4(1.0);
 		FSpec = vector4(0.0);
-		ShaderManager::Instance().CreateShader(FShader);
-		ShaderManager::Instance().Inject<Vector3>(FShader, FPosition,"lightSource.position");
-		ShaderManager::Instance().Inject<Vector4>(FShader, FDiff ,"lightSource.diffuse");
-		ShaderManager::Instance().Inject<Vector4>(FShader, FSpec ,"lightSource.specular");	
-		ShaderManager::Instance().Inject<float>(FShader, FRayon ,"lightSource.ray");	
 	}
 	TLight::~TLight()
 	{
 		
 	}
- 	void TLight::Bind()
- 	{
-		ShaderManager::Instance().EnableShader(FShader);
- 	}
 
- 	void TLight::Unbind()
- 	{
-		ShaderManager::Instance().DisableShader();
-	}
 	void TLight::Translate(const Vector3& parVector)
 	{
 		FPosition= FPosition + parVector;
-		FOutDate = true;
 	}
 
 	void TLight::SetPosition(const Vector3& parVector)
 	{
 		FPosition=parVector;
-		FOutDate = true;	
 	}
 	void TLight::SetSpecular(const Vector4& parColor)
 	{
@@ -74,19 +57,12 @@ namespace Donut
 	{
 		FDiff=parColor;
 	}
- 	void TLight::UpdateCamera(const Matrix4& parProjection, const Matrix4& parView)
- 	{
-		ShaderManager::Instance().Inject<Matrix4>(FShader,parView,"view");
-		ShaderManager::Instance().Inject<Matrix4>(FShader,parProjection,"projection");
- 	}
-	void TLight::InjectData()
+
+	void TLight::InjectData(const TShader& _shader)
 	{
-		if(FOutDate)
-		{
-			ShaderManager::Instance().Inject<Vector3>(FShader, FPosition,"lightSource.position");
-			ShaderManager::Instance().Inject<Vector4>(FShader, FDiff ,"lightSource.diffuse");
-			ShaderManager::Instance().Inject<Vector4>(FShader, FSpec ,"lightSource.specular");	
-			ShaderManager::Instance().Inject<float>(FShader, FRayon ,"lightSource.ray");	
-		}
+		ShaderManager::Instance().Inject<Vector3>(_shader, FPosition,"lightSource.position");
+		ShaderManager::Instance().Inject<Vector4>(_shader, FDiff ,"lightSource.diffuse");
+		ShaderManager::Instance().Inject<Vector4>(_shader, FSpec ,"lightSource.specular");	
+		ShaderManager::Instance().Inject<float>(_shader, FRayon ,"lightSource.ray");	
 	}
  }

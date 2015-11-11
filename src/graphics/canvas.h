@@ -41,7 +41,7 @@ namespace Donut
 	public:
 		// Creation
 		TCanvas(int _width, int _height);
-		~TCanvas();
+		virtual ~TCanvas();
 		// Init, could be in the constructor, but whatever
 		virtual void Init() =  0;
 		// Enabling the canvas before drawing it

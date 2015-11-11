@@ -15,25 +15,33 @@
 **/
 
 
-#ifndef SIMPLE_FX_GRAPHICS_DONUT
-#define SIMPLE_FX_GRAPHICS_DONUT
+#ifndef GRAPHIC_PIPELINE_FACTORY_DONUT
+#define GRAPHIC_PIPELINE_FACTORY_DONUT
 
 // Library includes
-#include "graphics/visualeffect.h"
+#include "graphics/pass.h"
+#include "graphics/light.h"
+#include "core/node.h"
+
 namespace Donut
 {
-	class TSimpleFX : public TVFX
+	enum TPipelineTAG
 	{
-	public:
-		// Creation/Destruction
-		TSimpleFX(const std::string& _vertex, const std::string& _fragment);
-		TSimpleFX(const TShader& _shader);
-		~TSimpleFX();
-		// Init
-		virtual void Init();
-		// Drawing it
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		SIMPLE = 0x0000,
+		DEFFERED =  0x0001,
+		DOF =  0x0002,
+		SSAO =  0x0004,
 	};
+
+	struct TPipeline
+	{
+		TPipeline();
+		~TPipeline();
+		Camera* camera;
+		std::vector<TPass*> passes;
+	};
+
+	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _pipelineTAGS);
 }
 
-#endif // SIMPLE_FX_GRAPHICS_DONUT
+#endif // GRAPHIC_PIPELINE_FACTORY_DONUT

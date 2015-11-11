@@ -24,7 +24,6 @@
 #include "core/camera.h"
 #include "graphics/pass.h"
 #include "core/node.h"
-#include "Render/Light.h"
 #include "graphics/canvas.h"
 #include "graphics/visualeffect.h"
 
@@ -37,11 +36,11 @@
 	{
 	public:
 		// Constructor destructor
-		TGeometryPass();
-		~TGeometryPass();
+		TGeometryPass(TCanvas* _canvas, TNode* _root);
+		virtual ~TGeometryPass();
 		
+		void SetCamera(Camera* _camera) { m_camera = _camera; }
 		// Setting the pass content
-		void Set(TCanvas* _canvas, TNode* _root);
 		void Init();
 		// Setting and disabling the canvas
 		void Bind();
@@ -53,13 +52,12 @@
 		// Getting the pass output
 		const TBufferOutput* GetOutput();
 
-		Camera* GetCamera() {return FCamera;}
 	private:
 		// Internal data
 		Matrix4 m_reference;
-		Camera * FCamera;
 
 		// Rendering data
+		Camera * m_camera;
 		TCanvas * m_canvas;
 		TNode* m_root;
 	};

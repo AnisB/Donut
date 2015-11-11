@@ -129,7 +129,7 @@ namespace Donut
 	 		}
 	 		break;
 	 		default:
-	 			GRAPHICS_ERROR("Unsuported texture nature");
+	 			GRAPHICS_ERROR("Unsuported texture nature "<<_tex.type);
 	 	}
 	}
 	void CreateTexture(TTextureInfo& _tex, int parWidth, int parHeight)

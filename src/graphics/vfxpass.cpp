@@ -23,20 +23,14 @@
  namespace Donut
  {
  	//CLASS IMPLEMENTATION
-	TVFXPass::TVFXPass()
-	: m_canvas(nullptr)
-	, m_vfx(nullptr)
+	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx)
+	: m_canvas(_canvas)
+	, m_vfx(_vfx)
 	{
 	}
 
 	TVFXPass::~TVFXPass()
 	{
-	}
-
-	void TVFXPass::Set(TCanvas* _canvas, TVFX* _vfx)
-	{
-		m_canvas = _canvas;
-		m_vfx = _vfx;
 	}
 
 	void TVFXPass::Init()
@@ -49,6 +43,7 @@
 	{
 		// Building common uniforms
 		std::map<std::string, TUniformHandler> values;
+		m_camera->AppendUniforms(values);
 		m_vfx->Draw(values, _previousData);
 	}
 
@@ -56,6 +51,7 @@
 	{
 		m_canvas->Enable();
 	}
+
 	const TBufferOutput* TVFXPass::GetOutput()
 	{
 		return &(m_canvas->Result());

@@ -21,7 +21,7 @@
 namespace Donut
 {
 	// Creation
-	TGBufferCanvas::TGBufferCanvas(const TShader& _shader, int _width, int _height)
+	TGBufferCanvas::TGBufferCanvas(int _width, int _height)
 	: TCanvas(_width, _height)
 	{
 	}
@@ -81,7 +81,7 @@ namespace Donut
 		TTextureInfo& depth = m_output.buffers[4];
 		depth.name = "depth";
 		depth.type = TTextureNature::DEPTH;
-		depth.offset = 0;
+		depth.offset = 4;
 		CreateTexture(depth, m_width, m_height);
  		BindToFrameBuffer(depth);
  		// Making sure everything is OK

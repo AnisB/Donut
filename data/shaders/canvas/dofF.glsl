@@ -1,20 +1,25 @@
 #version 410 
 
+// Input data
+in vec2 texCoord;
+// Out data
 out vec4 frag_color;
+
+// Input data
 uniform sampler2D canvas;
 uniform sampler2D depth;
-uniform sampler2D nbuffer;
-uniform sampler2D specbuffer;
-uniform sampler2D posbuffer;
-uniform sampler2D random;
+
+// Input uniforms
 uniform int width;
 uniform int lenght;
 
-in vec2 texCoord;
+// Values
 #define MIN_STEP 0.005
 #define LINE_SIZE 2.0
+// Blur size
 const float blurSize = 1.0/512.0;
 
+// Blur function
 vec4 blurr(vec2 texPos)
 {
   vec4 sum = vec4(0.0);

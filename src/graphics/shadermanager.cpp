@@ -90,11 +90,14 @@ namespace Donut
 	bool ShaderManager::CreateShader(TShader& _shader)
 	{
 		// We make shure the shader was not created before
+		GRAPHICS_DEBUG("Fetching shader kernel");
 		tryget(result, FPrograms, _shader);
 		if(result != FPrograms.end())
 		{
+			GRAPHICS_DEBUG("Already created shader kernel");
 			_shader.FProgramID = result->FProgramID;
 			_shader.FActive = result->FActive;
+			_shader.FIsTesselated = result->FIsTesselated;
 			return true;
 		}
 
@@ -115,6 +118,7 @@ namespace Donut
 			std::string vsFile;
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
 			const std::string& vertexShaderFileName = shaderFileHandler.GetShaderFile(_shader.FVertexShader);
+			GRAPHICS_DEBUG(vertexShaderFileName);
 			ReadFile(vertexShaderFileName.c_str(),vsFile);
 			const char * vsFile_ptr = vsFile.c_str();
 			glShaderSource(vertexShader, 1, (const char **)&vsFile_ptr, NULL);
