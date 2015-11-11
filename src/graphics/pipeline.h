@@ -37,6 +37,7 @@ namespace Donut
 	{
 		TPipeline();
 		~TPipeline();
+		void BuildPipelineData();
 		Camera* camera;
 		std::vector<TPass*> passes;
 		TBufferOutput pipelineData;

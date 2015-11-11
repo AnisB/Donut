@@ -144,6 +144,7 @@
         {
         	m_pipeline->passes[pass]->Init();
         }
+        m_pipeline->BuildPipelineData();
 		return isOk;
  	}
 	void TRenderer::SetLook(const TRenderingLook::Type parLook)

@@ -32,17 +32,6 @@
 namespace Donut
 {
 
-	void Merge(TBufferOutput& _target, const TBufferOutput& _source)
-	{
-		foreach_macro(buf, _source.buffers)
-		{
-			TTextureInfo newTex;
-			newTex.texID = buf->texID;
-			newTex.offset = (int)_target.buffers.size();
-			newTex.name = buf->name;
-			_target.buffers.push_back(newTex);
-		}
-	}
 
 	TPipeline::TPipeline()
 	{
@@ -57,6 +46,25 @@ namespace Donut
 		}
 		delete camera;
 	}
+
+	void TPipeline::BuildPipelineData()
+	{
+		foreach_macro(pass, passes)
+		{
+			TPass* currentPass = *pass;
+			const TBufferOutput* bufferOutput =  currentPass->GetOutput();
+			foreach_macro(buf, bufferOutput->buffers)
+			{
+				TTextureInfo newTex;
+				newTex.texID = buf->texID;
+				newTex.offset = (int)pipelineData.buffers.size();
+				newTex.name = buf->name;
+				pipelineData.buffers.push_back(newTex);
+			}				
+		}
+
+	}
+
 	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _graphicPipelineTAGS)
 	{
 		// Creating the pipeline
@@ -81,7 +89,6 @@ namespace Donut
 				TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
-				Merge(buffers, canvas->Result());
 			}
 
 			// Deffered Shading
@@ -93,7 +100,6 @@ namespace Donut
 				TVFXPass* vfxPass = new TVFXPass(canvas, deffered);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
-				Merge(buffers, canvas->Result());
 			}
 			// Depth of field
 			else if(_graphicPipelineTAGS == TPipelineTAG::DEPTH_OF_FIELD)
@@ -103,7 +109,6 @@ namespace Donut
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
-				Merge(buffers, canvas->Result());
 			}
 			// Screen space ambien occlusion
 			else if(_graphicPipelineTAGS == TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION)
@@ -114,7 +119,6 @@ namespace Donut
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
-				Merge(buffers, canvas->Result());
 			}
 		}
 		return pipeline;
