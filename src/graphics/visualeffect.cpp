@@ -65,10 +65,10 @@ namespace Donut
 
 	void TVFX::AddTexture(TTexture* parTex, const std::string& parName)
  	{
- 		TTextureInfo newTex;
+		TTextureInfo newTex;
 		newTex.texID = parTex->FID;
 		newTex.offset = (int)m_material.textures.size();
 		newTex.name = parName;
- 		m_material.textures.push_back(newTex);
+		m_material.textures.push_back(newTex);
  	}
 }

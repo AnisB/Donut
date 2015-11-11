@@ -26,10 +26,23 @@
 #include "graphics/defferedfx.h"
 #include "graphics/emptycanvas.h"
 #include "graphics/simplecanvas.h"
+#include "graphics/effectcanvas.h"
 #include "graphics/geometrypass.h"
 
 namespace Donut
 {
+
+	void Merge(TBufferOutput& _target, const TBufferOutput& _source)
+	{
+		foreach_macro(buf, _source.buffers)
+		{
+			TTextureInfo newTex;
+			newTex.texID = buf->texID;
+			newTex.offset = (int)_target.buffers.size();
+			newTex.name = buf->name;
+			_target.buffers.push_back(newTex);
+		}
+	}
 
 	TPipeline::TPipeline()
 	{
@@ -46,8 +59,12 @@ namespace Donut
 	}
 	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _graphicPipelineTAGS)
 	{
+		// Creating the pipeline
 		TPipeline* pipeline = new TPipeline();
+		// Fetching its internal data
 		Camera* camera =  pipeline->camera;
+		TBufferOutput& buffers =  pipeline->pipelineData;
+		// If nothing specified, lets just render the first color buffer
 		if(_graphicPipelineTAGS == TPipelineTAG::SIMPLE)
 		{
 			// One pass to rule them all
@@ -56,7 +73,7 @@ namespace Donut
 			geometryPass->SetCamera(camera);
 			pipeline->passes.push_back(geometryPass);
 		}
-		else if(_graphicPipelineTAGS == TPipelineTAG::DEFFERED)
+		else 
 		{
 			// The first GBuffer Pass
 			{
@@ -64,9 +81,11 @@ namespace Donut
 				TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
+				Merge(buffers, canvas->Result());
 			}
 
-			// The second deffered pass
+			// Deffered Shading
+			if(_graphicPipelineTAGS == TPipelineTAG::DEFFERED)
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TDefferedFX* deffered = new TDefferedFX();
@@ -74,38 +93,20 @@ namespace Donut
 				TVFXPass* vfxPass = new TVFXPass(canvas, deffered);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
+				Merge(buffers, canvas->Result());
 			}
-		}
-		else if(_graphicPipelineTAGS == TPipelineTAG::DOF)
-		{
-			// The first GBuffer Pass
-			{
-				TCanvas* canvas = new TSimpleCanvas(_width, _height);
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
-				geometryPass->SetCamera(camera);
-				pipeline->passes.push_back(geometryPass);
-			}
-
-			// The second deffered pass
+			// Depth of field
+			else if(_graphicPipelineTAGS == TPipelineTAG::DEPTH_OF_FIELD)
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TSimpleFX* afterFX = new TSimpleFX("data/shaders/canvas/dofV.glsl","data/shaders/canvas/dofF.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
+				Merge(buffers, canvas->Result());
 			}
-		}
-		else if(_graphicPipelineTAGS == TPipelineTAG::SSAO)
-		{
-			// The first GBuffer Pass
-			{
-				TCanvas* canvas = new TSimpleCanvas(_width, _height);
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
-				geometryPass->SetCamera(camera);
-				pipeline->passes.push_back(geometryPass);
-			}
-
-			// The second deffered pass
+			// Screen space ambien occlusion
+			else if(_graphicPipelineTAGS == TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION)
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
@@ -113,11 +114,8 @@ namespace Donut
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
+				Merge(buffers, canvas->Result());
 			}
-		}
-		else
-		{
-			ASSERT_NOT_IMPLEMENTED();
 		}
 		return pipeline;
 	}

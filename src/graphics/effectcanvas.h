@@ -14,35 +14,28 @@
 *
 **/
 
-
-#ifndef GRAPHIC_PIPELINE_FACTORY_DONUT
-#define GRAPHIC_PIPELINE_FACTORY_DONUT
+#ifndef EFFECT_CANVAS_GRAPHICS
+#define EFFECT_CANVAS_GRAPHICS
 
 // Library includes
-#include "graphics/pass.h"
-#include "graphics/light.h"
-#include "core/node.h"
+#include "canvas.h"
 
 namespace Donut
 {
-	enum TPipelineTAG
+	class TEffectCanvas : public TCanvas
 	{
-		SIMPLE = 0x0000,
-		DEFFERED =  0x0001,
-		DEPTH_OF_FIELD =  0x0002,
-		SCREN_SPACE_AMBIENT_OCCLUSION =  0x0004,
-	};
+	public:
+		// Creation
+		TEffectCanvas(int _width, int _height, const std::string& _outputName);
+		virtual ~TEffectCanvas();
 
-	struct TPipeline
-	{
-		TPipeline();
-		~TPipeline();
-		Camera* camera;
-		std::vector<TPass*> passes;
-		TBufferOutput pipelineData;
+		// Inheritance exigences
+		virtual void Init();
+		virtual void Enable();
+		virtual void Disable();
+	protected:
+		std::string m_texName;
 	};
-
-	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _pipelineTAGS);
+	// END CLASS DECLARATION
 }
-
-#endif // GRAPHIC_PIPELINE_FACTORY_DONUT
+#endif // EFFECT_CANVAS_GRAPHICS

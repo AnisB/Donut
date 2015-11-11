@@ -162,15 +162,13 @@
  	{ 	 
 		// We clear the global buffer
  		ClearBuffer();
-		const TBufferOutput* output;
 		int nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {
         	TPass * currentPass = m_pipeline->passes[pass];
 			currentPass->Bind();
-			currentPass->Draw(*output);
+			currentPass->Draw(m_pipeline->pipelineData);
 			currentPass->Unbind();
-        	output = currentPass->GetOutput();
         }
 		// Swap front and back buffer
 	  	glfwSwapBuffers (FWindow);

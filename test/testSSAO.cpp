@@ -83,7 +83,7 @@ int main()
 		}
 	}
 
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SSAO);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	

@@ -83,7 +83,7 @@ int main()
 		}
 	}
 
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::DOF);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::DEPTH_OF_FIELD);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	
