@@ -92,17 +92,46 @@ namespace Donut
 			}
 
 			// Deffered Shading
-			if(_graphicPipelineTAGS == TPipelineTAG::DEFFERED)
+			//if(_graphicPipelineTAGS == TPipelineTAG::DEFFERED)
 			{
-				TCanvas* canvas = new TEmptyCanvas(_width, _height);
+				TCanvas* canvas = new TEffectCanvas(_width, _height, "deffered");
 				TDefferedFX* deffered = new TDefferedFX();
 				deffered->SetLights(_lights);
 				TVFXPass* vfxPass = new TVFXPass(canvas, deffered);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			// Depth of field
-			else if(_graphicPipelineTAGS == TPipelineTAG::DEPTH_OF_FIELD)
+			
+
+			// Screen space ambien occlusion
+			//else if(_graphicPipelineTAGS == TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION)
+			{
+				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
+				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
+				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.jpg"), "random");
+				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
+				vfxPass->SetCamera(camera);
+				pipeline->passes.push_back(vfxPass);
+			}
+			
+			{
+				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_filtered");
+				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/gaussV.glsl", "shaders/canvas/gaussF.glsl");
+				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
+				vfxPass->SetCamera(camera);
+				pipeline->passes.push_back(vfxPass);
+			}
+			
+			// The compositing pass
+			{
+				TCanvas* canvas = new TEmptyCanvas(_width, _height);
+				TSimpleFX* afterFX =new TSimpleFX("shaders/canvas/compositingV.glsl", "shaders/canvas/compositingF.glsl");
+				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
+				vfxPass->SetCamera(camera);
+				pipeline->passes.push_back(vfxPass);
+			}
+			/*
+			//else if(_graphicPipelineTAGS == TPipelineTAG::DEPTH_OF_FIELD)
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TSimpleFX* afterFX = new TSimpleFX("data/shaders/canvas/dofV.glsl","data/shaders/canvas/dofF.glsl");
@@ -110,16 +139,8 @@ namespace Donut
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			// Screen space ambien occlusion
-			else if(_graphicPipelineTAGS == TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION)
-			{
-				TCanvas* canvas = new TEmptyCanvas(_width, _height);
-				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
-				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.jpg"), "random");
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
-			}
+			*/
+
 		}
 		return pipeline;
 	}

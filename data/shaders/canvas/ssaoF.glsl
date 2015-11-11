@@ -10,13 +10,12 @@ vec3 sample_sphere[16] = vec3[](vec3( 0.5381, 0.1856,-0.4319), vec3( 0.1379, 0.2
   vec3( 0.0352,-0.0631, 0.5460), vec3(-0.4776, 0.2847,-0.0271)
 );
 
-
 out vec4 frag_color;
-uniform sampler2D canvas;
+uniform sampler2D albedo;
+uniform sampler2D normal;
+uniform sampler2D specular;
+uniform sampler2D position;
 uniform sampler2D depth;
-uniform sampler2D nbuffer;
-uniform sampler2D specbuffer;
-uniform sampler2D posbuffer;
 uniform sampler2D random;
 uniform int width;
 uniform int lenght;
@@ -35,12 +34,12 @@ void main()
   
   const int samples = 16;
 
-  vec3 randomV = normalize( texture(random, texCoord * 16.0).rgb );
+  vec3 randomV = normalize( texture(random, texCoord * 8).rgb );
   
   float depthV = texture(depth, texCoord).r;
  
-  vec3 position = vec3(texCoord, depthV);
-  vec3 normal = texture(nbuffer, texCoord).xyz;
+  vec3 positionV = vec3(texCoord, depthV);
+  vec3 normalV = texture(normal, texCoord).xyz;
   
   float radius_depth = radius/depthV;
   float occlusion = 0.0;
@@ -48,7 +47,7 @@ void main()
   {
   
     vec3 ray = radius_depth * reflect(sample_sphere[i], randomV);
-    vec3 hemi_ray = position + sign(dot(ray,normal)) * ray;
+    vec3 hemi_ray = positionV + sign(dot(ray,normalV)) * ray;
     
     float occ_depth = texture(depth, clamp(hemi_ray.xy, 0.0,1.0)).r;
     float difference = depthV - occ_depth;
@@ -57,7 +56,6 @@ void main()
   }
   
   float ao = 1.0 - total_strength * occlusion * (1.0 / samples);
-  vec4 albedo = texture(canvas, texCoord);
   frag_color =  vec4(vec3(ao),1.0);
 
 }

@@ -377,10 +377,11 @@ namespace Donut
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, parTex->FWidth, parTex->FHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, parTex->FData);
         if(parTex->FType == TImgType::BMP || parTex->FType == TImgType::JPG)
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, parTex->FData);
+        glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now!!!
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 1.0); 
 
         glBindTexture(GL_TEXTURE_2D, 0);
