@@ -28,6 +28,7 @@ namespace Donut
 	, FHasChanged(true)
 	, m_near(0.1)
 	, m_far(1000.0)
+	, m_focus((m_near+m_far)/2.0)
 
 	{
 		matrix4(FViewMatrix, MatrixInit::Identity);
@@ -48,6 +49,7 @@ namespace Donut
 #else
 		m_fcoeff = 2.0 / log(m_far + 1.0)/log(2);
 #endif
+		m_focus = (m_near+m_far)/2.0;
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
@@ -95,5 +97,7 @@ namespace Donut
 		_uniforms["viewprojection"].SetValue<Matrix4>(TShaderData::MAT4, "viewprojection", FProjection*FViewMatrix);
 		// Injecting zbuffer fcoef
 		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
+		// Injecting focus distance
+		_uniforms["focus"].SetValue<float>(TShaderData::FLOAT, "focus", m_focus);
 	}
 }

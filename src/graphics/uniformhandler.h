@@ -104,6 +104,8 @@ namespace Donut
 		// InjectValue
 		void Inject(const TShader& _shader) const;
 		TShaderData::Type GetType() const;
+		TUniformHandler& operator=(const TUniformHandler& _val);
+		TUniformHandler& operator=(TUniformHandler&& _val);
 
 	private:
 		TUniformGeneric* m_uniform;

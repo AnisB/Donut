@@ -34,7 +34,7 @@ void main()
   
   const int samples = 16;
 
-  vec3 randomV = normalize( texture(random, texCoord * 8).rgb );
+  vec3 randomV = normalize( texture(random, texCoord * 16).rgb );
   
   float depthV = texture(depth, texCoord).r;
  

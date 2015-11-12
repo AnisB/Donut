@@ -62,6 +62,7 @@ namespace Donut
 			double m_near;
 			double m_far;
 			double m_fcoeff;
+			double m_focus;
 	};
 }
 
