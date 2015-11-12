@@ -91,6 +91,7 @@ namespace Donut
 	public:
 		TUniformHandler();
 		TUniformHandler(const TUniformHandler& _uniform);
+		TUniformHandler(TUniformHandler&& _uniform);
 		~TUniformHandler();
 
 		// Setting value

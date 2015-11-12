@@ -31,8 +31,6 @@
 
 namespace Donut
 {
-
-
 	TPipeline::TPipeline()
 	{
 		camera = new Camera();
@@ -62,7 +60,6 @@ namespace Donut
 				pipelineData.buffers.push_back(newTex);
 			}				
 		}
-
 	}
 
 	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _graphicPipelineTAGS)
@@ -108,7 +105,7 @@ namespace Donut
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
 				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
-				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.jpg"), "random");
+				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.bmp"), "random");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);

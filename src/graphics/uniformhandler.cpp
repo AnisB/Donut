@@ -34,7 +34,12 @@ namespace Donut
 			delete m_uniform;
 		}
 	}
-
+	
+	TUniformHandler::TUniformHandler(TUniformHandler&& _uniformHandler)
+	{
+		m_uniform = _uniformHandler.m_uniform;
+		_uniformHandler.m_uniform = nullptr;
+	}
 	TUniformHandler::TUniformHandler(const TUniformHandler& _uniformHandler)
 	{
 		m_uniform = _uniformHandler.m_uniform->Clone();
