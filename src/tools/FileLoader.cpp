@@ -121,6 +121,43 @@ namespace Donut
 		_stream.write((char*)&_container->faces, sizeof(unsigned int)*3*_container->nbFaces);
 		return _stream;
 	}
+
+	Vector3 stringConvertV3(const std::string& _param)
+	{
+		std::vector<std::string> values;
+		split(_param, ' ', values);
+		double x, y, z;
+		x = stringConvert<double>(values[0]);
+		y = stringConvert<double>(values[1]);
+		z = stringConvert<double>(values[2]);
+		return vector3(x,y,z);
+	}
+
+	Vector4 stringConvertV4(const std::string& _param)
+	{
+		std::vector<std::string> values;
+		split(_param, ' ', values);
+		double x, y, z,w;
+		x = stringConvert<double>(values[0]);
+		y = stringConvert<double>(values[1]);
+		z = stringConvert<double>(values[2]);
+		w = stringConvert<double>(values[3]);
+		return vector4(x,y,z,w);
+	}
+
+	Matrix4 stringConvertM4(const std::string& _param)
+	{
+		std::vector<std::string> values;
+		split(_param, ' ', values);
+		double m[16];
+		for(int i = 0; i < 16; ++i)
+		{
+			m[i] = stringConvert<double>(values[i]);
+		}
+		Matrix4 mat;
+		matrix4(mat, m);
+		return mat;
+	}
 }
 
 

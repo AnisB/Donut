@@ -18,6 +18,9 @@
 
 // LIbrary includes
  #include "resource/geometrycontainer.h"
+ #include "butter/vector3.h"
+ #include "butter/vector4.h"
+ #include "butter/matrix4.h"
 
 // Std includes
 #include <vector>
@@ -49,6 +52,10 @@ namespace Donut
 		streamConverter>>result;
 		return result;
 	}
+
+	Vector3 stringConvertV3(const std::string& _param);
+	Vector4 stringConvertV4(const std::string& _param);
+	Matrix4 stringConvertM4(const std::string& _param);
 }
 
 #endif // FILE_LOADER

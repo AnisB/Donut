@@ -14,35 +14,47 @@
 *
 **/
 
-// Library includes
+#ifndef DONUT_SCENE
+#define DONUT_SCENE
+
+
+// Std includes
 #include "core/node.h"
-#include "core/scene.h"
-#include "base/singleton.h"
+#include "core/camera.h"
+#include "graphics/light.h"
+#include "base/macro.h"
 
 // STL includes
-#include <string.h>
+#include <vector>
 
 namespace Donut
 {
-
-	namespace TSceneFile
+	struct TScene
 	{
-		enum Type
+		// Consrtuctor
+		TScene()
+		: root(nullptr)
+		, camera(nullptr)
 		{
-			JSon,
-			Xml,
-			UNKNOWN
-		};
-	}
-	
-	class TSceneLoader : public Singleton<TSceneLoader>
-	{
-	public:
-		TSceneLoader();
-		~TSceneLoader();
 
-		// This function reads the scene descriptor file
-		// and loads into memory the scene structures
-		TScene* LoadScene(const std::string& _sceneFileName);
+		}
+		//Destructor
+		~TScene()
+		{
+			if(root)
+				delete root;
+
+			foreach_macro(light, lights)
+			{
+				delete *light;
+			}
+			if(camera)
+				delete camera;
+		}
+
+		TNode* root;
+		std::vector<TLight*> lights;
+		Camera* camera;
 	};
 }
+#endif

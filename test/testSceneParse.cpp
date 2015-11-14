@@ -14,32 +14,28 @@
  *
  **/
 
+#include <resource/sceneloader.h>
+#include <resource/sugarloader.h>
+#include <graphics/settings.h>
+#include <render/renderer.h>
 
-#ifndef DONUT_LIGHT
-#define DONUT_LIGHT
+int main()
+{
+	Donut::TSugarLoader::Instance().Init("data");
 
-#include <butter/Vector3.h>
-#include "graphics/ShaderManager.h"
- 
- namespace Donut
- {
-	class TLight
-	{
-	public:
-		TLight();
-		~TLight();
-		void Translate(const Vector3& _vector);
-		void SetPosition(const Vector3& _vector);
-		void SetSpecular(const Vector4& _color);
-		void SetDiffuse(const Vector4& _color);
-		void SetRay(float _ray) {FRayon = _ray;}
-		void InjectData(const TShader& _shader);
+	Donut::TRenderer * window = new Donut::TRenderer();
+	// Context info
+	Donut::TGraphicsSettings newContext;
+	newContext.windowName = "testSceneLoad";
+	newContext.width = 1280;
+	newContext.lenght = 720;
+	newContext.major = 4;
+	newContext.minor = 1;
+	window->CreateRenderWindow(newContext);
 
-	protected:
-		Vector3 FPosition;
-		Vector4 FDiff;
-		Vector4 FSpec;
-		float FRayon;
-	};
- }
- #endif // DONUT_LIGHT
+	Donut::TSceneLoader::Instance().LoadScene("data/scenes/cornellBox.json");
+	Donut::TSceneLoader::Instance().LoadScene("data/scenes/cornellBox.xml");
+
+	delete window;
+	return 0;
+}

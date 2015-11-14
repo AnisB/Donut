@@ -46,6 +46,9 @@ TARGET_LINK_LIBRARIES(testRayTracer ${CORELIBS})
 add_executable(testSSAO ${TEST}/testSSAO.cpp)
 TARGET_LINK_LIBRARIES(testSSAO ${CORELIBS})
 
+add_executable(testSceneParse ${TEST}/testSceneParse.cpp)
+TARGET_LINK_LIBRARIES(testSceneParse ${CORELIBS})
+
 add_executable(testSceneLoad ${TEST}/testSceneLoad.cpp)
 TARGET_LINK_LIBRARIES(testSceneLoad ${CORELIBS})
 

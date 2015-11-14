@@ -14,6 +14,11 @@ namespace Donut
 			SetIdentity(_mat);
 	}
 
+	void matrix4(Matrix4& _mat, double* _values)
+	{
+		memcpy(_mat.m, _values,16*sizeof(double));
+	}
+
 	Matrix4::Matrix4(const Matrix4& _mat)
 	{
 		memcpy(m, _mat.m,16*sizeof(double));

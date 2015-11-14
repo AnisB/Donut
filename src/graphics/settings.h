@@ -13,6 +13,8 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
+#ifndef GRAPHICS_SETTINGS_DONUT
+#define GRAPHICS_SETTINGS_DONUT
 
 #include <string.h>
 	
@@ -47,3 +49,5 @@ namespace Donut
 		}
 	};
 }	
+
+#endif // GRAPHICS_SETTINGS_DONUT

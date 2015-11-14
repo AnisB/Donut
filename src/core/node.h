@@ -42,6 +42,7 @@ namespace Donut
 		bool RemoveChild(TNode* parNode);
 
 		// Utility functions
+		void SetTransformationMatrix(const Matrix4& _tm) { FModel =_tm;}
 		void Yaw(float parAngle);
 		void Roll(float parAngle);
 		void Pitch(float parAngle);
