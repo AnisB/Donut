@@ -43,16 +43,14 @@ int main(int argc, char** argv)
 	newContext.minor = 1;
 	window->CreateRenderWindow(newContext);
 
-	// Light source declaration
-	std::vector<Donut::TLight*> lights;
-
-	Donut::TNode* root = new Donut::TNode();
+	Donut::TScene* scene = new Donut::TScene();
+	scene->root = new Donut::TNode();
 	Donut::TMesh* sugar = Donut::CreateSugarInstance(argv[1]);
 	Donut::TSceneNode* node = new Donut::TSceneNode();
 	node->AddDrawable(sugar);
-	root->AttachChild(node);
+	scene->root->AttachChild(node);
 
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SIMPLE);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	

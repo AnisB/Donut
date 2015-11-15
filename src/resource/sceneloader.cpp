@@ -42,6 +42,11 @@ namespace Donut
 	#define NODE_TRANSFORM_MATRIX_TOKEN "TM"
 	// Light data
 	#define ILLUMINATION_TOKEN "illumination"
+	#define SPHERICAL_HARMONICS "envSH"
+	#define DEGREE_SPHERICAL_HARMONICS "degree"
+	#define RED_COEFF_SPHERICAL_HARMONICS "red"
+	#define GREEN_COEFF_SPHERICAL_HARMONICS "green"
+	#define BLUE_COEFF_SPHERICAL_HARMONICS "blue"
 	#define LIGHT_TOKEN "light"
 	#define LIGHT_POS_TOKEN "pos"
 	#define LIGHT_DIFF_TOKEN "diff"
@@ -120,6 +125,22 @@ namespace Donut
 			newLight->SetRay(stringConvert<float>(rayS));
 		}
 		return newLight;
+	}
+
+	TSphericalHarmonics* HandleSphericalHarmonics(rapidxml::xml_node<> * _SH)
+	{
+		TSphericalHarmonics* newSH = new TSphericalHarmonics();
+		rapidxml::xml_attribute<> *degree = _SH->first_attribute(DEGREE_SPHERICAL_HARMONICS);
+		
+		std::vector<float> red, green, blue;
+		rapidxml::xml_attribute<> *redCoeff = _SH->first_attribute(RED_COEFF_SPHERICAL_HARMONICS);
+		stringConvertArray(redCoeff->value(), red);
+		rapidxml::xml_attribute<> *greenCoeff = _SH->first_attribute(GREEN_COEFF_SPHERICAL_HARMONICS);
+		stringConvertArray(greenCoeff->value(), green);
+		rapidxml::xml_attribute<> *blueCoeff = _SH->first_attribute(BLUE_COEFF_SPHERICAL_HARMONICS);
+		stringConvertArray(blueCoeff->value(), blue);
+		newSH->SetCoeffs(red, green, blue);
+		return newSH;
 	}
 
 	void HandleIlluminationNode(rapidxml::xml_node<> *_illumination, std::vector<TLight*>& _lights)
@@ -224,6 +245,16 @@ namespace Donut
 		if(illumination)
 		{
 			HandleIlluminationNode(illumination, newScene->lights);
+		}
+		
+		rapidxml::xml_node<> *envSH = scene->first_node(SPHERICAL_HARMONICS);
+		if(envSH)
+		{
+			newScene->sh = HandleSphericalHarmonics(envSH);
+		}
+		else
+		{
+			RESOURCE_INFO("WTF DUDE");
 		}
 		return newScene;
 	}

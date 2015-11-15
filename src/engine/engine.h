@@ -48,6 +48,7 @@ namespace Donut
  	protected:
  		// A pointer to the renderer
  		TRenderer* FRenderer;
+ 		TScene* m_scene;
  	};
 }
 #endif // DONUT_ENGINE

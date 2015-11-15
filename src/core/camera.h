@@ -19,6 +19,7 @@
 
 // Library includes
 #include "butter/matrix4.h"
+#include "butter/matrix3.h"
 #include "butter/vector3.h"
 #include "graphics/uniformhandler.h"
 #include "multithread/usualthreadsafeobjects.h"
@@ -56,6 +57,7 @@ namespace Donut
 
 		protected:
 			Matrix4 FViewMatrix;
+			Matrix3 FViewMatrix_inverse;
 			Matrix4 FProjection;
 			Matrix4 FProjectionView;
 			TThreadSafeBolean FHasChanged;

@@ -287,6 +287,12 @@ namespace Donut
 	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), _value);
 	}
 
+	template <>
+	void ShaderManager::InjectV(const TShader& parProgram, const float* _values, int _nbValues, const std::string& parName)
+	{
+	    glUniform1fv( glGetUniformLocation(parProgram.FProgramID, parName.c_str()),_nbValues, _values);
+	}
+
  	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{

@@ -20,6 +20,7 @@
 // Donut includes
 #include "Engine.h"
 #include "engine/common.h"
+#include "core/scene.h"
 
 #include <base/common.h>
 
@@ -31,6 +32,7 @@ namespace Donut
 {
  	TEngine::TEngine()
  	: FRenderingRunning(false)
+ 	, m_scene(nullptr)
  	{
  		FRenderer = new Donut::TRenderer();
  		ENGINE_INFO("Engine created");
@@ -44,7 +46,7 @@ namespace Donut
  	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
  		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.");
- 		TPipeline* pipeline = GenerateGraphicPipeline(new TNode(), std::vector<TLight*>(), parContext.width, parContext.lenght, 0 );
+ 		TPipeline* pipeline = GenerateGraphicPipeline(m_scene, parContext.width, parContext.lenght, TPipelineConfig::MINIMAL );
  		FRenderer->CreateRenderWindow(parContext);
  		FRenderer->SetPipeline(pipeline);
  		InitScene();

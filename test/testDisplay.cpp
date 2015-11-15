@@ -43,9 +43,8 @@ int main()
 	window->CreateRenderWindow(newContext);
 
 	// Light source declaration
-	std::vector<Donut::TLight*> lights;
-
-	Donut::TNode* root = new Donut::TNode();
+	Donut::TScene* scene = new Donut::TScene();
+	scene->root = new Donut::TNode();
 	Donut::TShader uniformShader("shaders/base/vertex.glsl", "shaders/base/geometry.glsl", "shaders/base/fragment.glsl");
 	Donut::TMesh* cube = CreateCube(5.0, uniformShader);
 	Donut::TMesh* cube2 = CreateCube(2.5, uniformShader);
@@ -55,10 +54,10 @@ int main()
 	node2->Translate(Donut::vector3(20,0, -20));
 	node1->AddDrawable(cube);
 	node2->AddDrawable(cube2);
-	root->AttachChild(node1);
-	root->AttachChild(node2);
+	scene->root->AttachChild(node1);
+	scene->root->AttachChild(node2);
 
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SIMPLE);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	

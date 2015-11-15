@@ -48,11 +48,11 @@ int main(int argc, char** argv)
 	Donut::TPipeline* renderingPipeline;
 	if(newScene->lights.empty())
 	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(newScene->root, newScene->lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::SIMPLE);
+		renderingPipeline = Donut::GenerateGraphicPipeline(newScene, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
 	}
 	else
 	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(newScene->root, newScene->lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::DEFFERED);
+		renderingPipeline = Donut::GenerateGraphicPipeline(newScene, newContext.width, newContext.lenght, Donut::TPipelineConfig::REALIST);
 	}
 	window->SetPipeline(renderingPipeline);
 	window->Init();
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 	Donut::Camera* camera = renderingPipeline->camera;
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
+	camera->DefinePerspective(45.0,1280.0/720.0,1.0,500.0);
 	
 	while(window->IsRendering())
 	{

@@ -17,17 +17,20 @@
 
 // Library includes
 #include "pipeline.h"
+// Canvas
 #include "emptycanvas.h"
+#include "simplecanvas.h"
+#include "effectcanvas.h"
+#include "gbuffercanvas.h"
+// FX
+#include "vfxpass.h"
+#include "simplefx.h"
+#include "defferedfx.h"
+#include "environmentfx.h"
+// Other
 #include "base/macro.h"
-#include "graphics/gbuffercanvas.h"
 #include "resource/resourcemanager.h"
-#include "graphics/vfxpass.h"
-#include "graphics/simplefx.h"
-#include "graphics/defferedfx.h"
-#include "graphics/emptycanvas.h"
-#include "graphics/simplecanvas.h"
-#include "graphics/effectcanvas.h"
-#include "graphics/geometrypass.h"
+#include "geometrypass.h"
 
 namespace Donut
 {
@@ -62,7 +65,7 @@ namespace Donut
 		}
 	}
 
-	TPipeline* GenerateGraphicPipeline(TNode* _rootNode, std::vector<TLight*> _lights, int _width, int _height, int _graphicPipelineTAGS)
+	TPipeline* GenerateGraphicPipeline(TScene* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS)
 	{
 		// Creating the pipeline
 		TPipeline* pipeline = new TPipeline();
@@ -70,38 +73,36 @@ namespace Donut
 		Camera* camera =  pipeline->camera;
 		TBufferOutput& buffers =  pipeline->pipelineData;
 		// If nothing specified, lets just render the first color buffer
-		if(_graphicPipelineTAGS == TPipelineTAG::SIMPLE)
+		if(_pipelineTAGS == TPipelineConfig::MINIMAL)
 		{
 			// One pass to rule them all
 			TCanvas* canvas = new TEmptyCanvas(_width, _height);
-			TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
+			TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene->root);
 			geometryPass->SetCamera(camera);
 			pipeline->passes.push_back(geometryPass);
 		}
-		else 
+		else if(_pipelineTAGS == TPipelineConfig::REALIST)
 		{
 			// The first GBuffer Pass
 			{
 				TCanvas* canvas = new TGBufferCanvas(_width, _height);
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _rootNode);
+				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene->root);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
 			}
 
 			// Deffered Shading
-			//if(_graphicPipelineTAGS == TPipelineTAG::DEFFERED)
+			if(!_scene->lights.empty())
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "deffered");
 				TDefferedFX* deffered = new TDefferedFX();
-				deffered->SetLights(_lights);
+				deffered->SetLights(_scene->lights);
 				TVFXPass* vfxPass = new TVFXPass(canvas, deffered);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
 			
-
 			// Screen space ambien occlusion
-			//else if(_graphicPipelineTAGS == TPipelineTAG::SCREN_SPACE_AMBIENT_OCCLUSION)
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
 				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
@@ -110,7 +111,7 @@ namespace Donut
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			
+			// Filtering it
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_filtered");
 				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/gaussV.glsl", "shaders/canvas/gaussF.glsl");
@@ -119,16 +120,26 @@ namespace Donut
 				pipeline->passes.push_back(vfxPass);
 			}
 			
+			// If an envmap has been declared
+			if(_scene->sh)
+			{
+				TCanvas* canvas = new TEffectCanvas(_width, _height, "envmap");
+				TEnvironmentFX* afterFX = new TEnvironmentFX();
+				afterFX->SetSH(_scene->sh);
+				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
+				vfxPass->SetCamera(camera);
+				pipeline->passes.push_back(vfxPass);
+			}
+
 			// The compositing pass
 			{
-				TCanvas* canvas = new TEmptyCanvas(_width, _height);
+				TCanvas* canvas = new TEffectCanvas(_width, _height, "final");
 				TSimpleFX* afterFX =new TSimpleFX("shaders/canvas/compositingV.glsl", "shaders/canvas/compositingF.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			/*
-			//else if(_graphicPipelineTAGS == TPipelineTAG::DEPTH_OF_FIELD)
+
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TSimpleFX* afterFX = new TSimpleFX("data/shaders/canvas/dofV.glsl","data/shaders/canvas/dofF.glsl");
@@ -136,8 +147,13 @@ namespace Donut
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			*/
 
+			
+
+		}
+		else
+		{
+			ASSERT_NOT_IMPLEMENTED();
 		}
 		return pipeline;
 	}

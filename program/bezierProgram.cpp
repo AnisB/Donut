@@ -151,9 +151,10 @@ Donut::TGraphicsSettings init()
 	return newContext;
 }
 
-Donut::TNode* createScene()
+Donut::TScene* createScene()
 {
-	Donut::TNode* root= new Donut::TNode();
+	Donut::TScene* scene = new Donut::TScene();
+	scene->root = new Donut::TNode();
 	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
 	surface1 = Donut::CreateSugarInstance("Plane");
 	surface2 = Donut::CreateSugarInstance("PlaneLess");
@@ -180,11 +181,11 @@ Donut::TNode* createScene()
 	node2->AddDrawable(surface2);
 	node3->AddDrawable(surface3);
 	// On ajoute le noeud créé au noeud racine
-	root->AttachChild(node1);
-	root->AttachChild(node2);
-	root->AttachChild(node3);
+	scene->root->AttachChild(node1);
+	scene->root->AttachChild(node2);
+	scene->root->AttachChild(node3);
 
-	return root;
+	return scene;
 }
 
 // Fonction de destruction
@@ -209,8 +210,8 @@ void renderLoop()
 int main()
 {
 	const Donut::TGraphicsSettings& settings = init();
-	Donut::TNode* root = createScene();
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, std::vector<Donut::TLight*>(), settings.width, settings.lenght, Donut::TPipelineTAG::SIMPLE);
+	Donut::TScene* scene = createScene();
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, settings.width, settings.lenght, Donut::TPipelineConfig::MINIMAL);
 	window->SetPipeline(renderingPipeline);
 	Donut::Camera* camera = renderingPipeline->camera;
 	inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());

@@ -16,6 +16,7 @@
 
 // Library includes
 #include "Camera.h"
+#include "core/common.h"
 
 // STL inlcudes
 #include <math.h>
@@ -24,13 +25,14 @@ namespace Donut
 {
 	Camera::Camera()
 	: FViewMatrix()
+	, FViewMatrix_inverse()
 	, FProjection()
 	, FHasChanged(true)
 	, m_near(0.1)
 	, m_far(1000.0)
-	, m_focus((m_near+m_far)/2.0)
-
+	, m_focus((m_near+m_far)/(2.0*(m_far-m_near)))
 	{
+		SetIdentity(FViewMatrix_inverse);
 		matrix4(FViewMatrix, MatrixInit::Identity);
 		matrix4(FProjection, MatrixInit::Identity);
 	}
@@ -49,7 +51,7 @@ namespace Donut
 #else
 		m_fcoeff = 2.0 / log(m_far + 1.0)/log(2);
 #endif
-		m_focus = (m_near+m_far)/2.0;
+		m_focus = 100.0/(m_far-m_near);
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
@@ -57,6 +59,7 @@ namespace Donut
 	void Camera::Roll(double _angle)
 	{
 		FViewMatrix = RotateZAxis(_angle) * FViewMatrix;
+		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
@@ -64,6 +67,7 @@ namespace Donut
 	void Camera::Yaw(double _angle)
 	{
 		FViewMatrix = RotateYAxis(_angle) * FViewMatrix;
+		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
@@ -71,6 +75,7 @@ namespace Donut
 	void Camera::Pitch(double _angle)
 	{
 		FViewMatrix = RotateXAxis(_angle) * FViewMatrix;
+		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
 		FProjectionView = FProjection*FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
@@ -78,6 +83,7 @@ namespace Donut
 	void Camera::Translate(const Vector3& _dir)
 	{
 		FViewMatrix = Translate_M4(_dir) * FViewMatrix;
+		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
 		FProjectionView = FProjection * FViewMatrix;
 		FHasChanged.SetValue(true);
 	}
@@ -91,6 +97,8 @@ namespace Donut
 	{
 		// Injecting view matrix
 		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", FViewMatrix);
+		// Injecting inversed view matrix
+		_uniforms["view_inverse"].SetValue<Matrix3>(TShaderData::MAT3, "view_inverse", FViewMatrix_inverse);
 		// Injecting projection matrix
 		_uniforms["projection"].SetValue<Matrix4>(TShaderData::MAT4, "projection", FProjection);
 		// Injecting projection matrix

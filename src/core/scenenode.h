@@ -17,7 +17,7 @@
 #ifndef DONUT_SCENE_NODE
 #define DONUT_SCENE_NODE
 
-// Library includes
+// Donut includes
 #include "node.h"
 #include "graphics/drawable.h"
  

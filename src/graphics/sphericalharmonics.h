@@ -14,13 +14,34 @@
 *
 **/
 
-#ifndef DONUT_BASE_CONST
-#define DONUT_BASE_CONST
 
+#ifndef DONUT_ENV_MAP_SH
+#define DONUT_ENV_MAP_SH
+
+// STL includes
+#include <vector>
+
+ 
 namespace Donut
 {
-	// ASSERT CONSTS
-	#define EXCEPTION_STACK_SIZE 20
-}
+	// Foward declarations
+	struct TShader;
+	// Class
+	class TSphericalHarmonics
+	{
+	public:
+		TSphericalHarmonics();
+		~TSphericalHarmonics();
+		void SetCoeffs(const std::vector<float>& _redCoeffs, 
+						const std::vector<float>& _greenCoeffs,
+						const std::vector<float>& _blueCoeffs);
 
-#endif // DONUT_BASE_CONST
+		void InjectData(const TShader& _shader);
+	protected:
+		std::vector<float> m_red;
+		std::vector<float> m_green;
+		std::vector<float> m_blue;
+		int m_degree;
+	};
+}
+#endif // DONUT_ENV_MAP_SH

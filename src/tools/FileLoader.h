@@ -17,6 +17,7 @@
 #define DONUT_FILE_LOADER
 
 // LIbrary includes
+ #include "base/macro.h"
  #include "resource/geometrycontainer.h"
  #include "butter/vector3.h"
  #include "butter/vector4.h"
@@ -56,6 +57,17 @@ namespace Donut
 	Vector3 stringConvertV3(const std::string& _param);
 	Vector4 stringConvertV4(const std::string& _param);
 	Matrix4 stringConvertM4(const std::string& _param);
+
+	template<typename T>
+	void stringConvertArray(const std::string& _param, std::vector<T>& _values)
+	{
+		std::vector<std::string> stringValues;
+		split(_param, ' ',stringValues);
+		foreach_macro(val, stringValues)
+		{
+			_values.push_back(stringConvert<T>(*val));
+		}
+	}
 }
 
 #endif // FILE_LOADER

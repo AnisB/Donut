@@ -37,8 +37,6 @@ uniform TLight lightSource;
 
 void main()
 {
-	// Fecthing albedo color
-	vec4 albedo = texture(albedo, texCoord);
 	// Fetching normal (view space)
 	vec3 normal = texture(normal, texCoord).xyz;
 	// Fetching specularity
@@ -70,5 +68,5 @@ void main()
 	// Illumination coeffs
     float Idiff = 2.0*clamp(dot(l, normal),0.0,1.0);	
     float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);
-    frag_color = albedo*att*(Idiff*lightSource.diffuse + Ispec*lightSource.specular);
+    frag_color = att*(Idiff*lightSource.diffuse + Ispec*lightSource.specular);
 }

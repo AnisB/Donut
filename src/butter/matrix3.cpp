@@ -1,15 +1,45 @@
-// Library includes
+/**
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License as
+* published by the Free Software Foundation, either version 3 of the
+* License, or (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program. If not, see <http://www.gnu.org/licenses/>.
+*
+**/
+
+// Donut includes
 #include "matrix3.h"
+
 // STL includes
 #include <string.h>
 
 namespace Donut
 {
+	void matrix3(Matrix3& _mat, MatrixInit::Type reset)
+	{
+		if (reset == MatrixInit::Zero)
+			ResetToZero(_mat);
+		else if (reset == MatrixInit::Identity)
+			SetIdentity(_mat);
+	}
+
 	Matrix3::Matrix3(const Matrix3& _mat)
 	{
 		memcpy(m, _mat.m, 9*sizeof(double));
 	}
 
+	Matrix3& Matrix3::operator=(const Matrix3 _mat)
+	{
+		memcpy(m, _mat.m, 9*sizeof(double));
+		return *this;
+	}
 	void SetIdentity(Matrix3& _mat)
 	{
 		_mat.m[0] = 1.0;

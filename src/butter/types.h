@@ -16,7 +16,6 @@
 #ifndef BUTTER_TYPES_H
 #define BUTTER_TYPES_H
 
-
 namespace Donut
 {
 	// Vector types
@@ -49,19 +48,6 @@ namespace Donut
 	};
 
 	// Matrix
-	struct Matrix3
-	{
-		inline Matrix3(){}
-		Matrix3(const Matrix3& _mat);
-		double m[9];
-	};
-	struct Matrix4
-	{
-		inline Matrix4(){}
-		Matrix4(const Matrix4& _mat);
-		double m[16];
-	};
-
 	namespace MatrixInit
 	{
 		enum Type
@@ -70,6 +56,21 @@ namespace Donut
 			Identity
 		};
 	}
+	
+	struct Matrix3
+	{
+		inline Matrix3(){}
+		Matrix3(const Matrix3& _mat);
+		Matrix3& operator=(const Matrix3 _mat);
+		double m[9];
+	};
+	struct Matrix4
+	{
+		inline Matrix4(){}
+		Matrix4(const Matrix4& _mat);
+		Matrix4& operator=(const Matrix4 _mat);
+		double m[16];
+	};
 }
 
 #endif // BUTTER_TYPES_H

@@ -48,6 +48,9 @@ namespace Donut
  		// Data injection
  		template <typename T>
  		void Inject(const TShader& parProgram, const T& _value, const std::string& parName);
+
+ 		template <typename T>
+ 		void InjectV(const TShader& parProgram, const T* _value, int _nbVal, const std::string& parName);
 		
 		// Texture binding/unbinding functions
 		void BindTex(GLuint _texID, GLuint parOffset);

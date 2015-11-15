@@ -14,13 +14,32 @@
 *
 **/
 
-#ifndef DONUT_BASE_CONST
-#define DONUT_BASE_CONST
+
+#ifndef ENVIRONMENT_FX_GRAPHICS_DONUT
+#define ENVIRONMENT_FX_GRAPHICS_DONUT
+
+// Library includes
+#include "graphics/visualeffect.h"
+#include "graphics/sphericalharmonics.h"
 
 namespace Donut
 {
-	// ASSERT CONSTS
-	#define EXCEPTION_STACK_SIZE 20
+	class TEnvironmentFX : public TVFX
+	{
+	public:
+		// Creation/Destruction
+		TEnvironmentFX();
+		TEnvironmentFX(const TShader& _shader);
+		virtual ~TEnvironmentFX();
+		// Init
+		virtual void Init();
+		// Drawing it
+		void SetSH(TSphericalHarmonics* _SH) {m_SH = _SH;}
+		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+
+	protected:
+		TSphericalHarmonics* m_SH;
+	};
 }
 
-#endif // DONUT_BASE_CONST
+#endif // ENVIRONMENT_FX_GRAPHICS_DONUT

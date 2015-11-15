@@ -18,6 +18,7 @@
 // Libray includes
 #include "graphics/shader.h"
 #include "resource/common.h"
+#include "graphics/shadermanager.h"
 
 // STL includes
 #include <string>
@@ -58,6 +59,7 @@ namespace Donut
 
 		// Clone function, must be overloaded
 		virtual TUniformGeneric* Clone() = 0;
+		virtual void Inject(const TShader& _shader) = 0;
 		// Data
 		std::string name;
 	    TShaderData::Type type;
@@ -82,6 +84,12 @@ namespace Donut
 		{
 			return (new TUniform<T> (type, name, value));
 		}
+		
+		void Inject(const TShader& _shader)
+		{
+			ShaderManager::Instance().Inject<T>(_shader, value, name);
+		}
+
 		T value;
 	    const T& GetValue() { return value;}
 	};

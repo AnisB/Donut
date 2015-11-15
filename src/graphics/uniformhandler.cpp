@@ -17,7 +17,6 @@
 
 // Library includes
 #include "uniformhandler.h"
-#include "graphics/shadermanager.h"
 #include "base/security.h"
 
 namespace Donut
@@ -72,48 +71,6 @@ namespace Donut
 	// Injecting an uniform variable
 	void TUniformHandler::Inject(const TShader& _shader) const
 	{
-		TShaderData::Type val = m_uniform->type;
-
-		switch (val)
-		{
-			case TShaderData::INTEGER:
-			{
-				TUniform<int>* convert = static_cast<TUniform<int>*>(m_uniform);
-				ShaderManager::Instance().Inject<int>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			case TShaderData::FLOAT:
-			{
-				TUniform<float>* convert = static_cast<TUniform<float>*>(m_uniform);
-				ShaderManager::Instance().Inject<float>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			case TShaderData::MAT4:
-			{
-				TUniform<Matrix4>* convert = static_cast<TUniform<Matrix4>*>(m_uniform);
-				ShaderManager::Instance().Inject<Matrix4>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			case TShaderData::VEC3:
-			{
-				TUniform<Vector3>* convert = static_cast<TUniform<Vector3>*>(m_uniform);
-				ShaderManager::Instance().Inject<Vector3>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			case TShaderData::VEC4:
-			{
-				TUniform<Vector4>* convert = static_cast<TUniform<Vector4>*>(m_uniform);
-				ShaderManager::Instance().Inject<Vector4>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			case TShaderData::MAT3:
-			{
-				TUniform<Matrix3>* convert = static_cast<TUniform<Matrix3>*>(m_uniform);
-				ShaderManager::Instance().Inject<Matrix3>(_shader, convert->value,m_uniform->name);
-			}
-			break;
-			default:
-				ASSERT_FAIL_MSG("Unsupported uniform type "<<val);
-		}
+		m_uniform->Inject(_shader);
 	}
 }

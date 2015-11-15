@@ -1,4 +1,5 @@
 #include "Matrix4.h"
+#include "Matrix3.h"
 #include "base/security.h"
 // STL includes
 #include <string.h>
@@ -17,6 +18,12 @@ namespace Donut
 	void matrix4(Matrix4& _mat, double* _values)
 	{
 		memcpy(_mat.m, _values,16*sizeof(double));
+	}
+
+	Matrix4& Matrix4::operator=(const Matrix4 _mat)
+	{
+		memcpy(m, _mat.m, 16*sizeof(double));
+		return *this;
 	}
 
 	Matrix4::Matrix4(const Matrix4& _mat)
@@ -77,10 +84,14 @@ namespace Donut
 		return vector3(_mat.m[2], _mat.m[6], _mat.m[10]);
 	}
 
-	Vector4 operator*(const Matrix4& _mat, const Vector4& parFactor)
+	Vector4 operator*(const Matrix4& _mat, const Vector4& _vec)
 	{
-		ASSERT_NOT_IMPLEMENTED();
-		return Vector4();
+		Vector4 result;
+		result.x = _mat.m[0]*_vec.x + _mat.m[1]*_vec.y + _mat.m[2]*_vec.z + _mat.m[3]*_vec.w;
+		result.y = _mat.m[4]*_vec.x + _mat.m[5]*_vec.y + _mat.m[6]*_vec.z + _mat.m[7]*_vec.w;
+		result.z = _mat.m[8]*_vec.x + _mat.m[9]*_vec.y + _mat.m[10]*_vec.z + _mat.m[11]*_vec.w;
+		result.w = _mat.m[12]*_vec.x + _mat.m[13]*_vec.y + _mat.m[14]*_vec.z + _mat.m[15]*_vec.w;
+		return result;
 	}
 
 	Matrix4 Translate_M4(const Vector4& parVector)
@@ -261,10 +272,21 @@ namespace Donut
 		return result;
 	}
 
-	Matrix4 inverse(const Matrix4& parMatrix)
+	Matrix3 Inverse3x3(const Matrix4& _mat)
 	{
-		Matrix4 inverseMatrix;
-		ASSERT_NOT_IMPLEMENTED();
+		Matrix3 inverseMatrix;
+		double invdet = 1.0/(_mat.m[0]*(_mat.m[5]*_mat.m[10]-_mat.m[9]*_mat.m[6])
+	           -_mat.m[1]*(_mat.m[4]*_mat.m[10]-_mat.m[6]*_mat.m[8])
+	           +_mat.m[2]*(_mat.m[4]*_mat.m[9]-_mat.m[5]*_mat.m[8]));
+		inverseMatrix.m[0] =  (_mat.m[5]*_mat.m[10]-_mat.m[9]*_mat.m[6])*invdet;
+		inverseMatrix.m[1] = -(_mat.m[1]*_mat.m[10]-_mat.m[2]*_mat.m[9])*invdet;
+		inverseMatrix.m[2] =  (_mat.m[1]*_mat.m[6]-_mat.m[2]*_mat.m[5])*invdet;
+		inverseMatrix.m[3] = -(_mat.m[4]*_mat.m[10]-_mat.m[6]*_mat.m[8])*invdet;
+		inverseMatrix.m[4] =  (_mat.m[0]*_mat.m[10]-_mat.m[2]*_mat.m[8])*invdet;
+		inverseMatrix.m[5] = -(_mat.m[0]*_mat.m[6]-_mat.m[4]*_mat.m[2])*invdet;
+		inverseMatrix.m[6] =  (_mat.m[4]*_mat.m[9]-_mat.m[8]*_mat.m[5])*invdet;
+		inverseMatrix.m[7] = -(_mat.m[0]*_mat.m[9]-_mat.m[8]*_mat.m[1])*invdet;
+		inverseMatrix.m[8] =  (_mat.m[0]*_mat.m[5]-_mat.m[4]*_mat.m[1])*invdet;
 		return inverseMatrix;
 	}
 

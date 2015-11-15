@@ -16,8 +16,11 @@
 #ifndef BUTTER_MATRIX4_H
 #define BUTTER_MATRIX4_H
 
+// Library includes
 #include "vector3.h"
+#include "vector4.h"
 
+// STL includes
 #include <iostream>
 
 namespace Donut
@@ -37,7 +40,7 @@ namespace Donut
 	
 	// Computing functions
 	double Det(const Matrix4& _matrix);
-	Matrix4 Inverse(const Matrix4& parMatrix);
+	Matrix3 Inverse3x3(const Matrix4& _mat);
 	Matrix4 Translate_M4(const Vector4& parVector);
 	Matrix4 Translate_M4(const Vector3& parVector);
 

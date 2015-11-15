@@ -42,35 +42,35 @@ int main()
 	window->CreateRenderWindow(newContext);
 
 	// Light source declaration
-	std::vector<Donut::TLight*> lights;
+	Donut::TScene* scene = new Donut::TScene();
 	Donut::TLight* lightSource = new Donut::TLight();
 	lightSource->SetPosition(Donut::vector3(0,20,0));
 	lightSource->SetDiffuse(Donut::vector4(0,0,1,1.0));
-	lights.push_back(lightSource);
+	scene->lights.push_back(lightSource);
 
 	Donut::TLight* lightSource2 = new Donut::TLight();
 	lightSource2->SetPosition(Donut::vector3(0.0,20,-120));
 	lightSource2->SetDiffuse(Donut::vector4(1.0,0,0,1.0));
-	lights.push_back(lightSource2);
+	scene->lights.push_back(lightSource2);
 
 	Donut::TLight* lightSource3 = new Donut::TLight();
 	lightSource3->SetPosition(Donut::vector3(120.0,25,0));
 	lightSource3->SetDiffuse(Donut::vector4(0.0,1,0,1.0));
-	lights.push_back(lightSource3);
+	scene->lights.push_back(lightSource3);
 
 	Donut::TLight* lightSource4 = new Donut::TLight();
 	lightSource4->SetPosition(Donut::vector3(200.0,30,-200));
 	lightSource4->SetDiffuse(Donut::vector4(1,1,1,1.0));
-	lights.push_back(lightSource4);
+	scene->lights.push_back(lightSource4);
 
-	Donut::TNode* root = new Donut::TNode();
+	scene->root = new Donut::TNode();
 	Donut::TShader shader("shaders/basetex/vertex.glsl", "shaders/basetex/geometry.glsl","shaders/basetex/fragment.glsl");
 	Donut::TMesh* basePlane = Donut::CreatePlane(175, 200, shader);
 	basePlane->AddTexture(Donut::ResourceManager::Instance().FetchTexture("data/textures/farmhouse.jpg"), "textureCmp");
 	Donut::TSceneNode* nodePlane = new Donut::TSceneNode();
 	nodePlane->Translate(Donut::vector3(150, -10, -175));
 	nodePlane->AddDrawable(basePlane);
-	root->AttachChild(nodePlane);
+	scene->root->AttachChild(nodePlane);
 	for (int i = 0; i< 10; i++)
 	{
 		for (int j = 0; j< 10; j++)
@@ -79,11 +79,11 @@ int main()
 			Donut::TSceneNode* node = new Donut::TSceneNode();
 			node->Translate(Donut::vector3(30*j,0,-40*i));
 			node->AddDrawable(teapot2);
-			root->AttachChild(node);
+			scene->root->AttachChild(node);
 		}
 	}
 
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(root, lights, newContext.width, newContext.lenght, Donut::TPipelineTAG::DEFFERED);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, newContext.width, newContext.lenght, Donut::TPipelineConfig::REALIST);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	
@@ -101,5 +101,4 @@ int main()
 
 	delete window;
 	return 0;
-
 }

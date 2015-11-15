@@ -22,6 +22,7 @@
 #include "core/node.h"
 #include "core/camera.h"
 #include "graphics/light.h"
+#include "graphics/sphericalharmonics.h"
 #include "base/macro.h"
 
 // STL includes
@@ -34,7 +35,7 @@ namespace Donut
 		// Consrtuctor
 		TScene()
 		: root(nullptr)
-		, camera(nullptr)
+		, sh(nullptr)
 		{
 
 		}
@@ -48,13 +49,14 @@ namespace Donut
 			{
 				delete *light;
 			}
-			if(camera)
-				delete camera;
+
+			if(sh)
+				delete sh;
 		}
 
 		TNode* root;
 		std::vector<TLight*> lights;
-		Camera* camera;
+		TSphericalHarmonics* sh;
 	};
 }
 #endif
