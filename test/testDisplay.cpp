@@ -14,16 +14,18 @@
  *
  **/
 
-#include <graphics/pipeline.h>
-#include <Render/Renderer.h>
-#include <Input/InputHelper.h>
-#include <Input/DefaultInputManager.h>
-#include <Input/InputManager.h>
+// Resources
 #include <resource/sugarloader.h>
 #include <resource/resourcemanager.h>
-#include <graphics/factory.h>
- 
+// Core
 #include <core/scenenode.h>
+// Render
+#include <render/renderer.h>
+#include <graphics/factory.h>
+// Input 
+#include <input/defaultinputmanager.h>
+#include <input/helper.h>
+// Math
 #include <butter/vector3.h>
 #include <butter/vector4.h>
 

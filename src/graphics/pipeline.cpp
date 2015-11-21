@@ -134,12 +134,13 @@ namespace Donut
 			// The compositing pass
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "final");
-				TSimpleFX* afterFX =new TSimpleFX("shaders/canvas/compositingV.glsl", "shaders/canvas/compositingF.glsl");
+				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/compositingV.glsl", "shaders/canvas/compositingF.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
 
+			// The after effect DOF pass
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
 				TSimpleFX* afterFX = new TSimpleFX("data/shaders/canvas/dofV.glsl","data/shaders/canvas/dofF.glsl");
@@ -147,9 +148,6 @@ namespace Donut
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-
-			
-
 		}
 		else
 		{

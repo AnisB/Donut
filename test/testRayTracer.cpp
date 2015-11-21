@@ -17,7 +17,7 @@
 //Includes engine
 #include <Render/Renderer.h>
 #include <base/common.h>
-#include <Input/InputHelper.h>
+#include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
 #include <resource/sugarloader.h>
 #include <resource/texturehelpers.h>

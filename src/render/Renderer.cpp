@@ -18,7 +18,7 @@
 #include "Renderer.h"
 
 #include "Base/Common.h"
-#include "Input/InputHelper.h"
+#include "Input/helper.h"
 #include "Base/Macro.h"
 #include "graphics/glfactory.h"
  

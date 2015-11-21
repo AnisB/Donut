@@ -16,7 +16,7 @@
 
 // Donut includes
 #include "input/common.h"
-#include "inputhelper.h"
+#include "helper.h"
 #include "defaultinputmanager.h"
 
 #include <base/common.h>

@@ -16,7 +16,7 @@
 
 #include <iostream>
 #include <Engine/Engine.h>
-#include <Input/InputHelper.h>
+#include <Input/helper.h>
 
 
 int main()

@@ -15,7 +15,7 @@
  **/
 
 #include <Render/Renderer.h>
-#include <Input/InputHelper.h>
+#include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>

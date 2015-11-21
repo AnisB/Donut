@@ -19,7 +19,7 @@
 #define DONUT_ENGINE
 
 // Donut includes
-#include <input/inputhelper.h>
+#include <input/helper.h>
 #include <Render/Renderer.h>
 
 namespace Donut
@@ -35,7 +35,7 @@ namespace Donut
  		void ResumeRendering();
  		bool IsRendering();
  		virtual void InitScene() {}
- 		// Please call the mother Update function
+		// Please call the mother Update function
  		// in your implementation of the rendering engine
  		virtual void Update(float dt);
  		virtual void PrepareNextFrame() {}
