@@ -78,7 +78,7 @@ private:
 	// Shader hashing class
 	struct TShaderHasher
 	{
-		inline size_t operator()(const TShader& _shader)
+		inline size_t operator()(const TShader& _shader) const
 		{
 			size_t v0 = std::hash<TShaderFileID>()(_shader.FVertexShader);
 			size_t v1 = std::hash<TShaderFileID>()(_shader.FTessControl);

@@ -23,9 +23,9 @@
  
 #include <stdio.h>
 #include <stdlib.h>
-#if __posix__
 #include <jpeglib.h>
 #include <jerror.h>
+#if __posix__
 #include <png.h>
 #elif WIN32
 #endif
@@ -138,7 +138,6 @@ namespace Donut
     }
     TTexture* LoadJPG(const char* FileName, bool Fast = true)
     {
-#if __posix__
         // printf("Loading jpg dude %s\n", FileName);
 
         FILE* file = fopen(FileName, "rb");  //open the file
@@ -202,11 +201,6 @@ namespace Donut
         fclose(file);                    //close the file
 
         return Image;
-#elif WIN32
-		ASSERT_NOT_IMPLEMENTED()
-		return nullptr;
-
-#endif
     }
 
     TTexture* LoadPNG(const char* file_name)

@@ -34,7 +34,7 @@ int main()
 	window->CreateRenderWindow(newContext);
 
 	Donut::TSceneLoader::Instance().LoadScene("data/scenes/cornellBox.json");
-	Donut::TSceneLoader::Instance().LoadScene("data/scenes/cornellBox.xml");
+	Donut::TSceneLoader::Instance().LoadScene("data/scenes/teapotarmy.xml");
 
 	delete window;
 	return 0;
