@@ -290,6 +290,39 @@ namespace Donut
 		return inverseMatrix;
 	}
 
+	Matrix4 Rotate(double _angle, const Vector3& _axis)
+	{
+		double u = _axis.x;
+		double v = _axis.y;
+		double w = _axis.z;
+	    double L = (u*u + v * v + w * w);
+	    double u2 = u * u;
+	    double v2 = v * v;
+	    double w2 = w * w; 
+	 
+	 	Matrix4 rotationMatrix;
+	    rotationMatrix.m[0] = (u2 + (v2 + w2) * cos(_angle)) / L;
+	    rotationMatrix.m[1] = (u * v * (1 - cos(_angle)) - w * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[2] = (u * w * (1 - cos(_angle)) + v * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[3] = 0.0; 
+	 
+	    rotationMatrix.m[4] = (u * v * (1 - cos(_angle)) + w * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[5] = (v2 + (u2 + w2) * cos(_angle)) / L;
+	    rotationMatrix.m[6] = (v * w * (1 - cos(_angle)) - u * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[7] = 0.0; 
+	 
+	    rotationMatrix.m[8] = (u * w * (1 - cos(_angle)) - v * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[9] = (v * w * (1 - cos(_angle)) + u * sqrt(L) * sin(_angle)) / L;
+	    rotationMatrix.m[10] = (w2 + (u2 + v2) * cos(_angle)) / L;
+	    rotationMatrix.m[11] = 0.0; 
+	 
+	    rotationMatrix.m[12] = 0.0;
+	    rotationMatrix.m[13] = 0.0;
+	    rotationMatrix.m[14] = 0.0;
+	    rotationMatrix.m[15] = 1.0;
+	    return rotationMatrix;
+	}
+
 	void ToTable(const Matrix4& _mat, float* content)
 	{
 		for(int i = 0; i < 16; ++i)

@@ -26,8 +26,9 @@ uniform int lenght;
 float doAmbientOcclusion(vec2 tcoord, vec2 uv, vec3 p, vec3 cnorm)
 {
   vec3 diff = texture(position, tcoord + uv).xyz - p;
-  vec3 v = normalize(diff);
-  float d = length(diff)*scale;
+  float lengthDiff = length(diff);
+  vec3 v = diff/ lengthDiff;
+  float d = lengthDiff * scale;
   return max(0.0,dot(cnorm,v)-0.1)*(1.0/(1.0+d));
 }
 
@@ -36,14 +37,14 @@ void main()
   // If its too far, just forget about it
   // Maybe should not be done?
   float d = texture(depth, texCoord).r;
-  if(d == 1.0)
+  vec4 p4 = texture(position, texCoord);
+  if(p4.w == 0.0)
   {
-    frag_color = vec4(1.0);
-    return;
+    discard;
   }
 
+  vec3 p = p4.xyz;
   // Fetching the data
-  vec3 p = texture(position, texCoord).xyz;
   vec3 n = texture(normal, texCoord).xyz;
   vec2 rand = texture(random, texCoord * randomShift).xy;
 

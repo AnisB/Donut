@@ -48,19 +48,11 @@ namespace Donut
 
 	void TEnvironmentFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
-		glEnable (GL_BLEND); // --- could reject background frags!
-		glBlendEquation (GL_FUNC_ADD);
-		glBlendFunc (GL_ONE, GL_ONE); // addition each time
-		glDisable (GL_DEPTH_TEST);
-		glDepthMask (GL_FALSE);
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);
 		m_SH->InjectData(m_material.shader);
 		m_fsq->Draw(false);
  		ShaderManager::Instance().DisableShader();
-		glEnable (GL_DEPTH_TEST);
-		glDepthMask (GL_TRUE);
-		glDisable (GL_BLEND);
 		glFlush ();
 	}
 }

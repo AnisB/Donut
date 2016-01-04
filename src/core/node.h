@@ -35,7 +35,7 @@ namespace Donut
 		// Consrtuctor
 		TNode();
 		//Destructor
-		~TNode();
+		virtual ~TNode();
 		// Adds a child to the tree
 		void AttachChild(TNode* parNode);
 		// WARNING: You should preferably not call this, maybe disable your node?

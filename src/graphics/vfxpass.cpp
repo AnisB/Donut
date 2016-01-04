@@ -42,9 +42,8 @@
 	void TVFXPass::Draw(const TBufferOutput& _previousData)
 	{
 		// Building common uniforms
-		std::map<std::string, TUniformHandler> values;
-		m_camera->AppendUniforms(values);
-		m_vfx->Draw(values, _previousData);
+		m_camera->AppendUniforms(m_values);
+		m_vfx->Draw(m_values, _previousData);
 	}
 
 	void TVFXPass::Bind()

@@ -56,6 +56,7 @@
 		Camera * m_camera;
 		TCanvas * m_canvas;
 		TVFX* m_vfx;
+		std::map<std::string, TUniformHandler> m_values;
 	};
 	// END CLASS DECLARATION
  }

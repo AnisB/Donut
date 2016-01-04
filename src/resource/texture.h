@@ -61,6 +61,7 @@ struct TTexture
 
     std::string       FFileName;
     TImgType::Type    FType;
+    GLuint            FFormat;
     unsigned          FNbRef;
 
     TTexture(std::string parFilename, TImgType::Type parType, int parWidth, int parHeight )
@@ -71,6 +72,7 @@ struct TTexture
         , FType (parType)
         , FNbRef(0)
         , FDataType(TDataType::UNSIGNED_BYTE)
+        , FFormat(0)
     {
     }
     TTexture(int parWidth, int parHeight )
@@ -81,6 +83,7 @@ struct TTexture
         , FType (TImgType::NONE)
         , FNbRef(0)
         , FDataType(TDataType::UNSIGNED_BYTE)
+        , FFormat(0)
     {
     }
 

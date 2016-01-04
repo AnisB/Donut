@@ -23,6 +23,7 @@
  
 #include <stdio.h>
 #include <stdlib.h>
+#include <fstream>
 #include <jpeglib.h>
 #include <jerror.h>
 #if __posix__
@@ -118,7 +119,8 @@ namespace Donut
         int w = *(int*)&info[18];
         int l = *(int*)&info[22];
 
-        TTexture* Image = new TTexture(Filename,TImgType::BMP, w, l );
+        TTexture* image = new TTexture(Filename,TImgType::BMP, w, l );
+        image->FFormat = GL_RGB;
 
         int size = 3 * w  * l ;
         unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
@@ -133,8 +135,8 @@ namespace Donut
         }
 
         // read the data.
-        Image->FData = data;
-        return Image;
+        image->FData = data;
+        return image;
     }
     TTexture* LoadJPG(const char* FileName, bool Fast = true)
     {
@@ -169,7 +171,9 @@ namespace Donut
         //set the x and y
         unsigned int w = info.output_width;
         unsigned int l = info.output_height;
-        TTexture* Image = new TTexture(FileName,TImgType::JPG, w, l );
+        TTexture* image = new TTexture(FileName,TImgType::JPG, w, l );
+        image->FFormat = GL_RGB;
+
         GLuint channels = info.num_components;
 
         GLuint type = GL_RGB;
@@ -184,9 +188,9 @@ namespace Donut
         GLuint size = w * l * 3;
 
         //read turn the uncompressed data into something ogl can read
-        Image->FData = new unsigned char[size];      //setup data for the data its going to be handling
+        image->FData = new unsigned char[size];      //setup data for the data its going to be handling
 
-        unsigned char* p1 = (unsigned char*)    Image->FData;
+        unsigned char* p1 = (unsigned char*)    image->FData;
         unsigned char** p2 = &p1;
         int numlines = 0;
 
@@ -200,7 +204,7 @@ namespace Donut
 
         fclose(file);                    //close the file
 
-        return Image;
+        return image;
     }
 
     TTexture* LoadPNG(const char* file_name)
@@ -280,6 +284,7 @@ namespace Donut
             NULL, NULL, NULL);
 
         TTexture* image = new TTexture(file_name,TImgType::PNG, temp_width, temp_height);
+        image->FFormat = GL_RGBA;
 
         // Update the png info struct.
         png_read_update_info(png_ptr, info_ptr);
@@ -334,6 +339,116 @@ namespace Donut
 #endif
     }
 
+    TTexture* LoadTGA(const char* file_name)
+    {
+        std::fstream hFile(file_name, std::ios::in | std::ios::binary);
+
+        if (!hFile.is_open())
+        {
+            ASSERT_FAIL_MSG("File not found: "<<file_name);
+            return nullptr;
+        }
+        
+        TTexture* image = nullptr;
+
+        std::uint8_t Header[18] = {0};
+        static std::uint8_t DeCompressed[12] = {0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+        static std::uint8_t IsCompressed[12] = {0x0, 0x0, 0xA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
+
+        hFile.read(reinterpret_cast<char*>(&Header), sizeof(Header));
+
+        if (!std::memcmp(DeCompressed, &Header, sizeof(DeCompressed)))
+        {
+            int BitsPerPixel = Header[16];
+            int width  = Header[13] * 0xFF + Header[12];
+            int height = Header[15] * 0xFF + Header[14];
+            int size  = ((width * BitsPerPixel + 31) / 32) * 4 * height;
+            image = new TTexture(file_name,TImgType::TGA, width, height);
+
+            switch(BitsPerPixel)
+            {
+                case 24:
+                    image->FFormat = GL_RGB;
+                break;
+                case 32:
+                    image->FFormat = GL_RGBA;
+                break;
+                default: 
+                    hFile.close();
+                    ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit Image.");
+            }
+
+            image->FData = new unsigned char[size];
+            hFile.read(reinterpret_cast<char*>(image->FData), size);
+        }
+        /*
+        else if (!std::memcmp(IsCompressed, &Header, sizeof(IsCompressed)))
+        {
+            BitsPerPixel = Header[16];
+            width  = Header[13] * 0xFF + Header[12];
+            height = Header[15] * 0xFF + Header[14];
+            size  = ((width * BitsPerPixel + 31) / 32) * 4 * height;
+
+            if ((BitsPerPixel != 24) && (BitsPerPixel != 32))
+            {
+                hFile.close();
+                ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit Image.");
+                return nullptr;
+            }
+
+            RGB Pixel = {0};
+            int CurrentByte = 0;
+            std::size_t CurrentPixel = 0;
+            ImageCompressed = true;
+            std::uint8_t ChunkHeader = {0};
+            int BytesPerPixel = (BitsPerPixel / 8);
+            ImageData.resize(width * height * sizeof(RGB));
+
+            do
+            {
+                hFile.read(reinterpret_cast<char*>(&ChunkHeader), sizeof(ChunkHeader));
+
+                if(ChunkHeader < 128)
+                {
+                    ++ChunkHeader;
+                    for(int I = 0; I < ChunkHeader; ++I, ++CurrentPixel)
+                    {
+                        hFile.read(reinterpret_cast<char*>(&Pixel), BytesPerPixel);
+
+                        ImageData[CurrentByte++] = Pixel.RGBA.B;
+                        ImageData[CurrentByte++] = Pixel.RGBA.G;
+                        ImageData[CurrentByte++] = Pixel.RGBA.R;
+                        if (BitsPerPixel > 24) ImageData[CurrentByte++] = Pixel.RGBA.A;
+                    }
+                }
+                else
+                {
+                    ChunkHeader -= 127;
+                    hFile.read(reinterpret_cast<char*>(&Pixel), BytesPerPixel);
+
+                    for(int I = 0; I < ChunkHeader; ++I, ++CurrentPixel)
+                    {
+                        ImageData[CurrentByte++] = Pixel.RGBA.B;
+                        ImageData[CurrentByte++] = Pixel.RGBA.G;
+                        ImageData[CurrentByte++] = Pixel.RGBA.R;
+                        if (BitsPerPixel > 24) ImageData[CurrentByte++] = Pixel.RGBA.A;
+                    }
+                }
+            } while(CurrentPixel < (width * height));
+        }
+        */
+        else
+        {
+            hFile.close();
+            ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit TGA File.");
+            return nullptr;
+        }
+
+        hFile.close();
+        return image;
+    }
+
+
  	TTexture * LoadTexture(const std::string & parImg)
  	{
  		TImgType::Type typeImg = GetImgType(parImg);
@@ -350,10 +465,9 @@ namespace Donut
 	    	    break;
 	    	case TImgType::BMP:
 	    	    texture = LoadBMP(parImg.c_str());
-
 	    	    break;
 	    	case TImgType::TGA:
-	    	    texture = NULL;
+	    	    texture = LoadTGA(parImg.c_str());
 	    	    break;
     	    default:
     	        ASSERT_FAIL_MSG("Unhandled type "<<parImg);
@@ -366,11 +480,7 @@ namespace Donut
         RESOURCE_INFO("Creating GPU texture.");
         glGenTextures(1, &(parTex->FID));
         glBindTexture(GL_TEXTURE_2D, parTex->FID);
-
-        if(parTex->FType == TImgType::PNG || parTex->FType == TImgType::TGA)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, parTex->FWidth, parTex->FHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, parTex->FData);
-        if(parTex->FType == TImgType::BMP || parTex->FType == TImgType::JPG)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, parTex->FData);
+        glTexImage2D(GL_TEXTURE_2D, 0, parTex->FFormat, parTex->FWidth, parTex->FHeight, 0, parTex->FFormat, GL_UNSIGNED_BYTE, parTex->FData);
         glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now!!!
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
