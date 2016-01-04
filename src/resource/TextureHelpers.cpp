@@ -134,6 +134,17 @@ namespace Donut
                 data[i+2] = tmp;
         }
 
+		int shift = *(int*)&info[14];
+		shift /= 3;
+		unsigned char* tampon = new unsigned char[w*3];
+		for (int i = 0; i < l; ++i)
+		{
+			memcpy(tampon, data + i*w * 3 + shift * 3, (w - shift) * 3);
+			memcpy(tampon + (w - shift) * 3, data, shift * 3);
+			memcpy(data + i * w * 3, tampon, w * 3);
+		}
+		delete [] tampon;
+
         // read the data.
         image->FData = data;
         return image;
