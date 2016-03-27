@@ -39,45 +39,6 @@
  		std::vector<std::string> info;
  	};
 
- 	namespace TSkyboxComponent
- 	{
- 		enum Type
- 		{
- 			PX,
- 			NX,
- 			PY,
- 			NY,
- 			PZ,
- 			NZ
- 		};
- 	}
-    std::string SkyboxComponentToString(TSkyboxComponent::Type parType)
-    {
-        switch(parType)
-        {
-            case TSkyboxComponent::PX:
-                return "/px";
-            case TSkyboxComponent::NX:
-                return "/nx";
-            case TSkyboxComponent::PY:
-                return "/py";
-            case TSkyboxComponent::NY:
-                return "/ny";
-            case TSkyboxComponent::PZ:
-                return "/pz";
-            case TSkyboxComponent::NZ:
-                return "/nz";
-        };
-        return "";
-    }
- 	std::string ConcatFileName(const std::string& parFolderName,TSkyboxComponent::Type parType,TImgType::Type parImgType )
- 	{
- 		std::string filename(parFolderName);
- 		filename+=SkyboxComponentToString(parType);
- 		filename+=TextureHelpers::ImgTypeToString(parImgType);
- 		return filename;
- 	}
-
  	ResourceManager::ResourceManager()
  	{
 
@@ -108,6 +69,26 @@
  		}
  	}
 
+ 	TSkyboxTexture* ResourceManager::FetchSkybox(const std::string&  _skyboxFolder, const std::string& _extension)
+ 	{
+ 		auto it = FSkyboxTextures.find(_skyboxFolder);
+ 		if(it != FSkyboxTextures.end())
+ 		{
+ 			RESOURCE_INFO(_skyboxFolder<<" already loaded");
+ 			it->second->FNbRef++;
+ 			return it->second;
+ 		}
+ 		else
+ 		{
+ 			RESOURCE_INFO("Reading "<<_skyboxFolder);
+ 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(_skyboxFolder, TextureHelpers::GetImgType(_extension));
+ 			FSkyboxTextures[_skyboxFolder] = skybox;
+ 			TextureHelpers::CreateSkybox(skybox);
+ 			skybox->FNbRef++;
+ 			return skybox;
+ 		}
+ 	}
+
 	TGGXBRDF* ResourceManager::FetchBRDF(const std::string&  _brdfFileName)
  	{
  		auto it = m_brdfs.find(_brdfFileName);
@@ -125,43 +106,6 @@
  			return brdf;
  		}
  	}
-
-	TSkyboxTexture* ResourceManager::LoadSkybox(const std::string&  parTextureName)
-	{
-		return NULL;
-	}
-	TSkyboxTexture* ResourceManager::LoadSkybox(const std::string&  parTextureName,TImgType::Type parType)
-	{
-		TSkyboxTexture * result = GetSkybox(parTextureName);
-		if(!result)
-		{
-			TSkyboxTexture * skybox = new TSkyboxTexture(parTextureName);
-			skybox->FTextures[0] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::PX,parType));
-			skybox->FTextures[1] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::NX,parType));
-			skybox->FTextures[2] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::PY,parType));
-			skybox->FTextures[3] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::NY,parType));
-			skybox->FTextures[4] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::PZ,parType));
-			skybox->FTextures[5] =  TextureHelpers::LoadTexture(ConcatFileName(parTextureName,TSkyboxComponent::NZ,parType));
-			skybox->FID = TextureHelpers::	CreateTextureCube();
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_X, skybox->FTextures[0]);
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, skybox->FTextures[1]);
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, skybox->FTextures[2]);
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, skybox->FTextures[3]);
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, skybox->FTextures[4]);
-			TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, skybox->FTextures[5]);
-		}
-		return result;
-	}
-	TSkyboxTexture* ResourceManager::GetSkybox(const std::string&  parTextureName)
-	{
-
- 		auto it = FSkyboxTextures.find(parTextureName);
- 		if(it != FSkyboxTextures.end())
- 		{
- 			return it->second;
- 		}
- 		return NULL;
-	}
 
 	TGeometryContainer* ResourceManager::ReadWavefront(const std::string& _model)
 	{

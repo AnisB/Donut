@@ -20,6 +20,7 @@
 #include "graphics/factory.h"
 #include "core/sceneNode.h"
 #include "resource/common.h"
+#include "resource/resourcemanager.h"
 #include "base/common.h"
 #include "butter/stream.h"
 #include "picojson.h"
@@ -53,7 +54,10 @@ namespace Donut
 	#define LIGHT_DIFF_TOKEN "diff"
 	#define LIGHT_SPEC_TOKEN "spec"
 	#define LIGHT_RAY_TOKEN "ray"
-
+	// Skybox data
+	#define SKYBOX_TOKEN "skybox"
+	#define SKYBOX_EXTENSION_TOKEN "extension"
+	#define SKYBOX_LOCATION_TOKEN "location"
 
 
 	TNode* HandleNode(rapidxml::xml_node<> *_node);
@@ -126,6 +130,17 @@ namespace Donut
 			newLight->SetRay(convertFromString<float>(rayS));
 		}
 		return newLight;
+	}
+
+
+	TSceneNode* HandleSkyboxNode(rapidxml::xml_node<> * _skybox)
+	{
+		rapidxml::xml_attribute<> *location = _skybox->first_attribute(SKYBOX_LOCATION_TOKEN);
+		rapidxml::xml_attribute<> *extension = _skybox->first_attribute(SKYBOX_EXTENSION_TOKEN);
+		TSceneNode* node = new TSceneNode();
+		TMesh* mesh = CreateSkybox(location->value(), extension->value());
+		node->AddDrawable(mesh);
+		return node;
 	}
 
 	TSphericalHarmonics* HandleSphericalHarmonics(rapidxml::xml_node<> * _SH)
@@ -206,8 +221,15 @@ namespace Donut
 			const std::string& tmS = tmAtt->value();
 			node->SetTransformationMatrix(convertFromString<Matrix4>(tmS));
 		}
+		// Creating the scene children
+		for(rapidxml::xml_node<> *skybox = _node->first_node(SKYBOX_TOKEN); skybox; skybox = skybox->next_sibling(SKYBOX_TOKEN))
+		{
+			TSceneNode* child = HandleSkyboxNode(skybox);
+			node->AttachChild(child);
+		}
+
 		// Creating the node children
-		for(rapidxml::xml_node<> *currentNode = _node->first_node(NODE_TOKEN); currentNode; currentNode = currentNode->next_sibling())
+		for(rapidxml::xml_node<> *currentNode = _node->first_node(NODE_TOKEN); currentNode; currentNode = currentNode->next_sibling(NODE_TOKEN))
 		{
 			TNode* child = HandleNode(currentNode);
 			node->AttachChild(child);
@@ -247,7 +269,7 @@ namespace Donut
 		{
 			HandleIlluminationNode(illumination, newScene->lights);
 		}
-		
+	
 		rapidxml::xml_node<> *envSH = scene->first_node(SPHERICAL_HARMONICS);
 		if(envSH)
 		{

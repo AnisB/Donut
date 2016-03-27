@@ -41,6 +41,7 @@ namespace Donut
 		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
 		// Attaching a texture to a vfx
 	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
+	 	virtual void AddCubeMap(TSkyboxTexture* _skybox, const std::string& _nameInMaterial);
 	protected:
 		void BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous);
 	protected:

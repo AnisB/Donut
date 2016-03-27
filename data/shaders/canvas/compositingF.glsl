@@ -20,5 +20,5 @@ void main()
 	vec3 envmapV = texture(envmap, texCoord).xyz;
 	vec3 defferedV = texture(deffered, texCoord).xyz;
 
-	frag_color = vec4(ssaoV*albedoV*(envmapV+defferedV),1.0);
+	frag_color = vec4(albedoV*(envmapV+defferedV),1.0);
 }

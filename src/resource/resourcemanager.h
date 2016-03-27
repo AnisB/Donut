@@ -55,7 +55,10 @@
  		// If it has not been loaded yet, it loads the geometry into the GPU RAM
  		// Else it returns a pointer to what has been loaded
 		TGeometry* FetchGeometry(const TShader& parShader, const std::string&  parObjName);
-
+		// Returns a pointer to a given skybox (using its filepath)
+ 		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
+ 		// Else it returns a pointer to what has been loaded
+		TSkyboxTexture* FetchSkybox(const std::string& _skyboxFolder, const std::string& _extension);
 
 
 	// Should be taken a look at
@@ -66,11 +69,7 @@
 		// Binds into GPU memory a given material
 		void BindMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 
-
 		// Still to refactor
-		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName);
-		TSkyboxTexture* LoadSkybox(const std::string&  parTextureName,TImgType::Type parType);
-		TSkyboxTexture* GetSkybox(const std::string&  parTextureName);
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
 
 	protected:

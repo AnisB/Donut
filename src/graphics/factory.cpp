@@ -255,4 +255,24 @@ namespace Donut
 		return geometry;
 	}
 
+	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension)
+	{	
+		// Fetch the texture
+		TSkyboxTexture* skybox = ResourceManager::Instance().FetchSkybox(_folderName, _extension);
+		// Create the shader
+		TShader shader("data/shaders/canvas/skyboxV.glsl", "data/shaders/canvas/skyboxF.glsl");
+		ShaderManager::Instance().CreateShader(shader); 
+		// Create the material
+		TMaterial skyboxMat;
+ 		skyboxMat.shader = shader;
+ 		TCubeMapInfo newCM;
+		newCM.cmID = skybox->id;
+		newCM.offset = 0;
+		newCM.name = "skybox";
+		skyboxMat.cubeMaps.push_back(newCM);
+		// Create the geometry
+		TGeometry* fsq = CreateFullScreenQuad(shader);
+		return new TMesh(skyboxMat, fsq);
+	}
+
 }

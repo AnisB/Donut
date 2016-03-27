@@ -47,10 +47,11 @@ void main()
 
 	// Getting detph
 	float profondeur = texture(depth,texCoord).r;
-	if(profondeur == 1.0)
+	if(profondeur > 0.999f)
 	{
 		// Far away => discard
-		discard;
+		frag_color = vec4(1.0);
+		return;
 	}
 
 	vec4 finalColor = vec4(0.0,0.0,0.0,0.0);

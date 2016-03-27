@@ -93,7 +93,7 @@ namespace Donut
 
     void BindToCubeMap(GLuint parType, TTexture* parTexture)
     {
-        glTexImage2D(parType, 0, GL_RGBA8, parTexture->FWidth, parTexture->FHeight, 0, GL_BGRA, GL_UNSIGNED_BYTE, parTexture->FData);
+        glTexImage2D(parType, 0, GL_RGB, parTexture->FWidth, parTexture->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, parTexture->FData);
     }
 
     TTexture* LoadBMP(const char *Filename )
@@ -486,6 +486,78 @@ namespace Donut
 	    };
 	    return texture;
 	}
+
+    namespace TSkyboxComponent
+    {
+        enum Type
+        {
+            PX,
+            NX,
+            PY,
+            NY,
+            PZ,
+            NZ
+        };
+    }
+    std::string SkyboxComponentToString(TSkyboxComponent::Type parType)
+    {
+        switch(parType)
+        {
+            case TSkyboxComponent::PX:
+                return "/px";
+            case TSkyboxComponent::NX:
+                return "/nx";
+            case TSkyboxComponent::PY:
+                return "/py";
+            case TSkyboxComponent::NY:
+                return "/ny";
+            case TSkyboxComponent::PZ:
+                return "/pz";
+            case TSkyboxComponent::NZ:
+                return "/nz";
+        };
+        return "";
+    }
+    
+    std::string ConcatFileName(const std::string& parFolderName,TSkyboxComponent::Type parType,TImgType::Type parImgType )
+    {
+        std::string filename(parFolderName);
+        filename+=SkyboxComponentToString(parType);
+        filename+=TextureHelpers::ImgTypeToString(parImgType);
+        return filename;
+    }
+
+    TSkyboxTexture* LoadSkybox(const std::string&  _skyboxFolder, TImgType::Type parType)
+    {
+        TSkyboxTexture * skybox = new TSkyboxTexture(_skyboxFolder);
+        skybox->textures[0] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PX,parType));
+        skybox->textures[1] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NX,parType));
+        skybox->textures[2] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PY,parType));
+        skybox->textures[3] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NY,parType));
+        skybox->textures[4] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PZ,parType));
+        skybox->textures[5] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NZ,parType));
+        /*
+        skybox->FID = TextureHelpers::CreateTextureCube();
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_X, skybox->textures[0]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, skybox->textures[1]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, skybox->textures[2]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, skybox->textures[3]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, skybox->textures[4]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, skybox->textures[5]);
+        */
+        return skybox;
+    }
+
+    void CreateSkybox(TSkyboxTexture* _skyboxTex)
+    {
+        _skyboxTex->id = CreateTextureCube();
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_X, _skyboxTex->textures[0]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, _skyboxTex->textures[1]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, _skyboxTex->textures[2]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, _skyboxTex->textures[3]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, _skyboxTex->textures[4]);
+        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, _skyboxTex->textures[5]);
+    }
 
     void CreateTexture(TTexture* parTex)
     {

@@ -104,30 +104,22 @@ struct TTexture
     }
 };
 
-namespace TSkyboxData
-{
-    enum Type
-    {
-        FOLDER,
-        UNIQUEFILE
-    };
-}
-
 struct TSkyboxTexture
 {
-    GLuint              FID;
-    TTexture **          FTextures;
-    std::string         FFileName;
+    GLuint             id;
+    TTexture*          textures[6];
+    std::string        filename;
+    unsigned          FNbRef;
 
-    TSkyboxTexture(std::string parFilename)
-    : FFileName ( parFilename )
+    TSkyboxTexture(const std::string& _filename)
+    : filename ( _filename )
+    , id(0)
+    , textures()
     {
-        FTextures = new TTexture*[6];
     }
 
     ~TSkyboxTexture( void )
     {
-        delete [] FTextures;
     }
 };
 

@@ -20,6 +20,7 @@
 namespace Donut
 {
 	TGeometry* CreateFullScreenQuad(const TShader& _shader);
+	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension);
 	TMesh* CreateCube(double _length, const TShader& _shader);
 	TMesh* CreateSphere(double _radius);
 	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);

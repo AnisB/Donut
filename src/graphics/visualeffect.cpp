@@ -63,12 +63,21 @@ namespace Donut
  		
 	}
 
-	void TVFX::AddTexture(TTexture* parTex, const std::string& parName)
+	void TVFX::AddTexture(TTexture* parTex, const std::string& _nameInMaterial)
  	{
 		TTextureInfo newTex;
 		newTex.texID = parTex->FID;
 		newTex.offset = (int)m_material.textures.size();
-		newTex.name = parName;
+		newTex.name = _nameInMaterial;
 		m_material.textures.push_back(newTex);
+ 	}
+
+ 	void TVFX::AddCubeMap(TSkyboxTexture* _skybox, const std::string& _nameInMaterial)
+ 	{
+		TCubeMapInfo newCM;
+		newCM.cmID = _skybox->id;
+		newCM.offset = (int)m_material.cubeMaps.size();
+		newCM.name = _nameInMaterial;
+		m_material.cubeMaps.push_back(newCM);
  	}
 }

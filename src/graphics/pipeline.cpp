@@ -86,6 +86,7 @@ namespace Donut
 		}
 		else if(_pipelineTAGS == TPipelineConfig::REALIST)
 		{
+
 			// The first GBuffer Pass
 			{
 				TCanvas* canvas = new TGBufferCanvas(_width, _height);
@@ -151,6 +152,7 @@ namespace Donut
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
+			
 		}
 		else
 		{
