@@ -123,8 +123,22 @@ namespace Donut
 	void TUniformHandler::SetValue(TShaderData::Type _type, const std::string& _name, const T& _value)
 	{
 		if(m_uniform)
-			delete m_uniform;
-		m_uniform = new TUniform<T>(_type, _name, _value);
+		{
+			if(m_uniform->type != _type)
+			{
+				delete m_uniform;
+				m_uniform = new TUniform<T>(_type, _name, _value);
+			}
+			else
+			{
+				static_cast<TUniform<T>* >(m_uniform)->value = _value;
+			}
+		}
+		else
+		{
+			m_uniform = new TUniform<T>(_type, _name, _value);
+		}
+
 	}
 	template <typename T>
 	T& TUniformHandler::GetValue()
