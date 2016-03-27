@@ -28,7 +28,7 @@
 namespace Donut
 {
 	// Generic purpose functions
-	void CheckGLState(const std::string& desc);
+	bool CheckGLState(bool _clearState = false);
 
 	// Frame buffer functions
 	GLuint CreateFrameBuffer();
@@ -39,6 +39,7 @@ namespace Donut
 	void DeleteFrameBuffer(GLuint& _frameBuffer);
 	void BindToFrameBuffer(const TTextureInfo& _tex);
 	void ClearBuffer();
+	void SetClearColor(const Vector4& _color);
 
 	// Texture creation and deletion
 	void CreateTexture(TTextureInfo& _tex, int parWidth, int parHeight);
@@ -51,6 +52,15 @@ namespace Donut
 	// Creates a geometry into the GPU
 	TGeometry* CreateGeometry(const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
+#if _DEBUG
+	#define GL_API_CHECK_START() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the start of "<<__PRETTY_FUNCTION__)}
+	#define GL_API_CHECK_MIDDLE() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the middle of "<<__PRETTY_FUNCTION__)}
+	#define GL_API_CHECK_END() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the end of "<<__PRETTY_FUNCTION__)}
+#else
+	#define GL_API_CHECK_START() {}
+	#define GL_API_CHECK_MIDDLE() {}
+	#define GL_API_CHECK_END() {}
+#endif // _DEBUG
 }
 
 

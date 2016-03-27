@@ -25,6 +25,7 @@
 
 #include "base/singleton.h"
 #include "texture.h"
+#include "ggxbrdf.h"
 #include "geometrycontainer.h"
 #include "sugar.h"
 
@@ -41,6 +42,11 @@
  		ResourceManager();
  		~ResourceManager();
 
+ 	// Fetching methods
+		// Returns a pointer to a given brdf file (using its filepath)
+ 		// If it has not been loaded yet, it loads the brdf data into the GPU RAM
+ 		// Else it returns a pointer to what has been loaded
+ 		TGGXBRDF* FetchBRDF(const std::string& _brdfFileName);
  		// Returns a pointer to a given texture (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
@@ -49,6 +55,10 @@
  		// If it has not been loaded yet, it loads the geometry into the GPU RAM
  		// Else it returns a pointer to what has been loaded
 		TGeometry* FetchGeometry(const TShader& parShader, const std::string&  parObjName);
+
+
+
+	// Should be taken a look at
 		// Creates a geometry and registers it with a given name
 		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 		// Reads a given file and serializes its content as a geometry container
@@ -64,6 +74,7 @@
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
 
 	protected:
+		std::map<std::string, TGGXBRDF*> m_brdfs;
 		std::map<std::string, TTexture*> FTextures;
 		std::map<std::string, TGeometry*> FGeometries;
 		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;

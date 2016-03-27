@@ -31,9 +31,11 @@ struct TLight
 	vec4 specular;
 	float ray;
 };
-// Delcaring the light source
-uniform TLight lightSource;
 
+// Delcaring the light source
+uniform TLight lightSource[20];
+
+uniform int nbLights;
 
 void main()
 {
@@ -50,23 +52,28 @@ void main()
 		discard;
 	}
 
-	// Computing light source position (view space)
-	vec3 lightPos = (view*vec4(lightSource.position,1.0)).xyz;
-	// Fetching xyz position (view space)
-	vec3 pixelPos = texture(position,texCoord).xyz;
+	vec4 finalColor = vec4(0.0,0.0,0.0,0.0);
+	for(int lIndex = 0; lIndex < nbLights; ++lIndex)
+	{
+		// Computing light source position (view space)
+		vec3 lightPos = (view*vec4(lightSource[lIndex].position,1.0)).xyz;
+		// Fetching xyz position (view space)
+		vec3 pixelPos = texture(position,texCoord).xyz;
 
-	// Computing the light direction
-	vec3 l = lightPos - pixelPos;
-	// Computing the attenuation
- 	float att = clamp(1.0-length(l)/lightSource.ray,0.0,1.0)*clamp(dot(l,normal),0.0,1.0);
-	// Noramlizing it
-	l = normalize(l);
-	// Computing the view vector
-	vec3 v = normalize(-pixelPos);
-	// Computing the half vector
-	vec3 h = normalize(v + l);
-	// Illumination coeffs
-    float Idiff = 2.0*clamp(dot(l, normal),0.0,1.0);	
-    float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);
-    frag_color = att*(Idiff*lightSource.diffuse + Ispec*lightSource.specular);
+		// Computing the light direction
+		vec3 l = lightPos - pixelPos;
+		// Computing the attenuation
+	 	float att = clamp(1.0-length(l)/lightSource[lIndex].ray,0.0,1.0)*clamp(dot(l,normal),0.0,1.0);
+		// Noramlizing it
+		l = normalize(l);
+		// Computing the view vector
+		vec3 v = normalize(-pixelPos);
+		// Computing the half vector
+		vec3 h = normalize(v + l);
+		// Illumination coeffs
+	    float Idiff = 2.0*clamp(dot(l, normal),0.0,1.0);	
+	    float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);
+	    finalColor += att*(Idiff*lightSource[lIndex].diffuse + Ispec*lightSource[lIndex].specular);
+	}
+	frag_color = vec4(finalColor.xyz, 1.0);
 }

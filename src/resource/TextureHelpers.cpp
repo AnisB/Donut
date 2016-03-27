@@ -136,6 +136,7 @@ namespace Donut
 
 		int shift = *(int*)&info[14];
 		shift /= 3;
+        INPUT_DEBUG("Shift for this BMP is "<< shift);
 		unsigned char* tampon = new unsigned char[w*3];
 		for (int i = 0; i < l; ++i)
 		{

@@ -18,7 +18,9 @@
 #include "shadermanager.h"
 #include "base/common.h"
 #include "graphics/common.h"
+#include "graphics/glfactory.h"
 #include "base/macro.h"
+#include "butter/stream.h"
 #include "butter/matrix3.h"
 
 #include "tools/fileloader.h"
@@ -80,15 +82,21 @@ namespace Donut
 
 	ShaderManager::~ShaderManager()
 	{
+ 		GL_API_CHECK_START();
+
 		// Here we should delete all the shaders that where created
 		foreach_macro(shader, FPrograms)
 		{
 			glDeleteProgram(shader->FProgramID);
 		}
+
+ 		GL_API_CHECK_END();
 	}
 
 	bool ShaderManager::CreateShader(TShader& _shader)
 	{
+ 		GL_API_CHECK_START();
+
 		// We make shure the shader was not created before
 		GRAPHICS_DEBUG("Fetching shader kernel");
 		tryget(result, FPrograms, _shader);
@@ -98,6 +106,7 @@ namespace Donut
 			_shader.FProgramID = result->FProgramID;
 			_shader.FActive = result->FActive;
 			_shader.FIsTesselated = result->FIsTesselated;
+ 			GL_API_CHECK_END();
 			return true;
 		}
 
@@ -218,111 +227,142 @@ namespace Donut
 				glDetachShader(programID, fragmentShader);
 				glDeleteShader(fragmentShader);
 			}
+ 			GL_API_CHECK_END();
 			return true;
 		}
 		else
 		{
 			ASSERT_FAIL_MSG_NO_RELEASE("Shader creation failed.");
+ 			GL_API_CHECK_END();
 			return false;
 		}
 	}
 
-	void ShaderManager::EnableShader(const TShader& parProgram)
+	void ShaderManager::EnableShader(const TShader& _program)
 	{
-		ASSERT_NO_RELEASE(parProgram.FActive);
-		glUseProgram(parProgram.FProgramID);
+		GL_API_CHECK_START();
+		ASSERT_NO_RELEASE(_program.FActive);
+		glUseProgram(_program.FProgramID);
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::DisableShader()
 	{
+		GL_API_CHECK_START();
 		glUseProgram(0);
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::BindTex(GLuint parIndexTex, GLuint _spot)
 	{
+		GL_API_CHECK_START();
    		glActiveTexture(GL_TEXTURE0+_spot);
 	    glBindTexture(GL_TEXTURE_2D, parIndexTex);	
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::BindCubeMap(GLuint parIndexTex, GLuint _spot)
 	{
+		GL_API_CHECK_START();
    		glActiveTexture(GL_TEXTURE0+_spot);
 	    glBindTexture(GL_TEXTURE_CUBE_MAP, parIndexTex);		
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::UnbindTex(GLuint _spot)
 	{
+		GL_API_CHECK_START();
    		glActiveTexture(GL_TEXTURE0+_spot);
-	    glBindTexture(GL_TEXTURE_2D, 0);	
+	    glBindTexture(GL_TEXTURE_2D, 0);
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::UnbindCubeMap(GLuint _spot)
 	{
+		GL_API_CHECK_START();
    		glActiveTexture(GL_TEXTURE0 + _spot);
 	    glBindTexture(GL_TEXTURE_CUBE_MAP, 0);		
+		GL_API_CHECK_END();
 	}
 
 	// Injections
 	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
+		GL_API_CHECK_END();
 	}
 	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Vector4& parValue, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const Vector4& _value, const std::string& parName)
 	{
-	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z, (GLfloat)parValue.w);
+		GL_API_CHECK_START();
+	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
+		GL_API_CHECK_END();
 	}
 	
  	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const int& _value, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 		GLuint location = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
 	    glUniform1i(location, _value);
+		GL_API_CHECK_END();
 	}
 
  	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const float& _value, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), _value);
+		GL_API_CHECK_END();
 	}
 
 	template <>
 	void ShaderManager::InjectV(const TShader& parProgram, const float* _values, int _nbValues, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 	    glUniform1fv( glGetUniformLocation(parProgram.FProgramID, parName.c_str()),_nbValues, _values);
+		GL_API_CHECK_END();
 	}
 
  	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 		float mat[16];
 		ToTable(parValue, &mat[0]);
 	    glUniformMatrix4fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
+		GL_API_CHECK_END();
 	}
 
  	template <>
 	void ShaderManager::Inject(const TShader& parProgram, const Matrix3& parValue, const std::string& parName)
 	{
+		GL_API_CHECK_START();
 		float mat[9];
 		ToTable(parValue, &mat[0]);
 	    glUniformMatrix3fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
-
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::InjectTex(const TShader& parProgram, GLuint _textureID, const std::string& parName, GLuint _spot)
 	{
+		GL_API_CHECK_START();
 	    BindTex(_textureID, _spot);
 	    GLint texRef = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
 	    glUniform1i(texRef, 0 + _spot);
 	    //UnbindTex(_spot);
+		GL_API_CHECK_END();
 	}
 
 	void ShaderManager::InjectCubeMap(const TShader& parProgram, GLuint _textureID, const std::string& parName, GLuint _spot)
 	{
+		GL_API_CHECK_START();
 	    BindCubeMap(_textureID, _spot);
 	    GLint texRef = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
 	    glUniform1i(texRef, 0+_spot);
 	    //UnbindCubeMap(_spot);
+		GL_API_CHECK_END();
 	}
 }

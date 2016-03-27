@@ -17,10 +17,12 @@
 // Library includes
 #include "sugarloader.h"
 #include "base/common.h"
+#include "base/stringhelper.h"
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 #include "tools/fileloader.h"
 #include "butter/types.h"
+#include "butter/stream.h"
 
 // STL includes
 #include <stdlib.h>
@@ -45,11 +47,11 @@ namespace Donut
     void GetNonEmptyLine(std::ifstream& file, std::string& _outString)
     {
         getline(file, _outString);
-        _outString = removeMultSpace(_outString);
+        removeMultSpace(_outString);
         while(_outString == "")
         {
             getline(file, _outString);
-            _outString = removeMultSpace(_outString);
+            removeMultSpace(_outString);
         }
     }
 
@@ -74,11 +76,11 @@ namespace Donut
         }
         else if(_type == TOKEN_FLOAT)
         {
-            _handler.SetValue(TShaderData::FLOAT, _name, stringConvert<float>(_value));
+            _handler.SetValue(TShaderData::FLOAT, _name, convertFromString<float>(_value));
         }
         else if(_type == TOKEN_INT)
         {
-            _handler.SetValue(TShaderData::INTEGER, _name, stringConvert<int>(_value));
+            _handler.SetValue(TShaderData::INTEGER, _name, convertFromString<int>(_value));
         }
         else
         {
@@ -174,7 +176,7 @@ namespace Donut
         std::ifstream fin(parFileName.c_str());
         std::string file_line;
         std::getline(fin, file_line);
-        file_line = removeMultSpace(file_line);
+        removeMultSpace(file_line);
         std::vector<std::string> header;
         split(file_line,' ', header);
 

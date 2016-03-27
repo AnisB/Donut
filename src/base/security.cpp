@@ -38,13 +38,13 @@ namespace Donut
 		#endif
 	}
 
-	void __handleFail(std::string _message)
+	void __handleFail(STRING_TYPE _message, const CHAR_TYPE* _file, int _line)
 	{
-		GENERAL_ERROR(_message);
+		GENERAL_ERROR(_message << " @ "<< _file<<" line: "<<_line);
 		#if __posix__
 		printTrace();
 		#endif
-		throw TException(_message);
+		throw TException(_message, _file, _line);
 	}
 
 	

@@ -20,6 +20,7 @@
 #include "const.h"
 #include "exception.h"
 #include "macro.h"
+#include "stringhelper.h"
 #include "security.h"
 #include "singleton.h"
 #include "printers.h"

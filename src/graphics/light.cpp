@@ -16,13 +16,14 @@
 
 
 #include "light.h"
-#include <butter/vector4.h>
+#include "base/common.h"
+#include "butter/vector4.h"
 
 #define LIGHT_VERTEX "shaders/light/vertex.glsl"
 #define LIGHT_GEOMETRY "shaders/light/geometry.glsl" 
 #define LIGHT_FRAGMENT "shaders/light/fragment.glsl" 
 
-#define DEFAULT_RAY 100 
+#define DEFAULT_RAY 30
 namespace Donut
  {
 	TLight::TLight()
@@ -58,11 +59,12 @@ namespace Donut
 		FDiff=parColor;
 	}
 
-	void TLight::InjectData(const TShader& _shader)
+	void TLight::InjectData(const TShader& _shader, size_t _lightIndex)
 	{
-		ShaderManager::Instance().Inject<Vector3>(_shader, FPosition,"lightSource.position");
-		ShaderManager::Instance().Inject<Vector4>(_shader, FDiff ,"lightSource.diffuse");
-		ShaderManager::Instance().Inject<Vector4>(_shader, FSpec ,"lightSource.specular");	
-		ShaderManager::Instance().Inject<float>(_shader, FRayon ,"lightSource.ray");	
+		STRING_TYPE shift = "[" + convertToString(_lightIndex) + "]";
+		ShaderManager::Instance().Inject<Vector3>(_shader, FPosition, "lightSource"+shift+".position");
+		ShaderManager::Instance().Inject<Vector4>(_shader, FDiff , "lightSource"+shift+".diffuse");
+		ShaderManager::Instance().Inject<Vector4>(_shader, FSpec , "lightSource"+shift+".specular");	
+		ShaderManager::Instance().Inject<float>(_shader, FRayon , "lightSource"+shift+".ray");	
 	}
  }

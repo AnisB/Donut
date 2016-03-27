@@ -93,7 +93,7 @@ namespace Donut
 	{
 		glEnable(GL_DEPTH_TEST);
  		BindFrameBuffer(m_frameBuffer);
- 		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
+ 		//glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
  		ClearBuffer();
 		GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_COLOR_ATTACHMENT2_EXT ,GL_COLOR_ATTACHMENT3_EXT};
     	glDrawBuffers(4, buffers);
@@ -101,7 +101,7 @@ namespace Donut
 
 	void TGBufferCanvas::Disable()
 	{
-		glPopAttrib();
+		//glPopAttrib();
  		UnBindFrameBuffer();
  		glDisable(GL_DEPTH_TEST);
 	}

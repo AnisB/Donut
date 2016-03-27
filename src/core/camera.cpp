@@ -17,7 +17,7 @@
 // Library includes
 #include "Camera.h"
 #include "core/common.h"
-
+#include "butter/matrix3.h"
 // STL inlcudes
 #include <math.h>
 

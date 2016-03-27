@@ -97,6 +97,7 @@
  			// Setting the rendering flag
  			FIsRendering.SetValue(true);
 			CheckGLState(FLUSH_GL_ERROR);
+			ASSERT_MSG_NO_RELEASE(CheckGLState("Check pre render"), "GL state was not clear before starting");
    			glfwSetInputMode(FWindow,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
  		}
  		else
@@ -138,7 +139,9 @@
 		glfwMakeContextCurrent(FWindow);
  		// initing the inputs
  		InputInit();
- 		glClearColor(0.0,0.0,0.0,0.0); 	
+
+ 		SetClearColor(v4_ZERO); 
+ 			
 		int nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {

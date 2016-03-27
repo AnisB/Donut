@@ -18,9 +18,8 @@
 #define CAMERA_CORE_DONUT
 
 // Library includes
-#include "butter/matrix4.h"
-#include "butter/matrix3.h"
-#include "butter/vector3.h"
+#include "butter/types.h"
+
 #include "graphics/uniformhandler.h"
 #include "multithread/usualthreadsafeobjects.h"
 

@@ -33,7 +33,7 @@
 		void SetSpecular(const Vector4& _color);
 		void SetDiffuse(const Vector4& _color);
 		void SetRay(float _ray) {FRayon = _ray;}
-		void InjectData(const TShader& _shader);
+		void InjectData(const TShader& _shader, size_t _lightIndex);
 
 	protected:
 		Vector3 FPosition;

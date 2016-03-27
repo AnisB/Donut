@@ -17,6 +17,9 @@
 #ifndef DONUT_EXCEPTIONS_H
 #define DONUT_EXCEPTIONS_H
 
+// Library include
+#include "stringhelper.h"
+
 // STL Includes
 #include <exception>
 #include <string>
@@ -25,18 +28,18 @@ namespace Donut
 {
 	struct TException : public std::exception
 	{
-		TException(const std::string& _message)
+		TException(const std::string& _message, const CHAR_TYPE* _file, int _line)
 		: message(_message)
+		, file(_file)
+		, line(_line)
 		{
 
 		}
-		TException(const char* _message)
-		: message(_message)
-		{
 
-		}
 		virtual ~TException() throw() {}
-		std::string message;
+		STRING_TYPE message;
+		STRING_TYPE file;
+		int line;
 	};
 }
 

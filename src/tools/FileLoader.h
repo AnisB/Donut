@@ -17,7 +17,7 @@
 #define DONUT_FILE_LOADER
 
 // LIbrary includes
- #include "base/macro.h"
+ #include "base/common.h"
  #include "resource/geometrycontainer.h"
  #include "butter/vector3.h"
  #include "butter/vector4.h"
@@ -37,26 +37,9 @@ namespace Donut
 	bool WriteFile(char *fn, char *s);
 	// Splits parstring with parSeparator
 	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
-	// removes multiple spaces in a string
-	std::string removeMultSpace(const std::string& parString); 
 
 	// Geometry container writer
 	std::ofstream& operator<<(std::ofstream& _stream, TGeometryContainer* _container);
-
-	// Converters from string
-	template<typename T>
-	T stringConvert(const std::string& _param)
-	{
-		std::stringstream streamConverter;
-		streamConverter<<_param;
-		T result;
-		streamConverter>>result;
-		return result;
-	}
-
-	Vector3 stringConvertV3(const std::string& _param);
-	Vector4 stringConvertV4(const std::string& _param);
-	Matrix4 stringConvertM4(const std::string& _param);
 
 	template<typename T>
 	void stringConvertArray(const std::string& _param, std::vector<T>& _values)
@@ -65,7 +48,7 @@ namespace Donut
 		split(_param, ' ',stringValues);
 		foreach_macro(val, stringValues)
 		{
-			_values.push_back(stringConvert<T>(*val));
+			_values.push_back(convertFromString<T>(*val));
 		}
 	}
 }

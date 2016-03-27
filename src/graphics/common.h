@@ -30,7 +30,7 @@
 
 namespace Donut
 {
-	#define FLUSH_GL_ERROR "__FLUSH_ME_PLEASE"
+	#define FLUSH_GL_ERROR 0x1
 
 	#define __GRAPHICS_PRINT_NAMESPACE "GRAPHICS"
 	

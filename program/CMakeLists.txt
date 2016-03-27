@@ -11,3 +11,5 @@ endif(ROOF)
 
 add_executable(objSerializer ${PROGRAM}/objSerializer.cpp)
 TARGET_LINK_LIBRARIES(objSerializer ${CORELIBS})
+
+add_executable(brdfReader ${PROGRAM}/brdfReader.cpp)

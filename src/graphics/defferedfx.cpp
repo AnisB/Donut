@@ -31,7 +31,7 @@ namespace Donut
 
 	}
 	TDefferedFX::TDefferedFX(const TShader& _shader)
-	: TVFX(_shader)
+	: TVFX(_shader)	
 	{
 	}
 
@@ -49,22 +49,27 @@ namespace Donut
 
 	void TDefferedFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
-		glEnable (GL_BLEND); // --- could reject background frags!
-		glBlendEquation (GL_FUNC_ADD);
-		glBlendFunc (GL_ONE, GL_ONE); // addition each time
-		glDisable (GL_DEPTH_TEST);
-		glDepthMask (GL_FALSE);
+		// Enable the deffed shader 
 		ShaderManager::Instance().EnableShader(m_material.shader);
+
+		// Inject the necessary data
 		BindBufferOutput(_values, _previousData);
-		foreach_macro(light, m_lights )
+
+		// Inject the num of lights
+		int nbLights = (int)m_lights.size(); 
+		
+		ShaderManager::Instance().Inject<int>(m_material.shader, nbLights, "nbLights");
+
+		// Inject the lights
+		for(size_t lightIndex = 0; lightIndex < nbLights; ++lightIndex)
 		{
-			(*light)->InjectData(m_material.shader);
-		  	m_fsq->Draw(false);
+			m_lights[lightIndex]->InjectData(m_material.shader, lightIndex);
 		}
+
+		// Draw the frame
+	  	m_fsq->Draw(false);
+
+	  	// Disable the shader
  		ShaderManager::Instance().DisableShader();
-		glEnable (GL_DEPTH_TEST);
-		glDepthMask (GL_TRUE);
-		glDisable (GL_BLEND);
-		glFlush ();
 	}
 }

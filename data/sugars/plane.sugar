@@ -18,7 +18,7 @@ Object Plane
       float TessLevelOuter 8
    }
    textures{
-      diffMap data/textures/cloth.jpg
+      diffMap data/textures/farmhouse.jpg
       displacement data/textures/noise.png
    }
    cubeMap{

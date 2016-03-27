@@ -67,9 +67,12 @@ namespace Donut
 
 	TPipeline* GenerateGraphicPipeline(TScene* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS)
 	{
+		GRAPHICS_INFO(_width<<" " <<_height);
 		// Creating the pipeline
 		TPipeline* pipeline = new TPipeline();
 		// Fetching its internal data
+		pipeline->pipelineData.width = _width;
+		pipeline->pipelineData.height = _height;
 		Camera* camera =  pipeline->camera;
 		TBufferOutput& buffers =  pipeline->pipelineData;
 		// If nothing specified, lets just render the first color buffer

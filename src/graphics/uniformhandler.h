@@ -61,8 +61,8 @@ namespace Donut
 		virtual TUniformGeneric* Clone() = 0;
 		virtual void Inject(const TShader& _shader) = 0;
 		// Data
-		std::string name;
 	    TShaderData::Type type;
+		std::string name;
 	};
 
 	template <typename T>

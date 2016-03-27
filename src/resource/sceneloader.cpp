@@ -21,6 +21,7 @@
 #include "core/sceneNode.h"
 #include "resource/common.h"
 #include "base/common.h"
+#include "butter/stream.h"
 #include "picojson.h"
 #include "rapidxml.hpp"
 
@@ -101,28 +102,28 @@ namespace Donut
 		if(pos)
 		{
 			const std::string& posS = pos->value();
-			newLight->SetPosition(stringConvertV3(posS));
+			newLight->SetPosition(convertFromString<Vector3>(posS));
 		}
 
 		rapidxml::xml_attribute<> *diff = _light->first_attribute(LIGHT_DIFF_TOKEN);
 		if(diff)
 		{
 			const std::string& diffS = diff->value();
-			newLight->SetDiffuse(stringConvertV4(diffS));
+			newLight->SetDiffuse(convertFromString<Vector4>(diffS));
 		}
 
 		rapidxml::xml_attribute<> *spec = _light->first_attribute(LIGHT_SPEC_TOKEN);
 		if(spec)
 		{
 			const std::string& specularS = spec->value();
-			newLight->SetSpecular(stringConvertV4(specularS));
+			newLight->SetSpecular(convertFromString<Vector4>(specularS));
 		}
 
 		rapidxml::xml_attribute<> *ray = _light->first_attribute(LIGHT_RAY_TOKEN);
 		if(ray)
 		{
 			const std::string& rayS = ray->value();
-			newLight->SetRay(stringConvert<float>(rayS));
+			newLight->SetRay(convertFromString<float>(rayS));
 		}
 		return newLight;
 	}
@@ -168,7 +169,7 @@ namespace Donut
 		if(tmAtt)
 		{
 			const std::string& tmS = tmAtt->value();
-			node->SetTransformationMatrix(stringConvertM4(tmS));
+			node->SetTransformationMatrix(convertFromString<Matrix4>(tmS));
 		}
 
 		// Creating the node children
@@ -203,7 +204,7 @@ namespace Donut
 		if(tmAtt)
 		{
 			const std::string& tmS = tmAtt->value();
-			node->SetTransformationMatrix(stringConvertM4(tmS));
+			node->SetTransformationMatrix(convertFromString<Matrix4>(tmS));
 		}
 		// Creating the node children
 		for(rapidxml::xml_node<> *currentNode = _node->first_node(NODE_TOKEN); currentNode; currentNode = currentNode->next_sibling())

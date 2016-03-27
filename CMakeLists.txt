@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.0.2)
 
 project(DonutEngine)
 
-#add_definitions( -D_RELEASE )
-add_definitions( -D_DEBUG )
+set(CMAKE_C_FLAGS_DEBUG "-D_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 
 # Setting the compiler data
 set(CMAKE_BUILD_TYPE "Debug")

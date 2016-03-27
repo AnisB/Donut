@@ -17,6 +17,7 @@
  #include "ResourceManager.h"
 
  #include "TextureHelpers.h"
+ #include "brdfhelpers.h"
  #include "resource/Common.h"
  #include "input/Common.h"
  #include <Base/Common.h>
@@ -104,6 +105,24 @@
  			TextureHelpers::CreateTexture(texture);
  			texture->FNbRef++;
  			return texture;
+ 		}
+ 	}
+
+	TGGXBRDF* ResourceManager::FetchBRDF(const std::string&  _brdfFileName)
+ 	{
+ 		auto it = m_brdfs.find(_brdfFileName);
+ 		if(it != m_brdfs.end())
+ 		{
+ 			RESOURCE_INFO(_brdfFileName<<" already loaded");
+ 			return it->second;
+ 		}
+ 		else
+ 		{
+ 			RESOURCE_INFO("Reading "<<_brdfFileName);
+ 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(_brdfFileName);
+ 			m_brdfs[_brdfFileName] = brdf;
+ 			BRDFHelpers::CreateBRDF(brdf);
+ 			return brdf;
  		}
  	}
 
@@ -255,9 +274,9 @@
 					if(vertices.size() == 3)
 					{
 						Vector3 points[3];
-						points[0] = listePoints[stringConvert<int>(vertices[0])-1];
-						points[1] = listePoints[stringConvert<int>(vertices[1])-1];
-						points[2] = listePoints[stringConvert<int>(vertices[2])-1];
+						points[0] = listePoints[convertFromString<int>(vertices[0])-1];
+						points[1] = listePoints[convertFromString<int>(vertices[1])-1];
+						points[2] = listePoints[convertFromString<int>(vertices[2])-1];
 
 						const Vector3& v0 = points[1]-points[0];
 						const Vector3& v1 = points[2]-points[0];
@@ -278,10 +297,10 @@
 					else // 4
 					{
 						/*
-						const Vector3& point0 = listePoints[stringConvert<int>(vertices[0]-1];
-						const Vector3& point1 = listePoints[stringConvert<int>(vertices[1]-1];
-						const Vector3& point2 = listePoints[stringConvert<int>(vertices[2]-1];
-						const Vector3& point3 = listePoints[stringConvert<int>(vertices[3]-1];
+						const Vector3& point0 = listePoints[convertFromString<int>(vertices[0]-1];
+						const Vector3& point1 = listePoints[convertFromString<int>(vertices[1]-1];
+						const Vector3& point2 = listePoints[convertFromString<int>(vertices[2]-1];
+						const Vector3& point3 = listePoints[convertFromString<int>(vertices[3]-1];
 						*/
 						ASSERT_NOT_IMPLEMENTED();
 					}
@@ -315,14 +334,14 @@
 						split(vertices[0],'/', dataVert0);
 						split(vertices[1],'/', dataVert1);
 						split(vertices[2],'/', dataVert2);
-						points[0] = listePoints[stringConvert<int>(dataVert0[0])-1];
-						points[1] = listePoints[stringConvert<int>(dataVert1[0])-1];
-						points[2] = listePoints[stringConvert<int>(dataVert2[0])-1];
+						points[0] = listePoints[convertFromString<int>(dataVert0[0])-1];
+						points[1] = listePoints[convertFromString<int>(dataVert1[0])-1];
+						points[2] = listePoints[convertFromString<int>(dataVert2[0])-1];
 
 						Vector2 texCoord[3];
-						texCoord[0] = uvList[stringConvert<int>(dataVert0[1])-1];
-						texCoord[1] = uvList[stringConvert<int>(dataVert1[1])-1];
-						texCoord[2] = uvList[stringConvert<int>(dataVert2[1])-1];
+						texCoord[0] = uvList[convertFromString<int>(dataVert0[1])-1];
+						texCoord[1] = uvList[convertFromString<int>(dataVert1[1])-1];
+						texCoord[2] = uvList[convertFromString<int>(dataVert2[1])-1];
 
 						const Vector3& v0 = points[1]-points[0];
 						const Vector3& v1 = points[2]-points[0];
@@ -377,19 +396,19 @@
 						split(vertices[0],'/', dataVert0);
 						split(vertices[1],'/', dataVert1);
 						split(vertices[2],'/', dataVert2);
-						points[0] = listePoints[stringConvert<int>(dataVert0[0])-1];
-						points[1] = listePoints[stringConvert<int>(dataVert1[0])-1];
-						points[2] = listePoints[stringConvert<int>(dataVert2[0])-1];
+						points[0] = listePoints[convertFromString<int>(dataVert0[0])-1];
+						points[1] = listePoints[convertFromString<int>(dataVert1[0])-1];
+						points[2] = listePoints[convertFromString<int>(dataVert2[0])-1];
 
 						Vector2 texCoord[3];
-						texCoord[0] = uvList[stringConvert<int>(dataVert0[1])-1];
-						texCoord[1] = uvList[stringConvert<int>(dataVert1[1])-1];
-						texCoord[2] = uvList[stringConvert<int>(dataVert2[1])-1];
+						texCoord[0] = uvList[convertFromString<int>(dataVert0[1])-1];
+						texCoord[1] = uvList[convertFromString<int>(dataVert1[1])-1];
+						texCoord[2] = uvList[convertFromString<int>(dataVert2[1])-1];
 
 						Vector3 normals[3];
-						normals[0] = normales[stringConvert<int>(dataVert0[2])-1];
-						normals[1] = normales[stringConvert<int>(dataVert1[2])-1];
-						normals[2] = normales[stringConvert<int>(dataVert2[2])-1];
+						normals[0] = normales[convertFromString<int>(dataVert0[2])-1];
+						normals[1] = normales[convertFromString<int>(dataVert1[2])-1];
+						normals[2] = normales[convertFromString<int>(dataVert2[2])-1];
 
 						for(int i = 0; i < 3; ++i)
 						{
@@ -553,7 +572,7 @@
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						Vector3& point = listePoints[stringConvert<int>(*vertice)-1];
+						Vector3& point = listePoints[convertFromString<int>(*vertice)-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -584,7 +603,7 @@
 						// Vertex position
 						std::vector<std::string> dataVert;
 						split(*vertice,'/', dataVert);
-						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						Vector3& point = listePoints[convertFromString<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -593,7 +612,7 @@
 						data[3+decalage] = PACK_DATA(0.0, 1000000.0);
 						data[4+decalage] = PACK_DATA(0.0, 1000000.0);
 						data[5+decalage] = PACK_DATA(1.0, 1000000.0);
-						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						Vector2& mapp = uvList[convertFromString<int>(dataVert[1])-1];
 						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
 						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
 						data[8+decalage] = PACK_DATA(0.0, 1000000.0);
@@ -615,7 +634,7 @@
 						// Vertex position
 						std::vector<std::string> dataVert;
 						split(*vertice,'/', dataVert);
-						Vector3& point = listePoints[stringConvert<int>(dataVert[0])-1];
+						Vector3& point = listePoints[convertFromString<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -623,13 +642,13 @@
 						// std::cout<<"decalage "<<decalage<<std::endl;
 						// std::cout<<"Point "<<point.x<<" "<<point.y<<" "<<point.z<<" "<<std::endl;
 						// Vertex normal
-						Vector3& norm = normales[stringConvert<int>(dataVert[2])-1];
+						Vector3& norm = normales[convertFromString<int>(dataVert[2])-1];
 						data[3+decalage] = PACK_DATA(norm.x, 1000000.0);
 						data[4+decalage] = PACK_DATA(norm.y, 1000000.0);
 						data[5+decalage] = PACK_DATA(norm.z, 1000000.0);
 						// std::cout<<"Normale "<<norm.x<<" "<<norm.y<<" "<<norm.z<<" "<<std::endl;
 
-						Vector2& mapp = uvList[stringConvert<int>(dataVert[1])-1];
+						Vector2& mapp = uvList[convertFromString<int>(dataVert[1])-1];
 						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
 						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
 						data[8+decalage] = PACK_DATA(0.0, 1000000.0);

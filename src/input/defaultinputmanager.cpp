@@ -70,19 +70,19 @@ namespace Donut
 		double delta = next-m_time;
 		if(FKeys[TKeyCode::W])
 		{
-			FCamera->Translate(vector3(0.0,0.0,delta*50));
+			FCamera->Translate(vector3(0.0,0.0,delta*200));
 		}
 		if(FKeys[TKeyCode::S])
 		{
-			FCamera->Translate(vector3(0.0,0.0,-delta*50));
+			FCamera->Translate(vector3(0.0,0.0,-delta*200));
 		}	
 		if(FKeys[TKeyCode::A])
 		{
-			FCamera->Translate(vector3(delta*50,0.0,0.0));
+			FCamera->Translate(vector3(delta*200,0.0,0.0));
 		}
 		if(FKeys[TKeyCode::D])
 		{
-			FCamera->Translate(vector3(-delta*50,0.0,0.0));
+			FCamera->Translate(vector3(-delta*200,0.0,0.0));
 		}
 		m_time =  next;
 		return delta;

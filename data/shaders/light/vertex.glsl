@@ -5,6 +5,7 @@
 // The full screen canvas data
 // Input
 in vec3 position;
+in vec3 normal;
 in vec2 tex_coord;
 // Output
 out vec2 texCoordV;

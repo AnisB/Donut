@@ -30,3 +30,6 @@ TARGET_LINK_LIBRARIES(testSceneParse ${CORELIBS})
 
 add_executable(testSceneLoad ${TEST}/testSceneLoad.cpp)
 TARGET_LINK_LIBRARIES(testSceneLoad ${CORELIBS})
+
+add_executable(testBRDFLoad ${TEST}/testBRDFLoad.cpp)
+TARGET_LINK_LIBRARIES(testBRDFLoad ${CORELIBS})
