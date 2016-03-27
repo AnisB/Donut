@@ -71,6 +71,8 @@ namespace Donut
                 return ".bmp";
             case TImgType::JPG:
                 return ".jpg";
+            case TImgType::TGA:
+                return ".tga";
             default:
                 return "";
             break;
@@ -93,7 +95,7 @@ namespace Donut
 
     void BindToCubeMap(GLuint parType, TTexture* parTexture)
     {
-        glTexImage2D(parType, 0, GL_RGB, parTexture->FWidth, parTexture->FHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, parTexture->FData);
+        glTexImage2D(parType, 0, parTexture->FFormat, parTexture->FWidth, parTexture->FHeight, 0, parTexture->FFormat, GL_UNSIGNED_BYTE, parTexture->FData);
     }
 
     TTexture* LoadBMP(const char *Filename )
