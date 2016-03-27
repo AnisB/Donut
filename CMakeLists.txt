@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.0.2)
 
 project(DonutEngine)
 
+IF(SILENT)
+add_definitions( -D _SILENT )
+ENDIF(SILENT)
+
 set(CMAKE_C_FLAGS_DEBUG "-D_DEBUG")
 set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
 
@@ -90,9 +94,10 @@ GENERATE_LIB("${SOURCES}/tracing" Tracing)
 SET(CORELIBS ${CORELIBS} Base Butter Engine Input Core MultiThread Render Graphics Resource StateEngine Tools Tracing)
 
 # Adding the tests if we should
-IF(TESTS)
+IF(NO_TESTS)
+ELSE(NO_TESTS)
 add_subdirectory(${TEST})
-ENDIF()
+ENDIF(NO_TESTS)
 
 # Adding the programs if we should
 add_subdirectory(${PROGRAM})

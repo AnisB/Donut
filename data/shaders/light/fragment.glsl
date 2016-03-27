@@ -33,7 +33,8 @@ struct TLight
 };
 
 // Delcaring the light source
-uniform TLight lightSource[20];
+#define MAX_NB_LIGHTS 20
+uniform TLight lightSource[MAX_NB_LIGHTS];
 
 uniform int nbLights;
 
