@@ -19,6 +19,12 @@
 
 namespace Donut
 {
+	#if WIN32
+	#define FUNCTION_NAME __func__
+	#else
+	#define FUNCTION_NAME __PRETTY_FUNCTION__
+	#endif
+
 	#define foreach_macro(IT, X) for ( auto IT = X.begin(); IT != X.end(); ++IT )
 	#define tryget(IT, LIST, ELEM) auto IT = LIST.find(ELEM);
 
