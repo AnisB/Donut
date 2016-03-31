@@ -54,13 +54,13 @@
  		auto it = FTextures.find(_textureName);
  		if(it != FTextures.end())
  		{
- 			RESOURCE_INFO(_textureName<<" already loaded");
+ 			RESOURCE_DEBUG(_textureName<<" already loaded");
  			it->second->FNbRef++;
  			return it->second;
  		}
  		else
  		{
- 			RESOURCE_INFO("Reading "<<_textureName);
+			RESOURCE_INFO("Reading "<<_textureName);
  			TTexture * texture =  TextureHelpers::LoadTexture(_textureName);
  			FTextures[_textureName] = texture;
  			TextureHelpers::CreateTexture(texture);
@@ -74,7 +74,7 @@
  		auto it = FSkyboxTextures.find(_skyboxFolder);
  		if(it != FSkyboxTextures.end())
  		{
- 			RESOURCE_INFO(_skyboxFolder<<" already loaded");
+			RESOURCE_DEBUG(_skyboxFolder<<" already loaded");
  			it->second->FNbRef++;
  			return it->second;
  		}
@@ -94,7 +94,7 @@
  		auto it = m_brdfs.find(_brdfFileName);
  		if(it != m_brdfs.end())
  		{
- 			RESOURCE_INFO(_brdfFileName<<" already loaded");
+			RESOURCE_DEBUG(_brdfFileName<<" already loaded");
  			return it->second;
  		}
  		else
@@ -392,7 +392,7 @@
  		auto it = FGeometries.find(_fileName);
  		if(it != FGeometries.end())
  		{
-  			RESOURCE_INFO(_fileName<<" already loaded"); 
+  			RESOURCE_DEBUG(_fileName<<" already loaded"); 
  			return it->second;
  		}
 		std::string model = _fileName.substr(1,_fileName.size());

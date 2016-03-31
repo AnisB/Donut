@@ -46,11 +46,7 @@ namespace Donut
 	{
 		m_near = parNear;
 		m_far = parFar;
-#if __posix__
 		m_fcoeff = 2.0 / log2(m_far + 1.0);
-#else
-		m_fcoeff = 2.0 / log(m_far + 1.0)/log(2);
-#endif
 		m_focus = 100.0/(m_far-m_near);
 		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
 		FProjectionView = FProjection * FViewMatrix;

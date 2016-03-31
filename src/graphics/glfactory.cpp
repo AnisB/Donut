@@ -153,7 +153,7 @@ namespace Donut
 		glBindTexture(GL_TEXTURE_2D, _tex.texID);
 		if(_tex.type == TTextureNature::COLOR)
 		{
-			glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, parWidth, parHeight, 0,GL_RGBA, GL_FLOAT, 0);
+			glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA16F, parWidth, parHeight, 0,GL_RGBA, GL_FLOAT, 0);
 		}
 		else if(_tex.type == TTextureNature::DEPTH)
 		{

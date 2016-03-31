@@ -110,7 +110,7 @@ namespace Donut
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
 				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
-				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.bmp"), "random");
+				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.jpg"), "random");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);

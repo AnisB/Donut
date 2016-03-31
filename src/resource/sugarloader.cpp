@@ -305,7 +305,7 @@ namespace Donut
 
     TSugar TSugarLoader::FetchSugar(const std::string& parModel)
     {
-        RESOURCE_INFO(parModel<<" is requested");
+        RESOURCE_DEBUG(parModel<<" is requested");
         auto ite = FSugars.find(parModel);
         ASSERT_MSG((ite!=FSugars.end()), "Sugar model not found: "<<parModel);
         return ite->second;

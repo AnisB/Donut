@@ -1,5 +1,6 @@
 // Library includes
 #include "stringhelper.h"
+#include <algorithm>
 
 namespace Donut
 {

@@ -50,9 +50,6 @@ namespace Donut
 		virtual void Disable() = 0;
 		// Returns the output of this canvas
 		const TBufferOutput& Result();
-		// Attaching a texture to a canvas
-		void AttachTexture(TTexture* _texture, const std::string& _uniformVarName);
-
 	protected:
 		int m_width;
 		int m_height;

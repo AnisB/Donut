@@ -72,6 +72,7 @@ ENDIF (APPLE)
 
 IF(WIN32)
 add_definitions( -DWIN32 )
+set(CMAKE_CXX_FLAGS_DEBUG "/MDd")
 FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
 SET(GRAPHIC_LIBS "${EXTERNAL_LIBS}/lib-vc2015/glfw3.lib" "${EXTERNAL_LIBS}/glew32.lib" "${EXTERNAL_LIBS}/glew32s.lib" "opengl32.lib" "${EXTERNAL_LIBS}/libjpeg.lib")
 SET(CORELIBS ${GRAPHIC_LIBS} )

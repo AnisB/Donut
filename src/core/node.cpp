@@ -36,6 +36,7 @@ namespace Donut
 	}
 	void TNode::AttachChild(TNode* _node)
 	{
+		ASSERT_POINTER_NOT_NULL_NO_RELEASE(_node);
 		FSons.push_back(_node);
 	}
 	bool TNode::RemoveChild(TNode* _node)
