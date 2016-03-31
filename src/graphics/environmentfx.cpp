@@ -21,8 +21,8 @@
 
 namespace Donut
 {
-	#define ENVIRONMENT_VERTEX "shaders/canvas/shV.glsl"
-	#define ENVIRONMENT_FRAGMENT "shaders/canvas/shF.glsl" 
+	#define ENVIRONMENT_VERTEX "common/shaders/ssfx/sh/vertex.glsl"
+	#define ENVIRONMENT_FRAGMENT "common/shaders/ssfx/sh/fragment.glsl" 
 	// Constructor
 	TEnvironmentFX::TEnvironmentFX()
 	: TVFX(TShader(ENVIRONMENT_VERTEX, ENVIRONMENT_FRAGMENT))

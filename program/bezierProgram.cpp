@@ -19,7 +19,7 @@
 #include <base/common.h>
 #include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
-#include <resource/sugarloader.h>
+#include <resource/ResourceManager.h>
 #include <resource/texturehelpers.h>
 #include <graphics/factory.h>
 #include <core/SceneNode.h>
@@ -140,7 +140,7 @@ void createControlPoints()
 Donut::TGraphicsSettings init()
 {
 	// Spécifie le répertoire de chargement des modèles
-    Donut::TSugarLoader::Instance().Init("data");    
+    Donut::ResourceManager::Instance().Init("assets");    
 	// Creating the rendering window
 	window = new Donut::TRenderer();
 	// Context info

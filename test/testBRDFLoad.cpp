@@ -21,7 +21,7 @@
 int main(int argc, char** argv)
 {
 	ASSERT(argc == 2);
-	Donut::TSugarLoader::Instance().Init("data");	
+	Donut::ResourceManager::Instance().Init("assets");	
 
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();

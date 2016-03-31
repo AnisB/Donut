@@ -42,6 +42,17 @@
  		ResourceManager();
  		~ResourceManager();
 
+ 		void Init(const std::string& _assertFolder);
+ 	// Asset folder setting
+ 		inline const std::string& RootAssertFolder() const
+ 		{
+ 			return m_rootAssetFolder;
+ 		}
+ 		inline std::string RelativePath(const std::string& _fileName)
+ 		{
+ 			return (m_rootAssetFolder + _fileName);
+ 		}
+
  	// Fetching methods
 		// Returns a pointer to a given brdf file (using its filepath)
  		// If it has not been loaded yet, it loads the brdf data into the GPU RAM
@@ -73,6 +84,10 @@
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
 
 	protected:
+		// Asset folder path
+		std::string m_rootAssetFolder;
+
+		// Data records
 		std::map<std::string, TGGXBRDF*> m_brdfs;
 		std::map<std::string, TTexture*> FTextures;
 		std::map<std::string, TGeometry*> FGeometries;

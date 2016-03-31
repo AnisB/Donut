@@ -18,6 +18,7 @@
 #include "shadermanager.h"
 #include "base/common.h"
 #include "graphics/common.h"
+#include "resource/resourcemanager.h"
 #include "graphics/glfactory.h"
 #include "base/macro.h"
 #include "butter/stream.h"
@@ -128,7 +129,7 @@ namespace Donut
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
 			const std::string& vertexShaderFileName = shaderFileHandler.GetShaderFile(_shader.FVertexShader);
 			GRAPHICS_DEBUG(vertexShaderFileName);
-			ReadFile(vertexShaderFileName.c_str(),vsFile);
+            ReadFile(ResourceManager::Instance().RelativePath(vertexShaderFileName).c_str(),vsFile);
 			const char * vsFile_ptr = vsFile.c_str();
 			glShaderSource(vertexShader, 1, (const char **)&vsFile_ptr, NULL);
 			glCompileShader(vertexShader);
@@ -142,7 +143,7 @@ namespace Donut
 			std::string tcsFile;
 			const std::string& tessControlShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessControl);
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
-			ReadFile(tessControlShaderFileName.c_str(), tcsFile);
+            ReadFile(ResourceManager::Instance().RelativePath(tessControlShaderFileName).c_str(),tcsFile);
 			const char * tcsFile_ptr = tcsFile.c_str();
 			glShaderSource(tessControlShader, 1, (const char **)&tcsFile_ptr, NULL);
 			glCompileShader(tessControlShader);
@@ -157,7 +158,7 @@ namespace Donut
 			std::string tesFile;
 			const std::string& tessEvalShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessEval);
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-			ReadFile(tessEvalShaderFileName.c_str(), tesFile);
+            ReadFile(ResourceManager::Instance().RelativePath(tessEvalShaderFileName).c_str(),tesFile);
 			const char * tesFile_ptr = tesFile.c_str();
 			glShaderSource(tessEvalShader, 1, (const char **)&tesFile_ptr, NULL);
 			glCompileShader(tessEvalShader);
@@ -172,7 +173,7 @@ namespace Donut
 			std::string gsFile;
 			const std::string& geometryShaderFileName = shaderFileHandler.GetShaderFile(_shader.FGeometryShader);
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			ReadFile(geometryShaderFileName.c_str(), gsFile);
+            ReadFile(ResourceManager::Instance().RelativePath(geometryShaderFileName).c_str(),gsFile);
 			const char * gsFile_ptr = gsFile.c_str();
 			glShaderSource(geometryShader, 1, (const char **)&gsFile_ptr, NULL);
 			glCompileShader(geometryShader);
@@ -185,7 +186,7 @@ namespace Donut
 			std::string fsFile;
 			const std::string& fragmentShaderFileName = shaderFileHandler.GetShaderFile(_shader.FFragmentShader);
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			ReadFile(fragmentShaderFileName.c_str(), fsFile);
+            ReadFile(ResourceManager::Instance().RelativePath(fragmentShaderFileName).c_str(), fsFile);
 			const char * fsFile_ptr = fsFile.c_str();
 			glShaderSource(fragmentShader, 1, (const char **)&fsFile_ptr, NULL);
 			glCompileShader(fragmentShader);

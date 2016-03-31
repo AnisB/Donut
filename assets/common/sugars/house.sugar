@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<sugar name="House">
+   <geometry type="wavefront" location="common/geometry/house.obj"/>
+   <shader>
+      <vertex location="common/shaders/base/vertex.glsl"/>
+      <geometry location="common/shaders/base/geometry.glsl"/>
+      <fragment location="common/shaders/base/fragment.glsl"/>
+   </shader>
+   <built_in_data>
+   </built_in_data>
+   <extern_data>
+   </extern_data>
+   <textures>
+      <texture2D name="textureCmp" location="common/textures/farmHouse.jpg"/>
+   </textures>
+</sugar>

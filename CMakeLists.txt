@@ -108,31 +108,18 @@ add_subdirectory(${PROGRAM})
 IF(UNIX)
 add_custom_command(
     TARGET Tracing POST_BUILD
-    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data/shaders ${PROJECT_BINARY_DIR}
-)
-
-add_custom_command(
-    TARGET Tracing POST_BUILD
-    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/data ${PROJECT_BINARY_DIR}
-)
-  
-add_custom_command(
-    TARGET Tracing POST_BUILD
-    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/models ${PROJECT_BINARY_DIR}
+    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/assets ${PROJECT_BINARY_DIR}
 )
 ENDIF(UNIX)
 
 
 IF(WIN32)
 #sources
-file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/data/shaders" link1)
-file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/data" link2)
+file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/assets" link2)
 #global target
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/shaders" programShaders)
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/data" programData)
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/assets" programData)
 
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/shaders" testShaders)
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/data" testData)
+file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/assets" testData)
 execute_process( COMMAND cmd.exe /c mklink /D ${programData} ${link2})
 execute_process( COMMAND cmd.exe /c mklink /D ${programShaders} ${link1})
 execute_process( COMMAND cmd.exe /c mklink /D ${testData} ${link2})

@@ -24,6 +24,7 @@
  #include "graphics/glfactory.h"
  #include <Tools/FileLoader.h>
  #include "Base/Macro.h"
+ #include "sugarLoader.h"
 
  #include <fstream>
  #include <sstream> 
@@ -40,6 +41,7 @@
  	};
 
  	ResourceManager::ResourceManager()
+ 	: m_rootAssetFolder("./assets/")
  	{
 
  	}
@@ -49,6 +51,12 @@
 
  	}
 
+	void ResourceManager::Init(const std::string& _assertFolder)
+	{
+		m_rootAssetFolder = _assertFolder + "/";
+		TSugarLoader::Instance().Init();
+	}
+ 	
  	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)
  	{
  		auto it = FTextures.find(_textureName);
@@ -61,7 +69,7 @@
  		else
  		{
 			RESOURCE_INFO("Reading "<<_textureName);
- 			TTexture * texture =  TextureHelpers::LoadTexture(_textureName);
+ 			TTexture * texture =  TextureHelpers::LoadTexture(RootAssertFolder() + _textureName);
  			FTextures[_textureName] = texture;
  			TextureHelpers::CreateTexture(texture);
  			texture->FNbRef++;
@@ -81,7 +89,7 @@
  		else
  		{
  			RESOURCE_INFO("Reading "<<_skyboxFolder);
- 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(_skyboxFolder, TextureHelpers::GetImgType(_extension));
+ 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(RootAssertFolder() + _skyboxFolder, TextureHelpers::GetImgType(_extension));
  			FSkyboxTextures[_skyboxFolder] = skybox;
  			TextureHelpers::CreateSkybox(skybox);
  			skybox->FNbRef++;
@@ -100,7 +108,7 @@
  		else
  		{
  			RESOURCE_INFO("Reading "<<_brdfFileName);
- 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(_brdfFileName);
+ 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(RootAssertFolder() + _brdfFileName);
  			m_brdfs[_brdfFileName] = brdf;
  			BRDFHelpers::CreateBRDF(brdf);
  			return brdf;
@@ -395,8 +403,7 @@
   			RESOURCE_DEBUG(_fileName<<" already loaded"); 
  			return it->second;
  		}
-		std::string model = _fileName.substr(1,_fileName.size());
-		TGeometryContainer* container = ReadWavefront(model);
+		TGeometryContainer* container = ReadWavefront(RelativePath(_fileName));
 		ASSERT(container != nullptr);
 		TGeometry* newModel = CreateGeometry(_fileName, parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
 		delete container;

@@ -19,10 +19,6 @@
 #include "base/common.h"
 #include "butter/vector4.h"
 
-#define LIGHT_VERTEX "shaders/light/vertex.glsl"
-#define LIGHT_GEOMETRY "shaders/light/geometry.glsl" 
-#define LIGHT_FRAGMENT "shaders/light/fragment.glsl" 
-
 #define DEFAULT_RAY 30
 namespace Donut
  {

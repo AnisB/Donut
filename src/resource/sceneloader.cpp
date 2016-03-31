@@ -76,6 +76,7 @@ namespace Donut
 	
 	TSceneFile::Type GetExtensionType(const std::string& _extension)
 	{
+		RESOURCE_INFO("EXTENSION "<<_extension);
 		if(_extension == JSON_EXTENSION)
 		{
 			return TSceneFile::JSon;
@@ -285,6 +286,7 @@ namespace Donut
 	TScene* TSceneLoader::LoadScene(const std::string& _sceneFileName)
 	{
  		size_t stringLength = _sceneFileName.size();
+        RESOURCE_INFO(_sceneFileName);
  		const std::string& extension = _sceneFileName.substr(_sceneFileName.find_last_of(".") + 1, stringLength - 1);
  		TSceneFile::Type type = GetExtensionType(extension);
  		TScene* result = nullptr;

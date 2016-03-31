@@ -109,11 +109,8 @@ namespace Donut
         FILE* f = NULL;
 		fopen_s(&f, Filename, "rb");
 #endif
-        if(f==NULL)
-        {
-            INPUT_ERROR("Erreur ouverture fichier "<<Filename);  
-            return NULL;  
-        }
+        ASSERT_POINTER_NOT_NULL_NO_RELEASE(f);
+
         unsigned char info[54];
         fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 

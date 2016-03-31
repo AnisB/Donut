@@ -18,11 +18,13 @@
 #include "sugarloader.h"
 #include "base/common.h"
 #include "base/stringhelper.h"
+#include "resourcemanager.h"
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 #include "tools/fileloader.h"
 #include "butter/types.h"
 #include "butter/stream.h"
+#include "rapidxml.hpp"
 
 // STL includes
 #include <stdlib.h>
@@ -100,15 +102,9 @@ namespace Donut
         
     }
 
-    void TSugarLoader::SetDirectory(const std::string& parDirectory)
-    {
-        FMediaPath = parDirectory;
-    }
-
-    void TSugarLoader::Init(const std::string& parDirectory)
+    void TSugarLoader::Init()
     {
         RESOURCE_WARNING("========= SUGAR LOADER INIT =========");
-        SetDirectory(parDirectory);
         LoadSugars();
         RESOURCE_WARNING("=====================================");
 
@@ -118,16 +114,15 @@ namespace Donut
     {   
         // useful vars
         DIR * directory;
-        std::string directoryName = FMediaPath.c_str();
-        std::string directoryNameforParse = FMediaPath.c_str();
-        directoryName+="/sugars";
+        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssertFolder();
+        std::string sugarDirectory(rootAssetDirectory + "/common/sugars");
 
         // Opening the directory
-        directory = opendir (directoryName.c_str());
+        directory = opendir (sugarDirectory.c_str());
 
         if (! directory) 
         {
-            RESOURCE_ERROR("Error in directory: "<< directoryName); 
+            RESOURCE_ERROR("Error in directory: "<< sugarDirectory); 
 #if __posix__
             RESOURCE_ERROR("Error n°: "<< strerror (errno)); 
 #elif WIN32
@@ -154,149 +149,155 @@ namespace Donut
             {
                 continue;
             }
-            directoryNameforParse = directoryName;
-            directoryNameforParse+="/";
-            directoryNameforParse+=newEntry->d_name;
-            const TSugar& newSugar = ParseFile(directoryNameforParse);
+            std::string newSugarFile = sugarDirectory;
+            newSugarFile+="/";
+            newSugarFile+=newEntry->d_name;
+            const TSugar& newSugar = ParseSugarFile(newSugarFile);
             FSugars[newSugar.name]= newSugar;
-            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< directoryNameforParse); 
+            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< newSugarFile); 
         }
         if (closedir (directory)) 
         {
-            ASSERT_FAIL_MSG("Error while closing directory: "<< directoryName); 
+            ASSERT_FAIL_MSG("Error while closing directory: "<< sugarDirectory); 
             return;
         }
         RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
     }
 
-    TSugar TSugarLoader::ParseFile(const std::string& parFileName)
+    // SUGAR DATA
+    #define SUGAR_ROOT_TOKEN "sugar"
+    #define SUGAR_NAME_TOKEN "name"
+
+    // GEOMETRY DATA
+    #define GEOMETRY_NODE_TOKEN "geometry"
+    #define GEOMETRY_TYPE_TOKEN "type"
+    #define GEOMETRY_LOCATION_TOKEN "location"
+
+    // SHADER DATA
+    #define SHADER_NODE_TOKEN "shader"
+    #define VERTEX_SHADER_NODE_TOKEN "vertex"
+    #define TESS_CONTROL_SHADER_NODE_TOKEN "tesscontrol"
+    #define TESS_EVAL_SHADER_NODE_TOKEN "tesseval"
+    #define GEOMETRY_SHADER_NODE_TOKEN "geometry"
+    #define FRAGMENT_SHADER_NODE_TOKEN "fragment"
+    #define SHADER_LOCATION "location"
+
+    // BUILD IN DATA
+    #define BUILTIN_DATA_NODE_TOKEN "built_in_data"
+
+    // EXTERNAL DATA
+    #define EXTERNAL_DATA_NODE_TOKEN "extern_data"
+    #define UNIFORM_TYPE_TOKEN "type"
+    #define UNIFORM_VALUE_TOKEN "value"
+    #define UNIFORM_NAME_TOKEN "name"
+
+    // TEXTURE DATA
+    #define TEXTURES_NODE_TOKEN "textures"
+    #define TEXTURE_2D_NODE_TOKEN "texture2D"
+    #define TEXTURE_NAME_TOKEN "name"
+    #define TEXTURE_FILE_LOCATION_TOKEN "location"
+    
+    TSugar TSugarLoader::ParseSugarFile(const std::string& _fileLocation)
     {
-        //size_t index = 0;
         TSugar sugar;
-        std::ifstream fin(parFileName.c_str());
-        std::string file_line;
-        std::getline(fin, file_line);
-        removeMultSpace(file_line);
-        std::vector<std::string> header;
-        split(file_line,' ', header);
 
-        ASSERT_MSG((header.size()==2) && (header[0]=="Object"),"In file "<<parFileName<<" wrong header.");
-        sugar.name = header[1];
+        // reading the text file
+        std::vector<char> buffer;
+        ReadFile(_fileLocation.c_str(), buffer);
 
-        GetNonEmptyLine(fin, file_line);
-        ASSERT_MSG(!(file_line.find("{")>=file_line.size()),"Wrong token@"<< file_line);
-        while(!fin.eof())
+        // Parsing it
+        rapidxml::xml_document<> doc;
+        doc.parse<0>(&buffer[0]);
+
+        // Fetching the root sugar node
+        rapidxml::xml_node<>* sugar_root = doc.first_node(SUGAR_ROOT_TOKEN);
+        ASSERT_POINTER_NOT_NULL_NO_RELEASE(sugar_root);
+
+        // Fetching the name
+        sugar.name = sugar_root->first_attribute(SUGAR_NAME_TOKEN)->value();
+
+        // Fetching the geometry
+        rapidxml::xml_node<>* geometry = sugar_root->first_node(GEOMETRY_NODE_TOKEN);
+        ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
         {
-            GetNonEmptyLine(fin, file_line);
-            if(file_line.find("model{")!= std::string::npos)
+            sugar.geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
+        }
+        
+        // Fetching the shader data
+        rapidxml::xml_node<>* shaderNode = sugar_root->first_node(SHADER_NODE_TOKEN);
+        ASSERT_POINTER_NOT_NULL_NO_RELEASE(shaderNode);
+        {
+            // Fetch vertex shader
+            rapidxml::xml_node<>* vertex = shaderNode->first_node(VERTEX_SHADER_NODE_TOKEN);
+            if(vertex)
             {
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    RESOURCE_DEBUG("The model is: "<<file_line);
-                    sugar.geometry=file_line;
-                    GetNonEmptyLine(fin, file_line);
-                }
+                sugar.material.shader.FVertexShader = TShaderFileHandler::Instance().RegisterShaderFile(vertex->first_attribute(SHADER_LOCATION)->value());
             }
-            else if(file_line.find("textures{")!= std::string::npos)
-            {
-                int index = 0;
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    std::vector<std::string> entete;
-                    split(file_line,' ', entete);
-                    TTextureInfo tex;
-                    tex.offset = index;
-                    tex.name = entete[1];
-                    tex.file = entete[2];
-                    sugar.material.textures.push_back(tex);
-                    //RESOURCE_DEBUG(tex.index<<" "<<tex.name<<" "<<tex.file);
-                    index++;
-                    GetNonEmptyLine(fin, file_line);
-                }                
-            }
-            else if(file_line.find("cubemaps{")!= std::string::npos)
-            {
-                int index = 0;
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    std::vector<std::string> entete;
-                    split(file_line,' ', entete);
-                    TCubeMapInfo cm;
-                    cm.offset = index;
-                    cm.name = entete[1];
-                    cm.path = entete[2];
-                    sugar.material.cubeMaps.push_back(cm);
-                    //RESOURCE_DEBUG(cm.index<<" "<<cm.name<<" "<<cm.file);
-                    index++;
-                    GetNonEmptyLine(fin, file_line);
-                }                
-            }
-            else if(file_line.find("built_in_data{")!= std::string::npos)
-            {
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    std::vector<std::string> entete;
-                    split(file_line,' ', entete);
-                    TBuildIn bi;
-                    //bi.dataType = ToDataType(entete[1]);
-                    bi.name = entete[2];
-                    sugar.material.builtIns.push_back(bi);
-                    //RESOURCE_DEBUG(bi.dataType<<" "<<bi.name);
-                    GetNonEmptyLine(fin, file_line);
-                }                
-            }
-            else if(file_line.find("extern_data{")!= std::string::npos)
-            {
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    std::vector<std::string> entete;
-                    split(file_line,' ', entete);
-                    TUniformHandler uni;
-                    DataTypeToUniform(entete[1], entete[2], entete[3], uni);
-                    sugar.material.uniforms.push_back(uni);
-                    GetNonEmptyLine(fin, file_line);
-                }                
-            }
-            else if(file_line.find("shader{")!= std::string::npos)
-            {
-                GetNonEmptyLine(fin, file_line);
-                while(file_line.find("}")== std::string::npos)
-                {
-                    std::vector<std::string> entete;
-                    split(file_line,' ', entete);
-                    if(entete[1]=="vertex")
-                    {
-						sugar.material.shader.FVertexShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                    }
-                    else if(entete[1]=="tesscontrol")
-                    {
-                        sugar.material.shader.FTessControl = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                    }
-                    else if(entete[1]=="tesseval")
-                    {
-                        sugar.material.shader.FTessEval = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                    }
-                    else if(entete[1]=="geometry")
-                    {
-                        sugar.material.shader.FGeometryShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                    }
-                    else if(entete[1]=="fragment")
-                    {
-                        sugar.material.shader.FFragmentShader = TShaderFileHandler::Instance().RegisterShaderFile(entete[2]);
-                    }
 
-                    GetNonEmptyLine(fin, file_line);
-                }                
+            // Fetch tesscontrol shader
+            rapidxml::xml_node<>* tesscontrol = shaderNode->first_node(TESS_CONTROL_SHADER_NODE_TOKEN);
+            if(tesscontrol)
+            {
+                sugar.material.shader.FTessControl = TShaderFileHandler::Instance().RegisterShaderFile(tesscontrol->first_attribute(SHADER_LOCATION)->value());
+            }
+
+            // Fetch tesseval shader
+            rapidxml::xml_node<>* tesseval = shaderNode->first_node(TESS_EVAL_SHADER_NODE_TOKEN);
+            if(tesseval)
+            {
+                sugar.material.shader.FTessEval = TShaderFileHandler::Instance().RegisterShaderFile(tesseval->first_attribute(SHADER_LOCATION)->value());
+            }
+
+            // Fetch geometry shader
+            rapidxml::xml_node<>* geometry = shaderNode->first_node(GEOMETRY_SHADER_NODE_TOKEN);
+            if(geometry)
+            {
+                sugar.material.shader.FGeometryShader = TShaderFileHandler::Instance().RegisterShaderFile(geometry->first_attribute(SHADER_LOCATION)->value());
+            }
+
+            // Fetch fragment shader
+            rapidxml::xml_node<>* fragment = shaderNode->first_node(FRAGMENT_SHADER_NODE_TOKEN);
+            if(fragment)
+            {
+                sugar.material.shader.FFragmentShader = TShaderFileHandler::Instance().RegisterShaderFile(fragment->first_attribute(SHADER_LOCATION)->value());
+            }
+        }
+
+        // Fetching external shader data
+        rapidxml::xml_node<>* extern_data = sugar_root->first_node(EXTERNAL_DATA_NODE_TOKEN);
+        {
+            ASSERT_POINTER_NOT_NULL_NO_RELEASE(extern_data);
+
+            // Handeling the floats
+            for(rapidxml::xml_node<> *unif = extern_data->first_node(); unif; unif = unif->next_sibling())
+            {
+                TUniformHandler uni;
+                std::string type(unif->first_attribute(UNIFORM_TYPE_TOKEN)->value());
+                std::string name(unif->first_attribute(UNIFORM_NAME_TOKEN)->value());
+                std::string value(unif->first_attribute(UNIFORM_VALUE_TOKEN)->value());
+                DataTypeToUniform(type, name, value, uni);
+                sugar.material.uniforms.push_back(uni);
+            }
+        }
+
+        // Fetching external shader data
+        rapidxml::xml_node<>* textures = sugar_root->first_node(TEXTURES_NODE_TOKEN);
+        {
+            ASSERT_POINTER_NOT_NULL_NO_RELEASE(textures);
+            int index =0;
+            // Handeling the floats
+            for(rapidxml::xml_node<> *tex2D = textures->first_node(TEXTURE_2D_NODE_TOKEN); tex2D; tex2D = tex2D->next_sibling())
+            {
+                TTextureInfo tex;
+                tex.offset = index;
+                tex.name = tex2D->first_attribute(TEXTURE_NAME_TOKEN)->value();
+                tex.file = tex2D->first_attribute(TEXTURE_FILE_LOCATION_TOKEN)->value();
+                sugar.material.textures.push_back(tex);
+                index++;
             }
         }
         return sugar;
     }
-
 
     void TSugarLoader::LoadSugars_MultiThread()
     {

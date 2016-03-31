@@ -260,7 +260,7 @@ namespace Donut
 		// Fetch the texture
 		TSkyboxTexture* skybox = ResourceManager::Instance().FetchSkybox(_folderName, _extension);
 		// Create the shader
-		TShader shader("data/shaders/canvas/skyboxV.glsl", "data/shaders/canvas/skyboxF.glsl");
+		TShader shader("common/shaders/skybox/vertex.glsl", "common/shaders/skybox/fragment.glsl");
 		ShaderManager::Instance().CreateShader(shader); 
 		// Create the material
 		TMaterial skyboxMat;

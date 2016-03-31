@@ -109,8 +109,8 @@ namespace Donut
 			// Screen space ambien occlusion
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
-				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/ssaoV.glsl", "shaders/canvas/ssaoF.glsl");
-				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("data/textures/random.jpg"), "random");
+				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/ssao/vertex.glsl", "common/shaders/ssfx/ssao/fragment.glsl");
+				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("common/textures/random.jpg"), "random");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
@@ -118,7 +118,7 @@ namespace Donut
 			// Filtering it
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_filtered");
-				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/gaussV.glsl", "shaders/canvas/gaussF.glsl");
+				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/blur/vertex.glsl", "common/shaders/ssfx/blur/fragment.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
@@ -138,7 +138,7 @@ namespace Donut
 			// The compositing pass
 			{
 				TCanvas* canvas = new TEffectCanvas(_width, _height, "final");
-				TSimpleFX* afterFX = new TSimpleFX("shaders/canvas/compositingV.glsl", "shaders/canvas/compositingF.glsl");
+				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/cmp/vertex.glsl", "common/shaders/ssfx/cmp/fragment.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
@@ -147,7 +147,7 @@ namespace Donut
 			// The after effect DOF pass
 			{
 				TCanvas* canvas = new TEmptyCanvas(_width, _height);
-				TSimpleFX* afterFX = new TSimpleFX("data/shaders/canvas/dofV.glsl","data/shaders/canvas/dofF.glsl");
+				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/dof/vertex.glsl","common/shaders/ssfx/cmp/fragment.glsl");
 				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);

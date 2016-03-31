@@ -31,7 +31,7 @@
 int main(int argc, char** argv)
 {
 	ASSERT_MSG(argc == 2, "Not enough args");
-	Donut::TSugarLoader::Instance().Init("data");	
+	Donut::ResourceManager::Instance().Init("assets");	
 
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();

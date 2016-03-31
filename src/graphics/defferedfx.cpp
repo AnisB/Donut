@@ -21,9 +21,9 @@
 
 namespace Donut
 {
-	#define DEFFERED_VERTEX "shaders/light/vertex.glsl"
-	#define DEFFERED_GEOMETRY "shaders/light/geometry.glsl" 
-	#define DEFFERED_FRAGMENT "shaders/light/fragment.glsl" 
+	#define DEFFERED_VERTEX "common/shaders/light/vertex.glsl"
+	#define DEFFERED_GEOMETRY "common/shaders/light/geometry.glsl" 
+	#define DEFFERED_FRAGMENT "common/shaders/light/fragment.glsl" 
 
 	#define MAX_NB_LIGHTS 20
 

@@ -244,7 +244,7 @@ int main(int argc, char** argv)
 	} 
 	*/
 	CityGeneration::ParseOSM_XML(argv[1],city);
-    Donut::TSugarLoader::Instance().Init("data");   
+    Donut::TSugarLoader::Instance().Init("assets");   
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 
@@ -258,7 +258,7 @@ int main(int argc, char** argv)
 
 	// Getting the camera
 	Donut::TRenderPass* pass= window->GetPasses()[0];
-	pass->AddTexture("data/textures/random.bmp", "random");
+	pass->AddTexture("common/textures/random.bmp", "random");
 	Donut::TNode* root= pass->GetRoot();
 	Donut::Camera* camera = pass->GetCamera();
 	Donut::TDefaultInputManager * inManager = new Donut::TDefaultInputManager();
