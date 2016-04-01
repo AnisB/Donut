@@ -65,7 +65,7 @@ namespace Donut
 		}
 	}
 
-	TPipeline* GenerateGraphicPipeline(TScene* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS)
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS)
 	{
 		GRAPHICS_INFO(_width<<" " <<_height);
 		// Creating the pipeline

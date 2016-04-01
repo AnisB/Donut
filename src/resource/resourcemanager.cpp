@@ -55,6 +55,7 @@
 	{
 		m_rootAssetFolder = _assertFolder + "/";
 		TSugarLoader::Instance().Init();
+		TSugarLoader::Instance().Init();
 	}
  	
  	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)

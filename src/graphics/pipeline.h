@@ -22,7 +22,7 @@
 #include "pass.h"
 #include "light.h"
 #include "core/node.h"
-#include "core/scene.h"
+#include "core/flour.h"
 
 namespace Donut
 {
@@ -59,7 +59,7 @@ namespace Donut
 	};
 
 	// Pipeline builder
-	TPipeline* GenerateGraphicPipeline(TScene* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS);
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS);
 }
 
 #endif // GRAPHIC_PIPELINE_FACTORY_DONUT

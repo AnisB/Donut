@@ -13,7 +13,7 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
-#include "sceneloader.h"
+#include "flourloader.h"
 #include "tools/fileloader.h"
 #include "graphics/light.h"
 #include "graphics/mesh.h"
@@ -23,19 +23,15 @@
 #include "resource/resourcemanager.h"
 #include "base/common.h"
 #include "butter/stream.h"
-#include "picojson.h"
 #include "rapidxml.hpp"
 
 #include <fstream>
 
+
 namespace Donut
 {
-	// File extenstions
-	#define JSON_EXTENSION "json"
-	#define XML_EXTENSION "xml"
-
 	// XML file token
-	#define SCENE_TOKEN "scene"
+	#define SCENE_TOKEN "flour"
 	#define ROOT_TOKEN "root"
 	#define NODE_TOKEN "node"
 	#define SCENE_NODE_TOKEN "scenenode"
@@ -64,40 +60,31 @@ namespace Donut
 	TSceneNode* HandleSceneNode(rapidxml::xml_node<> *_node);
 
 
-	TSceneLoader::TSceneLoader()
+	TFlourLoader::TFlourLoader()
 	{
 
 	}
 
-	TSceneLoader::~TSceneLoader()
+	TFlourLoader::~TFlourLoader()
 	{
 		
 	}
 	
-	TSceneFile::Type GetExtensionType(const std::string& _extension)
+	void TFlourLoader::Init()
 	{
-		RESOURCE_INFO("EXTENSION "<<_extension);
-		if(_extension == JSON_EXTENSION)
-		{
-			return TSceneFile::JSon;
-		}
-		else if(_extension == XML_EXTENSION)
-		{
-			return TSceneFile::Xml;
-		}
-		return TSceneFile::UNKNOWN;
-	}
+		/*
+		const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssertFolder();
+        std::string floursDirectory(rootAssetDirectory + "/common/flours");
 
-	TScene* HandleJsonFile(const std::string& _sceneFileName)
-	{
-		// Reading json file
-		std::string jsonFile;
-		ReadFile(_sceneFileName.c_str(), jsonFile);
-		picojson::value v;
-		std::string err = picojson::parse(v, jsonFile);
-		ASSERT_MSG (err.empty(), "Failed reading json file "<<err); 
-
-		return nullptr;
+        std::vector<std::string> flourFiles;
+        GetExtensionFileList(floursDirectory, ".flour", flourFiles);
+        foreach_macro(flour, flourFiles)
+        {
+            TFlour* newFlour = new TFlour(*flour);
+            m_flours[*flour] = newFlour;
+            RESOURCE_INFO("Flour "<< newFlour->filename);
+        }
+        */
 	}
 
 	TLight* HandleLightNode(rapidxml::xml_node<> *_light)
@@ -244,7 +231,8 @@ namespace Donut
 		}
 		return node;
 	}
-	TScene* HandleXmlFile(const std::string& _sceneFileName)
+
+	TFlour* HandleFlourFile(const std::string& _sceneFileName)
 	{
 		// Reading json file
 		std::vector<char> buffer;
@@ -256,58 +244,38 @@ namespace Donut
 		rapidxml::xml_node<> *scene = doc.first_node(SCENE_TOKEN);
 		ASSERT_NO_RELEASE(scene);
 
-		TScene* newScene = new TScene();
+		TFlour* flour = new TFlour(_sceneFileName);
 		// Processing the geometry hierachy
 		rapidxml::xml_node<> *root = scene->first_node(ROOT_TOKEN);
 		if(root)
 		{
-			newScene->root = HandleNode(root);
+			flour->root = HandleNode(root);
 		}
 		std::vector<TLight*> lights;
 		// Processing the illumination structures
 		rapidxml::xml_node<> *illumination = scene->first_node(ILLUMINATION_TOKEN);
 		if(illumination)
 		{
-			HandleIlluminationNode(illumination, newScene->lights);
+			HandleIlluminationNode(illumination, flour->lights);
 		}
 	
 		rapidxml::xml_node<> *envSH = scene->first_node(SPHERICAL_HARMONICS);
 		if(envSH)
 		{
-			newScene->sh = HandleSphericalHarmonics(envSH);
+			flour->sh = HandleSphericalHarmonics(envSH);
 		}
 		else
 		{
 			RESOURCE_INFO("WTF DUDE");
 		}
-		return newScene;
+		return flour;
 	}
 
-	TScene* TSceneLoader::LoadScene(const std::string& _sceneFileName)
+	TFlour* TFlourLoader::LoadFlour(const std::string& _sceneFileName)
 	{
  		size_t stringLength = _sceneFileName.size();
         RESOURCE_INFO(_sceneFileName);
- 		const std::string& extension = _sceneFileName.substr(_sceneFileName.find_last_of(".") + 1, stringLength - 1);
- 		TSceneFile::Type type = GetExtensionType(extension);
- 		TScene* result = nullptr;
- 		switch (type)
- 		{
- 			case TSceneFile::JSon:
- 			{
- 				RESOURCE_INFO("Opening json file "<<_sceneFileName);
- 				result =  HandleJsonFile(_sceneFileName);
- 			}
- 			break;
-  			case TSceneFile::Xml:
- 			{
- 				RESOURCE_INFO("Opening xml file "<<_sceneFileName);
- 				result =  HandleXmlFile(_sceneFileName);
- 			}
- 			break;
- 			default:
- 				ASSERT_FAIL_MSG("Unsupported file type "<<extension);
- 		}
-		return result;
+ 		return HandleFlourFile(_sceneFileName);
 	}
 
 }

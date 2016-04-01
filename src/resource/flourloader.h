@@ -1,3 +1,6 @@
+#ifndef FLOUR_LOADER_H
+#define FLOUR_LOADER_H
+
 /**
 * This program is free software: you can redistribute it and/or modify
 * it under the terms of the GNU Lesser General Public License as
@@ -16,7 +19,7 @@
 
 // Library includes
 #include "core/node.h"
-#include "core/scene.h"
+#include "core/flour.h"
 #include "base/singleton.h"
 
 // STL includes
@@ -24,25 +27,20 @@
 
 namespace Donut
 {
-
-	namespace TSceneFile
-	{
-		enum Type
-		{
-			JSon,
-			Xml,
-			UNKNOWN
-		};
-	}
-	
-	class TSceneLoader : public Singleton<TSceneLoader>
+	class TFlourLoader : public Singleton<TFlourLoader>
 	{
 	public:
-		TSceneLoader();
-		~TSceneLoader();
+		TFlourLoader();
+		~TFlourLoader();
+
+		// Init levels
+		void Init();
 
 		// This function reads the scene descriptor file
 		// and loads into memory the scene structures
-		TScene* LoadScene(const std::string& _sceneFileName);
+		TFlour* LoadFlour(const std::string& _flourFileName);
+	protected:
+		std::map<std::string, TFlour*> m_flours;
 	};
 }
+#endif // FLOUR_LOADER_H

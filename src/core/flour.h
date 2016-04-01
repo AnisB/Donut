@@ -14,8 +14,8 @@
 *
 **/
 
-#ifndef DONUT_SCENE
-#define DONUT_SCENE
+#ifndef DONUT_FLOUR_H
+#define DONUT_FLOUR_H
 
 
 // Std includes
@@ -30,17 +30,19 @@
 
 namespace Donut
 {
-	struct TScene
+	struct TFlour
 	{
 		// Consrtuctor
-		TScene()
+		TFlour(const std::string& _fileName)
 		: root(nullptr)
 		, sh(nullptr)
+		, loaded(false)
+		, filename(_fileName)
 		{
 
 		}
 		//Destructor
-		~TScene()
+		~TFlour()
 		{
 			if(root)
 				delete root;
@@ -54,9 +56,14 @@ namespace Donut
 				delete sh;
 		}
 
+		// Generic data
+		bool loaded;
+		std::string filename;
+		
 		TNode* root;
 		std::vector<TLight*> lights;
 		TSphericalHarmonics* sh;
 	};
 }
-#endif
+
+#endif // DONUT_FLOUR_H

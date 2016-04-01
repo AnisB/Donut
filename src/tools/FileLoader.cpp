@@ -24,6 +24,7 @@
 #include <string.h>
 #include <sstream>
 #include <fstream>
+#include <dirent.h>
 
 #if LINUX | WIN32
 #include <algorithm>
@@ -105,6 +106,59 @@ namespace Donut
 		_stream.write((char*)&_container->nbFaces, sizeof(int));
 		_stream.write((char*)&_container->faces, sizeof(unsigned int)*3*_container->nbFaces);
 		return _stream;
+	}
+
+	void GetExtensionFileList(const std::string& _directoryPath, const std::string& _fileExtension, std::vector<std::string>& _outContainer)
+	{
+        // Opening the directory
+        DIR * directory;
+        directory = opendir (_directoryPath.c_str());
+        if (! directory) 
+        {
+#if __posix__
+            ASSERT_FAIL_MSG("Error in directory: "<< _directoryPath<<" Error n°: "<< strerror (errno)); 
+#elif WIN32
+			char msg[20];
+            ASSERT_FAIL_MSG("Error in directory: "<< _directoryPath<<" Error n°: "<< strerror_s (msg, errno));
+#endif
+        }
+
+        int extensionSize = _fileExtension.size();
+
+        // For each file in the directory
+        while (1) 
+        {
+        	// If each new entry
+            struct dirent* newEntry;
+            newEntry = readdir (directory);
+            if (! newEntry) 
+            {
+                break;
+            }
+
+            // Get its filename
+            std::string fileName(newEntry->d_name);
+            // Reject non matching entries
+            if((fileName=="..")|| (fileName==".") || fileName.size() < extensionSize)
+            {
+                continue;
+            }
+            else if( fileName.substr(fileName.size() - 6, fileName.size())!= _fileExtension)
+            {
+                continue;
+            }
+
+            // OK this file is concerned we add it
+            std::string newFilename = _directoryPath;
+            newFilename += "/";
+            newFilename += newEntry->d_name;
+            _outContainer.push_back(newFilename);
+        }
+        if (closedir (directory)) 
+        {
+            ASSERT_FAIL_MSG("Error while closing directory: "<< _directoryPath); 
+            return;
+        }
 	}
 }
 

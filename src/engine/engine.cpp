@@ -20,7 +20,6 @@
 // Donut includes
 #include "Engine.h"
 #include "engine/common.h"
-#include "core/scene.h"
 
 #include <base/common.h>
 

@@ -10,8 +10,8 @@ TARGET_LINK_LIBRARIES(testRenderer ${CORELIBS})
 add_executable(testRayTracer ${TEST}/testRayTracer.cpp)
 TARGET_LINK_LIBRARIES(testRayTracer ${CORELIBS})
 
-add_executable(testSceneLoad ${TEST}/testSceneLoad.cpp)
-TARGET_LINK_LIBRARIES(testSceneLoad ${CORELIBS})
+add_executable(testFlourLoad ${TEST}/testFlourLoad.cpp)
+TARGET_LINK_LIBRARIES(testFlourLoad ${CORELIBS})
 
 add_executable(testBRDFLoad ${TEST}/testBRDFLoad.cpp)
 TARGET_LINK_LIBRARIES(testBRDFLoad ${CORELIBS})

@@ -30,7 +30,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <dirent.h>
 #include <string.h>
 #include <errno.h>
 #include <fstream>
@@ -112,56 +111,17 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
-        // useful vars
-        DIR * directory;
         const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssertFolder();
         std::string sugarDirectory(rootAssetDirectory + "/common/sugars");
 
-        // Opening the directory
-        directory = opendir (sugarDirectory.c_str());
-
-        if (! directory) 
+        std::vector<std::string> sugarFiles;
+        GetExtensionFileList(sugarDirectory, ".sugar", sugarFiles);
+        foreach_macro(sugar, sugarFiles)
         {
-            RESOURCE_ERROR("Error in directory: "<< sugarDirectory); 
-#if __posix__
-            RESOURCE_ERROR("Error n°: "<< strerror (errno)); 
-#elif WIN32
-			char msg[20];
-            RESOURCE_ERROR("Error n°: "<< strerror_s (msg, errno)); 
-#endif
-            return;
+            const TSugar& newSugar = ParseSugarFile(*sugar);
+            FSugars[newSugar.name] = newSugar;
+            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< *sugar);
         }
-
-        while (1) 
-        {
-            struct dirent * newEntry;
-            newEntry = readdir (directory);
-            if (! newEntry) 
-            {
-                break;
-            }
-            std::string fileName(newEntry->d_name);
-            if((fileName=="..")|| (fileName==".") || fileName.size()<7)
-            {
-                continue;
-            }
-            else if(fileName.substr(fileName.size()-6,fileName.size())!=".sugar")
-            {
-                continue;
-            }
-            std::string newSugarFile = sugarDirectory;
-            newSugarFile+="/";
-            newSugarFile+=newEntry->d_name;
-            const TSugar& newSugar = ParseSugarFile(newSugarFile);
-            FSugars[newSugar.name]= newSugar;
-            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< newSugarFile); 
-        }
-        if (closedir (directory)) 
-        {
-            ASSERT_FAIL_MSG("Error while closing directory: "<< sugarDirectory); 
-            return;
-        }
-        RESOURCE_INFO("The parser found "<<FSugars.size()<<" sugars");
     }
 
     // SUGAR DATA

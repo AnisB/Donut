@@ -21,7 +21,7 @@
 #include <Input/InputManager.h>
 #include <resource/sugarloader.h>
 #include <resource/resourcemanager.h>
-#include <resource/sceneLoader.h>
+#include <resource/flourLoader.h>
 #include <graphics/factory.h>
  
 #include <core/scenenode.h>
@@ -44,15 +44,15 @@ int main(int argc, char** argv)
 	newContext.minor = 1;
 	window->CreateRenderWindow(newContext);
 
-	Donut::TScene* newScene = Donut::TSceneLoader::Instance().LoadScene(argv[1]);
+	Donut::TFlour* flour = Donut::TFlourLoader::Instance().LoadFlour(argv[1]);
 	Donut::TPipeline* renderingPipeline;
-	if(newScene->lights.empty())
+	if(flour->lights.empty())
 	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(newScene, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
+		renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
 	}
 	else
 	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(newScene, newContext.width, newContext.lenght, Donut::TPipelineConfig::REALIST);
+		renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght, Donut::TPipelineConfig::REALIST);
 	}
 	window->SetPipeline(renderingPipeline);
 	window->Init();

@@ -51,6 +51,9 @@ namespace Donut
 			_values.push_back(convertFromString<T>(*val));
 		}
 	}
+
+	// This function returns the list of file of a given extension in the ouputcontainer
+	void GetExtensionFileList(const std::string& _directory, const std::string& _fileExtension, std::vector<std::string>& _outContainer);
 }
 
 #endif // FILE_LOADER
