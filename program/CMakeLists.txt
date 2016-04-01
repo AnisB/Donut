@@ -1,15 +1,9 @@
-
-# SFML finding
-
-add_executable(bezierProgram ${PROGRAM}/bezierProgram.cpp)
-TARGET_LINK_LIBRARIES(bezierProgram ${CORELIBS})
+GENERATE_PROGRAM(bezierProgram)
 
 if(ROOF)
-add_executable(roofGeneration ${PROGRAM}/roofGeneration.cpp)
-TARGET_LINK_LIBRARIES(roofGeneration ${CORELIBS})
+GENERATE_PROGRAM(roofGeneration)
 endif(ROOF)
 
-add_executable(objSerializer ${PROGRAM}/objSerializer.cpp)
-TARGET_LINK_LIBRARIES(objSerializer ${CORELIBS})
+GENERATE_PROGRAM(objSerializer)
 
-add_executable(brdfReader ${PROGRAM}/brdfReader.cpp)
+GENERATE_PROGRAM(brdfReader)

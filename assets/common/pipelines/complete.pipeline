@@ -1,0 +1,65 @@
+<pipeline name="complete">
+	<!-- First g buffer pass -->
+	<step>
+		<canvas type="gbuffer"/>
+		<pass type="geometry"/>
+	</step>
+	<!-- Deffered lighting pass -->
+	<step>
+		<canvas type="effect" outputname="deffered"/>
+		<pass type="deffered"/>
+	</step>
+
+	<!-- SSAO PASS -->
+	<step>
+		<canvas type="effect" outputname="ssao_prefiltered"/>
+		<pass type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/ssao/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/ssao/fragment.glsl"/>
+			</shader>
+			<textures>
+				<texture2D name="random" location="common/textures/random.jpg"/>
+			</textures>
+		</pass>
+	</step>
+
+	<!-- SSAO FILTERING PASS -->
+	<step>
+		<canvas type="effect" outputname="ssao_filtered"/>
+		<pass type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/blur/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/blur/fragment.glsl"/>
+			</shader>
+		</pass>
+	</step>
+
+	<!-- Environement lighting pass -->
+	<step>
+		<canvas type="effect" outputname="deffered"/>
+		<pass type="environement"/>
+	</step>
+
+	<!-- Compositing lighting pass -->
+	<step>
+		<canvas type="effect" outputname="final"/>
+		<pass type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/cmp/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/cmp/fragment.glsl"/>
+			</shader>
+		</pass>
+	</step>
+
+	<!-- Depth of field pass -->
+	<step>
+		<canvas type="effect" outputname="dof"/>
+		<pass type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/dof/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/dof/fragment.glsl"/>
+			</shader>
+		</pass>
+	</step>
+</pipeline>   

@@ -153,7 +153,7 @@ Donut::TGraphicsSettings init()
 
 Donut::TFlour* createFlour()
 {
-	Donut::TFlour* scene = new Donut::TFlour();
+	Donut::TFlour* scene = new Donut::TFlour("BezierTest");
 	scene->root = new Donut::TNode();
 	// On crée la surface 1 à la position vector3(0,0,-70) en utilisant le modèle de nom "Plane"
 	surface1 = Donut::CreateSugarInstance("Plane");
