@@ -46,14 +46,7 @@ int main(int argc, char** argv)
 
 	Donut::TFlour* flour = Donut::TFlourLoader::Instance().LoadFlour(argv[1]);
 	Donut::TPipeline* renderingPipeline;
-	if(flour->lights.empty())
-	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght, Donut::TPipelineConfig::MINIMAL);
-	}
-	else
-	{
-		renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght, Donut::TPipelineConfig::REALIST);
-	}
+	renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	

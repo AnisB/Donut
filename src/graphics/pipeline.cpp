@@ -17,6 +17,7 @@
 
 // Library includes
 #include "pipeline.h"
+#include "resource/pipelineloader.h"
 // Canvas
 #include "emptycanvas.h"
 #include "simplecanvas.h"
@@ -65,9 +66,8 @@ namespace Donut
 		}
 	}
 
-	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS)
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height)
 	{
-		GRAPHICS_INFO(_width<<" " <<_height);
 		// Creating the pipeline
 		TPipeline* pipeline = new TPipeline();
 		// Fetching its internal data
@@ -75,88 +75,118 @@ namespace Donut
 		pipeline->pipelineData.height = _height;
 		Camera* camera =  pipeline->camera;
 		TBufferOutput& buffers =  pipeline->pipelineData;
-		// If nothing specified, lets just render the first color buffer
-		if(_pipelineTAGS == TPipelineConfig::MINIMAL)
-		{
-			// One pass to rule them all
-			TCanvas* canvas = new TEmptyCanvas(_width, _height);
-			TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene->root);
-			geometryPass->SetCamera(camera);
-			pipeline->passes.push_back(geometryPass);
-		}
-		else if(_pipelineTAGS == TPipelineConfig::REALIST)
-		{
 
-			// The first GBuffer Pass
+
+		// Fetch the pipeline that was specified
+		const TPipelineDescriptor& pipelineDesc = TPipelineLoader::Instance().FetchPipeline(_scene->pipelineName);
+		GRAPHICS_INFO("Creating pipeline "<<pipelineDesc.name);
+
+		foreach_macro(pass, pipelineDesc.passes)
+		{
+			// Fetching the pointers
+			if(pass->tag == TPassTag::GEOMETRY)
 			{
-				TCanvas* canvas = new TGBufferCanvas(_width, _height);
+				const TPipelineCanvas& canvasDesc = pass->canvas;
+				TCanvas* canvas = nullptr;
+				switch(canvasDesc.tag)
+				{
+					case TCanvasTag::EMPTY:
+					{
+						canvas = new TEmptyCanvas(_width, _height);
+					}
+					break;
+					case TCanvasTag::EFFECT:
+					{
+						canvas = new TEffectCanvas(_width, _height, canvasDesc.output);
+					}
+					break;
+					case TCanvasTag::GBUFFER:
+					{
+						canvas = new TGBufferCanvas(_width, _height);
+					}
+					break;
+					default:
+					ASSERT_FAIL_MSG("Unexisting canvas type");
+					break;
+				}
+
 				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene->root);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
-			}
 
-			// Deffered Shading
-			if(!_scene->lights.empty())
-			{
-				TCanvas* canvas = new TEffectCanvas(_width, _height, "deffered");
-				TDefferedFX* deffered = new TDefferedFX();
-				deffered->SetLights(_scene->lights);
-				TVFXPass* vfxPass = new TVFXPass(canvas, deffered);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
 			}
-			
-			// Screen space ambien occlusion
+			else if (pass->tag == TPassTag::VFX)
 			{
-				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_prefiltered");
-				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/ssao/vertex.glsl", "common/shaders/ssfx/ssao/fragment.glsl");
-				afterFX->AddTexture(ResourceManager::Instance().FetchTexture("common/textures/random.jpg"), "random");
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
-			}
-			// Filtering it
-			{
-				TCanvas* canvas = new TEffectCanvas(_width, _height, "ssao_filtered");
-				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/blur/vertex.glsl", "common/shaders/ssfx/blur/fragment.glsl");
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
-			}
-			
-			// If an envmap has been declared
-			if(_scene->sh)
-			{
-				TCanvas* canvas = new TEffectCanvas(_width, _height, "envmap");
-				TEnvironmentFX* afterFX = new TEnvironmentFX();
-				afterFX->SetSH(_scene->sh);
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
-			}
+				const TPipelineCanvas& canvasDesc = pass->canvas;
+				TCanvas* canvas = nullptr;
+				switch(canvasDesc.tag)
+				{
+					case TCanvasTag::EMPTY:
+					{
+						canvas = new TEmptyCanvas(_width, _height);
+					}
+					break;
+					case TCanvasTag::EFFECT:
+					{
+						canvas = new TEffectCanvas(_width, _height, canvasDesc.output);
+					}
+					break;
+					case TCanvasTag::GBUFFER:
+					{
+						canvas = new TGBufferCanvas(_width, _height);
+					}
+					break;
+					default:
+					ASSERT_FAIL_MSG("Unexisting canvas type");
+					break;
+				}
 
-			// The compositing pass
-			{
-				TCanvas* canvas = new TEffectCanvas(_width, _height, "final");
-				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/cmp/vertex.glsl", "common/shaders/ssfx/cmp/fragment.glsl");
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
-			}
+				const TPipelineVFX& vfxDescriptor = pass->vfx;
+				TVFX* vfx = nullptr;
+				switch(vfxDescriptor.tag)
+				{
+					case TVFXTag::SIMPLEFX:
+					{
+						TSimpleFX* sfx = new TSimpleFX(vfxDescriptor.shader);
+						vfx = sfx;
+					}
+					break;
+					case TVFXTag::ENVIRONEMENT:
+					{
+						if(_scene->sh)
+						{
+							TEnvironmentFX* envFX = new TEnvironmentFX();
+							envFX->SetSH(_scene->sh);
+							vfx = envFX;
+						}
+					}
+					break;
+					case TVFXTag::DEFFERED:
+					{
+						TDefferedFX* deffered = new TDefferedFX();
+						deffered->SetLights(_scene->lights);
+						vfx = deffered;
+					}
+					break;
+					default:
+					ASSERT_FAIL_MSG("Unexisting canvas type");
+					break;
+				}
 
-			// The after effect DOF pass
-			{
-				TCanvas* canvas = new TEmptyCanvas(_width, _height);
-				TSimpleFX* afterFX = new TSimpleFX("common/shaders/ssfx/dof/vertex.glsl","common/shaders/ssfx/cmp/fragment.glsl");
-				TVFXPass* vfxPass = new TVFXPass(canvas, afterFX);
+				ASSERT_POINTER_NOT_NULL_NO_RELEASE(vfx);
+				foreach_macro(tex2D, vfxDescriptor.textures)
+				{
+					vfx->AddTexture(ResourceManager::Instance().FetchTexture(tex2D->file), tex2D->name);
+				}
+
+				TVFXPass* vfxPass = new TVFXPass(canvas, vfx);
 				vfxPass->SetCamera(camera);
 				pipeline->passes.push_back(vfxPass);
 			}
-			
-		}
-		else
-		{
-			ASSERT_NOT_IMPLEMENTED();
+			else
+			{
+				ASSERT_FAIL_MSG("Unexisting pass type");
+			}
 		}
 		return pipeline;
 	}

@@ -25,6 +25,7 @@
 #include "butter/types.h"
 #include "butter/stream.h"
 #include "rapidxml.hpp"
+#include "tools/xmlhelpers.h"
 
 // STL includes
 #include <stdlib.h>
@@ -111,7 +112,7 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
-        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssertFolder();
+        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
         std::string sugarDirectory(rootAssetDirectory + "/common/sugars");
 
         std::vector<std::string> sugarFiles;
@@ -135,12 +136,6 @@ namespace Donut
 
     // SHADER DATA
     #define SHADER_NODE_TOKEN "shader"
-    #define VERTEX_SHADER_NODE_TOKEN "vertex"
-    #define TESS_CONTROL_SHADER_NODE_TOKEN "tesscontrol"
-    #define TESS_EVAL_SHADER_NODE_TOKEN "tesseval"
-    #define GEOMETRY_SHADER_NODE_TOKEN "geometry"
-    #define FRAGMENT_SHADER_NODE_TOKEN "fragment"
-    #define SHADER_LOCATION "location"
 
     // BUILD IN DATA
     #define BUILTIN_DATA_NODE_TOKEN "built_in_data"
@@ -186,42 +181,7 @@ namespace Donut
         // Fetching the shader data
         rapidxml::xml_node<>* shaderNode = sugar_root->first_node(SHADER_NODE_TOKEN);
         ASSERT_POINTER_NOT_NULL_NO_RELEASE(shaderNode);
-        {
-            // Fetch vertex shader
-            rapidxml::xml_node<>* vertex = shaderNode->first_node(VERTEX_SHADER_NODE_TOKEN);
-            if(vertex)
-            {
-                sugar.material.shader.FVertexShader = TShaderFileHandler::Instance().RegisterShaderFile(vertex->first_attribute(SHADER_LOCATION)->value());
-            }
-
-            // Fetch tesscontrol shader
-            rapidxml::xml_node<>* tesscontrol = shaderNode->first_node(TESS_CONTROL_SHADER_NODE_TOKEN);
-            if(tesscontrol)
-            {
-                sugar.material.shader.FTessControl = TShaderFileHandler::Instance().RegisterShaderFile(tesscontrol->first_attribute(SHADER_LOCATION)->value());
-            }
-
-            // Fetch tesseval shader
-            rapidxml::xml_node<>* tesseval = shaderNode->first_node(TESS_EVAL_SHADER_NODE_TOKEN);
-            if(tesseval)
-            {
-                sugar.material.shader.FTessEval = TShaderFileHandler::Instance().RegisterShaderFile(tesseval->first_attribute(SHADER_LOCATION)->value());
-            }
-
-            // Fetch geometry shader
-            rapidxml::xml_node<>* geometry = shaderNode->first_node(GEOMETRY_SHADER_NODE_TOKEN);
-            if(geometry)
-            {
-                sugar.material.shader.FGeometryShader = TShaderFileHandler::Instance().RegisterShaderFile(geometry->first_attribute(SHADER_LOCATION)->value());
-            }
-
-            // Fetch fragment shader
-            rapidxml::xml_node<>* fragment = shaderNode->first_node(FRAGMENT_SHADER_NODE_TOKEN);
-            if(fragment)
-            {
-                sugar.material.shader.FFragmentShader = TShaderFileHandler::Instance().RegisterShaderFile(fragment->first_attribute(SHADER_LOCATION)->value());
-            }
-        }
+        BuildShaderDescriptor(shaderNode, sugar.material.shader);
 
         // Fetching external shader data
         rapidxml::xml_node<>* extern_data = sugar_root->first_node(EXTERNAL_DATA_NODE_TOKEN);
@@ -244,17 +204,7 @@ namespace Donut
         rapidxml::xml_node<>* textures = sugar_root->first_node(TEXTURES_NODE_TOKEN);
         {
             ASSERT_POINTER_NOT_NULL_NO_RELEASE(textures);
-            int index =0;
-            // Handeling the floats
-            for(rapidxml::xml_node<> *tex2D = textures->first_node(TEXTURE_2D_NODE_TOKEN); tex2D; tex2D = tex2D->next_sibling())
-            {
-                TTextureInfo tex;
-                tex.offset = index;
-                tex.name = tex2D->first_attribute(TEXTURE_NAME_TOKEN)->value();
-                tex.file = tex2D->first_attribute(TEXTURE_FILE_LOCATION_TOKEN)->value();
-                sugar.material.textures.push_back(tex);
-                index++;
-            }
+            BuildTexturesDescriptor(textures, sugar.material.textures);
         }
         return sugar;
     }

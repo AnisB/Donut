@@ -25,6 +25,7 @@
  #include <Tools/FileLoader.h>
  #include "Base/Macro.h"
  #include "sugarLoader.h"
+ #include "pipelineloader.h"
 
  #include <fstream>
  #include <sstream> 
@@ -55,7 +56,7 @@
 	{
 		m_rootAssetFolder = _assertFolder + "/";
 		TSugarLoader::Instance().Init();
-		TSugarLoader::Instance().Init();
+		TPipelineLoader::Instance().Init();
 	}
  	
  	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)
@@ -70,7 +71,7 @@
  		else
  		{
 			RESOURCE_INFO("Reading "<<_textureName);
- 			TTexture * texture =  TextureHelpers::LoadTexture(RootAssertFolder() + _textureName);
+ 			TTexture * texture =  TextureHelpers::LoadTexture(RootAssetsFolder() + _textureName);
  			FTextures[_textureName] = texture;
  			TextureHelpers::CreateTexture(texture);
  			texture->FNbRef++;
@@ -90,7 +91,7 @@
  		else
  		{
  			RESOURCE_INFO("Reading "<<_skyboxFolder);
- 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(RootAssertFolder() + _skyboxFolder, TextureHelpers::GetImgType(_extension));
+ 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(RootAssetsFolder() + _skyboxFolder, TextureHelpers::GetImgType(_extension));
  			FSkyboxTextures[_skyboxFolder] = skybox;
  			TextureHelpers::CreateSkybox(skybox);
  			skybox->FNbRef++;
@@ -109,7 +110,7 @@
  		else
  		{
  			RESOURCE_INFO("Reading "<<_brdfFileName);
- 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(RootAssertFolder() + _brdfFileName);
+ 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(RootAssetsFolder() + _brdfFileName);
  			m_brdfs[_brdfFileName] = brdf;
  			BRDFHelpers::CreateBRDF(brdf);
  			return brdf;

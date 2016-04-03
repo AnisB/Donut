@@ -45,7 +45,7 @@ namespace Donut
  	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
  		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.");
- 		TPipeline* pipeline = GenerateGraphicPipeline(m_scene, parContext.width, parContext.lenght, TPipelineConfig::MINIMAL );
+ 		TPipeline* pipeline = GenerateGraphicPipeline(m_scene, parContext.width, parContext.lenght);
  		FRenderer->CreateRenderWindow(parContext);
  		FRenderer->SetPipeline(pipeline);
  		InitScene();

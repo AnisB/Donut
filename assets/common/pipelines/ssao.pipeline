@@ -1,4 +1,4 @@
-<pipeline name="complete">
+<pipeline name="ssao">
 	<!-- First g buffer pass -->
 	<pass type="geometry">
 		<canvas type="gbuffer"/>
@@ -25,7 +25,7 @@
 
 	<!-- SSAO FILTERING PASS -->
 	<pass type="vfx">
-		<canvas type="effect" output="ssao_filtered"/>
+		<canvas type="empty" output="ssao_filtered"/>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/blur/vertex.glsl"/>
@@ -33,32 +33,4 @@
 			</shader>
 		</vfx>
 	</pass>
-
-	<!-- Environement lighting pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="envmap"/>
-		<vfx type="environement"/>
-	</pass>
-
-	<!-- Compositing lighting pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="final"/>
-		<vfx type="simplefx">
-			<shader>
-				<vertex location="common/shaders/ssfx/cmp/vertex.glsl"/>
-				<fragment location="common/shaders/ssfx/cmp/fragment.glsl"/>
-			</shader>
-		</vfx>
-	</pass>
-
-	<!-- Depth of field pass -->
-	<pass type="vfx">
-		<canvas type="empty"/>
-		<vfx type="simplefx">
-			<shader>
-				<vertex location="common/shaders/ssfx/dof/vertex.glsl"/>
-				<fragment location="common/shaders/ssfx/dof/fragment.glsl"/>
-			</shader>
-		</vfx>
-	</pass>
-</pipeline>   
+</pipeline>

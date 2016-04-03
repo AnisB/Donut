@@ -55,6 +55,10 @@ namespace Donut
 	#define SKYBOX_EXTENSION_TOKEN "extension"
 	#define SKYBOX_LOCATION_TOKEN "location"
 
+	// Pipeline data
+	#define PIPELINE_NODE_TOKEN "pipeline"
+	#define PIPELINE_NAME_TOKEN "name"
+
 
 	TNode* HandleNode(rapidxml::xml_node<> *_node);
 	TSceneNode* HandleSceneNode(rapidxml::xml_node<> *_node);
@@ -73,7 +77,7 @@ namespace Donut
 	void TFlourLoader::Init()
 	{
 		/*
-		const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssertFolder();
+		const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
         std::string floursDirectory(rootAssetDirectory + "/common/flours");
 
         std::vector<std::string> flourFiles;
@@ -259,6 +263,18 @@ namespace Donut
 			HandleIlluminationNode(illumination, flour->lights);
 		}
 	
+		// Processing the illumination structures
+		rapidxml::xml_node<>* pipeline = scene->first_node(PIPELINE_NODE_TOKEN);
+		if(pipeline)
+		{
+			flour->pipelineName = pipeline->first_attribute(PIPELINE_NAME_TOKEN)->value();
+		}
+		else
+		{
+			flour->pipelineName = "minimal";
+		}
+		
+
 		rapidxml::xml_node<> *envSH = scene->first_node(SPHERICAL_HARMONICS);
 		if(envSH)
 		{

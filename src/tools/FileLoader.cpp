@@ -143,15 +143,15 @@ namespace Donut
             {
                 continue;
             }
-            else if( fileName.substr(fileName.size() - 6, fileName.size())!= _fileExtension)
+
+           	if( fileName.substr(fileName.size() - extensionSize, fileName.size())!= _fileExtension)
             {
                 continue;
             }
-
             // OK this file is concerned we add it
             std::string newFilename = _directoryPath;
             newFilename += "/";
-            newFilename += newEntry->d_name;
+            newFilename += fileName;
             _outContainer.push_back(newFilename);
         }
         if (closedir (directory)) 

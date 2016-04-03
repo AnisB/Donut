@@ -211,7 +211,7 @@ int main()
 {
 	const Donut::TGraphicsSettings& settings = init();
 	Donut::TFlour* scene = createFlour();
-	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, settings.width, settings.lenght, Donut::TPipelineConfig::MINIMAL);
+	Donut::TPipeline* renderingPipeline = Donut::GenerateGraphicPipeline(scene, settings.width, settings.lenght);
 	window->SetPipeline(renderingPipeline);
 	Donut::Camera* camera = renderingPipeline->camera;
 	inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());

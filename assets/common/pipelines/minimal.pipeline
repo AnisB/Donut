@@ -1,6 +1,5 @@
 <pipeline name="minimal">
-	<step>
+	<pass type="geometry">
 		<canvas type="empty"/>
-		<pass type="geometry"/>
-	</step>
+	</pass>
 </pipeline>   

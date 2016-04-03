@@ -217,6 +217,7 @@
 			<model sugar="LightBulb"/>
 		</scenenode>
 	</root>
+	<pipeline name="complete"/>
 	<illumination>
 		<light pos="30 50 -30" diff="1 1 1 1" spec="0 0 0 1" ray="150"/>
 		<light pos="200 50 -30" diff="0 0 0.5 1" spec="0 0 0 1" ray="150"/>

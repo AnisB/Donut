@@ -44,7 +44,7 @@
 
  		void Init(const std::string& _assertFolder);
  	// Asset folder setting
- 		inline const std::string& RootAssertFolder() const
+ 		inline const std::string& RootAssetsFolder() const
  		{
  			return m_rootAssetFolder;
  		}

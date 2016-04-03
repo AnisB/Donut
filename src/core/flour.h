@@ -38,6 +38,7 @@ namespace Donut
 		, sh(nullptr)
 		, loaded(false)
 		, filename(_fileName)
+		, pipelineName("minimal")
 		{
 
 		}
@@ -59,6 +60,7 @@ namespace Donut
 		// Generic data
 		bool loaded;
 		std::string filename;
+		std::string pipelineName;
 		
 		TNode* root;
 		std::vector<TLight*> lights;

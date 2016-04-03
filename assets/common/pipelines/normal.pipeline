@@ -1,0 +1,16 @@
+<pipeline name="normal">
+	<!-- First g buffer pass -->
+	<pass type="geometry">
+		<canvas type="gbuffer"/>
+	</pass>
+	<!-- Deffered lighting pass -->
+	<pass type="vfx">
+		<canvas type="empty"/>
+		<vfx type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/normal/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/normal/fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass>
+</pipeline>

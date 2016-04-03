@@ -26,22 +26,6 @@
 
 namespace Donut
 {
-	// Configurations that can be generated
-	namespace TPipelineConfig
-	{
-		enum Type
-		{
-			// Pure albedo
-			MINIMAL,
-			// Everything that is currently implemented
-			// and can be applied to the current scene
-			REALIST,
-			// Everything that is currently implemented
-			// and can be applied to the current scene
-			CELLSHADED
-		};
-	}
-
 	struct TPipeline
 	{
 		// Init and destruction
@@ -59,7 +43,7 @@ namespace Donut
 	};
 
 	// Pipeline builder
-	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, TPipelineConfig::Type _pipelineTAGS);
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height);
 }
 
 #endif // GRAPHIC_PIPELINE_FACTORY_DONUT
