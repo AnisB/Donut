@@ -24,6 +24,7 @@
 #include "base/common.h"
 #include "butter/stream.h"
 #include "rapidxml.hpp"
+#include "tools/xmlhelpers.h"
 
 #include <fstream>
 
@@ -74,9 +75,16 @@ namespace Donut
 		
 	}
 	
-	void TFlourLoader::Init()
+    void TFlourLoader::Init()
+    {
+        RESOURCE_WARNING("========= FLOUR LOADER INIT =========");
+        LoadFlours();
+        RESOURCE_WARNING("=====================================");
+    }
+
+	void TFlourLoader::LoadFlours()
 	{
-		/*
+		
 		const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
         std::string floursDirectory(rootAssetDirectory + "/common/flours");
 
@@ -84,11 +92,11 @@ namespace Donut
         GetExtensionFileList(floursDirectory, ".flour", flourFiles);
         foreach_macro(flour, flourFiles)
         {
-            TFlour* newFlour = new TFlour(*flour);
-            m_flours[*flour] = newFlour;
-            RESOURCE_INFO("Flour "<< newFlour->filename);
+        	TFlourDescriptor flrDsr;
+        	ParseFlourFile(*flour, flrDsr);
+        	m_flours[flrDsr.name] = flrDsr;
+            RESOURCE_INFO("Flour "<< flrDsr.name<<" file: "<< flrDsr.file);
         }
-        */
 	}
 
 	TLight* HandleLightNode(rapidxml::xml_node<> *_light)
@@ -238,12 +246,12 @@ namespace Donut
 
 	TFlour* HandleFlourFile(const std::string& _sceneFileName)
 	{
-		// Reading json file
-		std::vector<char> buffer;
-		ReadFile(_sceneFileName.c_str(), buffer);
 	    rapidxml::xml_document<> doc;
-	    // Parsing it
-		doc.parse<0>(&buffer[0]);
+        std::vector<char> buffer;
+        ReadFile(_sceneFileName.c_str(), buffer);
+        // Parsing it
+        doc.parse<0>(&buffer[0]);
+
 		// Fetching the scene node
 		rapidxml::xml_node<> *scene = doc.first_node(SCENE_TOKEN);
 		ASSERT_NO_RELEASE(scene);
@@ -280,10 +288,7 @@ namespace Donut
 		{
 			flour->sh = HandleSphericalHarmonics(envSH);
 		}
-		else
-		{
-			RESOURCE_INFO("WTF DUDE");
-		}
+
 		return flour;
 	}
 

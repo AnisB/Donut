@@ -22,12 +22,12 @@
 // Library includes
 #include "graphics/shaderManager.h"
 #include "graphics/geometry.h"
+#include "graphics/material.h"
 
 #include "base/singleton.h"
 #include "texture.h"
 #include "ggxbrdf.h"
 #include "geometrycontainer.h"
-#include "sugar.h"
 
 // STL includes
 #include <string>

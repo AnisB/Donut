@@ -1,5 +1,6 @@
 // Library includes
 #include "xmlhelpers.h"
+#include "fileloader.h"
 #include "base/common.h"
 
 namespace Donut

@@ -14,12 +14,13 @@
 *
 **/
 
+// Library includes
+#include "factory.h"
+#include "base/common.h"
 #include "graphics/common.h"
 #include "graphics/mesh.h"
-#include "resource/sugar.h"
 #include "resource/sugarloader.h"
 #include "resource/resourcemanager.h"
-#include "base/common.h"
 
 namespace Donut
 {
@@ -230,7 +231,7 @@ namespace Donut
 
 	TMesh* CreateSugarInstance(const std::string& _sugarName)
 	{
-		TSugar sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
+		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
 		foreach_macro(tex, sugar.material.textures)
 		{
 			TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);

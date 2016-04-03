@@ -38,10 +38,6 @@ int main(int argc, char** argv)
 	// Context info
 	Donut::TGraphicsSettings newContext;
 	newContext.windowName = "testSceneLoad";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
 	window->CreateRenderWindow(newContext);
 
 	Donut::TFlour* flour = Donut::TFlourLoader::Instance().LoadFlour(argv[1]);
@@ -53,7 +49,7 @@ int main(int argc, char** argv)
 	Donut::Camera* camera = renderingPipeline->camera;
 	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0,1280.0/720.0,1.0,2000.0);
+	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght,1.0,2000.0);
 	
 	while(window->IsRendering())
 	{

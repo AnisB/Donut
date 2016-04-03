@@ -8,7 +8,9 @@
 
 namespace Donut
 {
+	// Build a shader from its xml node
 	void BuildShaderDescriptor(rapidxml::xml_node<>* _shaderNode, TShader& _shader);
+	// Build texture infos from a textures xml node
 	void BuildTexturesDescriptor(rapidxml::xml_node<>* _texturesNode, std::vector<TTextureInfo>& _shader);
 }
 

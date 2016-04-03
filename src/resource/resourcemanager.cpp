@@ -26,6 +26,7 @@
  #include "Base/Macro.h"
  #include "sugarLoader.h"
  #include "pipelineloader.h"
+ #include "flourloader.h"
 
  #include <fstream>
  #include <sstream> 
@@ -57,6 +58,7 @@
 		m_rootAssetFolder = _assertFolder + "/";
 		TSugarLoader::Instance().Init();
 		TPipelineLoader::Instance().Init();
+		TFlourLoader::Instance().Init();
 	}
  	
  	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)

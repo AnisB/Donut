@@ -23,7 +23,6 @@ namespace Donut
     // Default context data
     #define DEFAULT_MAJOR_VERSION 4
     #define DEFAULT_MINOR_VERSION 1
-    #define DEFAULT_WINDOW_NAME 720
     #define DEFAULT_WIDTH 1280 
 	#define DEFAULT_LENGHT 720
 	#define DEFAULT_NAME "Donut"

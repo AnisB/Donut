@@ -47,7 +47,6 @@ namespace Donut
 	 	// GPU to CPU methods
 	 	void TakeScreenShot(const std::string& parFileName);
 	    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
-
 	}
 }
 

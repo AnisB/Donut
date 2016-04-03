@@ -19,7 +19,7 @@
 
 #include "base/singleton.h"
 #include "graphics/uniformhandler.h"
-#include "resource/sugar.h"
+#include "recipe/sugardescriptor.h"
 #include "multithread/usualthreadsafeobjects.h"
 
 #include <list>
@@ -39,20 +39,12 @@ namespace Donut
 
             // This function searches for a given sugar file and determines either or 
             // not it has been found and returns it if it has.
-            TSugar FetchSugar(const std::string& parModel);
+            const TSugarDescriptor& FetchSugar(const std::string& parModel);
         protected:
             // Parses the sugar sub_directory
             void LoadSugars();
-            // Parses the sugar sub_directory mutlithreaded
-            void LoadSugars_MultiThread();
-            // Parses a sugar file
-            TSugar ParseSugarFile(const std::string& parFileName);
-
         protected:
-            std::string FMediaPath;
-            std::map<std::string, TSugar> FSugars;
-            TThreadSafeBolean FFinished;
-
+            std::map<std::string, TSugarDescriptor> FSugars;
     };
 }
 #endif // DONUT_SUGAR_LOADER

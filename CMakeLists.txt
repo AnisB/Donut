@@ -89,13 +89,14 @@ GENERATE_LIB("${SOURCES}/input" Input "DonutLib")
 GENERATE_LIB("${SOURCES}/multithread" MultiThread "DonutLib")
 GENERATE_LIB("${SOURCES}/render" Render "DonutLib")
 GENERATE_LIB("${SOURCES}/core" Core "DonutLib")
+GENERATE_LIB("${SOURCES}/recipe" Recipe "DonutLib")
 GENERATE_LIB("${SOURCES}/graphics" Graphics "DonutLib")
 GENERATE_LIB("${SOURCES}/resource" Resource "DonutLib")
 GENERATE_LIB("${SOURCES}/stateengine" StateEngine "DonutLib")
 GENERATE_LIB("${SOURCES}/tools" Tools "DonutLib")
 GENERATE_LIB("${SOURCES}/tracing" Tracing "DonutLib")
 
-SET(CORELIBS ${CORELIBS} Base Butter Engine Input Core MultiThread Render Graphics Resource StateEngine Tools Tracing)
+SET(CORELIBS ${CORELIBS} Base Butter Engine Input Core MultiThread Render Graphics Recipe Resource StateEngine Tools Tracing)
 
 # Adding the tests if we should
 IF(NO_TESTS)
