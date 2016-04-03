@@ -36,7 +36,6 @@ namespace Donut
 		TFlour(const std::string& _fileName)
 		: root(nullptr)
 		, sh(nullptr)
-		, loaded(false)
 		, filename(_fileName)
 		, pipelineName("minimal")
 		{
@@ -58,7 +57,6 @@ namespace Donut
 		}
 
 		// Generic data
-		bool loaded;
 		std::string filename;
 		std::string pipelineName;
 		
@@ -66,6 +64,9 @@ namespace Donut
 		std::vector<TLight*> lights;
 		TSphericalHarmonics* sh;
 	};
+
+	// Flour builder
+	TFlour* GenerateFlour(const std::string& _flourName);
 }
 
 #endif // DONUT_FLOUR_H

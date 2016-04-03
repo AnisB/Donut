@@ -4,7 +4,7 @@
 namespace Donut
 {
 	// Define the type
-	typedef unsigned int RECIPE_GUID;
+	typedef unsigned long int RECIPE_GUID;
 
 	// Generate the guid
 	RECIPE_GUID GenerateGUID(const char* _data);

@@ -40,7 +40,7 @@ int main(int argc, char** argv)
 	newContext.windowName = "testSceneLoad";
 	window->CreateRenderWindow(newContext);
 
-	Donut::TFlour* flour = Donut::TFlourLoader::Instance().LoadFlour(argv[1]);
+	Donut::TFlour* flour = Donut::GenerateFlour(argv[1]);
 	Donut::TPipeline* renderingPipeline;
 	renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);

@@ -36,6 +36,9 @@ namespace Donut
 
 		// Init levels
 		void Init();
+		const TFlourDescriptor& FetchFlour(const std::string& _flourFileName);
+
+	protected:
 		void LoadFlours();
 
 		// This function reads the scene descriptor file
