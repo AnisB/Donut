@@ -33,7 +33,7 @@ namespace Donut
 	struct TFlour
 	{
 		// Consrtuctor
-		TFlour(const std::string& _fileName)
+		TFlour(const STRING_TYPE& _fileName)
 		: root(nullptr)
 		, sh(nullptr)
 		, filename(_fileName)
@@ -57,8 +57,8 @@ namespace Donut
 		}
 
 		// Generic data
-		std::string filename;
-		std::string pipelineName;
+		STRING_TYPE filename;
+		STRING_TYPE pipelineName;
 		
 		TNode* root;
 		std::vector<TLight*> lights;
@@ -66,7 +66,7 @@ namespace Donut
 	};
 
 	// Flour builder
-	TFlour* GenerateFlour(const std::string& _flourName);
+	TFlour* GenerateFlour(const STRING_TYPE& _flourName);
 }
 
 #endif // DONUT_FLOUR_H

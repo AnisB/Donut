@@ -28,7 +28,7 @@ namespace Donut
 {
 	struct TException : public std::exception
 	{
-		TException(const std::string& _message, const CHAR_TYPE* _file, int _line)
+		TException(const STRING_TYPE& _message, const CHAR_TYPE* _file, int _line)
 		: message(_message)
 		, file(_file)
 		, line(_line)

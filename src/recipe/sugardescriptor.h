@@ -8,29 +8,19 @@
 
 namespace Donut
 {
+	// Sugar descriptor
 	struct TSugarDescriptor
     {
-        std::string     name;
-        std::string     geometry;
+
+        STRING_TYPE    name;
+		STRING_TYPE     geometry;
         TMaterial       material;
         
         // For tracking the file's state
         RECIPE_GUID id;
-
-        TSugarDescriptor( )
-        {
-        }
-
-        TSugarDescriptor(const TSugarDescriptor& _sugar)
-        {
-            name = _sugar.name;
-            geometry = _sugar.geometry;
-            material = _sugar.material;
-            id = _sugar.id;
-        }
     };
 
-	void ParseSugarFile(const std::string& parFileName, TSugarDescriptor& _sugar);
+	void ParseSugarFile(const STRING_TYPE& parFileName, TSugarDescriptor& _sugar);
 }
 
 #endif // SUGAR_DESCRIPTOR_H

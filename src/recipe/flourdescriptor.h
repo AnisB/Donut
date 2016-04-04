@@ -10,7 +10,7 @@
 
 namespace Donut
 {
-	// Environement descriptor
+	// Environement SH descriptor
 	struct TSHDescriptor
 	{
 		std::string red;
@@ -18,6 +18,7 @@ namespace Donut
 		std::string blue;
 	};
 
+	// Light source descriptor
 	struct TLightDescriptor
 	{
 		std::string pos;
@@ -26,17 +27,20 @@ namespace Donut
 		std::string ray;
 	};
 
+	// Skybox descriptor
 	struct TSkyboxDescriptor
 	{
 		std::string location;
 		std::string extension;
 	};
 
+	// Sugar descriptor
 	struct TModelDescriptor
 	{
 		std::string sugarname;
 	};
 	
+	// Node descriptor
 	struct TNodeDescriptor
 	{
 		TNodeDescriptor(bool _sceneNode = false)
@@ -56,12 +60,13 @@ namespace Donut
 		std::vector<std::string> models;
 	};
 
+	// Illumination descriptor
 	struct TIlluminationDescritor
 	{
 		std::vector<TLightDescriptor> lights;
 	};
 
-	// The descriptor
+	// Flour descriptor
 	struct TFlourDescriptor
 	{
 		// Generic data
@@ -78,6 +83,7 @@ namespace Donut
         RECIPE_GUID id;
 	};
 
+	// Build a descriptor from a file 
 	void ParseFlourFile(const std::string& _fileName, TFlourDescriptor& _output);
 }
 

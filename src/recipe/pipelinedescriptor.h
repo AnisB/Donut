@@ -64,6 +64,7 @@ namespace Donut
         TPipelineVFX  vfx;
     };
 
+	// The pipeline descriptor
     struct TPipelineDescriptor
     {
         std::vector<TPipelinePass> passes;
@@ -73,7 +74,7 @@ namespace Donut
         RECIPE_GUID id;
     };
 
-    // Parsing method
+    // Generate a pipeline descriptor from a file
     void ParsePipelineFile(const std::string& _pipelineFileName, TPipelineDescriptor& _pipeline);
 
 }

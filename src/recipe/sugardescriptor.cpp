@@ -44,7 +44,7 @@ namespace Donut
     #define TEXTURE_FILE_LOCATION_TOKEN "location"
     
     // Returns the enumeration that matches a given string    
-    void DataTypeToUniform(const std::string& _type, const std::string& _name, const std::string& _value, TUniformHandler& _handler)
+    void DataTypeToUniform(const STRING_TYPE& _type, const std::string& _name, const std::string& _value, TUniformHandler& _handler)
     {
         if(_type == TOKEN_VEC3)
         {
@@ -76,7 +76,7 @@ namespace Donut
         }
     }
 
-    void ParseSugarFile(const std::string& _fileLocation, TSugarDescriptor& _sugar)
+    void ParseSugarFile(const STRING_TYPE& _fileLocation, TSugarDescriptor& _sugar)
     {
         // reading the text file
         std::vector<char> buffer;

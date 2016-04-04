@@ -18,13 +18,11 @@
 **/
 
 // Library includes
-#include "core/node.h"
-#include "core/flour.h"
-#include "base/singleton.h"
+#include "base/common.h"
 #include "recipe/flourdescriptor.h"
 
-// STL includes
-#include <string.h>
+// Extrernal includes
+#include <map>
 
 namespace Donut 
 {
@@ -36,17 +34,13 @@ namespace Donut
 
 		// Init levels
 		void Init();
-		const TFlourDescriptor& FetchFlour(const std::string& _flourFileName);
+		const TFlourDescriptor& FetchFlour(const STRING_TYPE& _flourFileName);
 
 	protected:
 		void LoadFlours();
-
-		// This function reads the scene descriptor file
-		// and loads into memory the scene structures
-		TFlour* LoadFlour(const std::string& _flourFileName);
 		
 	protected:
-		std::map<std::string, TFlourDescriptor> m_flours;
+		std::map<STRING_TYPE, TFlourDescriptor> m_flours;
 	};
 }
 #endif // FLOUR_LOADER_H

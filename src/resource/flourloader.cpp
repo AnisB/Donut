@@ -81,10 +81,10 @@ namespace Donut
 	void TFlourLoader::LoadFlours()
 	{
 		
-		const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-        std::string floursDirectory(rootAssetDirectory + "/common/flours");
+		const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+		STRING_TYPE floursDirectory(rootAssetDirectory + "/common/flours");
 
-        std::vector<std::string> flourFiles;
+        std::vector<STRING_TYPE> flourFiles;
         GetExtensionFileList(floursDirectory, ".flour", flourFiles);
         foreach_macro(flour, flourFiles)
         {

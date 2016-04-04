@@ -12,7 +12,6 @@ namespace Donut
 
 	void removeMultSpace(STRING_TYPE& _str) 
 	{
-
 		STRING_TYPE::iterator new_end = std::unique(_str.begin(), _str.end(), BothAreSpaces);
 		_str.erase(new_end, _str.end());  
 	}
