@@ -83,8 +83,11 @@ namespace Donut
         std::vector<char> buffer;
         ReadFile(_fileLocation.c_str(), buffer);
 
+        // Set the file location
+        _sugar.file = _fileLocation;
+
         // compute the GUID
-        _sugar.id = GenerateGUID(&buffer[0]);
+        _sugar.id = GetFileHash(_fileLocation);
 
         // Parsing it
         rapidxml::xml_document<> doc;
@@ -140,5 +143,11 @@ namespace Donut
 		{
 			shift = BuildBRDFDescriptor(brdf, _sugar.material.brfds, shift);
 		}
+    }
+
+    bool HasChanged(const TSugarDescriptor& _sugarDescriptor)
+    {
+        RECIPE_GUID id = GetFileHash(_sugarDescriptor.file);
+        return id != _sugarDescriptor.id;
     }
 }

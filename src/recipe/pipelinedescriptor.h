@@ -76,6 +76,7 @@ namespace Donut
 
     // Generate a pipeline descriptor from a file
     void ParsePipelineFile(const std::string& _pipelineFileName, TPipelineDescriptor& _pipeline);
+    bool HasChanged(const TPipelineDescriptor& _pipelineDescriptor);
 
 }
 

@@ -175,7 +175,7 @@ namespace Donut
                 ReadFile(_fileName.c_str(), buffer);
 
                 // compute the id
-                _output.id = GenerateGUID(&buffer[0]);
+                _output.id = GetFileHash(_fileName);
 
                 // Parsing it
                 rapidxml::xml_document<> doc;
@@ -220,4 +220,11 @@ namespace Donut
                         HandleIlluminationNode_D(illumination, _output.illumination);
                 }
 	}
+
+
+        bool HasChanged(const TFlourDescriptor& _flourDescriptor)
+        {
+                RECIPE_GUID id = GetFileHash(_flourDescriptor.file);
+                return id != _flourDescriptor.id;
+        }
 }

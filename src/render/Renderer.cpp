@@ -150,6 +150,7 @@
         m_pipeline->BuildPipelineData();
 		return isOk;
  	}
+ 	
 	void TRenderer::SetLook(const TRenderingLook::Type parLook)
 	{
 		if(parLook == TRenderingLook::LINE)

@@ -93,7 +93,7 @@ namespace Donut
 
         _pipeline.file = _pipelineFileName;
         // compute the id
-        _pipeline.id = GenerateGUID(&buffer[0]);
+        _pipeline.id = GetFileHash(_pipelineFileName);
 
         // Parsing it
         rapidxml::xml_document<> doc;
@@ -162,4 +162,10 @@ namespace Donut
             _pipeline.passes.push_back(pass);
         }
     }	
+
+    bool HasChanged(const TPipelineDescriptor& _pipeline)
+    {
+        RECIPE_GUID id = GetFileHash(_pipeline.file);
+        return id != _pipeline.id;
+    }
 }

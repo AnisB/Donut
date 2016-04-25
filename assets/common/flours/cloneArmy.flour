@@ -254,6 +254,9 @@
 		</scenenode>
 
 	</root>
+	
+	<pipeline name="complete"/>
+
 	<illumination>
 		<light pos="30 200 -30" diff="0 0 0 0" spec="0 0 0 1" ray="300"/>
 	</illumination>

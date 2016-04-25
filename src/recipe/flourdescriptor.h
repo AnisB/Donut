@@ -85,6 +85,7 @@ namespace Donut
 
 	// Build a descriptor from a file 
 	void ParseFlourFile(const std::string& _fileName, TFlourDescriptor& _output);
+    bool HasChanged(const TFlourDescriptor& _flourDescriptor);
 }
 
 #endif // FLOUR_DESCRIPTOR_H

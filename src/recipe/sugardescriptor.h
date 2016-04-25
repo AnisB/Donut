@@ -13,14 +13,16 @@ namespace Donut
     {
 
         STRING_TYPE    name;
-		STRING_TYPE     geometry;
-        TMaterial       material;
+        STRING_TYPE    file;
+		STRING_TYPE    geometry;
+        TMaterial      material;
         
         // For tracking the file's state
         RECIPE_GUID id;
     };
 
 	void ParseSugarFile(const STRING_TYPE& parFileName, TSugarDescriptor& _sugar);
+    bool HasChanged(const TSugarDescriptor& _sugarDescriptor);
 }
 
 #endif // SUGAR_DESCRIPTOR_H
