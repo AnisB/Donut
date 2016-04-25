@@ -10,14 +10,12 @@ The teapot army scene:
 
 
 Sample sugar file:
-![alt tag](http://anisb.github.io/images/sugar.png)
-
-
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/sugar.PNG)
 
 Sample scene file:
-![alt tag](http://anisb.github.io/images/scene.png)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/scene.PNG)
 
 
 
-Exemple of scene rendering:
-![alt tag](http://anisb.github.io/images/example.png)
+Pipeline recipe:
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/pipeline.PNG)
