@@ -237,6 +237,12 @@ namespace Donut
 			TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
   			tex->texID = texPtr->FID;
 		}
+
+		foreach_macro(brdfIT, sugar.material.brfds)
+		{
+			TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
+			brdf->id = brdfIT->texID;
+		}
 		ShaderManager::Instance().CreateShader(sugar.material.shader); 
 		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(sugar.material.shader, sugar.geometry);
 		TMesh* newMesh = new TMesh(sugar.material, geometry);

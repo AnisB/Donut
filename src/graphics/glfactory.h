@@ -18,6 +18,7 @@
 #define GL_FACTORY_GRAPHICS_DONUT
 
 //Library includes
+#include "base/common.h"
 #include "graphics/common.h"
 #include "graphics/geometry.h"
 #include "graphics/shader.h"

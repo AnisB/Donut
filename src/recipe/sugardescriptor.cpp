@@ -39,6 +39,7 @@ namespace Donut
 
     // TEXTURE DATA
     #define TEXTURES_NODE_TOKEN "textures"
+    #define BRDF_NODE_TOKEN "brdfs"
     #define TEXTURE_2D_NODE_TOKEN "texture2D"
     #define TEXTURE_NAME_TOKEN "name"
     #define TEXTURE_FILE_LOCATION_TOKEN "location"
@@ -125,11 +126,19 @@ namespace Donut
             }
         }
 
+		int shift = 0;
         // Fetching external shader data
         rapidxml::xml_node<>* textures = sugar_root->first_node(TEXTURES_NODE_TOKEN);
+		if(textures)
         {
-            ASSERT_POINTER_NOT_NULL_NO_RELEASE(textures);
-            BuildTexturesDescriptor(textures, _sugar.material.textures);
+			shift = BuildTexturesDescriptor(textures, _sugar.material.textures, shift);
         }
+
+		// Fetching external shader data
+		rapidxml::xml_node<>* brdf = sugar_root->first_node(BRDF_NODE_TOKEN);
+		if(brdf)
+		{
+			shift = BuildBRDFDescriptor(brdf, _sugar.material.brfds, shift);
+		}
     }
 }

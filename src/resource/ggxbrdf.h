@@ -9,14 +9,14 @@ namespace Donut
 	{
 		TGGXBRDF()
 		: data(nullptr)
-		, m_id(0)
+		, id(0)
 		{
 
 		}
 
 		int dimension[3];
-		double* data;
-		GLuint m_id;
+		float* data;
+		GLuint id;
 	};
 }
 

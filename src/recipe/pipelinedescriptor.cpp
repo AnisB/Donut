@@ -147,10 +147,11 @@ namespace Donut
                 }
 
                 // textures node
+				int shift = 0;
                 rapidxml::xml_node<>* textures = vfx->first_node(TEXTURES_NODE_TYPE_TOKEN);
                 if(textures)
                 {
-                    BuildTexturesDescriptor(textures, pass.vfx.textures);
+					shift = BuildTexturesDescriptor(textures, pass.vfx.textures, shift);
                 }
             }
             else

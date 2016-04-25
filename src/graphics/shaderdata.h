@@ -44,6 +44,28 @@ namespace Donut
         };
     };
 
+
+	struct TBRDFInfo
+	{
+		int offset;
+		std::string name;
+		std::string file;
+		GLuint texID;
+		TBRDFInfo()
+		{
+			offset = 0;
+			texID = 0;
+		}
+
+		TBRDFInfo(const TBRDFInfo& _texture)
+		{
+			offset = _texture.offset;
+			name = _texture.name;
+			file = _texture.file;
+			texID = _texture.texID;
+		}
+	};
+
     struct TTextureInfo
     {
         int offset;

@@ -37,7 +37,8 @@ namespace Donut
             builtIns = _mat.builtIns;
             uniforms = _mat.uniforms;
             textures = _mat.textures;
-            cubeMaps = _mat.cubeMaps;
+			cubeMaps = _mat.cubeMaps;
+			brfds = _mat.brfds;
             shader = _mat.shader;
         }
 
@@ -45,7 +46,8 @@ namespace Donut
         TShader                         shader;
         std::vector<TBuildIn>           builtIns;
         std::vector<TUniformHandler>    uniforms;
-        std::vector<TTextureInfo>       textures;
+		std::vector<TTextureInfo>       textures;
+		std::vector<TBRDFInfo>			brfds;
         std::vector<TCubeMapInfo>       cubeMaps;
     };
 }
