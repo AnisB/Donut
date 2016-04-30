@@ -125,10 +125,17 @@
  		}
 		TEgg* container = ReadEggFile(RelativePath(_fileName));
 		ASSERT(container != nullptr);
-		TGeometry* newModel = CreateGeometry(_fileName, parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
+		TGeometry* newModel = InstanciateRunTimeGeometry(_fileName, parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
 		delete container;
 		FGeometries[_fileName] = newModel;
 		return newModel;
+	}
+
+	TGeometry* ResourceManager::InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	{
+		TGeometry* geo = Donut::CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
+		FGeometries[_name] = geo;
+		return geo;
 	}
 
 	/*
@@ -345,22 +352,4 @@
 		return nbShapes;
 	}
 	*/
-
-	TGeometry* ResourceManager::CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
-	{
-		TGeometry* geo = ::Donut::CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
-		FGeometries[_name] = geo;
-		return geo;
-	}
-	void ResourceManager::BindMaterial(const TShader& _shader,  const TMaterial&  _material)
-	{
-		foreach_macro(uni, _material.uniforms)
-		{
-			uni->Inject(_shader);
-		}
-		foreach_macro(tex, _material.textures)
-		{
-			ShaderManager::Instance().InjectTex(_shader,tex->texID, tex->name,tex->offset);
-		}
-	}
 }

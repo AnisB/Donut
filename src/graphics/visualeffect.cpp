@@ -49,7 +49,7 @@ namespace Donut
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.width, "width");
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.height, "height");
  		// Injecting buffers
- 		ResourceManager::Instance().BindMaterial(m_material.shader, m_material);
+ 		ShaderManager::Instance().InjectMaterial(m_material.shader, m_material);
 
  		foreach_macro(buffer, _previous.buffers)
  		{

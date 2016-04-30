@@ -70,14 +70,11 @@
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
 		TSkyboxTexture* FetchSkybox(const std::string& _skyboxFolder, const std::string& _extension);
+		// This function is not really supposed to be used on a perfomance oriented scene, it is a helper that is available for the user to create
+		// at runtime geometries and to register them for further access (it is used to create cubes, spheres, planes, etc etc)
+		// It is also used internally by the FetchGeometry method
+		TGeometry* InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
-
-	// Should be taken a look at
-		// Creates a geometry and registers it with a given name
-		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
-
-		// Binds into GPU memory a given material
-		void BindMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 
 		// Still to refactor
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);

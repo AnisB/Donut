@@ -50,7 +50,7 @@ namespace Donut
  		Bind();
 		const Matrix4& model = _values["model"].GetValue<Matrix4>();
 		const Matrix4& viewprojection = _values["viewprojection"].GetValue<Matrix4>();
- 		ResourceManager::Instance().BindMaterial(FMaterial.shader, FMaterial);
+		ShaderManager::Instance().InjectMaterial(FMaterial.shader, FMaterial);
  		foreach_macro(uniform, _values)
  		{
  			TUniformHandler& handler = uniform->second;
