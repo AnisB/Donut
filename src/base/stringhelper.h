@@ -4,7 +4,7 @@
 // External includes
 #include <string.h>
 #include <sstream>
-
+#include <vector>
 
 namespace Donut
 {
@@ -35,6 +35,9 @@ namespace Donut
 
 	// Takes a string and removes multiple spaces from it
 	void removeMultSpace(STRING_TYPE& parString);
+
+	// Splits parstring with parSeparator
+	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
 }
 
 #endif // BASE_STRING_HELPER_H

@@ -27,7 +27,7 @@
 #include "base/singleton.h"
 #include "texture.h"
 #include "ggxbrdf.h"
-#include "geometrycontainer.h"
+#include "egg.h"
 
 // STL includes
 #include <string>
@@ -75,8 +75,7 @@
 	// Should be taken a look at
 		// Creates a geometry and registers it with a given name
 		TGeometry* CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
-		// Reads a given file and serializes its content as a geometry container
-		TGeometryContainer* ReadWavefront(const std::string&  parObjName);
+
 		// Binds into GPU memory a given material
 		void BindMaterial(const TShader& _shader, const TMaterial& _material); // <<<< should probably be moved
 

@@ -14,41 +14,18 @@
 *
 **/
 
-#ifndef GEOMETRY_CONTAINER_RESOURCE_DONUT
-#define GEOMETRY_CONTAINER_RESOURCE_DONUT
+// Library includes
+#include "tools/GeometryConverters.h"
 
 // STL includes
 #include <fstream>
-
-namespace Donut
+int main(int argc, char** argv)
 {
-	struct TGeometryContainer
-	{
-		TGeometryContainer()
-		: faces(nullptr)
-		, vertsNormalsUVs(nullptr)
-		{
-		}
-
-		~TGeometryContainer()
-		{
-			if(vertsNormalsUVs != nullptr)
-			{
-				delete [] vertsNormalsUVs;
-			}
-			if(faces != nullptr)
-			{
-				delete [] faces;
-			}
-		}
-
-	    int nbFaces;
-	    int nbVertices;
-	    float* vertsNormalsUVs;
-	    unsigned int* faces;
-	};	
+	ASSERT_MSG(argc == 3, "Wrong number of parameters, you should specify the input an output files.");
+	std::string inputFile(argv[1]);
+	std::string outputFile(argv[2]);
+	GENERAL_INFO("Inputfile is "<<inputFile<<" Output file will be "<<outputFile);
+	Donut::ConvertWavefrontToEgg(inputFile, outputFile);
+	GENERAL_INFO("Conversion done");
+	return 0;
 }
-
-
-#endif // GEOMETRY_CONTAINER_RESOURCE_DONUT
- 

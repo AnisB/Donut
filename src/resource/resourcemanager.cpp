@@ -14,34 +14,29 @@
  *
  **/
 
- #include "ResourceManager.h"
+#include "ResourceManager.h"
 
- #include "TextureHelpers.h"
- #include "brdfhelpers.h"
- #include "resource/Common.h"
- #include "input/Common.h"
- #include <Base/Common.h>
- #include "graphics/glfactory.h"
- #include <Tools/FileLoader.h>
- #include "Base/Macro.h"
- #include "sugarLoader.h"
- #include "pipelineloader.h"
- #include "flourloader.h"
+#include "TextureHelpers.h"
+#include "brdfhelpers.h"
+#include "resource/Common.h"
+#include "input/Common.h"
+#include <Base/Common.h>
+#include "graphics/glfactory.h"
+#include "Base/Macro.h"
+#include "sugarLoader.h"
+#include "pipelineloader.h"
+#include "flourloader.h"
+#include "egghelpers.h"
 
- #include <fstream>
- #include <sstream> 
- #include <vector> 
- #include <list> 
+#include <fstream>
+#include <sstream> 
+#include <vector> 
+#include <list> 
 
  using namespace std;
  
  namespace Donut
  {
- 	struct TShape
- 	{
- 		std::vector<std::string> info;
- 	};
-
  	ResourceManager::ResourceManager()
  	: m_rootAssetFolder("./assets/")
  	{
@@ -119,285 +114,6 @@
  		}
  	}
 
-	TGeometryContainer* ResourceManager::ReadWavefront(const std::string& _model)
-	{
-  		RESOURCE_INFO("Trying to load Wavefront: "<<_model); 
-		// Liste des vertices
-		std::vector<Vector3> listePoints;
-		// Liste des infos par point
-		std::vector<Vector3> normales;
-		std::vector<Vector2> uvList;
-
-		// Gestion des infos
-		std::list<TShape> shapes;
-		
-		fstream in;
-		in.open(_model.c_str(), std::fstream::in);
-	  	if (!in) 
-	  	{ 
-	  		ASSERT_FAIL_MSG("Cannot find _model obj: "<<_model); 
-	  		return NULL;
-	  	}
-		string line;
-		while (getline(in, line)) 
-		{
-			if (line.substr(0,2) == "o ") 
-			{
-				while(getline(in, line) && line.substr(0,2) != "o ")
-				{
-		  			if (line.substr(0,2) == "v ") 
-				    {
-		  				// INPUT_DEBUG("Nouveau vertice.");
-						stringstream s(line.substr(2));
-						Vector3 v; 
-						s >> v.x; 
-						s >> v.y; 
-						s >> v.z; 
-						listePoints.push_back(v);
-				    }
-				    else if (line.substr(0,2)=="f ")
-				    {
-				    	TShape newShape;
-				    	while(line.substr(0,2)=="f ")
-				    	{
-				    		// INPUT_DEBUG("new primitive "<< line);
-				    		newShape.info.push_back(line.substr(2));
-				    		if(!getline(in, line))
-				    			break;
-				    	}
-
-				    	shapes.push_back(newShape);
-				    }
-				    else if(line[0] == 'v' && line[1] == 't') 
-				    { 	
-				    	// INPUT_DEBUG("UV mapping.");
-						istringstream s(line.substr(2));
-						float u,v;
-						s >> u;
-						s >> v;
-						Vector2 map;
-						map.x = u;
-						map.y = v;
-				      	uvList.push_back(map);
-					}
-				    else if(line[0] == 'v' && line[1] == 'n') 
-				    { 
-				    	//INPUT_DEBUG("Normal.");
-						istringstream s(line.substr(2));
-						Vector3 normal;
-						s >> normal.x;
-						s >> normal.y;
-						s >> normal.z;
-				      	normales.push_back(normal);
-					}
-				}
-			}
-		    else if (line[0] == '#') 
-		    { 
-		    	// Commentaire
-			}
-		}
-	 	TGeometryContainer * newModel = new TGeometryContainer();
-	 	unsigned int* indices;
-
-		foreach_macro(shape,shapes)
-		{
-			TShape & currentShape = *shape;
-			int nbShape = (int)currentShape.info.size();
-			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
-			std::vector<std::string> sample;
-			split(currentShape.info[0], ' ', sample); 
-			int dimShape = (int)sample.size();
-			ASSERT_MSG_NO_RELEASE((dimShape==3 || dimShape==4), "Shape de dimension autre que 3 ou 4");
-			std::vector<std::string> sample2;
-			split(sample[2],'/', sample2);
-			int nbInfo = (int)sample2.size();
-
-			// We only get the pos buffer from the obj
-			if(nbInfo==1)
-			{
-				newModel->vertsNormalsUVs = new GLfloat[8*dimShape*nbShape];
-				GLfloat* vertexArray = newModel->vertsNormalsUVs;
-				GLfloat* normalArray = vertexArray + 3*dimShape*nbShape;
-				GLfloat* texCoord = normalArray + 3*dimShape*nbShape;
-
-				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
-				{
-					std::vector<std::string> vertices;
-					split(*prim,' ', vertices);
-					int primSize = (int)vertices.size();
-					if(vertices.size() == 3)
-					{
-						Vector3 points[3];
-						points[0] = listePoints[convertFromString<int>(vertices[0])-1];
-						points[1] = listePoints[convertFromString<int>(vertices[1])-1];
-						points[2] = listePoints[convertFromString<int>(vertices[2])-1];
-
-						const Vector3& v0 = points[1]-points[0];
-						const Vector3& v1 = points[2]-points[0];
-						const Vector3& normal =  normalize(crossProd(v0,v1));
-
-						for(int i = 0; i < 3; ++i)
-						{
-							vertexArray[(verticeCounter+i)*3] = (GLfloat)points[i].x;
-							vertexArray[(verticeCounter+i)*3+1] = (GLfloat)points[i].y;
-							vertexArray[(verticeCounter+i)*3+2] = (GLfloat)points[i].z;
-
-							normalArray[(verticeCounter+i)*3] = (GLfloat)normal.x;
-							normalArray[(verticeCounter+i)*3+1] = (GLfloat)normal.y;
-							normalArray[(verticeCounter+i)*3+2] = (GLfloat)normal.z;
-						}
-						verticeCounter += primSize;
-					}
-					else // 4
-					{
-						/*
-						const Vector3& point0 = listePoints[convertFromString<int>(vertices[0]-1];
-						const Vector3& point1 = listePoints[convertFromString<int>(vertices[1]-1];
-						const Vector3& point2 = listePoints[convertFromString<int>(vertices[2]-1];
-						const Vector3& point3 = listePoints[convertFromString<int>(vertices[3]-1];
-						*/
-						ASSERT_NOT_IMPLEMENTED();
-					}
-				}
-				// Creating the IBO
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for(int i = 0; i < verticeCounter; i++)
-				{
-					newModel->faces[i] = i;
-				}
-				newModel->nbFaces = verticeCounter/3;
-			}
-			else if(nbInfo==2)
-			{
-				newModel->vertsNormalsUVs = new GLfloat[8*dimShape*nbShape];
-				GLfloat* vertexArray = newModel->vertsNormalsUVs;
-				GLfloat* normalArray = vertexArray + 3*dimShape*nbShape;
-				GLfloat* texCoordArray = normalArray + 3*dimShape*nbShape;
-
-				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
-				{
-					std::vector<std::string> vertices;
-					split(*prim,' ', vertices);
-					int primSize = (int)vertices.size();
-					if(primSize == 3)
-					{
-						Vector3 points[3];
-						std::vector<std::string> dataVert0, dataVert1, dataVert2;
-						split(vertices[0],'/', dataVert0);
-						split(vertices[1],'/', dataVert1);
-						split(vertices[2],'/', dataVert2);
-						points[0] = listePoints[convertFromString<int>(dataVert0[0])-1];
-						points[1] = listePoints[convertFromString<int>(dataVert1[0])-1];
-						points[2] = listePoints[convertFromString<int>(dataVert2[0])-1];
-
-						Vector2 texCoord[3];
-						texCoord[0] = uvList[convertFromString<int>(dataVert0[1])-1];
-						texCoord[1] = uvList[convertFromString<int>(dataVert1[1])-1];
-						texCoord[2] = uvList[convertFromString<int>(dataVert2[1])-1];
-
-						const Vector3& v0 = points[1]-points[0];
-						const Vector3& v1 = points[2]-points[0];
-						const Vector3& normal =  normalize(crossProd(v0,v1));
-
-						for(int i = 0; i < 3; ++i)
-						{
-							vertexArray[(verticeCounter+i)*3] = (GLfloat)points[i].x;
-							vertexArray[(verticeCounter+i)*3+1] = (GLfloat)points[i].y;
-							vertexArray[(verticeCounter+i)*3+2] = (GLfloat)points[i].z;
-
-							normalArray[(verticeCounter+i)*3] = (GLfloat)normal.x;
-							normalArray[(verticeCounter+i)*3+1] = (GLfloat)normal.y;
-							normalArray[(verticeCounter+i)*3+2] = (GLfloat)normal.z;
-
-							texCoordArray[(verticeCounter+i)*2] = (GLfloat)texCoord[i].x;
-							texCoordArray[(verticeCounter+i)*2+1] = (GLfloat)texCoord[i].y;
-						}
-						verticeCounter += primSize;
-					}
-					else // 4
-					{
-						ASSERT_NOT_IMPLEMENTED();
-					}
-				}
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for(int i = 0; i < verticeCounter; i++)
-				{
-					newModel->faces[i] = i;
-				}
-				newModel->nbFaces = verticeCounter/3;
-			
-			}
-			else if(nbInfo==3)
-			{
-				newModel->vertsNormalsUVs = new GLfloat[8*dimShape*nbShape];
-				GLfloat* vertexArray = newModel->vertsNormalsUVs;
-				GLfloat* normalArray = vertexArray + 3*dimShape*nbShape;
-				GLfloat* texCoordArray = normalArray + 3*dimShape*nbShape;
-
-				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
-				{
-					std::vector<std::string> vertices;
-					split(*prim,' ', vertices);
-					int primSize = (int)vertices.size();
-					if(primSize == 3)
-					{
-						Vector3 points[3];
-						std::vector<std::string> dataVert0, dataVert1, dataVert2;
-						split(vertices[0],'/', dataVert0);
-						split(vertices[1],'/', dataVert1);
-						split(vertices[2],'/', dataVert2);
-						points[0] = listePoints[convertFromString<int>(dataVert0[0])-1];
-						points[1] = listePoints[convertFromString<int>(dataVert1[0])-1];
-						points[2] = listePoints[convertFromString<int>(dataVert2[0])-1];
-
-						Vector2 texCoord[3];
-						texCoord[0] = uvList[convertFromString<int>(dataVert0[1])-1];
-						texCoord[1] = uvList[convertFromString<int>(dataVert1[1])-1];
-						texCoord[2] = uvList[convertFromString<int>(dataVert2[1])-1];
-
-						Vector3 normals[3];
-						normals[0] = normales[convertFromString<int>(dataVert0[2])-1];
-						normals[1] = normales[convertFromString<int>(dataVert1[2])-1];
-						normals[2] = normales[convertFromString<int>(dataVert2[2])-1];
-
-						for(int i = 0; i < 3; ++i)
-						{
-							vertexArray[(verticeCounter+i)*3] = (GLfloat)points[i].x;
-							vertexArray[(verticeCounter+i)*3+1] = (GLfloat)points[i].y;
-							vertexArray[(verticeCounter+i)*3+2] = (GLfloat)points[i].z;
-
-							normalArray[(verticeCounter+i)*3] = (GLfloat)normals[i].x;
-							normalArray[(verticeCounter+i)*3+1] = (GLfloat)normals[i].y;
-							normalArray[(verticeCounter+i)*3+2] = (GLfloat)normals[i].z;
-
-							texCoordArray[(verticeCounter+i)*2] = (GLfloat)texCoord[i].x;
-							texCoordArray[(verticeCounter+i)*2+1] = (GLfloat)texCoord[i].y;
-						}
-						verticeCounter += primSize;
-					}
-					else // 4
-					{
-						ASSERT_NOT_IMPLEMENTED();
-					}
-				}
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for(int i = 0; i < verticeCounter; i++)
-				{
-					newModel->faces[i] = i;
-				}
-				newModel->nbFaces = verticeCounter/3;
-			}
-		}
-		return newModel;	
-	}
-
 	TGeometry* ResourceManager::FetchGeometry(const TShader& parShader, const std::string&  _fileName)
 	{
 		// Looking in the databaseModel
@@ -407,13 +123,15 @@
   			RESOURCE_DEBUG(_fileName<<" already loaded"); 
  			return it->second;
  		}
-		TGeometryContainer* container = ReadWavefront(RelativePath(_fileName));
+		TEgg* container = ReadEggFile(RelativePath(_fileName));
 		ASSERT(container != nullptr);
 		TGeometry* newModel = CreateGeometry(_fileName, parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
 		delete container;
 		FGeometries[_fileName] = newModel;
 		return newModel;
 	}
+
+	/*
 	std::vector<int> ResourceManager::LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable)
 	{
 		// Looking in the databaseModel
@@ -626,6 +344,7 @@
 		}
 		return nbShapes;
 	}
+	*/
 
 	TGeometry* ResourceManager::CreateGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
 	{

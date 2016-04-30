@@ -88,25 +88,6 @@ namespace Donut
 		}
 		return(status);
 	}
-	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out) 
-	{
-	    std::stringstream streamObj(parString);
-	    std::string item;
-	    while (std::getline(streamObj, item, parSeparator)) 
-	    {
-	        _out.push_back(item);
-	    }
-	}
-
-	// Geometry container writer
-	std::ofstream& operator<<(std::ofstream& _stream, TGeometryContainer* _container)
-	{
-		_stream.write((char*)&_container->nbVertices, sizeof(int));
-		_stream.write((char*)_container->vertsNormalsUVs, sizeof(float)*8*_container->nbVertices);
-		_stream.write((char*)&_container->nbFaces, sizeof(int));
-		_stream.write((char*)&_container->faces, sizeof(unsigned int)*3*_container->nbFaces);
-		return _stream;
-	}
 
 	void GetExtensionFileList(const std::string& _directoryPath, const std::string& _fileExtension, std::vector<std::string>& _outContainer)
 	{

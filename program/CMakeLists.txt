@@ -4,6 +4,6 @@ if(ROOF)
 GENERATE_PROGRAM(roofGeneration)
 endif(ROOF)
 
-GENERATE_PROGRAM(objSerializer)
+GENERATE_PROGRAM(wavefrontConverter)
 
 GENERATE_PROGRAM(brdfReader)
