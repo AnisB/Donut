@@ -69,6 +69,11 @@ namespace Donut
 	// Flour descriptor
 	struct TFlourDescriptor
 	{
+		TFlourDescriptor()
+		: sh(nullptr)
+		{
+
+		}
 		// Generic data
 		std::string name;
 		std::string file;

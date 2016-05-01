@@ -30,8 +30,17 @@
 
 int main(int argc, char** argv)
 {
-	ASSERT_MSG(argc == 2, "Not enough args");
-	Donut::ResourceManager::Instance().Init("assets");	
+	STRING_TYPE sceneName;
+	if (argc == 3)
+	{
+		sceneName = argv[2];
+		Donut::ResourceManager::Instance().Init(argv[1]);
+	}
+	else
+	{
+		sceneName = "TeapotArmy";
+		Donut::ResourceManager::Instance().Init("assets");
+	}
 
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
@@ -40,7 +49,7 @@ int main(int argc, char** argv)
 	newContext.windowName = "testSceneLoad";
 	window->CreateRenderWindow(newContext);
 
-	Donut::TFlour* flour = Donut::GenerateFlour(argv[1]);
+	Donut::TFlour* flour = Donut::GenerateFlour(argv[2]);
 	Donut::TPipeline* renderingPipeline;
 	renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);
