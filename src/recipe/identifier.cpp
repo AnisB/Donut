@@ -6,8 +6,11 @@
 #include <sstream>
 #include <sys/types.h>
 #include <sys/stat.h>
+#if __posix__
 #include <unistd.h>
-
+#else
+#include <time.h>
+#endif 
 namespace Donut
 {
 	RECIPE_GUID GetFileHash(const std::string& _filename)

@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 	newContext.windowName = "testSceneLoad";
 	window->CreateRenderWindow(newContext);
 
-	Donut::TFlour* flour = Donut::GenerateFlour(argv[2]);
+	Donut::TFlour* flour = Donut::GenerateFlour(sceneName);
 	Donut::TPipeline* renderingPipeline;
 	renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);
