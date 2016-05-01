@@ -1,9 +1,8 @@
 // Library include
 #include "GeometryConverters.h"
-#include "base\Common.h"
-#include "base\stringhelper.h"
-#include "butter\vector3.h"
-#include "resource\egg.h"
+#include "base/stringhelper.h"
+#include "butter/vector3.h"
+#include "resource/egg.h"
 
 // External includes
 #include <vector>
@@ -101,7 +100,7 @@ namespace Donut
 		{
 			TShape & currentShape = *shape;
 			int nbShape = (int)currentShape.info.size();
-			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, une ligne commencant par f error");
+			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modele, une ligne commencant par f error");
 			std::vector<std::string> sample;
 			split(currentShape.info[0], ' ', sample);
 			int dimShape = (int)sample.size();

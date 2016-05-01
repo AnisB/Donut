@@ -368,7 +368,7 @@ namespace Donut
 
         hFile.read(reinterpret_cast<char*>(&Header), sizeof(Header));
 
-        if (!std::memcmp(DeCompressed, &Header, sizeof(DeCompressed)))
+        if (!memcmp(DeCompressed, &Header, sizeof(DeCompressed)))
         {
             int BitsPerPixel = Header[16];
             int width  = Header[13] * 0xFF + Header[12];
