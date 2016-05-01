@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sugar name="Stormtrooper">
-   <geometry type="wavefront" location="common/geometry/Stormtrooper.obj"/>
+   <geometry type="egg" location="common/geometry/Stormtrooper.egg"/>
    <shader>
       <vertex location="common/shaders/base/vertex.glsl"/>
       <geometry location="common/shaders/base/geometry.glsl"/>

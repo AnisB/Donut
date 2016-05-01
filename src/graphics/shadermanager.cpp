@@ -18,6 +18,7 @@
 #include "shadermanager.h"
 #include "base/common.h"
 #include "graphics/common.h"
+#include "graphics/material.h"
 #include "resource/resourcemanager.h"
 #include "graphics/glfactory.h"
 #include "base/macro.h"
@@ -365,5 +366,17 @@ namespace Donut
 	    glUniform1i(texRef, 0+_spot);
 	    //UnbindCubeMap(_spot);
 		GL_API_CHECK_END();
+	}
+
+	void ShaderManager::InjectMaterial(const TShader& _shader, const TMaterial& _material)
+	{
+		foreach_macro(uni, _material.uniforms)
+		{
+			uni->Inject(_shader);
+		}
+		foreach_macro(tex, _material.textures)
+		{
+			ShaderManager::Instance().InjectTex(_shader, tex->texID, tex->name, tex->offset);
+		}
 	}
 }

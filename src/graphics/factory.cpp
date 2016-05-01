@@ -194,7 +194,7 @@ namespace Donut
  		meshName += std::to_string(cubeCounter++);
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader);
-		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 24, cubeFacesL, 12);
+		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, data, 24, cubeFacesL, 12);
 		TMesh* newMesh = new TMesh(defaultMat, geometry);
 		return newMesh;
 	}
@@ -218,7 +218,7 @@ namespace Donut
  		meshName += std::to_string(planeCounter++);
  		GRAPHICS_DEBUG("Creating plane "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, data, 4, planeIndexBuffer, 2);
+		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, data, 4, planeIndexBuffer, 2);
 		TMesh* newMesh = new TMesh(defaultMat, geometry);
 		return newMesh;
 	}
@@ -258,7 +258,7 @@ namespace Donut
  		meshName += std::to_string(FSQCounter++);
  		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		TGeometry* geometry = ResourceManager::Instance().CreateGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
+		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
 		return geometry;
 	}
 

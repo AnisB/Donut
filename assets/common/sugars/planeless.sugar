@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sugar name="Plane">
-   <geometry type="wavefront" location="common/geometry/plane.obj"/>
+   <geometry type="egg" location="common/geometry/plane.egg"/>
    <shader>
       <vertex location="common/shaders/bezier/vertex.glsl"/>
       <geometry location="common/shaders/bezier/tesseval.glsl"/>

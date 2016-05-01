@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sugar name="House">
-   <geometry type="wavefront" location="common/geometry/house.obj"/>
+   <geometry type="egg" location="common/geometry/house.egg"/>
    <shader>
       <vertex location="common/shaders/base/vertex.glsl"/>
       <geometry location="common/shaders/base/geometry.glsl"/>

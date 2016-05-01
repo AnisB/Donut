@@ -18,7 +18,7 @@
 
 // LIbrary includes
  #include "base/common.h"
- #include "resource/geometrycontainer.h"
+ #include "resource/egg.h"
  #include "butter/vector3.h"
  #include "butter/vector4.h"
  #include "butter/matrix4.h"
@@ -35,11 +35,6 @@ namespace Donut
 	void ReadFile(char const* fn, std::vector<char>& _output);
 	// Writes s in f
 	bool WriteFile(char *fn, char *s);
-	// Splits parstring with parSeparator
-	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
-
-	// Geometry container writer
-	std::ofstream& operator<<(std::ofstream& _stream, TGeometryContainer* _container);
 
 	template<typename T>
 	void stringConvertArray(const std::string& _param, std::vector<T>& _values)

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <sugar name="LightBulb">
-	<geometry type="wavefront" location="common/geometry/halobulb.obj"/>
+	<geometry type="egg" location="common/geometry/halobulb.egg"/>
 	<shader>
 		<vertex location="common/shaders/base/vertex.glsl"/>
 		<geometry location="common/shaders/base/geometry.glsl"/>

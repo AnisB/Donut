@@ -24,19 +24,22 @@
 #include "butter/Vector3.h"
 #include "butter/Matrix4.h"
 
-
 // STL includes
 #include <unordered_set>
 
 namespace Donut
 {
- 	class ShaderManager : public Singleton<ShaderManager>
- 	{
+	// Foward declare 
+	struct TMaterial;
 
- 	public:
- 		// Init && uninit
- 		ShaderManager();
- 		~ShaderManager();
+
+	class ShaderManager : public Singleton<ShaderManager>
+	{
+
+	public:
+		// Init && uninit
+		ShaderManager();
+		virtual ~ShaderManager();
 
  		// Creates a shader in GPU memory
  		bool CreateShader(TShader& parShader);
@@ -52,6 +55,10 @@ namespace Donut
  		template <typename T>
  		void InjectV(const TShader& parProgram, const T* _value, int _nbVal, const std::string& parName);
 		
+		// Inject Material
+		void InjectMaterial(const TShader& _shader, const TMaterial& _material);
+
+
 		// Texture binding/unbinding functions
 		void BindTex(GLuint _texID, GLuint parOffset);
 		void BindCubeMap(GLuint _texID, GLuint parOffset);
