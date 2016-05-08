@@ -23,7 +23,7 @@
 #include "stringhelper.h"
 #include "security.h"
 #include "singleton.h"
-#include "printers.h"
+#include "log.h"
 
 namespace Donut
 {

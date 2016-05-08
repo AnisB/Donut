@@ -25,8 +25,8 @@
  
 #include <GLFW/glfw3.h>
 
-// Donut includes
-#include <base/printers.h>
+// Library includes
+#include "base/log.h"
 
 namespace Donut
 {
