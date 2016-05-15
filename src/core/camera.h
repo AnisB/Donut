@@ -38,13 +38,12 @@ namespace Donut
 			// Utility functions
 			void Yaw(double parAngle);
 			void Pitch(double parAngle);
-			void Roll(double parAngle);
 			void Translate(const Vector3& parDir);
 
 			// Accessors
-			const Matrix4& GetViewMatrix() const { return FViewMatrix;}
-			const Matrix4& GetProjectionMatrix() const{ return FProjection;}
-			const Matrix4& GetProjectionViewMatrix() const{ return FProjection;}
+			const Matrix4& GetViewMatrix() const { return m_viewMatrix;}
+			const Matrix4& GetProjectionMatrix() const{ return m_projection;}
+			const Matrix4& GetProjectionViewMatrix() const{ return m_projectionView;}
 			// Setting the projection matrix
 			void DefinePerspective(double parFovy, double parAspect, double parNear, double parFar);
 			
@@ -54,16 +53,28 @@ namespace Donut
 			double GetFCoeff() {return m_fcoeff;}
 			void AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms);
 
+			// Compute view matrix
+			void RecomputeViewMatrix();
 		protected:
-			Matrix4 FViewMatrix;
-			Matrix3 FViewMatrix_inverse;
-			Matrix4 FProjection;
-			Matrix4 FProjectionView;
+			// Rendering data
+			Matrix4 m_viewMatrix;
+			Matrix3 m_viewMatrix_inverse;
+			Matrix4 m_projection;
+			Matrix4 m_projectionView;
+
+			// Management data
 			TThreadSafeBolean FHasChanged;
+
+			// Projection Data
 			double m_near;
 			double m_far;
 			double m_fcoeff;
 			double m_focus;
+
+			// View data
+			double m_yaw;
+			double m_pitch;
+			Vector3 m_position;
 	};
 }
 

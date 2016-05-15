@@ -35,6 +35,9 @@ namespace Donut
 	void ToTable(const Matrix3& _matrix, float* content);
 	Matrix3 Inverse(const Matrix3& parMatrix);
 
+	// Operators
+	Vector3 operator*(const Matrix3& _matrix, const Vector3& _vector);
+	
 	// Printing functions
 	std::ostream& operator<< (std::ostream& os, const Matrix3& obj);
 }

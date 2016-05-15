@@ -24,17 +24,26 @@
 namespace Donut 
 {
 	Camera::Camera()
-	: FViewMatrix()
-	, FViewMatrix_inverse()
-	, FProjection()
+	// Init of the matrices
+	: m_viewMatrix()
+	, m_viewMatrix_inverse()
+	, m_projection()
+	, m_projectionView()
+	// Manipulation data
 	, FHasChanged(true)
+	// projection data
 	, m_near(0.1)
 	, m_far(1000.0)
 	, m_focus((m_near+m_far)/(2.0*(m_far-m_near)))
+	// View data
+	, m_yaw(0.0)
+	, m_pitch(0.0)
+	, m_position()
 	{
-		SetIdentity(FViewMatrix_inverse);
-		matrix4(FViewMatrix, MatrixInit::Identity);
-		matrix4(FProjection, MatrixInit::Identity);
+		SetIdentity(m_viewMatrix);
+		SetIdentity(m_viewMatrix_inverse);
+		SetIdentity(m_projection);
+		SetIdentity(m_projectionView);
 	}
 
 	Camera::~Camera()
@@ -44,43 +53,46 @@ namespace Donut
 
 	void Camera::DefinePerspective(double parFovy, double parAspect, double parNear, double parFar)
 	{
+		// Setting the data
 		m_near = parNear;
 		m_far = parFar;
 		m_fcoeff = 2.0 / log2(m_far + 1.0);
 		m_focus = 100.0/(m_far-m_near);
-		AsPerspective(FProjection, parFovy, parAspect, parNear, parFar);
-		FProjectionView = FProjection * FViewMatrix;
-		FHasChanged.SetValue(true);
-	}
-	void Camera::Roll(double _angle)
-	{
-		FViewMatrix = RotateZAxis(_angle) * FViewMatrix;
-		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
-		FProjectionView = FProjection * FViewMatrix;
+
+		// Compute the perspective matrix
+		AsPerspective(m_projection, parFovy, parAspect, parNear, parFar);
+
+		// Comibinig it to the viex matrix for caching purposes
+		m_projectionView = m_projection * m_viewMatrix;
 		FHasChanged.SetValue(true);
 	}
 
+
 	void Camera::Yaw(double _angle)
 	{
-		FViewMatrix = RotateYAxis(_angle) * FViewMatrix;
-		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
-		FProjectionView = FProjection * FViewMatrix;
-		FHasChanged.SetValue(true);
+		// Incrementing the yaw angle
+		m_yaw = m_yaw + _angle;
+		RecomputeViewMatrix();
 	}
 
 	void Camera::Pitch(double _angle)
 	{
-		FViewMatrix = RotateXAxis(_angle) * FViewMatrix;
-		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
-		FProjectionView = FProjection*FViewMatrix;
-		FHasChanged.SetValue(true);
+		m_pitch = m_pitch + _angle;
+		RecomputeViewMatrix();
 	}
 
 	void Camera::Translate(const Vector3& _dir)
 	{
-		FViewMatrix = Translate_M4(_dir) * FViewMatrix;
-		FViewMatrix_inverse = Inverse3x3(FViewMatrix);
-		FProjectionView = FProjection * FViewMatrix;
+		const Vector3& dir = m_viewMatrix_inverse * _dir;
+		m_position = m_position + vector3(dir.x, dir.y, dir.z);
+		RecomputeViewMatrix();
+	}
+
+	void Camera::RecomputeViewMatrix()
+	{
+		m_viewMatrix = RotateXAxis(m_pitch) * RotateYAxis(m_yaw) * Translate_M4(m_position);
+		m_viewMatrix_inverse = Inverse3x3(m_viewMatrix);
+		m_projectionView = m_projection * m_viewMatrix;
 		FHasChanged.SetValue(true);
 	}
 
@@ -92,13 +104,13 @@ namespace Donut
 	void Camera::AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms)
 	{
 		// Injecting view matrix
-		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", FViewMatrix);
+		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", m_viewMatrix);
 		// Injecting inversed view matrix
-		_uniforms["view_inverse"].SetValue<Matrix3>(TShaderData::MAT3, "view_inverse", FViewMatrix_inverse);
+		_uniforms["view_inverse"].SetValue<Matrix3>(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
 		// Injecting projection matrix
-		_uniforms["projection"].SetValue<Matrix4>(TShaderData::MAT4, "projection", FProjection);
+		_uniforms["projection"].SetValue<Matrix4>(TShaderData::MAT4, "projection", m_projection);
 		// Injecting projection matrix
-		_uniforms["viewprojection"].SetValue<Matrix4>(TShaderData::MAT4, "viewprojection", FProjection*FViewMatrix);
+		_uniforms["viewprojection"].SetValue<Matrix4>(TShaderData::MAT4, "viewprojection", m_projection*m_viewMatrix);
 		// Injecting zbuffer fcoef
 		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance

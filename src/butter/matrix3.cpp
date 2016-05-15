@@ -95,6 +95,15 @@ namespace Donut
 		}
 	}
 
+	Vector3 operator*(const Matrix3& _mat, const Vector3& _vec)
+	{
+		Vector3 result;
+		result.x = _mat.m[0]*_vec.x + _mat.m[1]*_vec.y + _mat.m[2]*_vec.z;
+		result.y = _mat.m[3]*_vec.x + _mat.m[4]*_vec.y + _mat.m[5]*_vec.z;
+		result.z = _mat.m[6]*_vec.x + _mat.m[7]*_vec.y + _mat.m[8]*_vec.z;
+		return result;
+	}
+
 	std::ostream& operator<< (std::ostream& os, const Matrix3& obj) 
 	{
 		os << "Matrix3\n("<<obj.m[0] <<", " <<obj.m[1]<<", "<<obj.m[2]<<",\n"
