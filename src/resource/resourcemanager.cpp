@@ -24,6 +24,7 @@
 #include "graphics/glfactory.h"
 #include "Base/Macro.h"
 #include "sugarLoader.h"
+#include "toppingloader.h"
 #include "pipelineloader.h"
 #include "flourloader.h"
 #include "egghelpers.h"
@@ -54,6 +55,7 @@
 		TSugarLoader::Instance().Init();
 		TPipelineLoader::Instance().Init();
 		TFlourLoader::Instance().Init();
+		TToppingLoader::Instance().Init();
 	}
  	
  	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)

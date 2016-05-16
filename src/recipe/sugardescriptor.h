@@ -15,7 +15,7 @@ namespace Donut
         STRING_TYPE    name;
         STRING_TYPE    file;
 		STRING_TYPE    geometry;
-        TMaterial      material;
+        STRING_TYPE    material;
         
         // For tracking the file's state
         RECIPE_GUID id;

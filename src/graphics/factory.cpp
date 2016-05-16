@@ -21,6 +21,7 @@
 #include "graphics/mesh.h"
 #include "resource/sugarloader.h"
 #include "resource/resourcemanager.h"
+#include "resource/toppingloader.h"
 
 namespace Donut
 {
@@ -232,20 +233,21 @@ namespace Donut
 	TMesh* CreateSugarInstance(const std::string& _sugarName)
 	{
 		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
-		foreach_macro(tex, sugar.material.textures)
+		TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(sugar.material);
+		foreach_macro(tex, topping.data.textures)
 		{
 			TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
   			tex->texID = texPtr->FID;
 		}
 
-		foreach_macro(brdfIT, sugar.material.brfds)
+		foreach_macro(brdfIT, topping.data.brfds)
 		{
 			TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
 			brdf->id = brdfIT->texID;
 		}
-		ShaderManager::Instance().CreateShader(sugar.material.shader); 
-		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(sugar.material.shader, sugar.geometry);
-		TMesh* newMesh = new TMesh(sugar.material, geometry);
+		ShaderManager::Instance().CreateShader(topping.data.shader); 
+		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, sugar.geometry);
+		TMesh* newMesh = new TMesh(topping.data, geometry);
 		return newMesh;
 	}
 

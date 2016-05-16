@@ -1,17 +1,5 @@
 <?xml version="1.0"?>
 <sugar name="LightBulb">
 	<geometry type="egg" location="common/geometry/halobulb.egg"/>
-	<shader>
-		<vertex location="common/shaders/base/vertex.glsl"/>
-		<geometry location="common/shaders/base/geometry.glsl"/>
-		<fragment location="common/shaders/base/fragment.glsl"/>
-	</shader>
-	<built_in_data>
-	</built_in_data>
-	<extern_data>
-		<data type="float" name="weight" value="10.0"/>
-	</extern_data>
-	<textures>
-		<texture2D name="textureCmp" location="common/textures/rockwall.bmp"/>
-	</textures>
+	<material name="rockwall_base"/>
 </sugar>
