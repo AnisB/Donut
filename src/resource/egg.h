@@ -47,8 +47,6 @@ namespace Donut
 	    int nbVertices;
 	    float* vertsNormalsUVs;
 	    unsigned int* faces;
-
-
 	};
 
 	std::ostream& operator<<(std::ostream& _os, const TEgg& _eggInstance);

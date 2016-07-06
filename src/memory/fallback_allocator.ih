@@ -1,0 +1,49 @@
+// Library includes
+#include "null_allocator.h"
+#include "base/security.h"
+
+namespace Donut
+{
+	TFallBackAllocator::TFallBackAllocator()
+	: m_first()
+	, m_second()
+	{
+		// Nothing to do
+	}
+
+	TFallBackAllocator::~TFallBackAllocator()
+	{
+		// Nothing to do
+	}
+
+	// Allocate a memory chunk give a particular alignement
+	memory_block TFallBackAllocator::allocate(size_t size, char alignment)
+	{
+		const auto& blc = m_first.allocate(size, aligment);
+		if(blc.ptr == nullptr)
+		{
+			return m_second.allocate(size, aligment);
+		}
+		return blc;
+	}
+
+	// Frees a memory spot given
+	void TFallBackAllocator::deallocate(const memory_block& _blc)
+	{
+		if(m_first.owns(_blc))
+		{
+			m_first.deallocate(_blc);
+		}
+		else	
+		{
+			m_second.deallocate(_blc);
+		}
+	}
+
+	// Function that aswers to the question, has this bloc
+	// been allocated by this allocator ?
+	bool TFallBackAllocator::owns(const memory_block& _blc)
+	{
+		return m_first.owns(_blc) || m_second.owns(_blc);
+	}
+}

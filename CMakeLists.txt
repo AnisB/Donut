@@ -83,6 +83,7 @@ ENDIF()
 
 # Generating the libraries
 GENERATE_LIB("${SOURCES}/base" Base "DonutLib")
+GENERATE_LIB("${SOURCES}/memory" Memory "DonutLib")
 GENERATE_LIB("${SOURCES}/butter" Butter "DonutLib")
 GENERATE_LIB("${SOURCES}/engine" Engine "DonutLib")
 GENERATE_LIB("${SOURCES}/input" Input "DonutLib")
@@ -96,7 +97,7 @@ GENERATE_LIB("${SOURCES}/stateengine" StateEngine "DonutLib")
 GENERATE_LIB("${SOURCES}/tools" Tools "DonutLib")
 GENERATE_LIB("${SOURCES}/tracing" Tracing "DonutLib")
 
-SET(CORELIBS ${CORELIBS} Base Butter Engine Input Core MultiThread Render Graphics Recipe Resource StateEngine Tools Tracing)
+SET(CORELIBS ${CORELIBS} Base Butter Memory Engine Input Core MultiThread Render Graphics Recipe Resource StateEngine Tools Tracing)
 
 # Adding the tests if we should
 IF(NO_TESTS)
