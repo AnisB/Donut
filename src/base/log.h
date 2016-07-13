@@ -51,7 +51,7 @@ namespace Donut
 
 	// Access the default logger
 	TLoggerInterface* DefaultLogger();
-	TLoggerInterface* SetDefaultLogger();
+	void SetDefaultLogger(TLoggerInterface* _loggerInterface);
 
 	// General print macro
 	#define PRINT_GENERAL(LEVEL, TAG, ENONCE)\
