@@ -2,7 +2,10 @@
 #define ALLOCATOR_H
 
 // External includes
+#if __posix__
 #include <unistd.h>
+#elif WIN32
+#endif
 
 namespace Donut
 {

@@ -13,19 +13,28 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
+
+// Library includes
 #include "flourloader.h"
+
+#include "base/common.h"
+
+#include "butter/stream.h"
+
+#include "core/sceneNode.h"
+
 #include "tools/fileloader.h"
+#include "tools/xmlhelpers.h"
+
 #include "graphics/light.h"
 #include "graphics/mesh.h"
 #include "graphics/factory.h"
-#include "core/sceneNode.h"
+
 #include "resource/common.h"
 #include "resource/resourcemanager.h"
-#include "base/common.h"
-#include "butter/stream.h"
-#include "rapidxml.hpp"
-#include "tools/xmlhelpers.h"
 
+// External includes
+#include "rapidxml.hpp"
 #include <fstream>
 
 

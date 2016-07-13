@@ -5,6 +5,7 @@
 
 // External includes
 #include "rapidxml.hpp"
+
 namespace Donut
 {
         // XML file token

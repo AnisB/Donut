@@ -34,7 +34,7 @@ namespace Donut
 			DEBUG = 0,
 			INFO = 1, 
 			WARNING = 2,
-			ERROR = 3
+			ERROR_TAG = 3,
 		};	
 	}
 
@@ -58,7 +58,8 @@ namespace Donut
 	{\
 		STREAM_TYPE collector;\
 		collector<<ENONCE;\
-		Donut::DefaultLogger()->Log(LEVEL, TAG, collector.str().c_str());\
+		Donut::TLoggerInterface* logger = Donut::DefaultLogger();\
+		logger->Log(LEVEL, TAG, collector.str().c_str());\
 	}
 
 	// General purpose MACROS
@@ -75,7 +76,7 @@ namespace Donut
 		#endif
 		#define PRINT_INFO(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::INFO, TAG, ENONCE)
 		#define PRINT_WARNING(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::WARNING, TAG, ENONCE)
-		#define PRINT_ERROR(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::ERROR, TAG, ENONCE)
+		#define PRINT_ERROR(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::ERROR_TAG, TAG, ENONCE)
 	#endif
 }
 #endif

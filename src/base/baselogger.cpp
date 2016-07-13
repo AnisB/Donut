@@ -43,7 +43,7 @@ namespace Donut
 				std::cout<<ORANGE<<"[WARNING]";
 			}
 			break;
-			case TLogLevel::ERROR:
+			case TLogLevel::ERROR_TAG:
 			{
 				std::cout<<RED<<"[ERROR]";
 			}
