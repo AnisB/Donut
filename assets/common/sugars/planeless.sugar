@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <sugar name="Plane">
-   <geometry type="egg" location="common/geometry/plane.egg"/>
-   <material name="plane_tess_low"/>
+	<renderables>
+		<renderable>
+		   <geometry type="egg" location="common/geometry/plane.egg"/>
+		   <material name="plane_tess_low"/>
+		</renderable>
+	</renderables>
 </sugar>
  

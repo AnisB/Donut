@@ -12,6 +12,10 @@ namespace Donut
     #define SUGAR_ROOT_TOKEN "sugar"
     #define SUGAR_NAME_TOKEN "name"
 
+	// RENDERABLE DATA
+	#define RENDERABLES_NODE_TOKEN "renderables"
+	#define RENDERABLE_NODE_TOKEN "renderable"
+
     // GEOMETRY DATA
     #define GEOMETRY_NODE_TOKEN "geometry"
     #define GEOMETRY_TYPE_TOKEN "type"
@@ -20,6 +24,28 @@ namespace Donut
     // MATERIAL DATA
     #define MATERIAL_NODE_TOKEN "material"
     #define MATERIAL_NAME_TOKEN "name"
+
+	void HandleRenderableArray(TSugarDescriptor& _descriptor, rapidxml::xml_node<>* _renderableListNodeNode)
+	{
+		for (rapidxml::xml_node<>* renderableNode = _renderableListNodeNode->first_node(RENDERABLE_NODE_TOKEN); renderableNode; renderableNode = renderableNode->next_sibling())
+		{
+			TRenderableDescriptor renderable;
+			// Fetching the geometry
+			rapidxml::xml_node<>* geometry = renderableNode->first_node(GEOMETRY_NODE_TOKEN);
+			ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
+			{
+				renderable.geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
+			}
+
+			// Fetching the data
+			rapidxml::xml_node<>* material = renderableNode->first_node(MATERIAL_NODE_TOKEN);
+			ASSERT_POINTER_NOT_NULL_NO_RELEASE(material);
+			{
+				renderable.material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
+			}
+			_descriptor.renderables.push_back(renderable);
+		}
+	}
 
     void ParseSugarFile(const STRING_TYPE& _fileLocation, TSugarDescriptor& _sugar)
     {
@@ -44,19 +70,13 @@ namespace Donut
         // Fetching the name
         _sugar.name = sugar_root->first_attribute(SUGAR_NAME_TOKEN)->value();
 
-        // Fetching the geometry
-        rapidxml::xml_node<>* geometry = sugar_root->first_node(GEOMETRY_NODE_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
-        {
-            _sugar.geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
-        }
-        
-        // Fetching the data
-        rapidxml::xml_node<>* material = sugar_root->first_node(MATERIAL_NODE_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(material);
-        {
-            _sugar.material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
-        }
+		// Fetching the renderables
+		rapidxml::xml_node<>* renderableArray = sugar_root->first_node(RENDERABLES_NODE_TOKEN);
+		ASSERT_POINTER_NOT_NULL_NO_RELEASE(renderableArray);
+
+		HandleRenderableArray(_sugar, renderableArray);
+
+
     }
 
     bool HasChanged(const TSugarDescriptor& _sugarDescriptor)

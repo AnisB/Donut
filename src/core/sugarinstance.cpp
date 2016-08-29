@@ -13,19 +13,36 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
+#include "sugarinstance.h"
 
-// Library includes
 #include "graphics/mesh.h"
+
+#include "Base/Common.h"
+#include "Base/Macro.h"
+
 
 namespace Donut
 {
-	// Foward declaration
-	class TSugarInstance;
+	TSugarInstance::TSugarInstance()
+	{
 
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
+	}
+
+	TSugarInstance::~TSugarInstance()
+	{
+
+	}
+
+	void TSugarInstance::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	{
+		foreach_macro(mesh, m_meshes)
+		{
+			(*mesh)->Draw(_values, _previousData);
+		}
+	}
+	void TSugarInstance::AddMesh(TMesh* _mesh)
+	{
+		m_meshes.push_back(_mesh);
+	}
+
 }

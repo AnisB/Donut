@@ -14,18 +14,35 @@
 *
 **/
 
-// Library includes
-#include "graphics/mesh.h"
+#ifndef DONUT_SUGAR_INSTANCE_NODE
+#define DONUT_SUGAR_INSTANCE_NODE
+
+// Donut includes
+#include "node.h"
+#include "graphics/drawable.h"
+
+// STL includes
+#include <vector>
 
 namespace Donut
 {
 	// Foward declaration
-	class TSugarInstance;
+	class TMesh;
 
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
-	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
+	class TSugarInstance : public TDrawable
+	{
+	public:
+		// Consrtuctor
+		TSugarInstance();
+		//Destructor
+		~TSugarInstance();
+		// Adds a child to the tree
+		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+
+		void AddMesh(TMesh* _mesh);
+
+	protected:
+		std::vector<TMesh*> m_meshes;
+	};
 }
+#endif //DONUT_SUGAR_INSTANCE_NODE

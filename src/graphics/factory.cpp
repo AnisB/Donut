@@ -17,6 +17,7 @@
 // Library includes
 #include "factory.h"
 #include "base/common.h"
+#include "core/sugarinstance.h"
 #include "graphics/common.h"
 #include "graphics/mesh.h"
 #include "resource/sugarloader.h"
@@ -230,25 +231,30 @@ namespace Donut
 		return nullptr;
 	}
 
-	TMesh* CreateSugarInstance(const std::string& _sugarName)
+	TSugarInstance* CreateSugarInstance(const std::string& _sugarName)
 	{
 		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
-		TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(sugar.material);
-		foreach_macro(tex, topping.data.textures)
+		TSugarInstance* newSugarInstance = new TSugarInstance();
+		foreach_macro(renderable, sugar.renderables)
 		{
-			TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
-  			tex->texID = texPtr->FID;
-		}
+			TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(renderable->material);
+			foreach_macro(tex, topping.data.textures)
+			{
+				TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
+				tex->texID = texPtr->FID;
+			}
 
-		foreach_macro(brdfIT, topping.data.brfds)
-		{
-			TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
-			brdf->id = brdfIT->texID;
+			foreach_macro(brdfIT, topping.data.brfds)
+			{
+				TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
+				brdf->id = brdfIT->texID;
+			}
+			ShaderManager::Instance().CreateShader(topping.data.shader);
+			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, renderable->geometry);
+			TMesh* newMesh = new TMesh(topping.data, geometry);
+			newSugarInstance->AddMesh(newMesh);
 		}
-		ShaderManager::Instance().CreateShader(topping.data.shader); 
-		TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, sugar.geometry);
-		TMesh* newMesh = new TMesh(topping.data, geometry);
-		return newMesh;
+		return newSugarInstance;
 	}
 
 	TGeometry* CreateFullScreenQuad(const TShader& _shader)

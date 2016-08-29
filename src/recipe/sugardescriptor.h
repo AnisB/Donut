@@ -8,14 +8,20 @@
 
 namespace Donut
 {
+	// Renderable descriptor
+	struct TRenderableDescriptor
+	{
+		STRING_TYPE    geometry;
+		STRING_TYPE    material;
+	};
+
 	// Sugar descriptor
 	struct TSugarDescriptor
     {
-
         STRING_TYPE    name;
         STRING_TYPE    file;
-		STRING_TYPE    geometry;
-        STRING_TYPE    material;
+
+		std::vector<TRenderableDescriptor> renderables;
         
         // For tracking the file's state
         RECIPE_GUID id;

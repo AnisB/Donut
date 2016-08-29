@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <sugar name="LightBulb">
-	<geometry type="egg" location="common/geometry/halobulb.egg"/>
-	<material name="rockwall_base"/>
+	<renderables>
+		<renderable>
+			<geometry type="egg" location="common/geometry/halobulb.egg"/>
+			<material name="rockwall_base"/>
+		</renderable>
+	</renderables>
 </sugar>

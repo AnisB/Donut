@@ -3,6 +3,7 @@
 #include "butter/stream.h"
 #include "core/scenenode.h"
 #include "graphics/factory.h"
+#include "core/sugarinstance.h"
 #include "resource/flourloader.h"
 #include "tools/fileloader.h"
 
@@ -80,8 +81,8 @@ namespace Donut
 			foreach_macro(sugarIT, _node.models)
 			{
 				const STRING_TYPE& sugarName = *sugarIT;
-				TMesh* drwbl = CreateSugarInstance(sugarName);
-				sceneNode->AddDrawable(drwbl);
+				TSugarInstance* sugarInstance = CreateSugarInstance(sugarName);
+				sceneNode->AddDrawable(sugarInstance);
 			}
 		}
 

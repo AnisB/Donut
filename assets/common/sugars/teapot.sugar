@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <sugar name="Teapot">
-	<geometry type="egg" location="common/geometry/teapot.egg"/>
-	<material name="rockwall_base"/>
+	<renderables>
+		<renderable>
+			<geometry type="egg" location="common/geometry/teapot.egg"/>
+			<material name="rockwall_base"/>
+		</renderable>
+	</renderables>
 </sugar>

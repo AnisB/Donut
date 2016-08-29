@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <sugar name="Lego">
-   <geometry type="egg" location="common/geometry/lego.egg"/>
-   <material name="farmhouse_base"/>
+	<renderables>
+		<renderable>
+		   <geometry type="egg" location="common/geometry/lego.egg"/>
+		   <material name="rockwall_base"/>
+		</renderable>
+	</renderables>
 </sugar>

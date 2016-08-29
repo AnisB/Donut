@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 <sugar name="Rabbit">
-   <geometry type="egg" location="common/geometry/rabbit.egg"/>
-   <material name="farmhouse_base"/>
+	<renderables>
+		<renderable>
+		   <geometry type="egg" location="common/geometry/rabbit.egg"/>
+		   <material name="rockwall_base"/>
+		</renderable>
+	</renderables>
 </sugar>
-
- 

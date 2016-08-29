@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
 <sugar name="Soil">
-	<geometry type="egg" location="common/geometry/soil.egg"/>
-   <material name="farmhouse_base"/>
+	<renderables>
+		<renderable>
+		   <geometry type="egg" location="common/geometry/soil.egg"/>
+		   <material name="farmhouse_base"/>
+		</renderable>
+	</renderables>
 </sugar>
