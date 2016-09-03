@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <sugar name="Stormtrooper">
 	<renderables>
-		<renderable>
+		<renderable id="0">
 		   <geometry type="egg" location="common/geometry/Stormtrooper.egg"/>
 		   <material name="stormtropper_base"/>
 		</renderable>

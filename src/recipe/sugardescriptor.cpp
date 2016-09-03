@@ -17,6 +17,7 @@ namespace Donut
 	#define RENDERABLE_NODE_TOKEN "renderable"
 
     // GEOMETRY DATA
+    #define GEOMETRY_ID_NODE_TOKEN "id"
     #define GEOMETRY_NODE_TOKEN "geometry"
     #define GEOMETRY_TYPE_TOKEN "type"
     #define GEOMETRY_LOCATION_TOKEN "location"
@@ -30,6 +31,9 @@ namespace Donut
 		for (rapidxml::xml_node<>* renderableNode = _renderableListNodeNode->first_node(RENDERABLE_NODE_TOKEN); renderableNode; renderableNode = renderableNode->next_sibling())
 		{
 			TRenderableDescriptor renderable;
+            // Fetching the renderableID
+            renderable.id = renderableNode->first_attribute(GEOMETRY_ID_NODE_TOKEN)->value();
+
 			// Fetching the geometry
 			rapidxml::xml_node<>* geometry = renderableNode->first_node(GEOMETRY_NODE_TOKEN);
 			ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
@@ -43,7 +47,7 @@ namespace Donut
 			{
 				renderable.material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
 			}
-			_descriptor.renderables.push_back(renderable);
+			_descriptor.renderables[renderable.id] = renderable;
 		}
 	}
 

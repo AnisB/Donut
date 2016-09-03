@@ -6,13 +6,17 @@
 #include "graphics/material.h"
 #include "identifier.h"
 
+// External includes
+#include <map>
+
 namespace Donut
 {
 	// Renderable descriptor
 	struct TRenderableDescriptor
 	{
-		STRING_TYPE    geometry;
-		STRING_TYPE    material;
+		STRING_TYPE		id;
+		STRING_TYPE		geometry;
+		STRING_TYPE		material;
 	};
 
 	// Sugar descriptor
@@ -21,7 +25,7 @@ namespace Donut
         STRING_TYPE    name;
         STRING_TYPE    file;
 
-		std::vector<TRenderableDescriptor> renderables;
+		std::map<STRING_TYPE, TRenderableDescriptor> renderables;
         
         // For tracking the file's state
         RECIPE_GUID id;
