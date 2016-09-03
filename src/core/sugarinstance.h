@@ -40,6 +40,7 @@ namespace Donut
 		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 		void AddMesh(TMesh* _mesh);
+		TMesh* GetMesh(int _meshIndex);
 
 	protected:
 		std::vector<TMesh*> m_meshes;

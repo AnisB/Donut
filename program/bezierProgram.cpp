@@ -23,6 +23,7 @@
 #include <resource/texturehelpers.h>
 #include <graphics/factory.h>
 #include <core/SceneNode.h>
+#include <core/sugarinstance.h>
 #include <resource/texture.h>
 
 // Autres includes
@@ -40,7 +41,7 @@ TTexture* controlPointsTexture = NULL;
 // La fenetre de rendu
 Donut::TRenderer * window = NULL;
 // Les surface a afficher
-Donut::TMesh *surface1, * surface2 = NULL, *surface3 = NULL;
+Donut::TSugarInstance *surface1, * surface2 = NULL, *surface3 = NULL;
 // Le gestionnaire d'input
 Donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
@@ -165,9 +166,9 @@ Donut::TFlour* createFlour()
 	generateTexture();
 	
 	// On l'injecte dans chacun des modèles
-	surface1->AddTexture(controlPointsTexture, "controlPoints");
-	surface2->AddTexture(controlPointsTexture, "controlPoints");
-	surface3->AddTexture(controlPointsTexture, "controlPoints");
+	surface1->GetMesh(0)->AddTexture(controlPointsTexture, "controlPoints");
+	surface2->GetMesh(0)->AddTexture(controlPointsTexture, "controlPoints");
+	surface3->GetMesh(0)->AddTexture(controlPointsTexture, "controlPoints");
 	
 	// On crée un noeud de scene
 	node1 = new Donut::TSceneNode();

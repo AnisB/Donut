@@ -45,4 +45,9 @@ namespace Donut
 		m_meshes.push_back(_mesh);
 	}
 
+	TMesh* TSugarInstance::GetMesh(int _meshIndex)
+	{
+		ASSERT_NO_RELEASE(_meshIndex < m_meshes.size());
+		return m_meshes[_meshIndex];
+	}
 }

@@ -237,7 +237,8 @@ namespace Donut
 		TSugarInstance* newSugarInstance = new TSugarInstance();
 		foreach_macro(renderable, sugar.renderables)
 		{
-			TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(renderable->material);
+			const TRenderableDescriptor& renderableDescriptor = renderable->second;
+			TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(renderableDescriptor.material);
 			foreach_macro(tex, topping.data.textures)
 			{
 				TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
@@ -250,7 +251,7 @@ namespace Donut
 				brdf->id = brdfIT->texID;
 			}
 			ShaderManager::Instance().CreateShader(topping.data.shader);
-			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, renderable->geometry);
+			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, renderableDescriptor.geometry);
 			TMesh* newMesh = new TMesh(topping.data, geometry);
 			newSugarInstance->AddMesh(newMesh);
 		}
@@ -262,7 +263,7 @@ namespace Donut
 		static int FSQCounter = 0;
 		TMaterial defaultMat;
  		defaultMat.shader = _shader;
- 		std::string meshName = "FSQ_";
+ 		std::string meshName = "FSQ_";	
  		meshName += std::to_string(FSQCounter++);
  		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
