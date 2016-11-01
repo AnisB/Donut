@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<topping name="DEFAULT">
+   <shader>
+   </shader>
+   <built_in_data>
+   </built_in_data>
+   <extern_data>
+   </extern_data>
+   <textures>
+   </textures>
+</topping>
