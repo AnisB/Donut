@@ -24,26 +24,27 @@
 #include "graphics/material.h"
 #include "resource/texture.h"
 
+// Library includes
+#include <map>
+
  namespace Donut
  {
 	class TMesh : public TDrawable
 	{
 	public:
 	 	// Creating a mesh
-		TMesh(TMaterial& _material, TGeometry* _model);
+		TMesh(const TMaterial* _material, const TGeometry* _model);
+		
 		// Dstructor
 	 	virtual ~TMesh();
-	 	// Attach a texture to a mesh => should be moved somewhere where it makes sense
-	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
-	 	// Drawing a mesh
-	 	virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
- 	protected:
- 		void Bind();
- 		void Unbind();
+
+		// Evaluate the mesh
+		virtual void Evaluate(TCollector& _collector, const Matrix4& _tm);
+		
 	protected:
-	 	// Model to draw
-	 	TMaterial FMaterial;
-	 	TGeometry* FGeometry;
+	 	// All the required attributes for drawing a mesh
+	 	const TMaterial* m_material;
+	 	const TGeometry* m_geometry;
 	 };
 }
  #endif // DONUT_MESH

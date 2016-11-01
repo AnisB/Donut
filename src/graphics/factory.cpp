@@ -18,8 +18,9 @@
 #include "factory.h"
 #include "base/common.h"
 #include "core/sugarinstance.h"
+#include "core/mesh.h"
 #include "graphics/common.h"
-#include "graphics/mesh.h"
+#include "core/mesh.h"
 #include "resource/sugarloader.h"
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
@@ -181,7 +182,7 @@ namespace Donut
 		1, 2, 3
 	};
 
-	TMesh* CreateCube(double _length, const TShader& _shader)
+	TMesh* CreateCube(double _length, std::string _materialName)
 	{
 		static int cubeCounter = 0;
  		GLfloat data[216];
@@ -190,19 +191,28 @@ namespace Donut
  		{
  			data[i]*=(GLfloat)_length;
  		}
+
+		// Fetch the default material
+		const TMaterial* material = TToppingLoader::Instance().FetchMaterial(_materialName);
+
+		// Generating the geometry name
  		std::string meshName = "Cube_";
- 		TMaterial defaultMat;
- 		defaultMat.shader = _shader;
  		meshName += std::to_string(cubeCounter++);
+ 		
+ 		// Creating the geometry
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
-		ShaderManager::Instance().CreateShader(defaultMat.shader);
-		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, data, 24, cubeFacesL, 12);
-		TMesh* newMesh = new TMesh(defaultMat, geometry);
+		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 24, cubeFacesL, 12);
+		
+		// Create the mesh instance
+		TMesh* newMesh = new TMesh(material, geometry);
+
+		// return it
 		return newMesh;
 	}
 
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader)
+    TMesh* CreatePlane(double _with, double _length, std::string _materialName)
 	{
+		// Create the geometry buffer
 		static int planeCounter = 0;
  		GLfloat data[32];
  		memcpy(&data ,&planeVertexBuffer, 32*sizeof(float));
@@ -214,14 +224,22 @@ namespace Donut
  		{
  			data[3*i+2]*=(GLfloat)_length;
  		}
+
+ 		// Generate the geometry name
  		std::string meshName = "Plane_";
- 		TMaterial defaultMat;
- 		defaultMat.shader = _shader;
  		meshName += std::to_string(planeCounter++);
+
+		// Fetch the default material
+		const TMaterial* material = TToppingLoader::Instance().FetchMaterial(_materialName);
+
+		// Create the target geometry
  		GRAPHICS_DEBUG("Creating plane "<<meshName);
-		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, data, 4, planeIndexBuffer, 2);
-		TMesh* newMesh = new TMesh(defaultMat, geometry);
+		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 4, planeIndexBuffer, 2);
+
+		// Create the mesh instance
+		TMesh* newMesh = new TMesh(material, geometry);
+
+		// return it
 		return newMesh;
 	}
 
@@ -233,28 +251,32 @@ namespace Donut
 
 	TSugarInstance* CreateSugarInstance(const std::string& _sugarName)
 	{
+		// Fetch the sugar descriptor
 		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
+
+		// Create a sugar instance
 		TSugarInstance* newSugarInstance = new TSugarInstance();
+
+		// For each renderable in the renderables array
 		foreach_macro(renderable, sugar.renderables)
 		{
+			// Fetch the renderable descriptor
 			const TRenderableDescriptor& renderableDescriptor = renderable->second;
-			TToppingDescriptor topping = TToppingLoader::Instance().FetchTopping(renderableDescriptor.material);
-			foreach_macro(tex, topping.data.textures)
-			{
-				TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
-				tex->texID = texPtr->FID;
-			}
 
-			foreach_macro(brdfIT, topping.data.brfds)
-			{
-				TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
-				brdf->id = brdfIT->texID;
-			}
-			ShaderManager::Instance().CreateShader(topping.data.shader);
-			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(topping.data.shader, renderableDescriptor.geometry);
-			TMesh* newMesh = new TMesh(topping.data, geometry);
+			// Fetch the material
+			const TMaterial* material = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
+			
+			// Fetch the geometry
+			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(material->shader, renderableDescriptor.geometry);
+			
+			// Create the renderable mesh
+			TMesh* newMesh = new TMesh(material, geometry);
+
+			// Add the mesh to the sugar instance
 			newSugarInstance->AddMesh(newMesh);
 		}
+
+		// Return the instance
 		return newSugarInstance;
 	}
 
@@ -279,13 +301,13 @@ namespace Donut
 		TShader shader("common/shaders/skybox/vertex.glsl", "common/shaders/skybox/fragment.glsl");
 		ShaderManager::Instance().CreateShader(shader); 
 		// Create the material
-		TMaterial skyboxMat;
- 		skyboxMat.shader = shader;
+		TMaterial* skyboxMat = new TMaterial();
+ 		skyboxMat->shader = shader;
  		TCubeMapInfo newCM;
 		newCM.cmID = skybox->id;
 		newCM.offset = 0;
 		newCM.name = "skybox";
-		skyboxMat.cubeMaps.push_back(newCM);
+		skyboxMat->cubeMaps.push_back(newCM);
 		// Create the geometry
 		TGeometry* fsq = CreateFullScreenQuad(shader);
 		return new TMesh(skyboxMat, fsq);

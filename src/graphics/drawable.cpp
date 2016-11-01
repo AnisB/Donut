@@ -16,7 +16,7 @@
 
 
  #include "drawable.h"
- #include <Base/Common.h>
+ #include "Base/Common.h"
  #include "ShaderManager.h"
 
 namespace Donut
@@ -27,6 +27,5 @@ namespace Donut
 
 	TDrawable::~TDrawable()
 	{
-
 	}
 }

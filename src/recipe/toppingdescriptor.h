@@ -15,6 +15,7 @@ namespace Donut
 	struct TToppingDescriptor
 	{
 		TToppingDescriptor()
+		: loaded(false)
 		{
 
 		}
@@ -24,6 +25,8 @@ namespace Donut
 
         // Rendering data
         TMaterial data;
+        bool loaded;
+
         // For tracking the file's state
         RECIPE_GUID id;
 	};

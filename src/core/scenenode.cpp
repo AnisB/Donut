@@ -17,6 +17,7 @@
 
  #include "Base/Common.h"
  #include "Base/Macro.h"
+ #include "Render/Collector.h"
 
 
 namespace Donut
@@ -31,21 +32,26 @@ namespace Donut
 		
 	}
 
-	void TSceneNode::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
-	{	
-		Matrix4& parentModel = _values["model"].GetValue<Matrix4>();
-		Matrix4 save = parentModel;
-		parentModel = parentModel * FModel;
-		foreach_macro(drawable,FDrawables)
+	// Parse this node and its subnodes
+	void TSceneNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
+	{
+		// For each drawable attached to this node
+		const Matrix4& currentTransform = _parentTransform * m_transform;
+
+		// Evaluate the drawables
+		foreach_macro(drawable, m_drawables)
 		{
-			(*drawable)->Draw(_values, _previousData);
+            (*drawable)->Evaluate(_requestCollector, currentTransform);
 		}
-		parentModel = save;
-		TNode::Draw(_values, _previousData);
+
+		foreach_macro(son, m_sons)
+		{
+            (*son)->Evaluate(_requestCollector, currentTransform);
+		}
 	}
 
-	void TSceneNode::AddDrawable(TDrawable* parDrawable)
+	void TSceneNode::AppendDrawable(TDrawable* _drawable)
 	{
-		FDrawables.push_back(parDrawable);
+		m_drawables.push_back(_drawable);
 	}
 }

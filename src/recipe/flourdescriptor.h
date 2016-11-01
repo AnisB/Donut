@@ -46,8 +46,8 @@ namespace Donut
 		TNodeDescriptor(bool _sceneNode = false)
 		: tm("1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1")
 		, skybox(nullptr)
-		, nodes()
 		, scenenode(_sceneNode)
+        , nodes()
 		, models()
 		{
 

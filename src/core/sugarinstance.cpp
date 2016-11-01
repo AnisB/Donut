@@ -14,8 +14,7 @@
 *
 **/
 #include "sugarinstance.h"
-
-#include "graphics/mesh.h"
+#include "core/mesh.h"
 
 #include "Base/Common.h"
 #include "Base/Macro.h"
@@ -33,13 +32,6 @@ namespace Donut
 
 	}
 
-	void TSugarInstance::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
-	{
-		foreach_macro(mesh, m_meshes)
-		{
-			(*mesh)->Draw(_values, _previousData);
-		}
-	}
 	void TSugarInstance::AddMesh(TMesh* _mesh)
 	{
 		m_meshes.push_back(_mesh);
@@ -49,5 +41,14 @@ namespace Donut
 	{
 		ASSERT_NO_RELEASE(_meshIndex < m_meshes.size());
 		return m_meshes[_meshIndex];
+	}
+
+	// Evaluate the sugar instance
+	void TSugarInstance::Evaluate(TCollector& _collector, const Matrix4& _tm)
+	{
+		foreach_macro(mesh, m_meshes)
+		{
+			(*mesh)->Evaluate(_collector, _tm);
+		}
 	}
 }

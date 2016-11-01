@@ -15,7 +15,7 @@
 **/
 
 // Library includes
-#include "graphics/mesh.h"
+#include "core/mesh.h"
 
 namespace Donut
 {
@@ -23,9 +23,13 @@ namespace Donut
 	class TSugarInstance;
 
 	TGeometry* CreateFullScreenQuad(const TShader& _shader);
+
+	// Drawable factory
 	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension);
-	TMesh* CreateCube(double _length, const TShader& _shader);
-	TMesh* CreateSphere(double _radius);
-	TMesh* CreatePlane(double _with, double _length, const TShader& _shader);
+		// Default meshes
+	TMesh* CreateCube(double _length, std::string _materialName = "DEFAULT");
+	TMesh* CreateSphere(double _radius, std::string _materialName = "DEFAULT");
+	TMesh* CreatePlane(double _with, double _length, std::string _materialName = "DEFAULT");
+		// Create a sugar instance
 	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
 }

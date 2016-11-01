@@ -36,11 +36,13 @@ namespace Donut
 		TSugarInstance();
 		//Destructor
 		~TSugarInstance();
-		// Adds a child to the tree
-		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
+		// Lethods
 		void AddMesh(TMesh* _mesh);
 		TMesh* GetMesh(int _meshIndex);
+
+			// Evaluate the sugar instance
+		virtual void Evaluate(TCollector& _collector, const Matrix4& _tm);
 
 	protected:
 		std::vector<TMesh*> m_meshes;

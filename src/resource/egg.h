@@ -25,8 +25,8 @@ namespace Donut
 	struct TEgg
 	{
 		TEgg()
-		: faces(nullptr)
-		, vertsNormalsUVs(nullptr)
+		: vertsNormalsUVs(nullptr)
+        , faces(nullptr)
 		{
 		}
 

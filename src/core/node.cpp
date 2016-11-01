@@ -13,79 +13,68 @@
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
-#include "node.h"
+
+// Libarry includes
 #include "base/common.h"
 #include "core/common.h"
-// STL includes
+#include "node.h"
+
+// External includes
 #include <algorithm>
 
 namespace Donut
 {
+	// Cst
 	TNode::TNode()
-	: FModel()
+	: m_transform()
 	{
-		matrix4(FModel, MatrixInit::Identity);
+		// Make sure the root is centered at origin
+		matrix4(m_transform, MatrixInit::Identity);
 	}
 
 	TNode::~TNode()
 	{
-		foreach_macro(child, FSons)
+		// Delete all the children
+		foreach_macro(child, m_sons)
 		{
 			delete *child;
 		}
 	}
+
+	// Attach a child
 	void TNode::AttachChild(TNode* _node)
 	{
+		// Quick check
 		ASSERT_POINTER_NOT_NULL_NO_RELEASE(_node);
-		FSons.push_back(_node);
+
+		// Append it to the son list
+		m_sons.push_back(	_node);
 	}
+
 	bool TNode::RemoveChild(TNode* _node)
 	{
+		// User shouldn't be using this method, warn him
 		CORE_DEBUG("Maybe you should not call this function, preferably disabled");
-		auto nodeIT = std::find(FSons.begin(), FSons.end(), _node);
-		ASSERT(nodeIT != FSons.end());
-		if(nodeIT != FSons.end())
-		{
-			FSons.erase(nodeIT);
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+
+		// Search for that node
+		auto nodeIT = std::find(m_sons.begin(), m_sons.end(), _node);
+
+		// Were you able to find him ?
+		ASSERT(nodeIT != m_sons.end());
+
+		// Erase the son
+		m_sons.erase(nodeIT);
+
+		return true;
 	}
 
-	void TNode::Yaw(float parAngle)
+	// Parse this node and its subnodes
+	void TNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
 	{
-		FModel = FModel*RotateYAxis(parAngle);
-
-	}
-	void TNode::Roll(float parAngle)
-	{
-		FModel = FModel*RotateZAxis(parAngle);
-	}
-	void TNode::Pitch(float parAngle)
-	{
-		FModel = FModel*RotateXAxis(parAngle);
-	}	
-	void TNode::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
-	{
-		Matrix4& parentModel = _values["model"].GetValue<Matrix4>();
-		Matrix4 save = parentModel;
-		parentModel = parentModel * FModel;
-		foreach_macro(son,FSons)
+		// For each subnode, parse
+		foreach_macro(son, m_sons)
 		{
-			(*son)->Draw(_values, _previousData);
+			(*son)->Evaluate(_requestCollector, _parentTransform * m_transform);
 		}
-		parentModel = save;
-	}
-	void TNode::Translate(const Vector3& parVector)
-	{
- 		FModel = FModel*Translate_M4(parVector);
-	}
-
-	const std::vector<TNode*>& TNode::GetChildList()
-	{
-		return FSons;	
 	}
 }

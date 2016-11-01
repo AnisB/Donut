@@ -24,6 +24,7 @@
 #include "core/camera.h"
 #include "graphics/pass.h"
 #include "core/node.h"
+#include "render/collector.h"
 #include "graphics/canvas.h"
 #include "graphics/visualeffect.h"
 
@@ -60,6 +61,8 @@
 		Camera * m_camera;
 		TCanvas * m_canvas;
 		TNode* m_root;
+
+		TCollector m_collector;
 	};
 	// END CLASS DECLARATION
  }

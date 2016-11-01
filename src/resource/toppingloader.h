@@ -40,10 +40,12 @@ namespace Donut
 
             // This function searches for a given toppping file and determines either or 
             // not it has been found and returns it if it has.
-            const TToppingDescriptor& FetchTopping(const std::string& _toppingName);
+            const TMaterial* FetchMaterial(const std::string& _toppingName);
         protected:
             // Parses the sugar sub_directory
             void LoadToppings();
+            // Load the topping into memory if it is not
+            void LoadIntoMemory(TToppingDescriptor& _targetTopping);
 
         protected:
             std::string m_toppingsFolder;

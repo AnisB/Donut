@@ -18,28 +18,35 @@
 #define DONUT_SCENE_NODE
 
 // Donut includes
-#include "node.h"
 #include "graphics/drawable.h"
+#include "node.h"
  
-// STL includes
+// External includes
 #include <vector>
 
 namespace Donut
 {
+	// Foward declaration
+	class TCollector;
+
+	// This class encapsulates the data for a graph scene node
 	class TSceneNode : public TNode
 	{
 	public:
 		// Consrtuctor
 		TSceneNode();
-		//Destructor
-		~TSceneNode();
-		// Adds a child to the tree
-		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
-		virtual void AddDrawable(TDrawable* parDrawable);
+		// Destructor
+		~TSceneNode();
+
+		// Append a drawable to the list of drawables
+		virtual void AppendDrawable(TDrawable* _drawables);
+
+		// Evaluate this node and its subnodes
+		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
 
 	protected:
-		std::vector<TDrawable*> FDrawables;
+		std::vector<TDrawable*> m_drawables;
 	};
 }
 #endif //DONUT_SCENE_NODE

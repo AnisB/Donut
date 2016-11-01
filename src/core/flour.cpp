@@ -37,7 +37,7 @@ namespace Donut
 	{
 		TSceneNode* node = new TSceneNode();
 		TMesh* mesh = CreateSkybox(_skybox.location, _skybox.extension);
-		node->AddDrawable(mesh);
+		node->AppendDrawable(mesh);
 		return node;
 	}
 
@@ -82,7 +82,7 @@ namespace Donut
 			{
 				const STRING_TYPE& sugarName = *sugarIT;
 				TSugarInstance* sugarInstance = CreateSugarInstance(sugarName);
-				sceneNode->AddDrawable(sugarInstance);
+				sceneNode->AppendDrawable(sugarInstance);
 			}
 		}
 

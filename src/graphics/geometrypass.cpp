@@ -14,11 +14,15 @@
  *
  **/
 
+// Libary includes
 #include "geometrypass.h"
 #include "graphics/common.h"
 #include "base/Common.h"
 #include "Base/Macro.h"
 #include "resource/resourcemanager.h"
+
+// External includes
+#include <map>
 
  namespace Donut
  {
@@ -45,18 +49,36 @@
 
 	void TGeometryPass::Draw(const TBufferOutput& _previousData)
 	{
-		// Building common uniforms
+		// Drawing me
+		m_collector.Clear();
+		m_root->Evaluate(m_collector, m_reference);
+
+		// Fetch the request 
+		const std::vector<TRenderRequest>& requests = m_collector.Requests();
+
+		// Fetch the uniform values from the camera
 		std::map<std::string, TUniformHandler> values;
 		m_camera->AppendUniforms(values);
-		values["model"].SetValue(TShaderData::MAT4, "model", m_reference);
-		// Drawing me
-		m_root->Draw(values, _previousData);
+
+		// Bind the canvas
+		Bind();
+
+		// Process eache render request 
+		foreach_macro(request, requests)
+		{
+			// Process the render request
+			ProcessRenderRequest(*request, values);
+		}
+
+		// Unbind the canvas
+		Unbind();
 	}
 
 	void TGeometryPass::Bind()
 	{
 		m_canvas->Enable();
 	}
+	
 	const TBufferOutput* TGeometryPass::GetOutput()
 	{
 		return &(m_canvas->Result());

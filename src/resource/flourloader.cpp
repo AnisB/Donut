@@ -27,7 +27,6 @@
 #include "tools/xmlhelpers.h"
 
 #include "graphics/light.h"
-#include "graphics/mesh.h"
 #include "graphics/factory.h"
 
 #include "resource/common.h"

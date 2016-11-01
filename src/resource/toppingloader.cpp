@@ -71,12 +71,53 @@ namespace Donut
         }
     }
 
-    const TToppingDescriptor& TToppingLoader::FetchTopping(const std::string& _toppingFile)
+    const TMaterial* TToppingLoader::FetchMaterial(const std::string& _toppingFile)
     {
+        // Log it
         RESOURCE_DEBUG(_toppingFile<<" is requested");
+
+        // Fetch it
         auto ite = m_toppings.find(_toppingFile);
+
+        // Just make sure it is defined somewhere
         ASSERT_MSG((ite!=m_toppings.end()), "Topping not found: "<<_toppingFile);
-        return ite->second;
+
+        // We have to make sure that this topping is loaded into memory before loading it
+        TToppingDescriptor& targetTopping = ite->second;
+
+        //  If the sugar is not loaded, load it
+        if( !targetTopping.loaded)
+        {
+            // Load resources into memory
+            LoadIntoMemory(targetTopping);
+        }
+
+        // return it
+        return &(ite->second.data);
     }
 
+    void TToppingLoader::LoadIntoMemory(TToppingDescriptor& _targetTopping)
+    {
+        // Fetch the material to load
+        TMaterial& targetMaterial = _targetTopping.data;
+
+        // Request all the textures that this material requires
+        foreach_macro(tex, targetMaterial.textures)
+        {
+            TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
+            tex->texID = texPtr->FID;
+        }
+
+        foreach_macro(brdfIT, targetMaterial.brfds)
+        {
+            TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
+            brdf->id = brdfIT->texID;
+        }
+
+        // Load the shader into memory
+        ShaderManager::Instance().CreateShader(targetMaterial.shader);
+
+        // Mark it as loaded
+        _targetTopping.loaded = true;
+    }
 }

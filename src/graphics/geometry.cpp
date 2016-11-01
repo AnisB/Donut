@@ -21,7 +21,7 @@ namespace Donut
     {
     }
 
-    void TGeometry::Draw(bool _isTess)
+    void TGeometry::Draw(bool _isTess) const
     {
 	  	glBindVertexArray (vertexArray);
 	  	if(_isTess)

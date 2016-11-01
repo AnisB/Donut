@@ -19,20 +19,21 @@
 #define DONUT_DRAWABLE_OBJECT
 
 // Library includes
-#include "shader.h"
-#include "core/Camera.h"
 #include "graphics/uniformhandler.h"
 #include "graphics/canvas.h"
+#include "render/collector.h"
 
 namespace Donut
 {
 	class TDrawable
 	{
 	public:
+		// Cst & Dst
 		TDrawable();
 		virtual ~TDrawable();
-		// To be overloaded
-		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
+
+		// Evaluate the drawable
+		virtual void Evaluate(TCollector& _collector, const Matrix4& _tm) = 0;
 	};
 }
  #endif // DONUT_DRAWABLE_OBJECT

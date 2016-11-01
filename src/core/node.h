@@ -29,6 +29,10 @@
 
 namespace Donut
 {
+    // Foward declare
+    class TCollector;
+    
+    // Basic Node class of the engine
 	class TNode
 	{
 	public:
@@ -36,26 +40,26 @@ namespace Donut
 		TNode();
 		//Destructor
 		virtual ~TNode();
+
 		// Adds a child to the tree
-		void AttachChild(TNode* parNode);
+		void AttachChild(TNode* _childNode);
 		// WARNING: You should preferably not call this, maybe disable your node?
-		bool RemoveChild(TNode* parNode);
+		bool RemoveChild(TNode* _childNode);
 
 		// Utility functions
-		void SetTransformationMatrix(const Matrix4& _tm) { FModel =_tm;}
-		void Yaw(float parAngle);
-		void Roll(float parAngle);
-		void Pitch(float parAngle);
-		void Translate(const Vector3& parVector);
-		// Accessors
-		const std::vector<TNode*>& GetChildList();
+		void SetTransformationMatrix(const Matrix4& _tm) { m_transform =_tm;}
+
+		// Access the son set
+		const std::vector<TNode*>& ChildList() {return m_sons;}
 		
-		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		// Evaluate this node and its subnodes
+		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
 
 	protected:
-		std::vector<TNode*> FSons;
-		TNode* FParent;
-		Matrix4 FModel;
+		// Node data
+		TNode* m_parent;
+		std::vector<TNode*> m_sons;
+		Matrix4 m_transform;
 	};
 }
 #endif

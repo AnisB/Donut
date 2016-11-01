@@ -14,30 +14,40 @@
  *
  **/
 
-#ifndef GEOMETRY_GRAPHICS_DONUT
-#define GEOMETRY_GRAPHICS_DONUT
+// Library includes
+#include "Mesh.h"
+#include "resource/resourcemanager.h"
+#include "resource/sugarloader.h"
+#include "Base/Common.h"
+#include "MultiThread/Defines.h"
 
-#include "graphics/common.h"
+// External includes
+#include <string.h>
+
 
 namespace Donut
 {
-	class TMesh;
-	struct TGeometry
+	TMesh::TMesh(const TMaterial* _material, const TGeometry* _geometry)
+ 	: TDrawable()
+	, m_material(_material)
+	, m_geometry(_geometry)
+ 	{
+ 	}
+
+ 	TMesh::~TMesh()
+ 	{
+
+ 	}
+	
+	void TMesh::Evaluate(TCollector& _request, const Matrix4& _tm)
 	{
-	    GLuint vertexArray;
-	    GLuint vertexBuffer;
-	    GLuint indexBuffer;
-	    int nbVertices;
-	    TGeometry();
-	    void Draw(bool _isTess) const;
+		// Build our new render request
+		TRenderRequest newRequest;
+		newRequest.geometry = m_geometry;
+		newRequest.material = m_material;
+		newRequest.transform = _tm;
 
-	    // You should not call this
-	private:
-		friend class TMesh;
-		friend class TFrameCanvas;
-	};	
-}
-
-
-#endif // GEOMETRY_GRAPHICS_DONUT
- 
+		// Appent it
+		_request.Append(newRequest);
+	}
+ }
