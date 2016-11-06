@@ -2,7 +2,7 @@
 #include "base/macro.h"
 #include "collector.h"
 #include "graphics/material.h"
-#include "graphics/geometry.h"
+#include "resource/resourcemanager.h"
 
 namespace Donut
 {
@@ -25,7 +25,8 @@ namespace Donut
 		ShaderManager::Instance().Inject<Matrix4>(targetShader, viewprojection * _request.transform,"modelviewprojection");
 		ShaderManager::Instance().Inject<Matrix4>(targetShader, _request.transform, "model");
 
-		_request.geometry->Draw(targetShader.FIsTesselated);
+		TGeometry* geom = ResourceManager::Instance().RequestRuntimeGeometry(_request.geometry);
+		geom->Draw(targetShader.FIsTesselated);
 
 		// DIsable the shader
 		ShaderManager::Instance().DisableShader();

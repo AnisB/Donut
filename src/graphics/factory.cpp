@@ -201,7 +201,7 @@ namespace Donut
  		
  		// Creating the geometry
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
-		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 24, cubeFacesL, 12);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 24, cubeFacesL, 12);
 		
 		// Create the mesh instance
 		TMesh* newMesh = new TMesh(material, geometry);
@@ -234,7 +234,7 @@ namespace Donut
 
 		// Create the target geometry
  		GRAPHICS_DEBUG("Creating plane "<<meshName);
-		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 4, planeIndexBuffer, 2);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 4, planeIndexBuffer, 2);
 
 		// Create the mesh instance
 		TMesh* newMesh = new TMesh(material, geometry);
@@ -267,7 +267,7 @@ namespace Donut
 			const TMaterial* material = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
 			
 			// Fetch the geometry
-			TGeometry* geometry = ResourceManager::Instance().FetchGeometry(material->shader, renderableDescriptor.geometry);
+			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(material->shader, renderableDescriptor.geometry);
 			
 			// Create the renderable mesh
 			TMesh* newMesh = new TMesh(material, geometry);
@@ -280,7 +280,7 @@ namespace Donut
 		return newSugarInstance;
 	}
 
-	TGeometry* CreateFullScreenQuad(const TShader& _shader)
+	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader)
 	{
 		static int FSQCounter = 0;
 		TMaterial defaultMat;
@@ -289,8 +289,7 @@ namespace Donut
  		meshName += std::to_string(FSQCounter++);
  		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		TGeometry* geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
-		return geometry;
+		return ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
 	}
 
 	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension)
@@ -309,7 +308,7 @@ namespace Donut
 		newCM.name = "skybox";
 		skyboxMat->cubeMaps.push_back(newCM);
 		// Create the geometry
-		TGeometry* fsq = CreateFullScreenQuad(shader);
+		GEOMETRY_GUID fsq = CreateFullScreenQuad(shader);
 		return new TMesh(skyboxMat, fsq);
 	}
 

@@ -116,28 +116,43 @@
  		}
  	}
 
-	TGeometry* ResourceManager::FetchGeometry(const TShader& parShader, const std::string&  _fileName)
+	GEOMETRY_GUID ResourceManager::FetchGeometry(const TShader& parShader, const std::string&  _fileName)
 	{
-		// Looking in the databaseModel
- 		auto it = FGeometries.find(_fileName);
- 		if(it != FGeometries.end())
+		// Try to get the resource
+ 		auto it = m_geometryIdentifiers.find(_fileName);
+ 		if(it != m_geometryIdentifiers.end())
  		{
   			RESOURCE_DEBUG(_fileName<<" already loaded"); 
  			return it->second;
  		}
+
+		// Load the file into memory
 		TEgg* container = ReadEggFile(RelativePath(_fileName));
-		ASSERT(container != nullptr);
-		TGeometry* newModel = InstanciateRunTimeGeometry(_fileName, parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
+		ASSERT(container != nullptr, "Geomtry file couldn't be read");
+
+		// Instanciate the runtime geometry
+		TGeometry* newModel = CreateGeometry(parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
+
+		// Delete the CPU container
 		delete container;
-		FGeometries[_fileName] = newModel;
-		return newModel;
+
+		// Append it
+		return InsertGeometry(_fileName, newModel);
 	}
 
-	TGeometry* ResourceManager::InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	GEOMETRY_GUID ResourceManager::InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
 	{
-		TGeometry* geo = Donut::CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
-		FGeometries[_name] = geo;
-		return geo;
+		TGeometry* geo = CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
+		return InsertGeometry(_name, geo);
+	}
+
+	GEOMETRY_GUID ResourceManager::InsertGeometry(const STRING_TYPE& _path, TGeometry* _targetGeometry)
+	{
+		// Append the Index and the geometry
+		GEOMETRY_GUID geometryIndex = m_geometries.size();
+		m_geometries.push_back(_targetGeometry);
+		m_geometryIdentifiers[_path] = geometryIndex;
+		return geometryIndex;
 	}
 
 	/*

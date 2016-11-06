@@ -40,7 +40,8 @@ namespace Donut
 	void TVFX::Init()
 	{
 		ShaderManager::Instance().CreateShader(m_material.shader);
-		m_fsq = CreateFullScreenQuad(m_material.shader);
+		GEOMETRY_GUID fsqIndx = CreateFullScreenQuad(m_material.shader);
+		m_fsq =  ResourceManager::Instance().FetchGeometryByIndex(fsqIndx);
 	}
 
 	void TVFX::BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous)

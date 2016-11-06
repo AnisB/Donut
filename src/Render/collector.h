@@ -2,6 +2,7 @@
 #define GRAPHICS_COLLECTOR_H
 
 // Library includes
+#include "resource/types.h"
 #include "butter/types.h"
 #include "graphics/uniformhandler.h"
 
@@ -20,7 +21,7 @@ namespace Donut
 	{
 		// Instance data
 		const TMaterial* material;
-		const TGeometry* geometry;
+		GEOMETRY_GUID geometry;
 
 		// Mesh transform
 		Matrix4 transform;

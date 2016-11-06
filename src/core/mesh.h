@@ -33,7 +33,7 @@
 	{
 	public:
 	 	// Creating a mesh
-		TMesh(const TMaterial* _material, const TGeometry* _model);
+		TMesh(const TMaterial* _material, GEOMETRY_GUID _geometry);
 		
 		// Dstructor
 	 	virtual ~TMesh();
@@ -44,7 +44,7 @@
 	protected:
 	 	// All the required attributes for drawing a mesh
 	 	const TMaterial* m_material;
-	 	const TGeometry* m_geometry;
+		GEOMETRY_GUID m_geometry;
 	 };
 }
  #endif // DONUT_MESH

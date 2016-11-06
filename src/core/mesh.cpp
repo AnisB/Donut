@@ -27,7 +27,7 @@
 
 namespace Donut
 {
-	TMesh::TMesh(const TMaterial* _material, const TGeometry* _geometry)
+	TMesh::TMesh(const TMaterial* _material, GEOMETRY_GUID _geometry)
  	: TDrawable()
 	, m_material(_material)
 	, m_geometry(_geometry)

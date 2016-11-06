@@ -28,6 +28,7 @@
 #include "texture.h"
 #include "ggxbrdf.h"
 #include "egg.h"
+#include "types.h"
 
 // STL includes
 #include <string>
@@ -62,10 +63,10 @@
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
 		TTexture* FetchTexture(const std::string&  parTextureName);
-		// Returns a pointer to a given wavefrontFile (using its filepath)
+		// Returns a identifier for the geometry that is asked for
  		// If it has not been loaded yet, it loads the geometry into the GPU RAM
- 		// Else it returns a pointer to what has been loaded
-		TGeometry* FetchGeometry(const TShader& parShader, const std::string&  parObjName);
+ 		// Else it simply returns the identifier
+		GEOMETRY_GUID FetchGeometry(const TShader& parShader, const std::string&  parObjName);
 		// Returns a pointer to a given skybox (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
@@ -73,11 +74,15 @@
 		// This function is not really supposed to be used on a perfomance oriented scene, it is a helper that is available for the user to create
 		// at runtime geometries and to register them for further access (it is used to create cubes, spheres, planes, etc etc)
 		// It is also used internally by the FetchGeometry method
-		TGeometry* InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
-
+		GEOMETRY_GUID InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
 		// Still to refactor
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
+
+		TGeometry* RequestRuntimeGeometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
+
+	protected:
+		GEOMETRY_GUID InsertGeometry(const STRING_TYPE& _path, TGeometry* _targetGeometry);
 
 	protected:
 		// Asset folder path
@@ -86,8 +91,12 @@
 		// Data records
 		std::map<std::string, TGGXBRDF*> m_brdfs;
 		std::map<std::string, TTexture*> FTextures;
-		std::map<std::string, TGeometry*> FGeometries;
 		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;
+			
+			// Geometry data
+		std::map<std::string, GEOMETRY_GUID> m_geometryIdentifiers;
+		std::vector<TGeometry*> m_geometries;
+
 	};
 }
 

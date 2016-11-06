@@ -22,7 +22,7 @@ namespace Donut
 	// Foward declaration
 	class TSugarInstance;
 
-	TGeometry* CreateFullScreenQuad(const TShader& _shader);
+	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader);
 
 	// Drawable factory
 	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension);
