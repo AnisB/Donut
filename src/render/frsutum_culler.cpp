@@ -46,26 +46,28 @@ namespace Donut
 			// Include them in WS
 			box.IncludePoint(_view * currentRequest.transform * geom->os_bb.min);
 			box.IncludePoint(_view * currentRequest.transform * geom->os_bb.max);
+
+			if (box.max.z > -50) m_discardArray[req] = true;
 		}
 
 		// Remove all the non-visible requests
-		size_t reqIterator = nbRequests - 1;
-		size_t lastReqIndx = reqIterator;
+		int finalNbRequests = nbRequests;
+		int reqIterator = nbRequests - 1;
 
 		// Put them at the end
-		while (reqIterator > 0)
+		while (reqIterator >= 0)
 		{
 			if (m_discardArray[reqIterator])
 			{
-				TRenderRequest tmpReq = _requests[lastReqIndx];
-				_requests[lastReqIndx] = _requests[reqIterator];
+				TRenderRequest tmpReq = _requests[finalNbRequests - 1];
+				_requests[finalNbRequests - 1] = _requests[reqIterator];
 				_requests[reqIterator] = tmpReq;
-				lastReqIndx--;
+				finalNbRequests--;
 			}
 			reqIterator--;
 		}
 
 		// Discard them
-		_requests.erase(_requests.begin() + lastReqIndx, _requests.end());
+		_requests.erase(_requests.begin() + finalNbRequests, _requests.end());
 	}
 }
