@@ -18,23 +18,23 @@
 #define GEOMETRY_GRAPHICS_DONUT
 
 #include "graphics/common.h"
+#include "core/box3.h"
 
 namespace Donut
 {
-	class TMesh;
 	struct TGeometry
 	{
+		// Runtime rendering data
 	    GLuint vertexArray;
 	    GLuint vertexBuffer;
 	    GLuint indexBuffer;
 	    int nbVertices;
-	    TGeometry();
-	    void Draw(bool _isTess) const;
 
-	    // You should not call this
-	private:
-		friend class TMesh;
-		friend class TFrameCanvas;
+		// Useful data
+		TBox3 os_bb;
+
+		// Draw the geometry
+	    void Draw(bool _isTess) const;
 	};	
 }
 

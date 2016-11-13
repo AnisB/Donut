@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <topping name="stormtrooper_base">
    <shader>
       <vertex location="common/shaders/base/vertex.glsl"/>

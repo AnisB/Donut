@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<topping name="skybox">
+   <shader>
+      <vertex location="common/shaders/skybox/vertex.glsl"/>
+      <fragment location="common/shaders/skybox/fragment.glsl"/>
+   </shader>
+   <built_in_data>
+   </built_in_data>
+   <extern_data>
+   </extern_data>
+   <textures>
+   </textures>
+</topping>

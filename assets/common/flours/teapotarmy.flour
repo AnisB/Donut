@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <flour name="TeapotArmy">
 	<root>
 		<skybox location="common/skybox/sea" extension=".jpg"/>

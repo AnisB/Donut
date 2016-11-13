@@ -26,6 +26,7 @@
 #include "core/node.h"
 #include "render/collector.h"
 #include "graphics/canvas.h"
+#include "render/frustum_culler.h"
 #include "graphics/visualeffect.h"
 
 // STL includes
@@ -63,6 +64,7 @@
 		TNode* m_root;
 
 		TCollector m_collector;
+		TFrustumCuller m_culler;
 	};
 	// END CLASS DECLARATION
  }

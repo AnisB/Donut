@@ -246,7 +246,10 @@ namespace Donut
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray (0);
-		newModel->nbVertices = num_faces*3;
+		newModel->nbVertices = num_faces * 3;
+
+		// Build the OS AABB
+		newModel->os_bb.IncludePoints(_dataArray, num_faces, 8);
 
 		GL_API_CHECK_END();
 

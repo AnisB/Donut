@@ -17,10 +17,6 @@
 
 namespace Donut
 {
-    TGeometry::TGeometry()
-    {
-    }
-
     void TGeometry::Draw(bool _isTess) const
     {
 	  	glBindVertexArray (vertexArray);

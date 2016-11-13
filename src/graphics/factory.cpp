@@ -192,8 +192,8 @@ namespace Donut
  			data[i]*=(GLfloat)_length;
  		}
 
-		// Fetch the default material
-		const TMaterial* material = TToppingLoader::Instance().FetchMaterial(_materialName);
+		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
+		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 
 		// Generating the geometry name
  		std::string meshName = "Cube_";
@@ -201,10 +201,10 @@ namespace Donut
  		
  		// Creating the geometry
  		GRAPHICS_DEBUG("Creating cube "<<meshName);
-		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 24, cubeFacesL, 12);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 24, cubeFacesL, 12);
 		
 		// Create the mesh instance
-		TMesh* newMesh = new TMesh(material, geometry);
+		TMesh* newMesh = new TMesh(topping, geometry);
 
 		// return it
 		return newMesh;
@@ -229,15 +229,15 @@ namespace Donut
  		std::string meshName = "Plane_";
  		meshName += std::to_string(planeCounter++);
 
-		// Fetch the default material
-		const TMaterial* material = TToppingLoader::Instance().FetchMaterial(_materialName);
+		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
+		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 
 		// Create the target geometry
  		GRAPHICS_DEBUG("Creating plane "<<meshName);
-		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, material->shader, data, 4, planeIndexBuffer, 2);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 4, planeIndexBuffer, 2);
 
 		// Create the mesh instance
-		TMesh* newMesh = new TMesh(material, geometry);
+		TMesh* newMesh = new TMesh(topping, geometry);
 
 		// return it
 		return newMesh;
@@ -264,13 +264,14 @@ namespace Donut
 			const TRenderableDescriptor& renderableDescriptor = renderable->second;
 
 			// Fetch the material
-			const TMaterial* material = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
+			TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
+			const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 			
 			// Fetch the geometry
-			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(material->shader, renderableDescriptor.geometry);
+			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(mat->shader, renderableDescriptor.geometry);
 			
 			// Create the renderable mesh
-			TMesh* newMesh = new TMesh(material, geometry);
+			TMesh* newMesh = new TMesh(topping, geometry);
 
 			// Add the mesh to the sugar instance
 			newSugarInstance->AddMesh(newMesh);
@@ -289,7 +290,11 @@ namespace Donut
  		meshName += std::to_string(FSQCounter++);
  		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		return ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
+		GEOMETRY_GUID guid = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
+		TGeometry* geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
+		geo->os_bb.max = vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		geo->os_bb.min = -vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		return guid;
 	}
 
 	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension)
@@ -297,19 +302,17 @@ namespace Donut
 		// Fetch the texture
 		TSkyboxTexture* skybox = ResourceManager::Instance().FetchSkybox(_folderName, _extension);
 		// Create the shader
-		TShader shader("common/shaders/skybox/vertex.glsl", "common/shaders/skybox/fragment.glsl");
-		ShaderManager::Instance().CreateShader(shader); 
-		// Create the material
-		TMaterial* skyboxMat = new TMaterial();
- 		skyboxMat->shader = shader;
+		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial("skybox");
+		TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
+
  		TCubeMapInfo newCM;
 		newCM.cmID = skybox->id;
 		newCM.offset = 0;
 		newCM.name = "skybox";
-		skyboxMat->cubeMaps.push_back(newCM);
+		mat->cubeMaps.push_back(newCM);
 		// Create the geometry
-		GEOMETRY_GUID fsq = CreateFullScreenQuad(shader);
-		return new TMesh(skyboxMat, fsq);
+		GEOMETRY_GUID fsq = CreateFullScreenQuad(mat->shader);
+		return new TMesh(topping, fsq);
 	}
 
 }

@@ -40,16 +40,27 @@ namespace Donut
 
             // This function searches for a given toppping file and determines either or 
             // not it has been found and returns it if it has.
-            const TMaterial* FetchMaterial(const std::string& _toppingName);
+			TOPPING_GUID FetchMaterial(const std::string& _toppingName);
+
+			// Method required by rendering threads
+			TMaterial* RequestRuntimeMaterial(TOPPING_GUID _toppingGUID) { return &m_toppings[_toppingGUID].data; }
         protected:
             // Parses the sugar sub_directory
             void LoadToppings();
+
             // Load the topping into memory if it is not
             void LoadIntoMemory(TToppingDescriptor& _targetTopping);
 
+			// Insert a topping into the local data structures
+			TOPPING_GUID InsertTopping(TToppingDescriptor& _targetTopping);
+
         protected:
+			// The root folder that contains all the toppings
             std::string m_toppingsFolder;
-            std::map<std::string, TToppingDescriptor> m_toppings;
+
+			// The loaded into memory toppings
+			std::map<std::string, TOPPING_GUID> m_toppingsIdentifiers;
+			std::vector<TToppingDescriptor> m_toppings;
     };
 }
 #endif // DONUT_TOPPING_LOADER

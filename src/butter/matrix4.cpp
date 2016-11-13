@@ -94,6 +94,15 @@ namespace Donut
 		return result;
 	}
 
+	Vector3 operator*(const Matrix4& _mat, const Vector3& _vec)
+	{
+		Vector3 result;
+		result.x = _mat.m[0] * _vec.x + _mat.m[1] * _vec.y + _mat.m[2] * _vec.z + _mat.m[3] * 1.0f;
+		result.y = _mat.m[4] * _vec.x + _mat.m[5] * _vec.y + _mat.m[6] * _vec.z + _mat.m[7] * 1.0f;
+		result.z = _mat.m[8] * _vec.x + _mat.m[9] * _vec.y + _mat.m[10] * _vec.z + _mat.m[11] * 1.0f;
+		return result;
+	}
+
 	Matrix4 Translate_M4(const Vector4& parVector)
 	{
 		Matrix4 result;

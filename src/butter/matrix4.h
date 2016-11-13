@@ -52,6 +52,7 @@ namespace Donut
 	Matrix4 RotateZAxis(double parAngle);
 
 	Vector4 operator*(const Matrix4& _mat, const Vector4& _fac);
+	Vector3 operator*(const Matrix4& _mat, const Vector3& _fac);
 	Matrix4 operator*(const Matrix4& _mat1, const Matrix4& _mat2);
 	Matrix4& Set(Matrix4& _target, const Matrix4& parMatrix);
 

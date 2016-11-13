@@ -57,33 +57,52 @@ namespace Donut
 
     void TToppingLoader::LoadToppings()
     {   
+		// Fetch the root asset directory
         const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+		
+		// Fetch the asset directory to parse
         std::string toppingDirectory(rootAssetDirectory + "/common/toppings");
 
+		// Look for all the topping files in the target directory 
         std::vector<std::string> toppingFiles;
         GetExtensionFileList(toppingDirectory, ".topping", toppingFiles);
+
+		// Create a descriptor for each
         foreach_macro(topping, toppingFiles)
         {
+			// Parse the descriptor
             TToppingDescriptor newTopping;
             ParseToppingFile(*topping, newTopping);
-            m_toppings[newTopping.name] = newTopping;
+
+			// Append it
+			TOPPING_GUID guid = InsertTopping(newTopping);
             RESOURCE_INFO("Topping "<< newTopping.name<<" file: "<< *topping);
         }
     }
 
-    const TMaterial* TToppingLoader::FetchMaterial(const std::string& _toppingFile)
+	// Insert a topping into the local data structures
+	TOPPING_GUID TToppingLoader::InsertTopping(TToppingDescriptor& _targetTopping)
+	{
+		// Append the Index and the geometry
+		TOPPING_GUID toppingIndex = m_toppings.size();
+		m_toppings.push_back(_targetTopping);
+		m_toppingsIdentifiers[_targetTopping.name] = toppingIndex;
+		return toppingIndex;
+	}
+
+    TOPPING_GUID TToppingLoader::FetchMaterial(const std::string& _toppingFile)
     {
-        // Log it
+        // Log the request
         RESOURCE_DEBUG(_toppingFile<<" is requested");
 
-        // Fetch it
-        auto ite = m_toppings.find(_toppingFile);
+        // Fetch the identifier
+        auto ite = m_toppingsIdentifiers.find(_toppingFile);
 
         // Just make sure it is defined somewhere
-        ASSERT_MSG((ite!=m_toppings.end()), "Topping not found: "<<_toppingFile);
+        ASSERT_MSG((ite!= m_toppingsIdentifiers.end()), "Topping not found: "<<_toppingFile);
 
         // We have to make sure that this topping is loaded into memory before loading it
-        TToppingDescriptor& targetTopping = ite->second;
+        TToppingDescriptor& targetTopping = m_toppings[ite->second];
 
         //  If the sugar is not loaded, load it
         if( !targetTopping.loaded)
@@ -93,7 +112,7 @@ namespace Donut
         }
 
         // return it
-        return &(ite->second.data);
+        return ite->second;
     }
 
     void TToppingLoader::LoadIntoMemory(TToppingDescriptor& _targetTopping)

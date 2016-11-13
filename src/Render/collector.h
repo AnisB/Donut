@@ -2,33 +2,13 @@
 #define GRAPHICS_COLLECTOR_H
 
 // Library includes
-#include "resource/types.h"
-#include "butter/types.h"
-#include "graphics/uniformhandler.h"
+#include "render_request.h"
 
 // External includes
 #include <vector>
-#include <map>
 
 namespace Donut
 {
-    // Foward declare
-    class TMaterial;
-    class TGeometry;
-    
-	// This structure encapsulates everything that is required to draw a geometry with a material
-	struct TRenderRequest
-	{
-		// Instance data
-		const TMaterial* material;
-		GEOMETRY_GUID geometry;
-
-		// Mesh transform
-		Matrix4 transform;
-	};
-	// Processed a render request
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniformHandler>& _uniforms);
-
 	class TCollector
 	{
 	public:
@@ -40,7 +20,7 @@ namespace Donut
 			// Clears the render calls
 		void Clear();
 		void Append(const TRenderRequest& _request) {m_requests.push_back(_request);}
-		const std::vector<TRenderRequest>& Requests() {return m_requests;}
+		std::vector<TRenderRequest>& Requests() {return m_requests;}
 		
     protected:
         std::vector<TRenderRequest> m_requests;

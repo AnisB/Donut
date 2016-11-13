@@ -41,7 +41,7 @@ namespace Donut
 	{
 		ShaderManager::Instance().CreateShader(m_material.shader);
 		GEOMETRY_GUID fsqIndx = CreateFullScreenQuad(m_material.shader);
-		m_fsq =  ResourceManager::Instance().FetchGeometryByIndex(fsqIndx);
+		m_fsq =  ResourceManager::Instance().RequestRuntimeGeometry(fsqIndx);
 	}
 
 	void TVFX::BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous)

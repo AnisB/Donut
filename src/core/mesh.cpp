@@ -27,9 +27,9 @@
 
 namespace Donut
 {
-	TMesh::TMesh(const TMaterial* _material, GEOMETRY_GUID _geometry)
+	TMesh::TMesh(TOPPING_GUID _toppingGUID, GEOMETRY_GUID _geometry)
  	: TDrawable()
-	, m_material(_material)
+	, m_topping(_toppingGUID)
 	, m_geometry(_geometry)
  	{
  	}
@@ -44,7 +44,7 @@ namespace Donut
 		// Build our new render request
 		TRenderRequest newRequest;
 		newRequest.geometry = m_geometry;
-		newRequest.material = m_material;
+		newRequest.topping = m_topping;
 		newRequest.transform = _tm;
 
 		// Appent it
