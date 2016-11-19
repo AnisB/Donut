@@ -25,6 +25,10 @@ namespace Donut
 	inline Vector3 vector3(const double _x,const double _y, const double _z);
 	inline Vector3 vector3(const double _v);
 
+		// Index access
+	inline double& atIndex(Vector3& _val, int _index);
+	inline const double& atIndex_Cst(const Vector3& _val, int _index);
+
 		// Operators
 	inline Vector3 operator*(const Vector3& _v1, double parFactor);
 	inline Vector3 operator*(const Vector3& _v1, const Vector3& _v2);
@@ -47,6 +51,6 @@ namespace Donut
 	extern const Vector3 v3_Z;
 }
 
-#include "vector3.ih"
+#include "vector3.inl"
 
 #endif // BUTTER_VECTOR3_H

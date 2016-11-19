@@ -43,11 +43,14 @@ namespace Donut
 			TBox3& box = m_wsBoxes[req];
 			box.Reset();
 
-			// Include them in WS
-			box.IncludePoint(_view * currentRequest.transform * geom->os_bb.min);
-			box.IncludePoint(_view * currentRequest.transform * geom->os_bb.max);
+			// Compute the camera space bounding box
+			const TBox3& camera_space_bb = transform(geom->os_bb, _view * currentRequest.transform);
 
-			if (box.max.z > -50) m_discardArray[req] = true;
+			// For the moment, we filter by half space
+			if (camera_space_bb.min.z > 0.0)
+			{
+				m_discardArray[req] = true;
+			}
 		}
 
 		// Remove all the non-visible requests

@@ -249,7 +249,7 @@ namespace Donut
 		newModel->nbVertices = num_faces * 3;
 
 		// Build the OS AABB
-		newModel->os_bb.IncludePoints(_dataArray, num_faces, 8);
+		newModel->os_bb.IncludePoints(_dataArray, newModel->nbVertices);
 
 		GL_API_CHECK_END();
 

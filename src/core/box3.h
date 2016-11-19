@@ -14,16 +14,18 @@ namespace Donut
 		TBox3();
 		~TBox3();
 
-		// Manipulation method
+	public:
 		void Reset();
+		Vector3 Center() const { return (max + min) / 2.0f; }
+		Vector3 Width() const { return (max - min); }
 
 		// Override the max and min values if necessary
 		inline void IncludePoint(const Vector3& _pos)
 		{
 			// Override the miniaml
 			min.x = _pos.x < min.x ? _pos.x : min.x;
-			min.y = _pos.y < min.y ? _pos.x : min.y;
-			min.z = _pos.z < min.z ? _pos.x : min.z;
+			min.y = _pos.y < min.y ? _pos.y : min.y;
+			min.z = _pos.z < min.z ? _pos.z : min.z;
 
 			// Override the maximal
 			max.x = _pos.x > max.x ? _pos.x : max.x;
@@ -31,20 +33,16 @@ namespace Donut
 			max.z = _pos.z > max.z ? _pos.z : max.z;
 		}
 
-		void IncludePoints(float* _pointCoords, int _nbPoints, int _shift)
-		{
-			// For each point to include
-			for (int pIdx = 0; pIdx < _nbPoints; ++pIdx)
-			{
-				// Include it
-				float* posPtr = _pointCoords + _shift * pIdx;
-				IncludePoint(vector3(posPtr[0], posPtr[1], posPtr[2]));
-			}
-		}
+		// Include a set of points using a float buffer
+		void IncludePoints(float* _pointCoords, int _nbPoints);
+
 	public:
 		Vector3 min;
 		Vector3 max;
 	};
+
+	// Helper functions for bounding boxes
+	TBox3 transform(const TBox3& _source, const Matrix4& _tm);
 }
 
 #endif // BOX3_CORE_H

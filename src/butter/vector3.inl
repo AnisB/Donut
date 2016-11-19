@@ -91,4 +91,14 @@ namespace Donut
 	{
 		return _v1/length(_v1);
 	}
+		// Index access
+	double& atIndex(Vector3& _val, int _index)
+	{
+		return _index == 0 ? _val.x : (_index == 1 ? _val.y : _val.z);
+	}
+
+	const double& atIndex_Cst(const Vector3& _val, int _index)
+	{
+		return _index == 0 ? _val.x : (_index == 1 ? _val.y : _val.z);
+	}
 }

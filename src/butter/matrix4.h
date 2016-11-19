@@ -41,6 +41,7 @@ namespace Donut
 	// Computing functions
 	double Det(const Matrix4& _matrix);
 	Matrix3 Inverse3x3(const Matrix4& _mat);
+	Matrix4 inverse(const Matrix4& _target);
 	Matrix4 Translate_M4(const Vector4& parVector);
 	Matrix4 Translate_M4(const Vector3& parVector);
 
