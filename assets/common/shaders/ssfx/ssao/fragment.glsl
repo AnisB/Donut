@@ -65,6 +65,6 @@ void main()
     ao += doAmbientOcclusion(texCoord,coord2, p, n);
   }
   ao = ao / nbIterations;
-  ao = 1.0 - ao;
+  ao = pow(1.0 - ao, 2.0f);
   frag_color = vec4(ao,ao,ao,1.0);
 }
