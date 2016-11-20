@@ -78,4 +78,10 @@ namespace Donut
 	{
 		return (_v1.x * _v1.x + _v1.y * _v1.y + _v1.z * _v1.z + _v1.w * _v1.w);
 	}
+
+	inline Vector4 normalize(const Vector4& _vec)
+	{
+		const double norm = length(_vec);
+		return vector4(_vec.x / norm, _vec.y / norm, _vec.z / norm, _vec.w / norm);
+	}
 }

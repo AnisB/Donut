@@ -28,6 +28,8 @@ namespace Donut
 	// Init Functions
 	void matrix4(Matrix4& _mat, MatrixInit::Type _init = MatrixInit::Zero);
 	void matrix4(Matrix4& _mat, double* _values);
+
+	// Reset functions
 	void SetIdentity(Matrix4& _matrix);
 	void ResetToZero(Matrix4& _matrix);
 	void AsPerspective(Matrix4& _mat, double parFovy, double parAspect, double parNear, double parFar);
@@ -37,11 +39,15 @@ namespace Donut
 	Vector3 XAxis(const Matrix4& _matrix);
 	Vector3 YAxis(const Matrix4& _matrix);
 	Vector3 ZAxis(const Matrix4& _matrix);
+	const Vector4* XRow(const Matrix4& _matrix);
+	const Vector4* YRow(const Matrix4& _matrix);
+	const Vector4* ZRow(const Matrix4& _matrix);
+	const Vector4* WRow(const Matrix4& _matrix);
 	
 	// Computing functions
 	double Det(const Matrix4& _matrix);
 	Matrix3 Inverse3x3(const Matrix4& _mat);
-	Matrix4 inverse(const Matrix4& _target);
+	Matrix4 Inverse(const Matrix4& _target);
 	Matrix4 Translate_M4(const Vector4& parVector);
 	Matrix4 Translate_M4(const Vector3& parVector);
 

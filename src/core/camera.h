@@ -1,25 +1,9 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
-
 #ifndef CAMERA_CORE_DONUT
 #define CAMERA_CORE_DONUT
 
 // Library includes
 #include "butter/types.h"
-
+#include "core/frustum.h"
 #include "graphics/uniformhandler.h"
 #include "multithread/usualthreadsafeobjects.h"
 
@@ -29,41 +13,46 @@
 
 namespace Donut
 {
+	// This class is the camera structure of the engine, it makes available the usual operations (yaw, pitch, translate) and access to the rendering data
 	class Camera
 	{
 		public:
+			// Cst and Dst
 			Camera();
 			~Camera();
 
-			// Utility functions
+			// Transform data
+				// Apply a yaw using a given angle
 			void Yaw(double parAngle);
+				// Apply a pitch using a given angle
 			void Pitch(double parAngle);
+				// Apply a translation
 			void Translate(const Vector3& parDir);
 
 			// Accessors
 			const Matrix4& GetViewMatrix() const { return m_viewMatrix;}
 			const Matrix4& GetProjectionMatrix() const{ return m_projection;}
 			const Matrix4& GetProjectionViewMatrix() const{ return m_projectionView;}
-			// Setting the projection matrix
+
+			// Setting the projection data
 			void DefinePerspective(double parFovy, double parAspect, double parNear, double parFar);
-			
-			// Modification flags
-			void ChangeNoticed();
-			bool HasChanged() {return FHasChanged.GetValue();}
-			double GetFCoeff() {return m_fcoeff;}
+
+			// Fetch the the frustum data
+			const TFrustum& FrusumDescriptor() { return m_frustum; }
+
+			// Output the uniforms for rendering purposes
 			void AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms);
 
+	protected:
 			// Compute view matrix
-			void RecomputeViewMatrix();
+			void UpdateViewData();
 		protected:
 			// Rendering data
 			Matrix4 m_viewMatrix;
 			Matrix3 m_viewMatrix_inverse;
 			Matrix4 m_projection;
 			Matrix4 m_projectionView;
-
-			// Management data
-			TThreadSafeBolean FHasChanged;
+			TFrustum m_frustum;
 
 			// Projection Data
 			double m_near;

@@ -3,6 +3,7 @@
 
 // Library includes
 #include "render_request.h"
+#include "core/frustum.h"
 #include "core/box3.h"
 
 namespace Donut
@@ -17,7 +18,7 @@ namespace Donut
 
 		// This function modifies the set of render requests based on the fact that the concerned geometries as inside or outside
 		// the view frsutum that has been specified as an input
-		void Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view);
+		void Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm);
 
 	protected:
 		std::vector<char> m_discardArray;

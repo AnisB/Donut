@@ -57,7 +57,7 @@
 		std::vector<TRenderRequest>& requests = m_collector.Requests();
 
 		// Do the frustum culling
-		m_culler.Process(requests, m_camera->GetViewMatrix());
+		m_culler.Process(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
 		// Fetch the uniform values from the camera
 		std::map<std::string, TUniformHandler> values;

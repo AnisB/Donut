@@ -37,6 +37,7 @@ namespace Donut
 	inline Vector4 crossProd(const Vector4& _v1, const Vector4& _v2);
 	inline double length(const Vector4& _v1);
 	inline double length2(const Vector4& _v1);
+	inline Vector4 normalize(const Vector4& _vec);
 
 	// Default values;
 	extern const Vector4 v4_ZERO;
@@ -46,6 +47,6 @@ namespace Donut
 	extern const Vector4 v4_W;
 }
 
-#include "vector4.ih"
+#include "vector4.inl"
 
 #endif // BUTTER_VECTOR4_H

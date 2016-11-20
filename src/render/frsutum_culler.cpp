@@ -2,20 +2,24 @@
 #include "frustum_culler.h"
 #include "resource/resourcemanager.h"
 #include "butter/matrix4.h"
+#include "butter/vector4.h"
 
 namespace Donut
 {
+	// Cst
 	TFrustumCuller::TFrustumCuller()
 	{
 
 	}
 
+	// Dst
 	TFrustumCuller::~TFrustumCuller()
 	{
 
 	}
 
-	void TFrustumCuller::Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view)
+	// Process the render requests
+	void TFrustumCuller::Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
 	{
 		// Fetch the amount of remaining requests to process
 		size_t nbRequests = _requests.size();
@@ -46,8 +50,8 @@ namespace Donut
 			// Compute the camera space bounding box
 			const TBox3& camera_space_bb = transform(geom->os_bb, _view * currentRequest.transform);
 
-			// For the moment, we filter by half space
-			if (camera_space_bb.min.z > 0.0)
+			// Is it outside the frustum
+			if (_frusutm.BoxOutside(camera_space_bb))
 			{
 				m_discardArray[req] = true;
 			}

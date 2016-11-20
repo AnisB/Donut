@@ -18,19 +18,19 @@
 #include "Camera.h"
 #include "core/common.h"
 #include "butter/matrix3.h"
+
 // STL inlcudes
 #include <math.h>
 
 namespace Donut 
 {
+	// Cst
 	Camera::Camera()
 	// Init of the matrices
 	: m_viewMatrix()
 	, m_viewMatrix_inverse()
 	, m_projection()
 	, m_projectionView()
-	// Manipulation data
-	, FHasChanged(true)
 	// projection data
 	, m_near(0.1)
 	, m_far(1000.0)
@@ -48,57 +48,58 @@ namespace Donut
 
 	Camera::~Camera()
 	{
-		
+		// Nothing to do
 	}
 
-	void Camera::DefinePerspective(double parFovy, double parAspect, double parNear, double parFar)
+	// Define the perspective data
+	void Camera::DefinePerspective(double _fovy, double _apsect, double _near, double _far)
 	{
 		// Setting the data
-		m_near = parNear;
-		m_far = parFar;
+		m_near = _near;
+		m_far = _far;
 		m_fcoeff = 2.0 / log2(m_far + 1.0);
-		m_focus = 100.0/(m_far-m_near);
+		m_focus = 100.0 / (m_far - m_near);
 
 		// Compute the perspective matrix
-		AsPerspective(m_projection, parFovy, parAspect, parNear, parFar);
+		AsPerspective(m_projection, _fovy, _apsect, _near, _far);
+		// Update the frustum data
+		m_frustum.DefineProjection(_fovy, _apsect, _near, _far);
 
 		// Comibinig it to the viex matrix for caching purposes
 		m_projectionView = m_projection * m_viewMatrix;
-		FHasChanged.SetValue(true);
 	}
 
-
+	// Apply a yaw using a given angle
 	void Camera::Yaw(double _angle)
 	{
 		// Incrementing the yaw angle
 		m_yaw = m_yaw + _angle;
-		RecomputeViewMatrix();
+		UpdateViewData();
 	}
 
+	// Apply a pitch using a given angle
 	void Camera::Pitch(double _angle)
 	{
 		m_pitch = m_pitch + _angle;
-		RecomputeViewMatrix();
+		UpdateViewData();
 	}
 
+	// Apply a translation
 	void Camera::Translate(const Vector3& _dir)
 	{
+		// Compute the translation in view space
 		const Vector3& dir = m_viewMatrix_inverse * _dir;
+		// Update position
 		m_position = m_position + vector3(dir.x, dir.y, dir.z);
-		RecomputeViewMatrix();
+		UpdateViewData();
 	}
 
-	void Camera::RecomputeViewMatrix()
+	// Update the view data
+	void Camera::UpdateViewData()
 	{
 		m_viewMatrix = RotateXAxis(m_pitch) * RotateYAxis(m_yaw) * Translate_M4(m_position);
 		m_viewMatrix_inverse = Inverse3x3(m_viewMatrix);
 		m_projectionView = m_projection * m_viewMatrix;
-		FHasChanged.SetValue(true);
-	}
-
-	void Camera::ChangeNoticed()
-	{
-		FHasChanged.SetValue(false);
 	}
 
 	void Camera::AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms)
