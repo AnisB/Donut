@@ -53,6 +53,7 @@ namespace Donut
 		void DefineProjection(float angle, float ratio, float nearD, float farD);
 		bool BoxOutside(const TBox3& _box) const;
 		bool PointInFrustum(const Vector3& _point) const;
+		float MaxScreenPercentage(const TBox3& _box) const;
 
 	protected:
 		void ComputeInternalData();

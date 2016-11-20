@@ -27,6 +27,7 @@
 #include "render/collector.h"
 #include "graphics/canvas.h"
 #include "render/frustum_culler.h"
+#include "render/crumble_remover.h"
 #include "graphics/visualeffect.h"
 
 // STL includes
@@ -65,6 +66,7 @@
 
 		TCollector m_collector;
 		TFrustumCuller m_culler;
+		TCrumbleRemover m_remover;
 	};
 	// END CLASS DECLARATION
  }

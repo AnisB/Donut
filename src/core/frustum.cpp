@@ -4,6 +4,9 @@
 #include "butter/vector3.h"
 #include "butter/vector4.h"
 
+// External includes
+#include <algorithm>
+
 namespace Donut
 {
 	// Build a plane's data from 3 points
@@ -130,5 +133,20 @@ namespace Donut
 
 		// OK we have an intersection here
 		return false;
+	}
+
+	float TFrustum::MaxScreenPercentage(const TBox3& _box) const
+	{
+		// Fetche the dimension of the box
+		Vector3 dimension = _box.Width();
+
+		// Fetch the maximal box dimension
+		float maxBoxDimension = std::max(dimension.x, dimension.y);
+
+		// Fetch the minimal far screen dimension
+		float minScreenDimension = std::min(tang * -_box.min.z * 2, tang * -_box.min.z * ratio * 2);
+
+		// return the percentage
+		return maxBoxDimension / minScreenDimension;
 	}
 }

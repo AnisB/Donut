@@ -59,6 +59,9 @@
 		// Do the frustum culling
 		m_culler.Process(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
+		// Remove the crumbles
+		m_remover.Process(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
+
 		// Fetch the uniform values from the camera
 		std::map<std::string, TUniformHandler> values;
 		m_camera->AppendUniforms(values);
