@@ -25,6 +25,9 @@
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
 
+// External includes
+#include <float.h>
+
 namespace Donut
 {
 	// Cube Data

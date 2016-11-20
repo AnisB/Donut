@@ -21,6 +21,7 @@
 #include "resource/Common.h"
 #include "input/Common.h"
 #include <Base/Common.h>
+#include <Base/Security.h>
 #include "graphics/glfactory.h"
 #include "Base/Macro.h"
 #include "sugarLoader.h"
@@ -128,7 +129,7 @@
 
 		// Load the file into memory
 		TEgg* container = ReadEggFile(RelativePath(_fileName));
-		ASSERT(container != nullptr, "Geomtry file couldn't be read");
+		ASSERT_MSG(container != nullptr, "Geomtry file couldn't be read");
 
 		// Instanciate the runtime geometry
 		TGeometry* newModel = CreateGeometry(parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);

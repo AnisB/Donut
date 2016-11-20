@@ -70,4 +70,4 @@ namespace Donut
 		float nw, nh, fw, fh;
 	};
 }
-#endif FRUSTUM_H
+#endif // FRUSTUM_H
