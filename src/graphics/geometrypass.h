@@ -25,9 +25,8 @@
 #include "graphics/pass.h"
 #include "core/node.h"
 #include "render/collector.h"
+#include "render/dispatcher.h"
 #include "graphics/canvas.h"
-#include "render/frustum_culler.h"
-#include "render/crumble_remover.h"
 #include "graphics/visualeffect.h"
 
 // STL includes
@@ -64,9 +63,9 @@
 		TCanvas * m_canvas;
 		TNode* m_root;
 
+		// Rendering request data
 		TCollector m_collector;
-		TFrustumCuller m_culler;
-		TCrumbleRemover m_remover;
+		TDispatcher m_dipatcher;
 	};
 	// END CLASS DECLARATION
  }

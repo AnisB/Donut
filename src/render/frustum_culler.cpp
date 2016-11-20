@@ -19,7 +19,7 @@ namespace Donut
 	}
 
 	// Process the render requests
-	void TFrustumCuller::Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
+	void TFrustumCuller::Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes, const Matrix4& _view, const TFrustum& _frusutm)
 	{
 		// Fetch the amount of remaining requests to process
 		size_t nbRequests = _requests.size();

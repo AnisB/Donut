@@ -2,6 +2,7 @@
 #define FRUSTUM_CULLER_H
 
 // Library includes
+#include "processor.h"
 #include "render_request.h"
 #include "core/frustum.h"
 #include "core/box3.h"
@@ -9,7 +10,7 @@
 namespace Donut
 {
 	// This class is able to process frustrum culling for a given set of render requests
-	class TFrustumCuller
+	class TFrustumCuller : public TProcessor
 	{
 	public:
 		// Cst and Dst
@@ -18,7 +19,7 @@ namespace Donut
 
 		// This function modifies the set of render requests based on the fact that the concerned geometries as inside or outside
 		// the view frsutum that has been specified as an input
-		void Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm);
+		void Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes, const Matrix4& _view, const TFrustum& _frusutm);
 
 	protected:
 		std::vector<char> m_discardArray;

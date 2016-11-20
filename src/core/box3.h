@@ -36,6 +36,8 @@ namespace Donut
 		// Include a set of points using a float buffer
 		void IncludePoints(float* _pointCoords, int _nbPoints);
 
+		void operator=(const TBox3& _targetBox) {min = _targetBox.min; max = _targetBox.max;}
+
 	public:
 		Vector3 min;
 		Vector3 max;

@@ -19,6 +19,7 @@
 #include "graphics/common.h"
 #include "base/Common.h"
 #include "Base/Macro.h"
+#include "Base/log.h"
 #include "resource/resourcemanager.h"
 
 // External includes
@@ -49,22 +50,23 @@
 
 	void TGeometryPass::Draw(const TBufferOutput& _previousData)
 	{
-		// Drawing me
+		// Reset the dispatcher
 		m_collector.Clear();
+
+		// Collect the requests
 		m_root->Evaluate(m_collector, m_reference);
 
-		// Fetch the request 
-		std::vector<TRenderRequest>& requests = m_collector.Requests();
+		// Fetch the requests
+		auto& requests = m_collector.Requests();
 
-		// Do the frustum culling
-		m_culler.Process(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
-
-		// Remove the crumbles
-		m_remover.Process(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
+		// Do all the processings on the requests
+		m_dipatcher.ProcessRequests(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
 		// Fetch the uniform values from the camera
 		std::map<std::string, TUniformHandler> values;
 		m_camera->AppendUniforms(values);
+
+		GENERAL_INFO(requests.size());
 
 		// Bind the canvas
 		Bind();

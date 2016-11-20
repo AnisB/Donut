@@ -97,7 +97,8 @@ namespace Donut
 		// Check each plane
 		for (int i = 0; i < 6; ++i)
 		{
-			if (!(dotProd(Normal(pl[i]), _point) + pl[i].w) > 0.0)
+			bool positive = (dotProd(Normal(pl[i]), _point) + pl[i].w) > 0.0;
+			if (!positive)
 			{
 				return false;
 			}

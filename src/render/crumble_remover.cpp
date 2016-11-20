@@ -19,7 +19,7 @@ namespace Donut
 	}
 
 	// Process the render requests
-	void TCrumbleRemover::Process(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
+	void TCrumbleRemover::Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes,const Matrix4& _view, const TFrustum& _frusutm)
 	{
 		// Fetch the amount of remaining requests to process
 		size_t nbRequests = _requests.size();
@@ -51,7 +51,7 @@ namespace Donut
 			const TBox3& camera_space_bb = transform(geom->os_bb, _view * currentRequest.transform);
 
 			// Is it outside the frustum
-			if (_frusutm.MaxScreenPercentage(camera_space_bb) < 0.02f)
+			if (_frusutm.MaxScreenPercentage(camera_space_bb) < 0.01f)
 			{
 				m_discardArray[req] = true;
 			}

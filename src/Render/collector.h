@@ -20,7 +20,7 @@ namespace Donut
 			// Clears the render calls
 		void Clear();
 		void Append(const TRenderRequest& _request) {m_requests.push_back(_request);}
-		std::vector<TRenderRequest>& Requests() {return m_requests;}
+		inline std::vector<TRenderRequest>& Requests() {return m_requests;}
 		
     protected:
         std::vector<TRenderRequest> m_requests;
