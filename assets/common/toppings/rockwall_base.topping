@@ -14,6 +14,6 @@
 		<texture2D name="textureCmp" location="common/textures/rockwall.bmp"/>
 	</textures>
    <brdfs>
-      <ggx name="brdf" location="common/brdfs/alumina-oxide.binary"/>
+      <!--<ggx name="brdf" location="common/brdfs/alumina-oxide.binary"/> -->
    </brdfs>
 </topping>
