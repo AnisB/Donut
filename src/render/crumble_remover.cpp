@@ -29,7 +29,6 @@ namespace Donut
 
 		// Make sure that we have all the memory we need
 		m_discardArray.resize(nbRequests);
-		m_wsBoxes.resize(nbRequests);
 
 		// Intialize the arrays
 		memset(&m_discardArray[0], 0, nbRequests);
@@ -37,21 +36,8 @@ namespace Donut
 		// Iterate over the requests
 		for (size_t req = 0; req < nbRequests; ++req)
 		{
-			// Fetch the request to process
-			TRenderRequest& currentRequest = _requests[req];
-
-			// Fetch the geometry to process
-			TGeometry* geom = ResourceManager::Instance().RequestRuntimeGeometry(currentRequest.geometry);
-
-			// Get the target box
-			TBox3& box = m_wsBoxes[req];
-			box.Reset();
-
-			// Compute the camera space bounding box
-			const TBox3& camera_space_bb = transform(geom->os_bb, _view * currentRequest.transform);
-
 			// Is it outside the frustum
-			if (_frusutm.MaxScreenPercentage(camera_space_bb) < 0.01f)
+			if (_frusutm.MaxScreenPercentage(_vsBoxes[req]) < 0.02f)
 			{
 				m_discardArray[req] = true;
 			}
@@ -66,15 +52,23 @@ namespace Donut
 		{
 			if (m_discardArray[reqIterator])
 			{
+				// Swap the render request
 				TRenderRequest tmpReq = _requests[finalNbRequests - 1];
 				_requests[finalNbRequests - 1] = _requests[reqIterator];
 				_requests[reqIterator] = tmpReq;
+
+				// Swap the bounding box
+				TBox3 tmpBox = _vsBoxes[finalNbRequests - 1];
+				_vsBoxes[finalNbRequests - 1] = _vsBoxes[reqIterator];
+				_vsBoxes[reqIterator] = tmpBox;
+
 				finalNbRequests--;
 			}
 			reqIterator--;
 		}
 
-		// Discard them
+		// Discard request and boxes
 		_requests.erase(_requests.begin() + finalNbRequests, _requests.end());
+		_vsBoxes.erase(_vsBoxes.begin() + finalNbRequests, _vsBoxes.end());
 	}
 }

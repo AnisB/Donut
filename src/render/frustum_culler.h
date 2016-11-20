@@ -23,7 +23,6 @@ namespace Donut
 
 	protected:
 		std::vector<char> m_discardArray;
-		std::vector<TBox3> m_wsBoxes;
 	};
 }
 #endif // FRUSTUM_CULLER_H

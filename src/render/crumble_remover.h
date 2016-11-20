@@ -21,7 +21,6 @@ namespace Donut
 
 	protected:
 		std::vector<char> m_discardArray;
-		std::vector<TBox3> m_wsBoxes;
 	};
 }
 #endif // CRUMBLE_REMOVER_H
