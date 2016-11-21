@@ -28,6 +28,7 @@
 #include "simplefx.h"
 #include "defferedfx.h"
 #include "environmentfx.h"
+#include "skyboxfx.h"
 // Other
 #include "base/macro.h"
 #include "resource/resourcemanager.h"
@@ -110,7 +111,7 @@ namespace Donut
 					break;
 				}
 
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene->root);
+				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
 
@@ -168,8 +169,16 @@ namespace Donut
 						vfx = deffered;
 					}
 					break;
+					case TVFXTag::SKYBOX:
+					{
+						TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader);
+						skyboxFX->SetSkybox(_scene->skybox);
+						skyboxFX->SetCamera(camera);
+						vfx = skyboxFX;
+					}
+					break;
 					default:
-					ASSERT_FAIL_MSG("Unexisting canvas type");
+					ASSERT_FAIL_MSG("Unexisting fx type");
 					break;
 				}
 

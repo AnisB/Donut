@@ -5,6 +5,7 @@
 #include "graphics/factory.h"
 #include "core/sugarinstance.h"
 #include "resource/flourloader.h"
+#include "resource/resourcemanager.h"
 #include "tools/fileloader.h"
 
 namespace Donut
@@ -33,12 +34,9 @@ namespace Donut
 	}
 
 	// Handle a skybox from its descriptor
-	TSceneNode* HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
+	SKYBOX_GUID HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
 	{
-		TSceneNode* node = new TSceneNode();
-		TMesh* mesh = CreateSkybox(_skybox.location, _skybox.extension);
-		node->AppendDrawable(mesh);
-		return node;
+		return ResourceManager::Instance().FetchSkybox(_skybox.location, _skybox.extension);
 	}
 
 	// Handle a node  from its descriptor
@@ -64,13 +62,6 @@ namespace Donut
 		{
 			const TNodeDescriptor& currentNodeDescriptor = **nodeIT;
 			node->AttachChild(HandleNode(currentNodeDescriptor));
-		}
-
-		// If a skybox was defined, handle it
-		if(_node.skybox)
-		{
-			const TSkyboxDescriptor& skyboxDescriptor = *_node.skybox;
-			node->AttachChild(HandleSkyboxNode(skyboxDescriptor));
 		}
 
 		// If it is a scene node, make sure models are handled
@@ -118,6 +109,11 @@ namespace Donut
 			flour->lights.push_back(newLight);
 		}
 
+		// If a skybox was defined, handle it
+		if(_desc.skybox)
+		{
+			flour->skybox = HandleSkyboxNode(*_desc.skybox);
+		}
 
 		// If there is one, handle the sphericla harmonic env map
 		if(_desc.sh)

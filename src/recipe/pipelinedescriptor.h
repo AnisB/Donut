@@ -30,6 +30,7 @@ namespace Donut
             SIMPLEFX = 1,
             ENVIRONEMENT = 2,
             DEFFERED = 3,
+            SKYBOX = 4,
         };
     }
 

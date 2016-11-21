@@ -61,11 +61,6 @@ namespace Donut
                 {
                         nodeDesc->tm = tmAtt->value();
                 }
-                // Creating the scene children
-                for(rapidxml::xml_node<> *skybox = _node->first_node(SKYBOX_TOKEN); skybox; skybox = skybox->next_sibling(SKYBOX_TOKEN))
-                {
-                        nodeDesc->skybox = HandleSkyboxNode_D(skybox);
-                }
 
                 // Creating the node children
                 for(rapidxml::xml_node<> *currentNode = _node->first_node(NODE_TOKEN); currentNode; currentNode = currentNode->next_sibling(NODE_TOKEN))
@@ -219,6 +214,13 @@ namespace Donut
                 if(illumination)
                 {
                         HandleIlluminationNode_D(illumination, _output.illumination);
+                }
+
+                // Processing the skybox
+                rapidxml::xml_node<> *skybox = flour->first_node(SKYBOX_TOKEN);
+                if(skybox)
+                {
+                        _output.skybox = HandleSkyboxNode_D(skybox);
                 }
 	}
 

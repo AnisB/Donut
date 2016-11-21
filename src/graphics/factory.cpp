@@ -300,10 +300,11 @@ namespace Donut
 		return guid;
 	}
 
-	TMesh* CreateSkybox(const std::string& _folderName, const std::string& _extension)
+	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID)
 	{	
 		// Fetch the texture
-		TSkyboxTexture* skybox = ResourceManager::Instance().FetchSkybox(_folderName, _extension);
+		TSkyboxTexture* skybox = ResourceManager::Instance().RequestRuntimeSkybox(_skyboxID);
+		
 		// Create the shader
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial("skybox");
 		TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
@@ -313,6 +314,7 @@ namespace Donut
 		newCM.offset = 0;
 		newCM.name = "skybox";
 		mat->cubeMaps.push_back(newCM);
+		
 		// Create the geometry
 		GEOMETRY_GUID fsq = CreateFullScreenQuad(mat->shader);
 		return new TMesh(topping, fsq);

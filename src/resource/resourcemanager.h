@@ -70,7 +70,7 @@
 		// Returns a pointer to a given skybox (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
-		TSkyboxTexture* FetchSkybox(const std::string& _skyboxFolder, const std::string& _extension);
+		SKYBOX_GUID FetchSkybox(const std::string& _skyboxFolder, const std::string& _extension);
 		// This function is not really supposed to be used on a perfomance oriented scene, it is a helper that is available for the user to create
 		// at runtime geometries and to register them for further access (it is used to create cubes, spheres, planes, etc etc)
 		// It is also used internally by the FetchGeometry method
@@ -79,10 +79,12 @@
 		// Still to refactor
 		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
 
+		TSkyboxTexture* RequestRuntimeSkybox(SKYBOX_GUID _skyboxIndex) { return m_skyboxes[_skyboxIndex]; }
 		TGeometry* RequestRuntimeGeometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
 
 	protected:
 		GEOMETRY_GUID InsertGeometry(const STRING_TYPE& _path, TGeometry* _targetGeometry);
+		SKYBOX_GUID InsertSkybox(const STRING_TYPE& _folder, TSkyboxTexture* _targetSkybox);
 
 	protected:
 		// Asset folder path
@@ -91,7 +93,10 @@
 		// Data records
 		std::map<std::string, TGGXBRDF*> m_brdfs;
 		std::map<std::string, TTexture*> FTextures;
-		std::map<std::string, TSkyboxTexture*> FSkyboxTextures;
+
+			// Skybox data
+		std::map<std::string, SKYBOX_GUID> m_skyboxIdentifiers;
+		std::vector<TSkyboxTexture*> m_skyboxes;
 			
 			// Geometry data
 		std::map<std::string, GEOMETRY_GUID> m_geometryIdentifiers;

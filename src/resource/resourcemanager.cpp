@@ -79,23 +79,26 @@
  		}
  	}
 
- 	TSkyboxTexture* ResourceManager::FetchSkybox(const std::string&  _skyboxFolder, const std::string& _extension)
+ 	SKYBOX_GUID ResourceManager::FetchSkybox(const std::string&  _skyboxFolder, const std::string& _extension)
  	{
- 		auto it = FSkyboxTextures.find(_skyboxFolder);
- 		if(it != FSkyboxTextures.end())
+ 		auto it = m_skyboxIdentifiers.find(_skyboxFolder);
+ 		if(it != m_skyboxIdentifiers.end())
  		{
 			RESOURCE_DEBUG(_skyboxFolder<<" already loaded");
- 			it->second->FNbRef++;
  			return it->second;
  		}
  		else
  		{
  			RESOURCE_INFO("Reading "<<_skyboxFolder);
- 			TSkyboxTexture * skybox =  TextureHelpers::LoadSkybox(RootAssetsFolder() + _skyboxFolder, TextureHelpers::GetImgType(_extension));
- 			FSkyboxTextures[_skyboxFolder] = skybox;
+
+ 			// Read the skybox data into memory
+ 			TSkyboxTexture* skybox =  TextureHelpers::LoadSkybox(RootAssetsFolder() + _skyboxFolder, TextureHelpers::GetImgType(_extension));
+ 			
+ 			// Instciate the runtime data
  			TextureHelpers::CreateSkybox(skybox);
- 			skybox->FNbRef++;
- 			return skybox;
+
+ 			// Register and return index
+ 			return InsertSkybox(_skyboxFolder, skybox);
  		}
  	}
 
@@ -154,6 +157,15 @@
 		m_geometries.push_back(_targetGeometry);
 		m_geometryIdentifiers[_path] = geometryIndex;
 		return geometryIndex;
+	}
+
+	SKYBOX_GUID ResourceManager::InsertSkybox(const STRING_TYPE& _path, TSkyboxTexture* _targetSkybox)
+	{
+		// Append the Index and the skybox
+		SKYBOX_GUID skyboxIndex = m_skyboxes.size();
+		m_skyboxes.push_back(_targetSkybox);
+		m_skyboxIdentifiers[_path] = skyboxIndex;
+		return skyboxIndex;
 	}
 
 	/*

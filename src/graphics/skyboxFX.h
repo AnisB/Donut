@@ -14,23 +14,33 @@
 *
 **/
 
+
+#ifndef SKYBOX_FX_GRAPHICS_DONUT
+#define SKYBOX_FX_GRAPHICS_DONUT
+
 // Library includes
+#include "graphics/visualeffect.h"
+#include "core/camera.h"
 #include "core/mesh.h"
 
 namespace Donut
 {
-	// Foward declaration
-	class TSugarInstance;
-
-	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader);
-
-	// Drawable factory
-	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID);
-	
-		// Default meshes
-	TMesh* CreateCube(double _length, std::string _materialName = "DEFAULT");
-	TMesh* CreateSphere(double _radius, std::string _materialName = "DEFAULT");
-	TMesh* CreatePlane(double _with, double _length, std::string _materialName = "DEFAULT");
-		// Create a sugar instance
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
+	class TSkyboxFX : public TVFX
+	{
+	public:
+		// Creation/Destruction
+		TSkyboxFX(const TShader& _shader);
+		~TSkyboxFX();
+		// Init
+		virtual void Init();
+		void SetSkybox(SKYBOX_GUID _skybox);
+		void SetCamera(Camera* _camera);
+		// Drawing it
+		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+	protected:
+		SKYBOX_GUID m_skybox;
+		Camera* m_camera;
+	};
 }
+
+#endif // SKYBOX_FX_GRAPHICS_DONUT

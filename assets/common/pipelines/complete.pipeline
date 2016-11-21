@@ -1,8 +1,10 @@
 <pipeline name="complete">
+
 	<!-- First g buffer pass -->
 	<pass type="geometry">
 		<canvas type="gbuffer"/>
 	</pass>
+
 	<!-- Deffered lighting pass -->
 	<pass type="vfx">
 		<canvas type="effect" output="deffered"/>
@@ -50,6 +52,17 @@
 			</shader>
 		</vfx>
 	</pass>
+
+	<!-- Reflection pass pass -->
+<!-- 	<pass type="vfx">
+		<canvas type="effect" output="final"/>
+		<vfx type="skybox">
+			<shader>
+				<vertex location="common/shaders/ssfx/reflect/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/reflect/fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass> -->
 
 	<!-- Depth of field pass -->
 	<pass type="vfx">

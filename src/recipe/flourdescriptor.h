@@ -45,7 +45,6 @@ namespace Donut
 	{
 		TNodeDescriptor(bool _sceneNode = false)
 		: tm("1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1")
-		, skybox(nullptr)
 		, scenenode(_sceneNode)
         , nodes()
 		, models()
@@ -55,7 +54,6 @@ namespace Donut
 
 		bool scenenode;
 		std::string tm;
-		TSkyboxDescriptor* skybox;
 		std::vector<TNodeDescriptor*> nodes;
 		std::vector<std::string> models;
 	};
@@ -80,8 +78,11 @@ namespace Donut
 
 		// Rendering data
 		std::string pipeline;
+		// Illumination data
 		TSHDescriptor* sh;
+		TSkyboxDescriptor* skybox;
 		TIlluminationDescritor illumination;
+		// Node Hierachy
 		TNodeDescriptor* root;
 
         // For tracking the file's state

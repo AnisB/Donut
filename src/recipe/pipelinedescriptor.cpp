@@ -42,6 +42,10 @@ namespace Donut
         {
             return TVFXTag::ENVIRONEMENT;
         }
+        else if(_tag == "skybox")
+        {
+            return TVFXTag::SKYBOX;
+        }
         else
         {
             return TVFXTag::UNKNOWN;

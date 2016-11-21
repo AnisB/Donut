@@ -31,6 +31,7 @@ namespace Donut
 
 			// Accessors
 			const Matrix4& GetViewMatrix() const { return m_viewMatrix;}
+			const Matrix3& GetInverseViewMatrix() const { return m_viewMatrix_inverse;}
 			const Matrix4& GetProjectionMatrix() const{ return m_projection;}
 			const Matrix4& GetProjectionViewMatrix() const{ return m_projectionView;}
 
@@ -42,6 +43,9 @@ namespace Donut
 
 			// Output the uniforms for rendering purposes
 			void AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms);
+
+			// Fetch the camera's position
+			const Vector3& Position() {return m_position;}
 
 	protected:
 			// Compute view matrix

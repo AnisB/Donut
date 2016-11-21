@@ -109,7 +109,6 @@ struct TSkyboxTexture
     GLuint             id;
     TTexture*          textures[6];
     std::string        filename;
-    unsigned          FNbRef;
 
     TSkyboxTexture(const std::string& _filename)
     : filename ( _filename )

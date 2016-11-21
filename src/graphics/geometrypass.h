@@ -28,6 +28,7 @@
 #include "render/dispatcher.h"
 #include "graphics/canvas.h"
 #include "graphics/visualeffect.h"
+#include "core/flour.h"
 
 // STL includes
 #include <vector>
@@ -38,7 +39,7 @@
 	{
 	public:
 		// Constructor destructor
-		TGeometryPass(TCanvas* _canvas, TNode* _root);
+		TGeometryPass(TCanvas* _canvas, TFlour* _flour);
 		virtual ~TGeometryPass();
 		
 		void SetCamera(Camera* _camera) { m_camera = _camera; }
@@ -61,8 +62,9 @@
 		// Rendering data
 		Camera * m_camera;
 		TCanvas * m_canvas;
-		TNode* m_root;
-
+		TFlour* m_flour;
+		TMesh* m_skyboxDrawable;
+		
 		// Rendering request data
 		TCollector m_collector;
 		TDispatcher m_dipatcher;

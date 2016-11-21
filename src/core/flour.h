@@ -23,6 +23,7 @@
 #include "core/camera.h"
 #include "graphics/light.h"
 #include "graphics/sphericalharmonics.h"
+#include "resource/types.h"
 #include "base/macro.h"
 
 // STL includes
@@ -30,6 +31,9 @@
 
 namespace Donut
 {
+	// Foward declare
+	class TMesh;
+	
 	struct TFlour
 	{
 		// Consrtuctor
@@ -63,6 +67,7 @@ namespace Donut
 		TNode* root;
 		std::vector<TLight*> lights;
 		TSphericalHarmonics* sh;
+		SKYBOX_GUID skybox;
 	};
 
 	// Flour builder

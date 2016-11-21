@@ -17,9 +17,11 @@
 // Libary includes
 #include "geometrypass.h"
 #include "graphics/common.h"
+#include "graphics/factory.h"
 #include "base/Common.h"
 #include "Base/Macro.h"
 #include "Base/log.h"
+#include "core/mesh.h"
 #include "resource/resourcemanager.h"
 
 // External includes
@@ -29,23 +31,28 @@
  {
 
  	//CLASS IMPLEMENTATION
-	TGeometryPass::TGeometryPass(TCanvas* _canvas, TNode* _root)
+	TGeometryPass::TGeometryPass(TCanvas* _canvas, TFlour* _flour)
 	: m_canvas(_canvas)
-	, m_root(_root)
+	, m_flour(_flour)
 	, m_reference()
 	, m_camera(nullptr)
 	{
+		// Set identifity
 		SetIdentity(m_reference);
 	}
 	TGeometryPass::~TGeometryPass()
 	{
 		delete m_canvas;
-		delete m_root;
+		delete m_flour;
 	}
 	
 	void TGeometryPass::Init()
 	{
+		// Init the canvas
 		m_canvas->Init();
+
+		// Create the drawable for the skybox if there is some
+		m_skyboxDrawable = CreateSkyboxDrawable(m_flour->skybox);
 	}
 
 	void TGeometryPass::Draw(const TBufferOutput& _previousData)
@@ -54,7 +61,8 @@
 		m_collector.Clear();
 
 		// Collect the requests
-		m_root->Evaluate(m_collector, m_reference);
+		m_skyboxDrawable->Evaluate(m_collector, m_reference);
+		m_flour->root->Evaluate(m_collector, m_reference);
 
 		// Fetch the requests
 		auto& requests = m_collector.Requests();
@@ -68,18 +76,12 @@
 
 		GENERAL_INFO(requests.size());
 
-		// Bind the canvas
-		Bind();
-
 		// Process eache render request 
 		foreach_macro(request, requests)
 		{
 			// Process the render request
 			ProcessRenderRequest(*request, values);
 		}
-
-		// Unbind the canvas
-		Unbind();
 	}
 
 	void TGeometryPass::Bind()
