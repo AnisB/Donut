@@ -9,6 +9,7 @@
 	</built_in_data>
 	<extern_data>
 		<data type="float" name="weight" value="10.0"/>
+      <data type="float" name="reflection" value="0.0"/>
 	</extern_data>
 	<textures>
 		<texture2D name="textureCmp" location="common/textures/rockwall.bmp"/>

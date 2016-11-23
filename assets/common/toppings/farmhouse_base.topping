@@ -8,6 +8,7 @@
    <built_in_data>
    </built_in_data>
    <extern_data>
+      <data type="float" name="reflection" value="0.5"/>
    </extern_data>
    <textures>
       <texture2D name="textureCmp" location="common/textures/farmHouse.jpg"/>

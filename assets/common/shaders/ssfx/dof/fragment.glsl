@@ -18,7 +18,7 @@ uniform float focus;
 #define MIN_STEP 0.005
 #define LINE_SIZE 2.0
 // Blur size
-const float blurSize = 1.0/512.0;
+const float blurSize = 1.0/1024.0;
 
 // Blur function
 vec4 blurr(vec2 texPos)

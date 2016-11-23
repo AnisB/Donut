@@ -62,11 +62,7 @@ void main()
 	// Fetch reflection percentage
     float reflection = texture(specular, texCoord).z;
 
-    if(reflection == 0.0f)
-    {
-    	frag_color = texture(composed, texCoord.xy);
-    	return;
-    }
+    vec4 originalColor = texture(composed, texCoord.xy);
 
     // Fetch the world space position
     vec3 vs_origin = texture(position, texCoord).xyz;
@@ -199,5 +195,5 @@ void main()
 	}
 	
 	// return the target color
-	frag_color = intersection? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse *vs_direction);
+	frag_color = (1-reflection)*originalColor + (intersection? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse *vs_direction)) * reflection;
 }

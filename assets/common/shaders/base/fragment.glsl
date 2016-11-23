@@ -5,6 +5,8 @@ uniform sampler2D textureCmp;
 // Zbuffer data
 uniform float fcoef;
 
+// reflection data
+uniform float reflection = 0.0;
 // Output Gbuffer
 out vec4 frag_color[4];
 
@@ -22,6 +24,6 @@ void main()
 	// Outputing in the Zbuffer
     frag_color[0] = texture(textureCmp,texCoord); // Albedo
     frag_color[1] = vec4(fnormal,1.0); // Camera space normal
-    frag_color[2] = vec4(0.0,0.0,0.0,1.0); // Specularity (sun contribution and reflectivity)
+    frag_color[2] = vec4(0.0,0.0,reflection,1.0); // Specularity (sun contribution and reflectivity)
     frag_color[3] = ecPos; // Camera space position
 }
