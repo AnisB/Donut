@@ -3,7 +3,7 @@
 	<renderables>
 		<renderable id="0">
 		   <geometry type="egg" location="common/geometry/soil.egg"/>
-		   <material name="farmhouse_base"/>
+		   <material name="mirror"/>
 		</renderable>
 	</renderables>
 </sugar>

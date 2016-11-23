@@ -44,7 +44,7 @@
 
 	<!-- Compositing lighting pass -->
 	<pass type="vfx">
-		<canvas type="effect" output="final"/>
+		<canvas type="effect" output="composed"/>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/cmp/vertex.glsl"/>
@@ -54,7 +54,7 @@
 	</pass>
 
 	<!-- Reflection pass pass -->
-<!-- 	<pass type="vfx">
+	<pass type="vfx">
 		<canvas type="effect" output="final"/>
 		<vfx type="skybox">
 			<shader>
@@ -62,7 +62,7 @@
 				<fragment location="common/shaders/ssfx/reflect/fragment.glsl"/>
 			</shader>
 		</vfx>
-	</pass> -->
+	</pass>
 
 	<!-- Depth of field pass -->
 	<pass type="vfx">

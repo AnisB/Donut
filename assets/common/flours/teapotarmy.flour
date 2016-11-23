@@ -198,7 +198,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<!-- Ground-->
-		<scenenode TM="18 0 0 -50 0 18 0 -10 0 0 14 -230 0 0 0 1">
+		<scenenode TM="18 0 0 -50 0 18 0 -7 0 0 14 -230 0 0 0 1">
 			<model sugar="Soil"/>
 		</scenenode>
 
