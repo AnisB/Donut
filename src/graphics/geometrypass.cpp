@@ -74,8 +74,6 @@
 		std::map<std::string, TUniformHandler> values;
 		m_camera->AppendUniforms(values);
 
-		GENERAL_INFO(requests.size());
-
 		// Process eache render request 
 		foreach_macro(request, requests)
 		{

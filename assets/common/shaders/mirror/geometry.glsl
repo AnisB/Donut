@@ -11,6 +11,7 @@ in vec4 ecPosV[];
 in float flogzG[];
 
 // Output Data
+out vec2 texCoord;
 out vec3 fnormal;
 out vec4 ecPos;
 out float flogz;
@@ -24,6 +25,7 @@ void main()
     fnormal = fnormalV[i];
     ecPos = ecPosV[i];
     flogz = flogzG[i];
+    texCoord = texCoordV[i];
     // Emit vertex
     EmitVertex();
   }

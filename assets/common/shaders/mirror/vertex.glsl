@@ -12,8 +12,10 @@ uniform float fcoef;
 // Input Data
 in vec3 position;
 in vec3 normal;
+in vec2 tex_coord;
 
 // Output data
+out vec2 texCoordV;
 out vec3 fnormalV;
 out vec4 ecPosV;
 out float flogzG;
@@ -22,6 +24,7 @@ void main()
 {	
 	// Output data
     gl_Position = modelviewprojection*vec4(position,1.0);
+   	texCoordV = tex_coord;
     fnormalV = normalize(view*model*vec4(normal,0.0)).xyz;
 	ecPosV = view*model*vec4(position,1.0);
 

@@ -18,11 +18,11 @@ uniform float near_plane;
 
 // Reflection parameters
 int max_steps = 300;
-float maxDistance = 1000.0; 
+float maxDistance = 500.0; 
 float pixel_stride = 1.0;
 float stride_Z_cutoff = 1.0;
 float jitter = 0.0;
-float zThickness = 0.0001;
+float zThickness = 0.0002;
 
 const mat4 toTextureSpace = mat4(0.5f, 0.0f, 0.0f, 0.0f,
 								 0.0f, 0.5f, 0.0f, 0.0f, 
@@ -81,11 +81,11 @@ void main()
 	float maxZ = (vs_origin.z + vs_direction.z * maxDistance);
 
 	// We clip the ray length to the near plane
-	float rayLength = maxZ > -near_plane ? (near_plane - vs_origin.z) / vs_direction.z : maxDistance;
-	
+	float rayLength = maxZ > -near_plane ? (-near_plane - vs_origin.z) / vs_direction.z : maxDistance;
+
 	// Compute the real end point
 	vec3 vs_endPoint = vs_origin + vs_direction * rayLength;
- 	
+
 	// Project the star and end point into homogeneous space
 	vec4 H0 = toTextureSpace * projection * vec4(vs_origin, 1.0f);
 	vec4 H1 = toTextureSpace * projection * vec4(vs_endPoint, 1.0f);
@@ -108,13 +108,14 @@ void main()
 
 	// If the line is degenerate, make it cover at least one pixel
 	// to avoid handling zero-pixel extent as a special case later
-	P1 += (dot(P0, P1) < 0.0001f) ? vec2(0.01f, 0.01f) : vec2(0.0f, 0.0f);
-	
+	P1 += (length(P0- P1) < 0.0001f) ? vec2(1.0f, 1.0f) : vec2(0.0f, 0.0f);
+
 	// Compute the 2D delta to rasterize
 	vec2 delta = P1 - P0;
 	// Permute so that the primary iteration is in x to collapse
 	// all quadrant-specific DDA cases later
 	bool permute = false;
+
 	if(abs(delta.x) < abs(delta.y))
 	{
 		// This is a more-vertical line
@@ -150,7 +151,7 @@ void main()
 	vec3 dPQk = vec3(dP, dz);
 
 	// Adjust end condition for iteration direction
-	float end = P1.x;
+	float end = P1.x * stepDir;
 
 	// Initla estimate is the starting point
 	float prevZMaxEstimate = PQk.z;
@@ -194,7 +195,7 @@ void main()
 		PQk += dPQk;
 
 		// Are we done with the rasterization? is the pixel matchting without being refective  and are we still processing a viable pixel (not oob)
-		continueCondition = (PQk.x <= end) && !intersection && (candidateZ != 0.0f);
+		continueCondition = (PQk.x*stepDir <= end) && !intersection && (candidateZ != 0.0f);
 	}
 	
 	// return the target color

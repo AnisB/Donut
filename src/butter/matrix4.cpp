@@ -30,7 +30,7 @@ namespace Donut
 	{
 		memcpy(m, _mat.m,16*sizeof(double));
 	}
-
+	
 	void AsPerspective(Matrix4& _mat, double parFovy, double parAspect, double parNear, double parFar)
 	{
 		std::fill_n(_mat.m, 16, 0);

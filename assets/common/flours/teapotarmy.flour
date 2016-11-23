@@ -3,7 +3,7 @@
 	<root>		
 		 <!--Ligne 1-->
 		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -34,7 +34,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -30 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -65,7 +65,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -60 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -96,7 +96,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -90 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -127,7 +127,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -120 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -158,7 +158,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -150 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
@@ -189,7 +189,7 @@
 			<model sugar="Teapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -180 0 0 0 1">
-			<model sugar="Teapot"/>
+			<model sugar="TransparentTeapot"/>
 		</scenenode>
 		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>

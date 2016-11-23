@@ -46,7 +46,7 @@ namespace Donut
 
 			// Fetch the camera's position
 			const Vector3& Position() {return m_position;}
-			double NearPlane() {return m_near;}
+			float NearPlane() {return m_near;}
 
 	protected:
 			// Compute view matrix

@@ -68,8 +68,8 @@ namespace Donut
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);
 		ShaderManager::Instance().Inject<Matrix3>(m_material.shader, m_camera->GetInverseViewMatrix(), "view_inverse");
-		ShaderManager::Instance().Inject<Matrix3>(m_material.shader, m_camera->GetProjectionMatrix(), "projection");
-		ShaderManager::Instance().Inject<float>(m_material.shader, m_camera->NearPlane(), "near_plane");
+		ShaderManager::Instance().Inject<Matrix4>(m_material.shader, m_camera->GetProjectionMatrix(), "projection");
+		ShaderManager::Instance().Inject(m_material.shader, 1.0f, "near_plane");
 	  	m_fsq->Draw(false);
  		ShaderManager::Instance().DisableShader();
 		glFlush ();
