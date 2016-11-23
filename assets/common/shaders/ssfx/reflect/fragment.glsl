@@ -22,7 +22,7 @@ float maxDistance = 1000.0;
 float pixel_stride = 1.0;
 float stride_Z_cutoff = 1.0;
 float jitter = 0.0;
-float zThickness = -3.0;
+float zThickness = 0.0001;
 
 const mat4 toTextureSpace = mat4(0.5f, 0.0f, 0.0f, 0.0f,
 								 0.0f, 0.5f, 0.0f, 0.0f, 
@@ -32,7 +32,8 @@ const mat4 toTextureSpace = mat4(0.5f, 0.0f, 0.0f, 0.0f,
 // Tells if a given depth is between two depts
 bool intersectsDepthBuffer(float z, float minZ, float maxZ)
 {
-	return (maxZ >= z) && (minZ <= z);
+	float thickness = z > 0.995 ? 0.0 : zThickness;
+	return (maxZ >= z) && (minZ - thickness<= z);
 }
 
 // Swaps two float values
@@ -176,12 +177,6 @@ void main()
 		rayZMin = prevZMaxEstimate;
 		rayZMax = (dPQk.z * 0.5 + PQk.z);
 
-		// Adjust it if necessary
-		if(rayZMin > rayZMax)
-		{
-			swap(rayZMin, rayZMax);
-		}
-		 
 		// Fetch the current pixel
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
