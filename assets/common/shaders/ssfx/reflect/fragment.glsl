@@ -19,21 +19,22 @@ uniform float near_plane;
 // Reflection parameters
 int max_steps = 300;
 float maxDistance = 500.0; 
-float pixel_stride = 1.0;
-float stride_Z_cutoff = 1.0;
-float jitter = 0.0;
-float zThickness = 0.0002;
+float pixel_stride = 5.0;
+float zThickness = 1.1;
 
+// Moves from xy data [-1,1] to [0,1]
 const mat4 toTextureSpace = mat4(0.5f, 0.0f, 0.0f, 0.0f,
 								 0.0f, 0.5f, 0.0f, 0.0f, 
 								 0.0f, 0.0f, 1.0f, 0.0f,
 								 0.5f, 0.5f, 0.0f, 1.0f);
 
 // Tells if a given depth is between two depts
-bool intersectsDepthBuffer(float z, float minZ, float maxZ)
+bool intersectsDepthBuffer(vec2 zData, float minZ, float maxZ)
 {
-	float thickness = z > 0.995 ? 0.0 : zThickness;
-	return (maxZ >= z) && (minZ - thickness<= z);
+	// Compute the projected thickness
+	float thick = abs(zData.x - zData.y);
+	// Is it okay within the thickness interval
+	return (maxZ >= zData.x - thick) && (minZ <= zData.x + thick);
 }
 
 // Swaps two float values
@@ -50,11 +51,21 @@ vec2 normalizeTexCoord(vec2 _pix)
 	return vec2(_pix.x/1280.0, _pix.y/720.0);
 }
 
-float linearDepthTexelFetch(vec2 hitPixel)
+// Computes the couple projectedZ and projected precision
+vec2 linearDepthTexelFetch(vec2 hitPixel)
 {
-	vec3 pos = texture(position, hitPixel).xyz;
-	vec4 posProj = projection * vec4(pos, 1.0);
-	return (hitPixel.x <0 || hitPixel.x > 1.0 || hitPixel.y <0 || hitPixel.y > 1.0) ? 0.0 : posProj.z / posProj.w;
+	// Fetch the target position of the 
+	vec4 position = texture(position, hitPixel);
+
+	// Compute the real projection of the point
+	vec4 posProj = projection * position;
+
+	// Compute the thickness of the pixel
+	position.z += zThickness;
+	vec4 posProjLimit = projection * position;
+
+	// If the pixel if viable, return the couple real/thickness
+	return (hitPixel.x < 0 || hitPixel.x > 1.0 || hitPixel.y <0 || hitPixel.y > 1.0) ? vec2(0.0) : vec2(posProj.z / posProj.w, posProjLimit.z/posProjLimit.w);
 }
  
 void main()
@@ -62,6 +73,7 @@ void main()
 	// Fetch reflection percentage
     float reflection = texture(specular, texCoord).z;
 
+    // Fetch the original color of the pixel
     vec4 originalColor = texture(composed, texCoord.xy);
 
     // Fetch the world space position
@@ -104,22 +116,20 @@ void main()
 
 	// If the line is degenerate, make it cover at least one pixel
 	// to avoid handling zero-pixel extent as a special case later
-	P1 += (length(P0- P1) < 0.0001f) ? vec2(1.0f, 1.0f) : vec2(0.0f, 0.0f);
+	P1 += (length(P0 - P1) < 0.0001f) ? vec2(1.0f, 1.0f) : vec2(0.0f, 0.0f);
 
 	// Compute the 2D delta to rasterize
 	vec2 delta = P1 - P0;
+
 	// Permute so that the primary iteration is in x to collapse
 	// all quadrant-specific DDA cases later
 	bool permute = false;
 
-	if(abs(delta.x) < abs(delta.y))
-	{
-		// This is a more-vertical line
-		permute = true;
-		delta = delta.yx;
-		P0 = P0.yx;
-		P1 = P1.yx;
-	}
+	// Permute if required
+	permute = abs(delta.x) < abs(delta.y);
+	delta = permute ? delta.yx : delta.xy;
+	P0 = permute ? P0.yx : P0.xy;
+	P1 = permute ? P1.yx : P1.xy;
 
 	// Compute the step dir of the X coord
 	float stepDir = sign(delta.x);
@@ -131,16 +141,9 @@ void main()
 
 	// Scale derivatives by the desired pixel stride and then
 	// offset the starting values by the jitter fraction
-	/*
-	float strideScale = 1.0f - min(1.0f, vs_origin.z * stride_Z_cutoff);
-	float stride = 1.0f + strideScale * pixel_stride;
+	float stride = 1.0f + pixel_stride;
 	dP *= stride;
-	dQ *= stride;
-	dk *= stride;
-	P0 += dP * 1.0;
-	Q0 += dQ * 1.0;
-	k0 += dk * 1.0;
-	*/
+	dz *= stride;
 
 	// Slide P from P0 to P1, (now-homogeneous) Q from Q0 to Q1, k from k0 to k1
 	vec3 PQk = vec3(P0, z0_w);
@@ -162,13 +165,13 @@ void main()
 	vec2 hitPixel =  vec2(0.0,0.0);
 
 	// We do not want to hit a reflective surface
-	float reflect = 1.0;
+	float reflectionFactor = 1.0;
 	// we count the number of steps
 	bool continueCondition = true;
 	bool intersection = false;
 
 	// Why we didn't reach the end and we didn't get to the last step and it didn't overlap
-	for(int step = 0; continueCondition && (step < max_steps); ++step)
+	for(int stepIdx = 0; continueCondition && (stepIdx < max_steps); ++stepIdx)
 	 {
 	 	// Compute the depth rage
 		rayZMin = prevZMaxEstimate;
@@ -178,20 +181,20 @@ void main()
 		hitPixel = permute ? PQk.yx : PQk.xy;
 
 		// Fetch the candidate's depth
-		candidateZ = linearDepthTexelFetch(normalizeTexCoord(hitPixel));
+		vec2 candidateData = linearDepthTexelFetch(normalizeTexCoord(hitPixel));
 
 		// Is the target reflective?
-		reflect = texture(specular, normalizeTexCoord(hitPixel)).z;
+		reflectionFactor = texture(specular, normalizeTexCoord(hitPixel)).z;
 		
 		// Compute the intersection
-		intersection = intersectsDepthBuffer(candidateZ, rayZMin, rayZMax) && (reflect == 0.0);
+		intersection = intersectsDepthBuffer(candidateData, rayZMin, rayZMax) && (reflectionFactor == 0.0);
 
 		// Adjust the parameter for next step
 		prevZMaxEstimate = rayZMax;
 		PQk += dPQk;
 
 		// Are we done with the rasterization? is the pixel matchting without being refective  and are we still processing a viable pixel (not oob)
-		continueCondition = (PQk.x*stepDir <= end) && !intersection && (candidateZ != 0.0f);
+		continueCondition = (PQk.x*stepDir <= end) && !intersection && (candidateData.x != 0.0f);
 	}
 	
 	// return the target color
