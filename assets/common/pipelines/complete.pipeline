@@ -53,13 +53,46 @@
 		</vfx>
 	</pass>
 
-	<!-- Reflection pass pass -->
+	<!-- Reflection pass -->
 	<pass type="vfx">
-		<canvas type="effect" output="final"/>
+		<canvas type="effect" output="reflection"/>
 		<vfx type="skybox">
 			<shader>
-				<vertex location="common/shaders/ssfx/reflect/vertex.glsl"/>
-				<fragment location="common/shaders/ssfx/reflect/fragment.glsl"/>
+				<vertex location="common/shaders/ssfx/ssr/raymarch_vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/ssr/raymarch_fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass>
+
+	<!-- Blurring the reflection buffer pass -->
+	<pass type="vfx">
+		<canvas type="effect" output="reflection_smoothV"/>
+		<vfx type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/ssr/smoothV_vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/ssr/smoothV_fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass>
+
+	<!-- Blurring the reflection buffer pass -->
+	<pass type="vfx">
+		<canvas type="effect" output="reflection_smoothH"/>
+		<vfx type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/ssr/smoothH_vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/ssr/smoothH_fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass>
+
+	<!-- Compose the SSR -->
+	<pass type="vfx">
+		<canvas type="effect" output="final"/>
+		<vfx type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/ssr/compose_vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/ssr/compose_fragment.glsl"/>
 			</shader>
 		</vfx>
 	</pass>

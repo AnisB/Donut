@@ -19,7 +19,7 @@ uniform float near_plane;
 // Reflection parameters
 int max_steps = 300;
 float maxDistance = 500.0; 
-float pixel_stride = 5.0;
+float pixel_stride = 1.0;
 float zThickness = 1.1;
 
 // Moves from xy data [-1,1] to [0,1]
@@ -198,5 +198,5 @@ void main()
 	}
 	
 	// return the target color
-	frag_color = (1-reflection)*originalColor + (intersection? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse *vs_direction)) * reflection;
+	frag_color = (intersection? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse *vs_direction)) * reflection;
 }
