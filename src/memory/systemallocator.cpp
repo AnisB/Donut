@@ -1,5 +1,6 @@
 // Library includes
 #include "systemallocator.h"
+#include "base/common.h"
 #include "base/security.h"
 
 namespace Donut
@@ -20,18 +21,20 @@ namespace Donut
 		memory_block blc;
 		blc.ptr = malloc(size);
 		blc.size  = 0;
+		// GENERAL_DEBUG("Allocation of "<< size << "requested. Output: "<< blc.ptr);
 		return blc;
 	}
 
 	// Frees a memory spot given
-	void TSystemAllocator::deallocate(const memory_block& _blc)
+	void TSystemAllocator::deallocate(void* _ptr)
 	{
-		free(_blc.ptr);
+		// GENERAL_DEBUG("Deallocation of "<< _ptr);
+		free(_ptr);
 	}
 
 	// Function that aswers to the question, has this bloc
 	// been allocated by this allocator ?
-	bool TSystemAllocator::owns(const memory_block& _blc)
+	bool TSystemAllocator::owns(void* _ptr)
 	{
 		return true;
 	}

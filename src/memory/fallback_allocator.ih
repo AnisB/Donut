@@ -28,22 +28,22 @@ namespace Donut
 	}
 
 	// Frees a memory spot given
-	void TFallBackAllocator::deallocate(const memory_block& _blc)
+	void TFallBackAllocator::deallocate(void* _ptr)
 	{
-		if(m_first.owns(_blc))
+		if(m_first.owns(_ptr))
 		{
-			m_first.deallocate(_blc);
+			m_first.deallocate(_ptr);
 		}
 		else	
 		{
-			m_second.deallocate(_blc);
+			m_second.deallocate(_ptr);
 		}
 	}
 
 	// Function that aswers to the question, has this bloc
 	// been allocated by this allocator ?
-	bool TFallBackAllocator::owns(const memory_block& _blc)
+	bool TFallBackAllocator::owns(void* _ptr)
 	{
-		return m_first.owns(_blc) || m_second.owns(_blc);
+		return m_first.owns(_ptr) || m_second.owns(_ptr);
 	}
 }

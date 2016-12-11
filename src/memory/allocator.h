@@ -20,23 +20,18 @@ namespace Donut
 	class TAllocator
 	{
 	public:
-		TAllocator()
-		{
-		}
-
-		virtual ~TAllocator()
-		{
-		}
+		TAllocator();
+		virtual ~TAllocator();
 
 		// Allocate a memory chunk give a particular alignement
 		virtual memory_block allocate(size_t size, char alignment = 4) = 0;
 
 		// Frees a memory spot given
-		virtual void deallocate(const memory_block& _blc) = 0;
+		virtual void deallocate(void* _ptr) = 0;
 
 		// Function that aswers to the question, has this bloc
 		// been allocated by this allocator ?
-		virtual bool owns(const memory_block& _blc);
+		virtual bool owns(void* _ptr) = 0;
 	};
 }
 

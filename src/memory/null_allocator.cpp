@@ -17,7 +17,7 @@ namespace Donut
 	// Allocate a memory chunk give a particular alignement
 	memory_block TNullAllocator::allocate(size_t size, char alignment)
 	{
-		ASSERT_FAIL();
+		ASSERT_FAIL_MSG("Null allocator cannot allocate memory");
 		memory_block blc;
 		blc.ptr = nullptr;
 		blc.size  = 0;
@@ -25,15 +25,15 @@ namespace Donut
 	}
 
 	// Frees a memory spot given
-	void TNullAllocator::deallocate(const memory_block& _blc)
+	void TNullAllocator::deallocate(void* _ptr)
 	{
-		ASSERT(_blc.ptr == nullptr);
+		ASSERT_MSG(_ptr == nullptr, "The null allocator cannot free non-nullptrs.");
 	}
 
 	// Function that aswers to the question, has this bloc
 	// been allocated by this allocator ?
-	bool TNullAllocator::owns(const memory_block& _blc)
+	bool TNullAllocator::owns(void* _ptr)
 	{
-		return (_blc.ptr ==  nullptr);
+		return (_ptr ==  nullptr);
 	}
 }

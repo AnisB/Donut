@@ -19,14 +19,11 @@ namespace Donut
 		virtual memory_block allocate(size_t size, char alignment = 4);
 
 		// Frees a memory spot given
-		virtual void deallocate(const memory_block& _blc);
+		virtual void deallocate(void* _ptr);
 
 		// Function that aswers to the question, has this bloc
 		// been allocated by this allocator ?
-		virtual bool owns(const memory_block& _blc);
-
-	protected:
-		std::unordered_set<void*> m_allocatedPointers;
+		virtual bool owns(void* _ptr);
 	};
 }
 

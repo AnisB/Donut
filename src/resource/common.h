@@ -21,6 +21,7 @@
 // Donut includes
 #include <base/log.h>
 #include <base/security.h>
+#include <memory/common.h>
 
 namespace Donut
 {
@@ -31,6 +32,9 @@ namespace Donut
 	#define RESOURCE_WARNING(ENONCE) PRINT_WARNING (__RESOURCE_PRINT_NAMESPACE, ENONCE)
 	#define RESOURCE_INFO(ENONCE) PRINT_INFO (__RESOURCE_PRINT_NAMESPACE, ENONCE)
 	#define RESOURCE_ERROR(ENONCE) PRINT_ERROR (__RESOURCE_PRINT_NAMESPACE, ENONCE)	
+
+	// This allocator should be used for everything related to resource management
+	TAllocator* ResourceAllocator();
 }
 
 #endif // RESOURCE_COMMON_H

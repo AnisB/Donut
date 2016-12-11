@@ -13,6 +13,18 @@ namespace Donut
 		m_processors.push_back(new TCrumbleRemover());
 	}
 
+	void TDispatcher::ProcessRequests(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
+	{
+		// Update the dispatcher internal data
+		UpdateData(_requests, _view);
+		
+		// Fetch the requests
+		for(auto processor = m_processors.begin(); processor != m_processors.end(); ++processor)
+		{
+			(*processor)->Process(_requests, m_vs_bb, _view, _frusutm);
+		}
+	}
+	
 	TDispatcher::~TDispatcher()
 	{
 		for(auto processor = m_processors.begin(); processor != m_processors.end(); ++processor)
@@ -42,18 +54,6 @@ namespace Donut
 
 			// Compute the camera space bounding box
 			box = transform(geom->os_bb, _view * currentRequest.transform);
-		}
-	}
-
-	void TDispatcher::ProcessRequests(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
-	{
-		// Update the dispatcher internal data
-		UpdateData(_requests, _view);
-		
-		// Fetch the requests
-		for(auto processor = m_processors.begin(); processor != m_processors.end(); ++processor)
-		{
-			(*processor)->Process(_requests, m_vs_bb, _view, _frusutm);
 		}
 	}
 }

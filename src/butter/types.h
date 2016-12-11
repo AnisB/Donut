@@ -64,6 +64,7 @@ namespace Donut
 		Matrix3& operator=(const Matrix3 _mat);
 		double m[9];
 	};
+	
 	struct Matrix4
 	{
 		inline Matrix4(){}
