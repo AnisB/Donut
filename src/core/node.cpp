@@ -25,8 +25,9 @@
 namespace Donut
 {
 	// Cst
-	TNode::TNode()
+	TNode::TNode(TAllocator& _alloc)
 	: m_transform()
+	, m_sons(_alloc)
 	{
 		// Make sure the root is centered at origin
 		matrix4(m_transform, MatrixInit::Identity);
@@ -48,7 +49,7 @@ namespace Donut
 		ASSERT_POINTER_NOT_NULL_NO_RELEASE(_node);
 
 		// Append it to the son list
-		m_sons.push_back(	_node);
+		m_sons.push_back(_node);
 	}
 
 	bool TNode::RemoveChild(TNode* _node)

@@ -13,16 +13,18 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  **/
- #include "scenenode.h"
 
- #include "Base/Common.h"
- #include "Base/Macro.h"
- #include "Render/Collector.h"
+#include "scenenode.h"
+#include "Base/Common.h"
+#include "Base/Macro.h"
+#include "Render/Collector.h"
 
 
 namespace Donut
 {
-	TSceneNode::TSceneNode()
+	TSceneNode::TSceneNode(TAllocator& _alloc)
+	: TNode(_alloc)
+	, m_drawables(_alloc)
 	{
 
 	}

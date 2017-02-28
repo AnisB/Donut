@@ -19,6 +19,8 @@
 
 // Donut includes
 #include "graphics/drawable.h"
+#include "containers/vector.h"
+#include "memory/common.h"
 #include "node.h"
  
 // External includes
@@ -34,7 +36,7 @@ namespace Donut
 	{
 	public:
 		// Consrtuctor
-		TSceneNode();
+		TSceneNode(TAllocator& _alloc);
 
 		// Destructor
 		~TSceneNode();
@@ -46,7 +48,7 @@ namespace Donut
 		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
 
 	protected:
-		std::vector<TDrawable*> m_drawables;
+		TVector<TDrawable*> m_drawables;
 	};
 }
 #endif //DONUT_SCENE_NODE

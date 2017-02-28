@@ -20,9 +20,8 @@
 
 // Std includes
 #include "butter/matrix4.h"
-#include "graphics/uniformhandler.h"
-#include "graphics/canvas.h"
-#include "camera.h"
+#include "containers/vector.h"
+#include "memory/common.h"
 
 // STL includes
 #include <vector>
@@ -37,7 +36,7 @@ namespace Donut
 	{
 	public:
 		// Consrtuctor
-		TNode();
+		TNode(TAllocator& _alloc);
 		//Destructor
 		virtual ~TNode();
 
@@ -50,7 +49,7 @@ namespace Donut
 		void SetTransformationMatrix(const Matrix4& _tm) { m_transform =_tm;}
 
 		// Access the son set
-		const std::vector<TNode*>& ChildList() {return m_sons;}
+		const TVector<TNode*>& ChildList() {return m_sons;}
 		
 		// Evaluate this node and its subnodes
 		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
@@ -58,7 +57,7 @@ namespace Donut
 	protected:
 		// Node data
 		TNode* m_parent;
-		std::vector<TNode*> m_sons;
+		TVector<TNode*> m_sons;
 		Matrix4 m_transform;
 	};
 }

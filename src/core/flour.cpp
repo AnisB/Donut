@@ -47,11 +47,11 @@ namespace Donut
 		// Instanciate the right noide type
 		if(_node.scenenode)
 		{
-			node = new TSceneNode();
+			node = new TSceneNode(*CommonAllocator());
 		}
 		else
 		{
-			node = new TNode();
+			node = new TNode(*CommonAllocator());
 		}
 
 		// Setting the matrix transform

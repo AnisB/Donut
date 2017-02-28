@@ -16,6 +16,8 @@ namespace Donut
 		// Internal values
 		const uint MINIMAL_RESIZE_CAPACITY = 10;
 		const uint RESIZE_FACTOR = 2;
+		// Interval types
+		typedef T* iterator;
 
 	public:
 		TVector(TAllocator& _alloc)
@@ -137,6 +139,17 @@ namespace Donut
 			}
 			m_data[m_size++] = _value;
 		}
+
+		void erase(iterator _iterator)
+		{
+			ASSERT(false);
+		}
+
+
+		inline iterator begin()		 						{return m_data;}
+		inline const iterator begin() const 				{return m_data;}
+		inline iterator end()								{return m_data + m_size;}
+		inline const iterator end() const 					{return m_data + m_size;}
 
 	protected:
 		T* m_data;
