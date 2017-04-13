@@ -14,8 +14,8 @@ namespace Donut
 	class TArray
 	{
 		// Internal values
-		const uint MINIMAL_RESIZE_CAPACITY = 10;
-		const uint RESIZE_FACTOR = 2;
+		const uint64_t MINIMAL_RESIZE_CAPACITY = 10;
+		const uint64_t RESIZE_FACTOR = 2;
 
 	public:
 		TArray(TAllocator& _alloc)
@@ -27,7 +27,7 @@ namespace Donut
 
 		}
 
-		TArray(TAllocator& _alloc, uint _reservedSize)
+		TArray(TAllocator& _alloc, uint64_t _reservedSize)
 		: m_alloc(_alloc)
 		, m_size(0)
 		, m_capacity(0)
@@ -43,10 +43,10 @@ namespace Donut
 			}
 		}
 
-		inline uint size() {return m_size;}
-		inline uint capacity() {return m_capacity;}
+		inline uint64_t size() {return m_size;}
+		inline uint64_t capacity() {return m_capacity;}
 
-		void resize(uint _size)
+		void resize(uint64_t _size)
 		{
 			if(_size ==  0)
 			{
@@ -83,7 +83,7 @@ namespace Donut
 			m_size = 0;
 		}
 
-		void reserve(uint _space)
+		void reserve(uint64_t _space)
 		{
 			ASSERT_NO_RELEASE(_space != 0);
 			memory_block mem = m_alloc.allocate(sizeof(T) * (m_capacity + _space));
@@ -113,8 +113,8 @@ namespace Donut
 
 	protected:
 		T* m_data;
-		uint m_size;
-		uint m_capacity;
+		uint64_t m_size;
+		uint64_t m_capacity;
 
 		TAllocator& m_alloc;
 	};
