@@ -10,7 +10,7 @@ file(
   ${LIB_PATH}/*.cpp
     )
 add_library(${LIB_NAME} ${Source_File})
-include_directories(${SOURCES} ${OPENGL_INCLUDE_DIRS} ${EXTERNAL_INCLUDES} )
+include_directories(${SOURCES} ${GRAPHIC_INCLUDE_DIR} ${EXTERNAL_INCLUDES} )
 set_target_properties(${LIB_NAME} 
 	PROPERTIES FOLDER ${FOLDER_NAME}
 	COMPILE_PDB_NAME ${LIB_NAME}

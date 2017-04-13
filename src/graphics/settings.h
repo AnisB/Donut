@@ -20,6 +20,15 @@
 	
 namespace Donut
 {
+	namespace RenderingBackEnd
+	{
+		enum Type
+		{
+			OPENGL = 0,
+			VULKAN = 1
+		};
+	}
+
     // Default context data
     #define DEFAULT_MAJOR_VERSION 4
     #define DEFAULT_MINOR_VERSION 1
@@ -36,6 +45,7 @@ namespace Donut
 		int major;
 		int minor;
 		bool fullScreen;
+		RenderingBackEnd::Type backend;
 
 		TGraphicsSettings()
 		{
@@ -45,6 +55,7 @@ namespace Donut
 			major = DEFAULT_MAJOR_VERSION;
 			minor = DEFAULT_MINOR_VERSION;
 			fullScreen = DEFAULT_FULLSCREEN;
+			backend = RenderingBackEnd::OPENGL;
 		}
 	};
 }	
