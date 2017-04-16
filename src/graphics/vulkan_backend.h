@@ -1,6 +1,7 @@
 #ifndef VULKAN_BACKEND_H
 #define VULKAN_BACKEND_H
 
+#ifdef VULKAN_SUPPORTED
 // Library includes
 #include "gpu_backend.h"
 
@@ -19,5 +20,5 @@ namespace Donut
 		RenderWindow render_window(RenderEnvironment render_environement);
 	}
 }
-
+#endif // VULKAN_SUPPORTED
 #endif // VULKAN_BACKEND_H

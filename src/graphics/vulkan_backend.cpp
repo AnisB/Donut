@@ -1,3 +1,4 @@
+#ifdef VULKAN_SUPPORTED
 
 // External includes
 #define GLFW_INCLUDE_VULKAN
@@ -134,3 +135,5 @@ namespace Donut
 		}
 	}
 }
+
+#endif // VULKAN_SUPPORTED

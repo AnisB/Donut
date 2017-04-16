@@ -49,9 +49,10 @@ add_definitions( -D LINUX )
 find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 FIND_PACKAGE (X11 REQUIRED)
-find_package(Vulkan REQUIRED)
-set(GRAPHIC_INCLUDE_DIR "${Vulkan_INCLUDE_DIRS}" "${OPENGL_INCLUDE_DIRS}")
-set(GRAPHIC_LIBS "${EXTERNAL_LIBS}/libglfw3.a" ${GLEW_LIBRARY} ${OPENGL_LIBRARIES} 
+# Support vulkan if available
+HANDLE_VULKAN()
+set(GRAPHIC_INCLUDE_DIR "${GRAPHIC_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIRS}")
+set(GRAPHIC_LIBS "${GRAPHIC_LIBS}" "${EXTERNAL_LIBS}/libglfw3.a" ${GLEW_LIBRARY} ${OPENGL_LIBRARIES} 
  ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB} pthread)
    SET(IMAGE_LIBS jpeg png)
    SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
@@ -80,9 +81,10 @@ add_definitions( -DWIN32 )
 set(CMAKE_CXX_FLAGS_DEBUG "/Md /Zi")
 set(CMAKE_CXX_FLAGS_RELEASE "/Md /Zi")
 FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-find_package(Vulkan REQUIRED)
-set(GRAPHIC_INCLUDE_DIR "${Vulkan_INCLUDE_DIRS}" "${OPENGL_INCLUDE_DIRS}")
-SET(GRAPHIC_LIBS "${Vulkan_LIBRARY}" "${EXTERNAL_LIBS}/lib-vc2015/glfw3.lib" "${EXTERNAL_LIBS}/glew32.lib" "${EXTERNAL_LIBS}/glew32s.lib" "opengl32.lib" "${EXTERNAL_LIBS}/libjpeg.lib")
+# Support vulkan if available
+HANDLE_VULKAN()
+set(GRAPHIC_INCLUDE_DIR "${GRAPHIC_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIRS}")
+SET(GRAPHIC_LIBS "${GRAPHIC_LIBS}" "${EXTERNAL_LIBS}/lib-vc2015/glfw3.lib" "${EXTERNAL_LIBS}/glew32.lib" "${EXTERNAL_LIBS}/glew32s.lib" "opengl32.lib" "${EXTERNAL_LIBS}/libjpeg.lib")
 SET(CORELIBS ${GRAPHIC_LIBS} )
 ENDIF()
 

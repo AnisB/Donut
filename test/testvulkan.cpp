@@ -1,6 +1,6 @@
+#ifdef VULKAN_SUPPORTED
 // Donut includes
 #include <graphics/vulkan_backend.h>
-
 
 int main()
 {
@@ -12,3 +12,5 @@ int main()
 	Donut::VK::shutdown_render_system();
 	return 0;
 }
+
+#endif // VULKAN_SUPPORTED
