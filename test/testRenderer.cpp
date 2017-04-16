@@ -16,19 +16,16 @@
 
 #include <iostream>
 #include <Engine/Engine.h>
-
+#include <graphics/gl_backend.h>
 
 int main()
 {
 	Donut::TEngine * engine = new Donut::TEngine();
 
 	// Context info
-	Donut::TGraphicsSettings newContext;
-	newContext.windowName = "testRenderer";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
+	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	newContext.window_name = "testRenderer";
+
 	// Lanching the test
 	engine->LaunchRendering(newContext);
 	GENERIC_SLEEP(1);

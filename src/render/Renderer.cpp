@@ -21,6 +21,7 @@
 #include "Input/helper.h"
 #include "Base/Macro.h"
 #include "graphics/glfactory.h"
+#include "graphics/gl_backend.h"
  
 #include <stdlib.h>
 #include <stdio.h>
@@ -52,53 +53,12 @@
  	{
  		if(!FInitDone)
  		{
-			// Init
- 			if (!glfwInit())
- 			{
- 				GRAPHICS_ERROR("Failed during glfw init.");
- 				return false;
- 			}
-
- 			// Init error call back
-			glfwSetErrorCallback(error_callback);
- 			
- 			// Setting the context info
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, parContext.major);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, parContext.minor);
-			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-
-			// Window creation
- 			FWindow = glfwCreateWindow(parContext.width, parContext.lenght, parContext.windowName.c_str(), parContext.fullScreen?glfwGetPrimaryMonitor():NULL, NULL);
- 			if(FWindow==NULL)
- 			{
- 				GRAPHICS_ERROR("Failed creating the window: "<<parContext.width<<" "<<parContext.lenght<<" "<<parContext.windowName.c_str());
- 				return false;
- 			}
- 			// Setting context
-			glfwMakeContextCurrent(FWindow);
-
-		    // Initiating glew
-			glewExperimental = GL_TRUE;
-			GLenum glewReturn = glewInit();
-			if(glewReturn)
-			{
-			    GRAPHICS_ERROR("Glew returned: "<<glewGetErrorString(glewReturn));
- 				return false;
-			}
-			
-			#if _DEBUG
-			const GLubyte* renderer = glGetString (GL_RENDERER); 
-			const GLubyte* version = glGetString (GL_VERSION); 
-			GRAPHICS_DEBUG("Renderer: "<<renderer);
-			GRAPHICS_DEBUG("Version: "<<version);
-			#endif
- 			// Setting the rendering flag
- 			FIsRendering.SetValue(true);
-			CheckGLState(FLUSH_GL_ERROR);
-			ASSERT_MSG_NO_RELEASE(CheckGLState("Check pre render"), "GL state was not clear before starting");
-   			glfwSetInputMode(FWindow,GLFW_CURSOR,GLFW_CURSOR_DISABLED);
+			// Init the render backend
+			GL::init_render_system();
+			// Create a window
+			FWindow = (GLFWwindow*) GL::create_render_window(parContext);
+			FIsRendering.SetValue(true);
+			FInitDone = true;
  		}
  		else
  		{

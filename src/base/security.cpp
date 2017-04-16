@@ -16,11 +16,11 @@
 
 // Donut includes
 #include "security.h"
-#include "exception.h"
 #include "const.h"
 #include "common.h"
 
-// STL include
+// External includes
+#include <assert.h>
 #if __posix__
 #include <unistd.h>
 #include <execinfo.h>
@@ -44,8 +44,6 @@ namespace Donut
 		#if __posix__
 		printTrace();
 		#endif
-		throw TException(_message, _file, _line);
+		assert(false);
 	}
-
-	
 }

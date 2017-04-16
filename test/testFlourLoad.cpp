@@ -23,7 +23,8 @@
 #include <resource/resourcemanager.h>
 #include <resource/flourLoader.h>
 #include <graphics/factory.h>
- 
+#include <graphics/gl_backend.h>
+
 #include <core/scenenode.h>
 #include <butter/vector3.h>
 #include <butter/vector4.h>
@@ -45,8 +46,8 @@ int main(int argc, char** argv)
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 	// Context info
-	Donut::TGraphicsSettings newContext;
-	newContext.windowName = "testSceneLoad";
+	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	newContext.window_name = "testFlourLoad";
 	window->CreateRenderWindow(newContext);
 
 	Donut::TFlour* flour = Donut::GenerateFlour(sceneName);

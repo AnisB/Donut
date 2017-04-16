@@ -16,7 +16,7 @@
 #ifndef GRAPHICS_SETTINGS_DONUT
 #define GRAPHICS_SETTINGS_DONUT
 
-#include <string.h>
+#include <string>
 	
 namespace Donut
 {
@@ -25,13 +25,12 @@ namespace Donut
 		enum Type
 		{
 			OPENGL = 0,
-			VULKAN = 1
+			VULKAN = 1,
+			D12 = 2
 		};
 	}
 
     // Default context data
-    #define DEFAULT_MAJOR_VERSION 4
-    #define DEFAULT_MINOR_VERSION 1
     #define DEFAULT_WIDTH 1280 
 	#define DEFAULT_LENGHT 720
 	#define DEFAULT_NAME "Donut"
@@ -39,25 +38,21 @@ namespace Donut
 
 	struct TGraphicsSettings
 	{
-		std::string windowName;
-		int width;
-		int lenght;
-		int major;
-		int minor;
-		bool fullScreen;
 		RenderingBackEnd::Type backend;
+		std::string window_name;
+		uint32_t width;
+		uint32_t lenght;
+		bool fullScreen;
+		uint64_t data[5];
 
 		TGraphicsSettings()
 		{
-			windowName = DEFAULT_NAME;
+			backend = RenderingBackEnd::OPENGL;
+			window_name = DEFAULT_NAME;
 			width = DEFAULT_WIDTH;
 			lenght = DEFAULT_LENGHT;
-			major = DEFAULT_MAJOR_VERSION;
-			minor = DEFAULT_MINOR_VERSION;
 			fullScreen = DEFAULT_FULLSCREEN;
-			backend = RenderingBackEnd::OPENGL;
 		}
 	};
 }	
-
-#endif // GRAPHICS_SETTINGS_DONUT
+#endif

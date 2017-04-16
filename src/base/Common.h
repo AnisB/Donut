@@ -18,7 +18,6 @@
 
 // Donut Includes
 #include "const.h"
-#include "exception.h"
 #include "macro.h"
 #include "stringhelper.h"
 #include "security.h"

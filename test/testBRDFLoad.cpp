@@ -17,6 +17,7 @@
 #include <Render/Renderer.h>
 #include <resource/sugarloader.h>
 #include <resource/resourcemanager.h>
+#include <graphics/gl_backend.h>
 
 int main(int argc, char** argv)
 {
@@ -26,12 +27,8 @@ int main(int argc, char** argv)
 	// Creating the rendering window
 	Donut::TRenderer * window = new Donut::TRenderer();
 	// Context info
-	Donut::TGraphicsSettings newContext;
-	newContext.windowName = "testSceneLoad";
-	newContext.width = 1280;
-	newContext.lenght = 720;
-	newContext.major = 4;
-	newContext.minor = 1;
+	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	newContext.window_name = "testBRDFLoad";
 	window->CreateRenderWindow(newContext);
 	Donut::ResourceManager& resourcemanager = Donut::ResourceManager::Instance();
 	resourcemanager.FetchBRDF(argv[1]);
