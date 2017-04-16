@@ -22,8 +22,13 @@ namespace Donut
 
 		// Builds and returns a default graphics setting for an opengl environement
 		TGraphicsSettings default_settings();
+
+		// API functions
 		bool init_render_system();
-		RenderWindow create_render_window(const TGraphicsSettings& graphic_settings);
+		void shutdown_render_system();
+		RenderEnvironment create_render_environment(const TGraphicsSettings& graphic_settings);
+		void destroy_render_environment(RenderEnvironment render_environment);
+		RenderWindow render_window(RenderEnvironment render_environement);
 	}
 }
 

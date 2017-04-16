@@ -20,15 +20,13 @@ namespace Donut
 	{
 		memory_block blc;
 		blc.ptr = malloc(size);
-		blc.size  = 0;
-		// GENERAL_DEBUG("Allocation of "<< size << "requested. Output: "<< blc.ptr);
+		blc.size  = size;
 		return blc;
 	}
 
 	// Frees a memory spot given
 	void TSystemAllocator::deallocate(void* _ptr)
 	{
-		// GENERAL_DEBUG("Deallocation of "<< _ptr);
 		free(_ptr);
 	}
 

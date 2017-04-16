@@ -36,20 +36,14 @@ namespace Donut
 		: m_alloc(_alloc)
 		, m_size(0)
 		, m_capacity(0)
+		, m_data(nullptr)
 		{
 			resize(_reservedSize);
 		}
 
 		~TVector()
 		{
-			if(m_capacity)
-			{
-				for(size_t i = 0; i < m_size; i++)
-				{
-					m_data[i].~T();
-				}
-				m_alloc.deallocate(m_data);
-			}
+			free();
 		}
 
 		inline uint64_t size() {return m_size;}
@@ -79,7 +73,7 @@ namespace Donut
 			}
 			else
 			{
-				reserve(std::max(_size, MINIMAL_RESIZE_CAPACITY));
+				reserve(_size);
 				for(int i  = m_size; i < _size; ++i)
 				{
 					new (&m_data[i]) T;
@@ -142,12 +136,6 @@ namespace Donut
 			}
 			m_data[m_size++] = _value;
 		}
-
-		void erase(iterator _iterator)
-		{
-			ASSERT(false);
-		}
-
 
 		inline iterator begin()		 						{return m_data;}
 		inline const iterator begin() const 				{return m_data;}

@@ -56,7 +56,7 @@
 			// Init the render backend
 			GL::init_render_system();
 			// Create a window
-			FWindow = (GLFWwindow*) GL::create_render_window(parContext);
+			FWindow = (GLFWwindow*) GL::render_window(GL::create_render_environment(parContext));
 			FIsRendering.SetValue(true);
 			FInitDone = true;
  		}

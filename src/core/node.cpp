@@ -52,23 +52,6 @@ namespace Donut
 		m_sons.push_back(_node);
 	}
 
-	bool TNode::RemoveChild(TNode* _node)
-	{
-		// User shouldn't be using this method, warn him
-		CORE_DEBUG("Maybe you should not call this function, preferably disabled");
-
-		// Search for that node
-		auto nodeIT = std::find(m_sons.begin(), m_sons.end(), _node);
-
-		// Were you able to find him ?
-		ASSERT(nodeIT != m_sons.end());
-
-		// Erase the son
-		m_sons.erase(nodeIT);
-
-		return true;
-	}
-
 	// Parse this node and its subnodes
 	void TNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
 	{

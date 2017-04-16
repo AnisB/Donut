@@ -19,6 +19,12 @@ namespace Donut
 			GRAPHICS_ERROR(error << " " << description);
 		}
 
+
+		struct GLRenderEnvironement
+		{
+			GLFWwindow* window;
+		};
+
 		// Builds and returns a default graphics setting for an opengl environement
 		TGraphicsSettings default_settings()
 		{
@@ -37,7 +43,12 @@ namespace Donut
 			return glfwInit();
 		}
 
-		RenderWindow create_render_window(const TGraphicsSettings& graphic_settings)
+		void shutdown_render_system()
+		{
+			glfwTerminate();
+		}
+
+		RenderEnvironment create_render_environment(const TGraphicsSettings& graphic_settings)
 		{
 			// The the error callback
 			glfwSetErrorCallback((ErrorCallBack)graphic_settings.data[GLData::ERROR_CALLBACK]);
@@ -76,7 +87,23 @@ namespace Donut
  			// Setting the rendering flag
    			glfwSetInputMode(window_ptr, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-			return (uint64_t)window_ptr;
+   			// Create the 
+ 			GLRenderEnvironement* gl_render_env = new GLRenderEnvironement();
+ 			gl_render_env->window = window_ptr;
+
+			return (RenderEnvironment)gl_render_env;
+		}
+
+		void destroy_render_environment(RenderEnvironment render_environment)
+		{
+			GLRenderEnvironement* gl_re = (GLRenderEnvironement*)render_environment;
+			glfwDestroyWindow(gl_re->window);
+		}
+
+		RenderWindow render_window(RenderEnvironment render_environement)
+		{
+			GLRenderEnvironement* gl_re = (GLRenderEnvironement*)render_environement;
+			return (RenderWindow) gl_re->window;
 		}
 	}
 }

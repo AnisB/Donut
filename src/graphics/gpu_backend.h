@@ -7,12 +7,16 @@
 namespace Donut
 {
 	// Types definition
+	typedef uint64_t RenderEnvironment;
 	typedef uint64_t RenderWindow;
 
 	struct GPUBackendAPI
 	{
 		bool (*init_render_system)();
-		RenderWindow (*create_render_windows)(TGraphicsSettings& graphic_settings);
+		void (*shutdown_render_system)();
+		RenderEnvironment(*create_render_environment)(TGraphicsSettings& graphic_settings);
+		void (*destroy_render_environment)(RenderEnvironment render_environment);
+		RenderWindow (*render_window)(RenderEnvironment _render);
 	};
 }
 
