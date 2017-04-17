@@ -53,10 +53,14 @@
  	{
  		if(!FInitDone)
  		{
+			// Fetch the GL rendering backend
+			GPUBackendAPI gl_backend;
+			build_rendering_backend(RenderingBackEnd::OPENGL, gl_backend);
+
 			// Init the render backend
-			GL::init_render_system();
+			gl_backend.init_render_system();
 			// Create a window
-			FWindow = (GLFWwindow*) GL::render_window(GL::create_render_environment(parContext));
+			FWindow = (GLFWwindow*) gl_backend.render_window(gl_backend.create_render_environment(parContext));
 			FIsRendering.SetValue(true);
 			FInitDone = true;
  		}
@@ -102,7 +106,7 @@
 
  		SetClearColor(v4_ZERO); 
  			
-		int nbPasses = m_pipeline->passes.size();
+		uint64_t nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {
         	m_pipeline->passes[pass]->Init();

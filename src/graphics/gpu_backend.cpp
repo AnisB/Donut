@@ -1,0 +1,35 @@
+// Library includes
+#include "gpu_backend.h"
+#include "gl_backend.h"
+#include "vulkan_backend.h"
+#include "base/Common.h"
+
+namespace Donut
+{
+	void build_rendering_backend(RenderingBackEnd::Type backend_type, GPUBackendAPI& backend_api)
+	{
+		switch (backend_type)
+		{
+			case RenderingBackEnd::OPENGL:
+			{
+				backend_api.init_render_system = GL::init_render_system;
+				backend_api.shutdown_render_system = GL::shutdown_render_system;
+				backend_api.create_render_environment = GL::create_render_environment;
+				backend_api.destroy_render_environment = GL::destroy_render_environment;
+				backend_api.render_window = GL::render_window;
+			}
+			break;
+			case RenderingBackEnd::VULKAN:
+			{
+				backend_api.init_render_system = VK::init_render_system;
+				backend_api.shutdown_render_system = VK::shutdown_render_system;
+				backend_api.create_render_environment = VK::create_render_environment;
+				backend_api.destroy_render_environment = VK::destroy_render_environment;
+				backend_api.render_window = VK::render_window;
+			}
+			break;
+			default:
+				ASSERT_FAIL_MSG("Unsupported RenderingBackEnd");
+		};
+	}
+}

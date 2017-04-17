@@ -20,16 +20,6 @@
 	
 namespace Donut
 {
-	namespace RenderingBackEnd
-	{
-		enum Type
-		{
-			OPENGL = 0,
-			VULKAN = 1,
-			D12 = 2
-		};
-	}
-
     // Default context data
     #define DEFAULT_WIDTH 1280 
 	#define DEFAULT_LENGHT 720
@@ -38,7 +28,6 @@ namespace Donut
 
 	struct TGraphicsSettings
 	{
-		RenderingBackEnd::Type backend;
 		std::string window_name;
 		uint32_t width;
 		uint32_t lenght;
@@ -47,7 +36,6 @@ namespace Donut
 
 		TGraphicsSettings()
 		{
-			backend = RenderingBackEnd::OPENGL;
 			window_name = DEFAULT_NAME;
 			width = DEFAULT_WIDTH;
 			lenght = DEFAULT_LENGHT;

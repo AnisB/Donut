@@ -36,7 +36,7 @@ namespace Donut
 			const Matrix4& GetProjectionViewMatrix() const{ return m_projectionView;}
 
 			// Setting the projection data
-			void DefinePerspective(double parFovy, double parAspect, double parNear, double parFar);
+			void DefinePerspective(float parFovy, float parAspect, float parNear, float parFar);
 
 			// Fetch the the frustum data
 			const TFrustum& FrusumDescriptor() { return m_frustum; }
@@ -60,10 +60,10 @@ namespace Donut
 			TFrustum m_frustum;
 
 			// Projection Data
-			double m_near;
-			double m_far;
-			double m_fcoeff;
-			double m_focus;
+			float m_near;
+			float m_far;
+			float m_fcoeff;
+			float m_focus;
 
 			// View data
 			double m_yaw;

@@ -6,6 +6,9 @@
 
 namespace Donut
 {
+	// SFNIAE based member for allocation based class
+	#define ALLOCATOR_BASED int allocator_based;
+
 	// This function sets should be used instead of the classic new operator
 	// new operator should be forbitten. 
 
@@ -42,12 +45,10 @@ namespace Donut
 	// This function is the way to delete objects that have been allocated 
 	// using a Donut::TAllocator.
 	template<typename T>
-	void make_delete(T* _targetPtr)
+	void make_delete(TAllocator& allocator, T* _targetPtr)
 	{
-		// Fetch the allocator that has been used for the object
-		TAllocator& tarAllocator = _targetPtr->_alloc;
 		// Deallocates the memory
-		tarAllocator.deallocate(_targetPtr);
+		allocator.deallocate(_targetPtr);
 	}
 
 	// This function should be called to fetch the default common allocator, if a specific 

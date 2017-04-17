@@ -32,12 +32,12 @@ namespace Donut
 	, m_projection()
 	, m_projectionView()
 	// projection data
-	, m_near(0.1)
-	, m_far(1000.0)
+	, m_near(0.1f)
+	, m_far(1000.0f)
 	, m_focus((m_near+m_far)/(2.0*(m_far-m_near)))
 	// View data
-	, m_yaw(0.0)
-	, m_pitch(0.0)
+	, m_yaw(0.0f)
+	, m_pitch(0.0f)
 	, m_position()
 	{
 		SetIdentity(m_viewMatrix);
@@ -52,13 +52,13 @@ namespace Donut
 	}
 
 	// Define the perspective data
-	void Camera::DefinePerspective(double _fovy, double _apsect, double _near, double _far)
+	void Camera::DefinePerspective(float _fovy, float _apsect, float _near, float _far)
 	{
 		// Setting the data
 		m_near = _near;
 		m_far = _far;
-		m_fcoeff = 2.0 / log2(m_far + 1.0);
-		m_focus = 100.0 / (m_far - m_near);
+		m_fcoeff = 2.0f / log2(m_far + 1.0f);
+		m_focus = 100.0f / (m_far - m_near);
 
 		// Compute the perspective matrix
 		AsPerspective(m_projection, _fovy, _apsect, _near, _far);

@@ -122,7 +122,7 @@ namespace Donut
 			m_capacity = (m_capacity + _space);
 		}
 
-		inline T& operator[](int _index)
+		inline T& operator[](uint64_t _index)
 		{
 			ASSERT_NO_RELEASE(_index < m_size);
 			return m_data[_index];

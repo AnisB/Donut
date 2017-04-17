@@ -29,7 +29,6 @@ namespace Donut
 		TGraphicsSettings default_settings()
 		{
 			TGraphicsSettings settings;
-			settings.backend = RenderingBackEnd::OPENGL;
 			settings.data[GLData::ERROR_CALLBACK] = (uint64_t)error_callback;
 			settings.data[GLData::MAJOR_VERSION] = 4;
 			settings.data[GLData::MINOR_VERSION] = 1;
@@ -54,8 +53,8 @@ namespace Donut
 			glfwSetErrorCallback((ErrorCallBack)graphic_settings.data[GLData::ERROR_CALLBACK]);
 
  			// Setting the context info
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, graphic_settings.data[GLData::MAJOR_VERSION]);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, graphic_settings.data[GLData::MINOR_VERSION]);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, (int) graphic_settings.data[GLData::MAJOR_VERSION]);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, (int) graphic_settings.data[GLData::MINOR_VERSION]);
 			glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 			glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
