@@ -1,154 +1,75 @@
-#ifndef DONUT_VECTOR_H
-#define DONUT_VECTOR_H
+#pragma once
 
 // Library includes
-#include "base/common.h"
+#include "base/platform.h"
+#include "base/security.h"
 #include "memory/common.h"
 
-// External includes
-#include <algorithm>
-
-namespace Donut
+namespace donut
 {
-	// Foward declaration
-	class TAllocator;
-
 	template <typename T>
 	class TVector
 	{
-		// Internal values
-		const uint64_t MINIMAL_RESIZE_CAPACITY = 10;
-		const uint64_t RESIZE_FACTOR = 2;
-		// Interval types
-		typedef T* iterator;
-
 	public:
-		TVector(TAllocator& _alloc)
-		: m_alloc(_alloc)
-		, m_size(0)
-		, m_capacity(0)
-		, m_data(nullptr)
-		{
+		ALLOCATOR_BASED;
 
+		// Type definition
+		typedef T* pointer;
+		typedef const T* const_pointer;
+		typedef T& reference;
+		typedef const T& const_reference;
+		typedef pointer iterator;
+		typedef const_pointer const_iterator;
+
+
+		// Default constructor
+		TVector(TAllocator& allocator);
+
+		// Size aware constructor
+		TVector(uint32_t size, TAllocator& allocator);
+
+		// Dst
+		~TVector();
+
+		// Accessors
+		inline uint32_t size() {return _size;}
+		inline uint32_t capacity() {return _capacity;}
+
+		// Resize the array
+		void resize(uint32_t size);
+
+		// Free the memory
+		void free();
+
+		// set the size to 0
+		void clear();
+
+		// Reserve memory in the array
+		void reserve(uint32_t _space);
+
+		inline T& operator[](uint32_t index)
+		{
+			ASSERT_NO_RELEASE(index < _size);
+			return _data[index];
 		}
 
-		TVector(TAllocator& _alloc, uint64_t _reservedSize)
-		: m_alloc(_alloc)
-		, m_size(0)
-		, m_capacity(0)
-		, m_data(nullptr)
-		{
-			resize(_reservedSize);
-		}
+		// Append an element in the vector
+		void push_back(const T& _value);
 
-		~TVector()
-		{
-			free();
-		}
-
-		inline uint64_t size() {return m_size;}
-		inline uint64_t capacity() {return m_capacity;}
-
-		void resize(uint64_t _size)
-		{
-			if(_size ==  0)
-			{
-				clear();
-			}
-			else if(_size < m_size)
-			{
-				for(int i = _size; i < m_size; ++i)
-				{
-					m_data[i].~T();
-				}
-				m_size = _size;
-			}
-			else if (_size < m_capacity)
-			{
-				for(int i = _size; i < m_size; ++i)
-				{
-					new (&m_data[i]) T;
-				}
-				m_size = _size;
-			}
-			else
-			{
-				reserve(_size);
-				for(int i  = m_size; i < _size; ++i)
-				{
-					new (&m_data[i]) T;
-				}
-				m_size = _size;
-			}
-			
-		}
-
-		inline void clear()
-		{
-			if(m_capacity)
-			{
-				for(size_t i = 0; i < m_size; i++)
-				{
-					m_data[i].~T();
-				}
-				m_size = 0;
-			}
-		}
-
-		inline void free()
-		{
-			if(m_capacity)
-			{
-				for(size_t i = 0; i < m_size; i++)
-				{
-					m_data[i].~T();
-				}
-				m_size = 0;
-				m_capacity = 0;
-				m_alloc.deallocate(m_data);
-			}
-		}
-
-		void reserve(uint64_t _space)
-		{
-			ASSERT_NO_RELEASE(_space != 0);
-			memory_block mem = m_alloc.allocate(sizeof(T) * (m_capacity + _space));
-			memcpy(mem.ptr, m_data, sizeof(T) * m_size);
-			if(m_data != nullptr)
-			{
-				m_alloc.deallocate(m_data);
-			}
-			m_data = static_cast<T*>(mem.ptr);
-			m_capacity = (m_capacity + _space);
-		}
-
-		inline T& operator[](uint64_t _index)
-		{
-			ASSERT_NO_RELEASE(_index < m_size);
-			return m_data[_index];
-		}
-
-		inline void push_back(const T& _value)
-		{
-			if(m_size >= m_capacity)
-			{
-				reserve(std::max(m_capacity * RESIZE_FACTOR, MINIMAL_RESIZE_CAPACITY));
-			}
-			m_data[m_size++] = _value;
-		}
-
-		inline iterator begin()		 						{return m_data;}
-		inline const iterator begin() const 				{return m_data;}
-		inline iterator end()								{return m_data + m_size;}
-		inline const iterator end() const 					{return m_data + m_size;}
+		// Iterator access
+		inline iterator begin() {return _data;}
+		inline const_iterator begin() const {return _data;}
+		inline iterator end() {return _data + _size;}
+		inline const_iterator end() const {return _data + _size;}
 
 	protected:
-		T* m_data;
-		uint64_t m_size;
-		uint64_t m_capacity;
+		T* _data;
+		uint32_t _size;
+		uint32_t _capacity;
 
-		TAllocator& m_alloc;
+		// Allocator for this class
+		TAllocator& _allocator;
 	};
 }
 
-#endif // DONUT_VECTOR_H
+#include "vector.inl"

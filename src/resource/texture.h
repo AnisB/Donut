@@ -59,12 +59,12 @@ struct TTexture
     GLvoid *          FData;
     TDataType::Type   FDataType;
 
-    std::string       FFileName;
+    STRING_TYPE       FFileName;
     TImgType::Type    FType;
     GLuint            FFormat;
     unsigned          FNbRef;
 
-    TTexture(std::string parFilename, TImgType::Type parType, int parWidth, int parHeight )
+    TTexture(STRING_TYPE parFilename, TImgType::Type parType, int parWidth, int parHeight )
         : FWidth ( parWidth  )
         , FHeight( parHeight )
         , FData ( NULL )
@@ -108,9 +108,9 @@ struct TSkyboxTexture
 {
     GLuint             id;
     TTexture*          textures[6];
-    std::string        filename;
+    STRING_TYPE        filename;
 
-    TSkyboxTexture(const std::string& _filename)
+    TSkyboxTexture(const STRING_TYPE& _filename)
     : filename ( _filename )
     , id(0)
     , textures()

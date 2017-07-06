@@ -22,7 +22,7 @@
 #include "graphics/visualeffect.h"
 #include "graphics/light.h"
 
-namespace Donut
+namespace donut
 {
 	class TDefferedFX : public TVFX
 	{
@@ -35,7 +35,7 @@ namespace Donut
 		virtual void Init();
 		// Drawing it
 		void SetLights(std::vector<TLight*>& _lights);
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 	protected:
 		std::vector<TLight*> m_lights;

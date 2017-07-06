@@ -3,7 +3,7 @@
 
 #include "graphics/common.h"
 
-namespace Donut
+namespace donut
 {
 	struct TGGXBRDF
 	{

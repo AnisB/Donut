@@ -19,9 +19,8 @@
 #include "graphics/shadermanager.h"
 #include "resource/resourcemanager.h"
 #include "graphics/factory.h"
-#include "base/macro.h"
 
-namespace Donut
+namespace donut
 {
 	// Constructor
 	TVFX::TVFX(const TShader& _shader)
@@ -44,7 +43,7 @@ namespace Donut
 		m_fsq =  ResourceManager::Instance().RequestRuntimeGeometry(fsqIndx);
 	}
 
-	void TVFX::BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous)
+	void TVFX::BindBufferOutput(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previous)
 	{
 		// Injecting frame size
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.width, "width");
@@ -52,19 +51,19 @@ namespace Donut
  		// Injecting buffers
  		ShaderManager::Instance().InjectMaterial(m_material.shader, m_material);
 
- 		foreach_macro(buffer, _previous.buffers)
+ 		for(auto& buffer : _previous.buffers)
  		{
- 			ShaderManager::Instance().InjectTex(m_material.shader, buffer->texID, buffer->name, buffer->offset + m_material.textures.size() );
+ 			ShaderManager::Instance().InjectTex(m_material.shader, buffer.texID, buffer.name, buffer.offset + m_material.textures.size() );
  		}
-		foreach_macro(uniform, _values)
+		for(const auto& uniform : _values)
  		{
- 			TUniformHandler& handler = uniform->second;
+ 			const TUniformHandler& handler = uniform.second;
  			handler.Inject(m_material.shader);
  		}
  		
 	}
 
-	void TVFX::AddTexture(TTexture* parTex, const std::string& _nameInMaterial)
+	void TVFX::AddTexture(TTexture* parTex, const STRING_TYPE& _nameInMaterial)
  	{
 		TTextureInfo newTex;
 		newTex.texID = parTex->FID;
@@ -73,7 +72,7 @@ namespace Donut
 		m_material.textures.push_back(newTex);
  	}
 
- 	void TVFX::AddCubeMap(TSkyboxTexture* _skybox, const std::string& _nameInMaterial)
+ 	void TVFX::AddCubeMap(TSkyboxTexture* _skybox, const STRING_TYPE& _nameInMaterial)
  	{
 		TCubeMapInfo newCM;
 		newCM.cmID = _skybox->id;

@@ -16,11 +16,10 @@
 
 
 #include "light.h"
-#include "base/common.h"
 #include "butter/vector4.h"
 
 #define DEFAULT_RAY 30
-namespace Donut
+namespace donut
  {
 	TLight::TLight()
 	: FPosition()
@@ -57,7 +56,7 @@ namespace Donut
 
 	void TLight::InjectData(const TShader& _shader, size_t _lightIndex)
 	{
-		STRING_TYPE shift = "[" + convertToString(_lightIndex) + "]";
+		STRING_TYPE shift = "[" + convert_to_string(_lightIndex) + "]";
 		ShaderManager::Instance().Inject<Vector3>(_shader, FPosition, "lightSource"+shift+".position");
 		ShaderManager::Instance().Inject<Vector4>(_shader, FDiff , "lightSource"+shift+".diffuse");
 		ShaderManager::Instance().Inject<Vector4>(_shader, FSpec , "lightSource"+shift+".specular");	

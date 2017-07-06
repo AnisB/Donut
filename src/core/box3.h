@@ -5,7 +5,7 @@
 #include "butter/types.h"
 #include "butter/vector3.h"
 
-namespace Donut
+namespace donut
 {
 	class TBox3
 	{

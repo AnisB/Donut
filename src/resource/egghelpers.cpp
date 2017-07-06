@@ -2,7 +2,7 @@
 #include "egghelpers.h"
 #include "egg.h"
 
-namespace Donut
+namespace donut
 {
 	TEgg* ReadEggFile(const STRING_TYPE& _eggFileLocation)
 	{

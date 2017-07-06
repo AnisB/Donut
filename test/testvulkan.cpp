@@ -1,15 +1,17 @@
 #ifdef VULKAN_SUPPORTED
-// Donut includes
+// donut includes
 #include <graphics/vulkan_backend.h>
+
+using namespace donut;
 
 int main()
 {
-	Donut::TGraphicsSettings newContext = Donut::VK::default_settings();
+	TGraphicsSettings newContext = VK::default_settings();
 	newContext.window_name = "testVulkan";
-	Donut::VK::init_render_system();
-	Donut::RenderEnvironment env = Donut::VK::create_render_environment(newContext);
-	Donut::VK::destroy_render_environment(env);
-	Donut::VK::shutdown_render_system();
+	VK::init_render_system();
+	RenderEnvironment env = VK::create_render_environment(newContext);
+	VK::destroy_render_environment(env);
+	VK::shutdown_render_system();
 	return 0;
 }
 

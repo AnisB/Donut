@@ -20,7 +20,7 @@
 #include "graphics/common.h"
 #include "core/box3.h"
 
-namespace Donut
+namespace donut
 {
 	struct TGeometry
 	{

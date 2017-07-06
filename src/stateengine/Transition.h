@@ -20,7 +20,7 @@
  #include "Defines.h"
 
 
- namespace Donut
+ namespace donut
  {
  	class TAtomicState;
  	class TTransition

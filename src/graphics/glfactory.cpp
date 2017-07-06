@@ -15,9 +15,8 @@
  **/
 
 #include "glfactory.h"
-#include "base/common.h"
 
-namespace Donut
+namespace donut
 {
 	bool CheckGLState(bool _clearFlag)
 	{

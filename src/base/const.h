@@ -17,7 +17,7 @@
 #ifndef DONUT_BASE_CONST
 #define DONUT_BASE_CONST
 
-namespace Donut
+namespace donut
 {
 	// ASSERT CONSTS
 	#define EXCEPTION_STACK_SIZE 20

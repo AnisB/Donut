@@ -18,12 +18,12 @@
 #define RESOURCE_COMMON_H
 
 
-// Donut includes
+// donut includes
 #include <base/log.h>
 #include <base/security.h>
 #include <memory/common.h>
 
-namespace Donut
+namespace donut
 {
 	#define __RESOURCE_PRINT_NAMESPACE "RESOURCE"
 	

@@ -16,7 +16,7 @@
 
 #include "DefaultInputManager.h"
 #include "butter/vector3.h"
-namespace Donut
+namespace donut
 {
 	TDefaultInputManager::TDefaultInputManager()
 	: m_initDone(false)

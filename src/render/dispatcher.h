@@ -7,7 +7,7 @@
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	class TDispatcher
 	{

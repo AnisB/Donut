@@ -20,7 +20,7 @@
 // STL includes
 #include <fstream>
 
-namespace Donut
+namespace donut
 {
 	struct TEgg
 	{

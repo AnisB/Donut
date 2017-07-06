@@ -22,15 +22,15 @@
 int main(int argc, char** argv)
 {
 	ASSERT(argc == 2);
-	Donut::ResourceManager::Instance().Init("assets");	
+	donut::ResourceManager::Instance().Init("assets");	
 
 	// Creating the rendering window
-	Donut::TRenderer * window = new Donut::TRenderer();
+	donut::TRenderer * window = new donut::TRenderer();
 	// Context info
-	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	donut::TGraphicsSettings newContext = donut::GL::default_settings();
 	newContext.window_name = "testBRDFLoad";
 	window->CreateRenderWindow(newContext);
-	Donut::ResourceManager& resourcemanager = Donut::ResourceManager::Instance();
+	donut::ResourceManager& resourcemanager = donut::ResourceManager::Instance();
 	resourcemanager.FetchBRDF(argv[1]);
 	return 0;
 }

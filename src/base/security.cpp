@@ -14,19 +14,16 @@
 *
 **/
 
-// Donut includes
+// donut includes
+#include "platform.h"
+#include "log.h"
 #include "security.h"
 #include "const.h"
-#include "common.h"
 
 // External includes
 #include <assert.h>
-#if __posix__
-#include <unistd.h>
-#include <execinfo.h>
-#endif
 
-namespace Donut
+namespace donut
 {
 	void printTrace()
 	{
@@ -40,7 +37,7 @@ namespace Donut
 
 	void __handleFail(STRING_TYPE _message, const CHAR_TYPE* _file, int _line)
 	{
-		GENERAL_ERROR(_message << " @ "<< _file<<" line: "<<_line);
+		PRINT_ERROR("FAILURE", _message << " @ "<< _file<<" line: "<<_line);
 		#if __posix__
 		printTrace();
 		#endif

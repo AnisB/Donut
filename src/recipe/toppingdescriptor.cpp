@@ -6,7 +6,7 @@
 // External includes
 #include "rapidxml.hpp"
 
-namespace Donut
+namespace donut
 {
     // Tokens
     #define TOPPING_ROOT_NODE_TOKEN "topping"
@@ -40,7 +40,7 @@ namespace Donut
     #define TEXTURE_FILE_LOCATION_TOKEN "location"
     
     // Returns the enumeration that matches a given string    
-    void DataTypeToUniform(const STRING_TYPE& _type, const std::string& _name, const std::string& _value, TUniformHandler& _handler)
+    void DataTypeToUniform(const STRING_TYPE& _type, const STRING_TYPE& _name, const STRING_TYPE& _value, TUniformHandler& _handler)
     {
         if(_type == TOKEN_VEC3)
         {
@@ -60,11 +60,11 @@ namespace Donut
         }
         else if(_type == TOKEN_FLOAT)
         {
-            _handler.SetValue(TShaderData::FLOAT, _name, convertFromString<float>(_value));
+            _handler.SetValue(TShaderData::FLOAT, _name, convert_from_string<float>(_value));
         }
         else if(_type == TOKEN_INT)
         {
-            _handler.SetValue(TShaderData::INTEGER, _name, convertFromString<int>(_value));
+            _handler.SetValue(TShaderData::INTEGER, _name, convert_from_string<int>(_value));
         }
         else
         {
@@ -109,9 +109,9 @@ namespace Donut
             for(rapidxml::xml_node<> *unif = extern_data->first_node(); unif; unif = unif->next_sibling())
             {
                 TUniformHandler uni;
-                std::string type(unif->first_attribute(UNIFORM_TYPE_TOKEN)->value());
-                std::string name(unif->first_attribute(UNIFORM_NAME_TOKEN)->value());
-                std::string value(unif->first_attribute(UNIFORM_VALUE_TOKEN)->value());
+                STRING_TYPE type(unif->first_attribute(UNIFORM_TYPE_TOKEN)->value());
+                STRING_TYPE name(unif->first_attribute(UNIFORM_NAME_TOKEN)->value());
+                STRING_TYPE value(unif->first_attribute(UNIFORM_VALUE_TOKEN)->value());
                 DataTypeToUniform(type, name, value, uni);
                 _topping.data.uniforms.push_back(uni);
             }

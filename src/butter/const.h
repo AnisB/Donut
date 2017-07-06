@@ -16,7 +16,7 @@
 #ifndef BUTTER_CONST_H
 #define BUTTER_CONST_H
 
-namespace Donut
+namespace donut
 {
 	// MATH CONSTS
 	// Reference

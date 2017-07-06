@@ -20,7 +20,7 @@
 #include <pthread.h>
 #endif
 
-namespace Donut 
+namespace donut 
 {
 
 	class TThreadSharedObject

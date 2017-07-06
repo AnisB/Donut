@@ -16,7 +16,6 @@
 
 // Library includes
 #include "sugarloader.h"
-#include "base/common.h"
 #include "base/stringhelper.h"
 #include "resourcemanager.h"
 #include "resource/common.h"
@@ -38,7 +37,7 @@
 
 
 
-namespace Donut
+namespace donut
 {
     TSugarLoader::TSugarLoader()
     {
@@ -60,21 +59,21 @@ namespace Donut
 
     void TSugarLoader::LoadSugars()
     {   
-        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-        std::string sugarDirectory(rootAssetDirectory + "/common/sugars");
+        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+        STRING_TYPE sugarDirectory(rootAssetDirectory + "/common/sugars");
 
-        std::vector<std::string> sugarFiles;
+        std::vector<STRING_TYPE> sugarFiles;
         GetExtensionFileList(sugarDirectory, ".sugar", sugarFiles);
-        foreach_macro(sugar, sugarFiles)
+        for(auto& sugar : sugarFiles)
         {
             TSugarDescriptor newSugar;
-            ParseSugarFile(*sugar, newSugar);
+            ParseSugarFile(sugar, newSugar);
             FSugars[newSugar.name] = newSugar;
-            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< *sugar);
+            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< sugar);
         }
     }
 
-    const TSugarDescriptor& TSugarLoader::FetchSugar(const std::string& parModel)
+    const TSugarDescriptor& TSugarLoader::FetchSugar(const STRING_TYPE& parModel)
     {
         RESOURCE_DEBUG(parModel<<" is requested");
         auto ite = FSugars.find(parModel);

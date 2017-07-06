@@ -5,7 +5,7 @@
 #include <string.h>
 #include <math.h>
 
-namespace Donut
+namespace donut
 {
 	void matrix4(Matrix4& _mat, MatrixInit::Type reset)
 	{

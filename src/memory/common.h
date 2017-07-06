@@ -1,13 +1,41 @@
-#ifndef MEMORY_UTILITY_H
-#define MEMORY_UTILITY_H
+#pragma once
 
 // Library includes
 #include "allocator.h"
 
-namespace Donut
+namespace donut
 {
 	// SFNIAE based member for allocation based class
 	#define ALLOCATOR_BASED int allocator_based;
+
+	// Convert integer to type.
+	template <int v>
+	struct Int2Type { enum {value=v}; };
+
+	// Determines if a class is based on the allocation system
+	template <class T>
+	struct is_allocator_based {
+
+		template <typename C>
+		static char dummy_func(typename C::allocator_based *);
+
+		template <typename C>
+		static int dummy_func(...);
+
+	public:
+		enum {
+			value = (sizeof(dummy_func<T>(0)) == sizeof(char))
+		};
+	};
+
+	// Helper macros for allocation detection
+	#define IS_ALLOCATOR_BASED(T) is_allocator_based<T>::value
+	#define IS_ALLOCATOR_BASED_TYPE(T) Int2Type< IS_ALLOCATOR_BASED(T) >
+
+	// Allocator based constuction
+	template <class T> inline T &construct(void *p, TAllocator &a, Int2Type<true>) {new (p) T(a); return *(T *)p;}
+	template <class T> inline T &construct(void *p, TAllocator &a, Int2Type<false>) {new (p) T; return *(T *)p;}
+	template <class T> inline T &construct(void *p, TAllocator &a) {return construct<T>(p, a, IS_ALLOCATOR_BASED_TYPE(T)());}
 
 	// This function sets should be used instead of the classic new operator
 	// new operator should be forbitten. 
@@ -43,7 +71,7 @@ namespace Donut
 	}	
 
 	// This function is the way to delete objects that have been allocated 
-	// using a Donut::TAllocator.
+	// using a donut::TAllocator.
 	template<typename T>
 	void make_delete(TAllocator& allocator, T* _targetPtr)
 	{
@@ -53,7 +81,5 @@ namespace Donut
 
 	// This function should be called to fetch the default common allocator, if a specific 
 	// allocation behavior is not required aat the spot you call it.
-	TAllocator* CommonAllocator();
+	TAllocator* common_allocator();
 }
-
-#endif // MEMORY_UTILITY_H

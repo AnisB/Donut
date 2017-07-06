@@ -17,14 +17,14 @@
 #ifndef DONUT_SUGAR_INSTANCE_NODE
 #define DONUT_SUGAR_INSTANCE_NODE
 
-// Donut includes
+// donut includes
 #include "node.h"
 #include "graphics/drawable.h"
 
 // STL includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Foward declaration
 	class TMesh;

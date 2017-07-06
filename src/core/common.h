@@ -18,10 +18,10 @@
 #define CORE_COMMON_H
 
 
-// Donut includes
+// donut includes
 #include <base/log.h>
 
-namespace Donut
+namespace donut
 {
 	#define __CORE_PRINT_NAMESPACE "CORE"
 	

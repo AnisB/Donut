@@ -15,19 +15,20 @@
 **/
 
 // Libarry includes
-#include "base/common.h"
+#include "base/security.h"
 #include "core/common.h"
 #include "node.h"
 
 // External includes
 #include <algorithm>
 
-namespace Donut
+namespace donut
 {
 	// Cst
 	TNode::TNode(TAllocator& _alloc)
 	: m_transform()
 	, m_sons(_alloc)
+	, m_parent(nullptr)
 	{
 		// Make sure the root is centered at origin
 		matrix4(m_transform, MatrixInit::Identity);
@@ -36,9 +37,9 @@ namespace Donut
 	TNode::~TNode()
 	{
 		// Delete all the children
-		foreach_macro(child, m_sons)
+		for(auto child : m_sons)
 		{
-			delete *child;
+			delete child;
 		}
 	}
 
@@ -56,9 +57,9 @@ namespace Donut
 	void TNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
 	{
 		// For each subnode, parse
-		foreach_macro(son, m_sons)
+		for(auto son : m_sons)
 		{
-			(*son)->Evaluate(_requestCollector, _parentTransform * m_transform);
+			son->Evaluate(_requestCollector, _parentTransform * m_transform);
 		}
 	}
 }

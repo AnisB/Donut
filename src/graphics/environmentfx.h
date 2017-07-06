@@ -22,7 +22,7 @@
 #include "graphics/visualeffect.h"
 #include "graphics/sphericalharmonics.h"
 
-namespace Donut
+namespace donut
 {
 	class TEnvironmentFX : public TVFX
 	{
@@ -35,7 +35,7 @@ namespace Donut
 		virtual void Init();
 		// Drawing it
 		void SetSH(TSphericalHarmonics* _SH) {m_SH = _SH;}
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 	protected:
 		TSphericalHarmonics* m_SH;

@@ -19,11 +19,13 @@
 
 // Library includes
 #include "base/Singleton.h"
+#include "base/stringhelper.h"
+
 // STL includes
 #include <unordered_map>
 #include <string>
 
-namespace Donut
+namespace donut
 {
 	// Referenced but unexisting shader
 	#define NON_DEFINED_SHADER -2
@@ -38,13 +40,13 @@ namespace Donut
 		~TShaderFileHandler();
 
 		// Methods
-		TShaderFileID RegisterShaderFile(const std::string& _shaderFile);
-		const std::string& GetShaderFile(const TShaderFileID& _shaderFile);
-		bool IsRegistered(const std::string& _shaderFile);
+		TShaderFileID RegisterShaderFile(const STRING_TYPE& _shaderFile);
+		const STRING_TYPE& GetShaderFile(const TShaderFileID& _shaderFile);
+		bool IsRegistered(const STRING_TYPE& _shaderFile);
 
 	protected:
-		std::unordered_map<std::string, TShaderFileID, std::hash<std::string>> m_shaderKeys;
-		std::unordered_map<TShaderFileID, std::string> m_inverseShaderKeys;
+		std::unordered_map<STRING_TYPE, TShaderFileID, std::hash<STRING_TYPE>> m_shaderKeys;
+		std::unordered_map<TShaderFileID, STRING_TYPE> m_inverseShaderKeys;
 	};
 }
 #endif // SHADER_FILE_HANDLER_RESOURCE_DONUT

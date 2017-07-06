@@ -22,7 +22,7 @@
 //--------------------------------------------------------------------
 
 
-namespace Donut
+namespace donut
 {
 	typedef void (*TUpdaterFunction)(const TStateEngineId&, double);
 	typedef void (*TStateCallBack)(const TStateEngineId&, TStateData *);

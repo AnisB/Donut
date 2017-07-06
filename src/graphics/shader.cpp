@@ -17,7 +17,7 @@
 // Library includes
 #include "shader.h"
 
-namespace Donut
+namespace donut
 {
 	// Default Constructor
 	TShader::TShader()
@@ -33,7 +33,7 @@ namespace Donut
 	}
 
 	// This should go into a factory
-	TShader::TShader(const std::string& _vertex, const std::string& _fragment)
+	TShader::TShader(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment)
 	: FIsTesselated(false)
 	, FProgramID(0)
 	, FTessControl(BASIC_SHADER)
@@ -46,7 +46,7 @@ namespace Donut
 		FFragmentShader =  shaderFileHandler.RegisterShaderFile(_fragment);
 	}
 
-	TShader::TShader(const std::string& _vertex, const std::string& _geometry, const std::string& _fragment)
+	TShader::TShader(const STRING_TYPE& _vertex, const STRING_TYPE& _geometry, const STRING_TYPE& _fragment)
 	: FIsTesselated(false)
 	, FProgramID(0)
 	, FTessControl(BASIC_SHADER)

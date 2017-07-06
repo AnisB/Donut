@@ -16,7 +16,7 @@
 
 #include "ThreadSharedObject.h"
 
-namespace Donut 
+namespace donut 
 {
 
 	TThreadSharedObject::TThreadSharedObject()

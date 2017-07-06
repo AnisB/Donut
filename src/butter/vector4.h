@@ -16,10 +16,10 @@
 #ifndef BUTTER_VECTOR4_H
 #define BUTTER_VECTOR4_H
 
-// Donut includes
+// donut includes
 #include "types.h"
 
-namespace Donut
+namespace donut
 {
 	// inline methods
 		// Constructors

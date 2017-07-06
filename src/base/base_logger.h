@@ -4,7 +4,7 @@
 // Library includes
 #include "log.h"
 
-namespace Donut
+namespace donut
 {
 	class TBaseLogger : public TLoggerInterface
 	{
@@ -13,7 +13,7 @@ namespace Donut
 		~TBaseLogger();
 
 		// The virtual logging function that must be 
-		virtual void Log(TLogLevel::Type _logLevel, const char* _tag, const char* _message);
+		virtual void log(TLogLevel::Type _logLevel, const char* _tag, const char* _message);
 	};
 }
 

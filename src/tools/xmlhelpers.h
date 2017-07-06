@@ -6,7 +6,7 @@
 #include "graphics/shaderdata.h"
 #include "rapidxml.hpp"
 
-namespace Donut
+namespace donut
 {
 	// Build a shader from its xml node
 	void BuildShaderDescriptor(rapidxml::xml_node<>* _shaderNode, TShader& _shader);

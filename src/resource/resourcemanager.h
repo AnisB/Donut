@@ -35,7 +35,7 @@
 #include <vector>
 #include <map>
 
- namespace Donut 
+ namespace donut 
  {
  	class ResourceManager : public Singleton<ResourceManager>
  	{
@@ -43,13 +43,13 @@
  		ResourceManager();
  		~ResourceManager();
 
- 		void Init(const std::string& _assertFolder);
+ 		void Init(const STRING_TYPE& _assertFolder);
  	// Asset folder setting
- 		inline const std::string& RootAssetsFolder() const
+ 		inline const STRING_TYPE& RootAssetsFolder() const
  		{
  			return m_rootAssetFolder;
  		}
- 		inline std::string RelativePath(const std::string& _fileName)
+ 		inline STRING_TYPE RelativePath(const STRING_TYPE& _fileName)
  		{
  			return (m_rootAssetFolder + _fileName);
  		}
@@ -58,26 +58,26 @@
 		// Returns a pointer to a given brdf file (using its filepath)
  		// If it has not been loaded yet, it loads the brdf data into the GPU RAM
  		// Else it returns a pointer to what has been loaded
- 		TGGXBRDF* FetchBRDF(const std::string& _brdfFileName);
+ 		TGGXBRDF* FetchBRDF(const STRING_TYPE& _brdfFileName);
  		// Returns a pointer to a given texture (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
-		TTexture* FetchTexture(const std::string&  parTextureName);
+		TTexture* FetchTexture(const STRING_TYPE&  parTextureName);
 		// Returns a identifier for the geometry that is asked for
  		// If it has not been loaded yet, it loads the geometry into the GPU RAM
  		// Else it simply returns the identifier
-		GEOMETRY_GUID FetchGeometry(const TShader& parShader, const std::string&  parObjName);
+		GEOMETRY_GUID FetchGeometry(const TShader& parShader, const STRING_TYPE&  parObjName);
 		// Returns a pointer to a given skybox (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
-		SKYBOX_GUID FetchSkybox(const std::string& _skyboxFolder, const std::string& _extension);
+		SKYBOX_GUID FetchSkybox(const STRING_TYPE& _skyboxFolder, const STRING_TYPE& _extension);
 		// This function is not really supposed to be used on a perfomance oriented scene, it is a helper that is available for the user to create
 		// at runtime geometries and to register them for further access (it is used to create cubes, spheres, planes, etc etc)
 		// It is also used internally by the FetchGeometry method
-		GEOMETRY_GUID InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
+		GEOMETRY_GUID InstanciateRunTimeGeometry(const STRING_TYPE& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
 		// Still to refactor
-		std::vector<int> LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable);
+		std::vector<int> LoadObjToTexture(const STRING_TYPE&  parFileName, std::vector<TTexture*>& parTexturetable);
 
 		TSkyboxTexture* RequestRuntimeSkybox(SKYBOX_GUID _skyboxIndex) { return m_skyboxes[_skyboxIndex]; }
 		TGeometry* RequestRuntimeGeometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
@@ -88,18 +88,18 @@
 
 	protected:
 		// Asset folder path
-		std::string m_rootAssetFolder;
+		STRING_TYPE m_rootAssetFolder;
 
 		// Data records
-		std::map<std::string, TGGXBRDF*> m_brdfs;
-		std::map<std::string, TTexture*> FTextures;
+		std::map<STRING_TYPE, TGGXBRDF*> m_brdfs;
+		std::map<STRING_TYPE, TTexture*> FTextures;
 
 			// Skybox data
-		std::map<std::string, SKYBOX_GUID> m_skyboxIdentifiers;
+		std::map<STRING_TYPE, SKYBOX_GUID> m_skyboxIdentifiers;
 		std::vector<TSkyboxTexture*> m_skyboxes;
 			
 			// Geometry data
-		std::map<std::string, GEOMETRY_GUID> m_geometryIdentifiers;
+		std::map<STRING_TYPE, GEOMETRY_GUID> m_geometryIdentifiers;
 		std::vector<TGeometry*> m_geometries;
 
 	};

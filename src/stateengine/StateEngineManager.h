@@ -22,7 +22,7 @@
 #include "Defines.h"
 #include <map>
 
- namespace Donut 
+ namespace donut 
  {
  	class TStateEngine;
  	class TStateEngineManager : public Singleton<TStateEngineManager>

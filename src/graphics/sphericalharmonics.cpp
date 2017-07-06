@@ -19,7 +19,7 @@
 #include "graphics/shadermanager.h"
 #include "graphics/common.h"
 
-namespace Donut
+namespace donut
 {
 	TSphericalHarmonics::TSphericalHarmonics()
 	{

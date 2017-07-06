@@ -7,7 +7,7 @@
 // External includes
 #include <iostream>
 
-namespace Donut 
+namespace donut 
 {
 	// Stream operator overload
 	std::istream& operator>>(std::istream& _stream, Vector2& _val);

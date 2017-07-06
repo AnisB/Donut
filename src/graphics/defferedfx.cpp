@@ -16,10 +16,9 @@
 
 // Library includes
 #include "defferedfx.h"
-#include "base/macro.h"
 #include "graphics/geometry.h"
 
-namespace Donut
+namespace donut
 {
 	#define DEFFERED_VERTEX "common/shaders/light/vertex.glsl"
 	#define DEFFERED_GEOMETRY "common/shaders/light/geometry.glsl" 
@@ -62,7 +61,7 @@ namespace Donut
 		ASSERT_MSG_NO_RELEASE(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
 	}
 
-	void TDefferedFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TDefferedFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
 		// Enable the deffed shader 
 		ShaderManager::Instance().EnableShader(m_material.shader);

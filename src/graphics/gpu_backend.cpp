@@ -2,9 +2,9 @@
 #include "gpu_backend.h"
 #include "gl_backend.h"
 #include "vulkan_backend.h"
-#include "base/Common.h"
+#include "base/security.h"
 
-namespace Donut
+namespace donut
 {
 	void build_rendering_backend(RenderingBackEnd::Type backend_type, GPUBackendAPI& backend_api)
 	{

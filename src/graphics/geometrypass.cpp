@@ -18,8 +18,6 @@
 #include "geometrypass.h"
 #include "graphics/common.h"
 #include "graphics/factory.h"
-#include "base/Common.h"
-#include "Base/Macro.h"
 #include "Base/log.h"
 #include "core/mesh.h"
 #include "resource/resourcemanager.h"
@@ -27,7 +25,7 @@
 // External includes
 #include <map>
 
- namespace Donut
+ namespace donut
  {
 
  	//CLASS IMPLEMENTATION
@@ -71,14 +69,14 @@
 		m_dipatcher.ProcessRequests(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
 		// Fetch the uniform values from the camera
-		std::map<std::string, TUniformHandler> values;
+		std::map<STRING_TYPE, TUniformHandler> values;
 		m_camera->AppendUniforms(values);
 
 		// Process eache render request 
-		foreach_macro(request, requests)
+		for(auto& request : requests)
 		{
 			// Process the render request
-			ProcessRenderRequest(*request, values);
+			ProcessRenderRequest(request, values);
 		}
 	}
 

@@ -11,7 +11,7 @@
 #include <vector>
 #include <map>
 
-namespace Donut
+namespace donut
 {
 	// This class is the camera structure of the engine, it makes available the usual operations (yaw, pitch, translate) and access to the rendering data
 	class Camera
@@ -42,7 +42,7 @@ namespace Donut
 			const TFrustum& FrusumDescriptor() { return m_frustum; }
 
 			// Output the uniforms for rendering purposes
-			void AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms);
+			void AppendUniforms(std::map<STRING_TYPE, TUniformHandler>& _uniforms);
 
 			// Fetch the camera's position
 			const Vector3& Position() {return m_position;}
@@ -66,8 +66,8 @@ namespace Donut
 			float m_focus;
 
 			// View data
-			double m_yaw;
-			double m_pitch;
+			float m_yaw;
+			float m_pitch;
 			Vector3 m_position;
 	};
 }

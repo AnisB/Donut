@@ -22,7 +22,7 @@
 // STL includes
 #include <string>
 
-namespace Donut 
+namespace donut 
 {
 
 	#define DECLARE_USUAL_THREAD_SAFE_OBJECT(CLASSNAME, TYPE, DEFAULTVALUE) \
@@ -56,7 +56,7 @@ namespace Donut
 
 	DECLARE_USUAL_THREAD_SAFE_OBJECT(TThreadSafeBolean, bool, false)
 	DECLARE_USUAL_THREAD_SAFE_OBJECT(TThreadSafeInteger, int, 0)
-	DECLARE_USUAL_THREAD_SAFE_OBJECT(TThreadSafeString, std::string, "INVALID")
+	DECLARE_USUAL_THREAD_SAFE_OBJECT(TThreadSafeString, STRING_TYPE, "INVALID")
 
 
 }

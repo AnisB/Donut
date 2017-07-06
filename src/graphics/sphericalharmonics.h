@@ -22,7 +22,7 @@
 #include <vector>
 
  
-namespace Donut
+namespace donut
 {
 	// Foward declarations
 	struct TShader;

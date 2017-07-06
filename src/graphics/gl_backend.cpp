@@ -10,7 +10,7 @@
 #include "gl_backend.h"
 #include "common.h"
 
-namespace Donut
+namespace donut
 {
 	namespace GL
 	{

@@ -18,11 +18,11 @@
 #define INPUT_COMMON_H
 
 
-// Donut includes
+// donut includes
 #include <base/log.h>
 #include <base/security.h>
 
-namespace Donut
+namespace donut
 {
 	#define __INPUT_PRINT_NAMESPACE "INPUT"
 	

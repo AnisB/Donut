@@ -23,13 +23,13 @@
 #include <iostream>
 #include <sstream>
 
-namespace Donut
+namespace donut
 {
 	// Final function
 	void __handleFail(STRING_TYPE _message, const CHAR_TYPE* _file, int _line);
 
 	// Fail function with messages
-	#define ASSERT_FAIL_MSG(MSG) {STREAM_TYPE stream; stream<<MSG;  Donut::__handleFail(stream.str(), __FILE__, __LINE__);}
+	#define ASSERT_FAIL_MSG(MSG) {STREAM_TYPE stream; stream<<MSG;  donut::__handleFail(stream.str(), __FILE__, __LINE__);}
 	#define ASSERT_FAIL() {ASSERT_FAIL_MSG("");}
 	#define ASSERT(Enonce) {if(!(Enonce)) ASSERT_FAIL_MSG ("");}
 	#define ASSERT_MSG(Enonce, MSG) {if(!(Enonce)) ASSERT_FAIL_MSG(MSG);}

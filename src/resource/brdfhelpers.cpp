@@ -3,11 +3,11 @@
 
 #include <stdio.h>
 
-namespace Donut
+namespace donut
 {
 	namespace BRDFHelpers
 	{
-		TGGXBRDF* LoadBRDF(const std::string& _filename)
+		TGGXBRDF* LoadBRDF(const STRING_TYPE& _filename)
 		{
 			// Opening the ggx brdf fle
 			FILE* brdf_file = fopen(_filename.c_str(), "rb");

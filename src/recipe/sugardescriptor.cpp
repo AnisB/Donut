@@ -6,7 +6,7 @@
 // External includes
 #include "rapidxml.hpp"
 
-namespace Donut
+namespace donut
 {
     // SUGAR DATA
     #define SUGAR_ROOT_TOKEN "sugar"

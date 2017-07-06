@@ -14,9 +14,9 @@
  *
  **/
 
-// Donut include
+// donut include
 #include "fileloader.h"
-#include <base/common.h>
+#include "base/security.h"
 
 // STL include 
 #include <stdio.h>
@@ -30,15 +30,15 @@
 #include <algorithm>
 #endif
 
-namespace Donut
+namespace donut
 {
-	void ReadFile( char const* fn, std::string& _output) 
+	void ReadFile( char const* fn, STRING_TYPE& _output) 
 	{
 		ASSERT_MSG(fn != NULL, "Empty file name to load");
 		std::ifstream fileReader (fn);
 		if (fileReader.is_open())
 		{
-			std::string line;
+			STRING_TYPE line;
 			while ( getline (fileReader, line) )
 			{
 				_output += line;
@@ -89,7 +89,7 @@ namespace Donut
 		return(status);
 	}
 
-	void GetExtensionFileList(const std::string& _directoryPath, const std::string& _fileExtension, std::vector<std::string>& _outContainer)
+	void GetExtensionFileList(const STRING_TYPE& _directoryPath, const STRING_TYPE& _fileExtension, std::vector<STRING_TYPE>& _outContainer)
 	{
         // Opening the directory
         DIR * directory;
@@ -118,7 +118,7 @@ namespace Donut
             }
 
             // Get its filename
-            std::string fileName(newEntry->d_name);
+            STRING_TYPE fileName(newEntry->d_name);
             // Reject non matching entries
             if((fileName=="..")|| (fileName==".") || fileName.size() < extensionSize)
             {
@@ -130,7 +130,7 @@ namespace Donut
                 continue;
             }
             // OK this file is concerned we add it
-            std::string newFilename = _directoryPath;
+            STRING_TYPE newFilename = _directoryPath;
             newFilename += "/";
             newFilename += fileName;
             _outContainer.push_back(newFilename);

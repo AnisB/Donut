@@ -4,7 +4,7 @@
 // Library includes
 #include "settings.h"
 
-namespace Donut
+namespace donut
 {
 	namespace RenderingBackEnd
 	{

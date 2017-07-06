@@ -19,7 +19,7 @@
 #include "uniformhandler.h"
 #include "base/security.h"
 
-namespace Donut
+namespace donut
 {
 	TUniformHandler::TUniformHandler()
 	: m_uniform(nullptr)

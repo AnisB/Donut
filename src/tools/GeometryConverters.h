@@ -2,9 +2,9 @@
 #define GEOMETRY_CONVERTERS_H
 
 // Library includes
-#include "base/common.h"
+#include "base/stringhelper.h"
 
-namespace Donut
+namespace donut
 {
 	// Foward declare
 	struct TEgg;

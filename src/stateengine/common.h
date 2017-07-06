@@ -18,11 +18,11 @@
 #define STATE_ENGINE_COMMON_H
 
 
-// Donut includes
+// donut includes
 #include <base/log.h>
 #include <base/security.h>
 
-namespace Donut
+namespace donut
 {
 	#define __STATE_ENGINE_PRINT_NAMESPACE "STATE_ENGINE"
 	

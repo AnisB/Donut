@@ -16,8 +16,9 @@
 #include "gl_backend.h"
 #include "common.h"
 #include "containers/vector.h"
+#include "base/security.h"
 
-namespace Donut
+namespace donut
 {
 	namespace VK
 	{
@@ -137,7 +138,7 @@ namespace Donut
 			app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 			app_info.pApplicationName = graphic_settings.window_name.c_str();
 			app_info.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
-			app_info.pEngineName = "Donut";
+			app_info.pEngineName = "donut";
 			app_info.engineVersion = VK_MAKE_VERSION(1, 0, 0);
 			app_info.apiVersion = VK_API_VERSION_1_0;
 
@@ -168,7 +169,7 @@ namespace Donut
 				return 0;
 			}
 
-			TVector<VkPhysicalDevice> devices(*CommonAllocator(), deviceCount);
+			TVector<VkPhysicalDevice> devices(deviceCount, *common_allocator());
 			vkEnumeratePhysicalDevices(vk_re->instance, &deviceCount, devices.begin());
 
 			// Evaluate the device 
@@ -180,7 +181,7 @@ namespace Donut
 			uint32_t queueFamilyCount = 0;
 			vkGetPhysicalDeviceQueueFamilyProperties(vk_re->physical_device, &queueFamilyCount, nullptr);
 
-			TVector<VkQueueFamilyProperties> queueFamilies(*CommonAllocator(), queueFamilyCount);
+			TVector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount, *common_allocator());
 			vkGetPhysicalDeviceQueueFamilyProperties(vk_re->physical_device, &queueFamilyCount, queueFamilies.begin());
 			
 			// Check for the queues

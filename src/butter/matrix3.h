@@ -17,13 +17,13 @@
 #ifndef BUTTER_MATRIX_3
 #define BUTTER_MATRIX_3
 
-// Donut inludes
+// donut inludes
 #include "types.h"
 
 // STL includes
 #include <iostream>
 
-namespace Donut
+namespace donut
 {
 	// Init functions
 	void matrix3(Matrix3& _mat, MatrixInit::Type reset);

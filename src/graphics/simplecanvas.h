@@ -20,7 +20,7 @@
 // Library includes
 #include "canvas.h"
 
-namespace Donut
+namespace donut
 {
 	class TSimpleCanvas : public TCanvas
 	{

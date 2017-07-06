@@ -14,7 +14,7 @@
 *
 **/
 
-namespace Donut
+namespace donut
 {
 
 	// Constructors;

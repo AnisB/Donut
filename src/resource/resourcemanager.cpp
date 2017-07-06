@@ -20,10 +20,8 @@
 #include "brdfhelpers.h"
 #include "resource/Common.h"
 #include "input/Common.h"
-#include <Base/Common.h>
 #include <Base/Security.h>
 #include "graphics/glfactory.h"
-#include "Base/Macro.h"
 #include "sugarLoader.h"
 #include "toppingloader.h"
 #include "pipelineloader.h"
@@ -37,7 +35,7 @@
 
  using namespace std;
  
- namespace Donut
+ namespace donut
  {
  	ResourceManager::ResourceManager()
  	: m_rootAssetFolder("./assets/")
@@ -50,7 +48,7 @@
 
  	}
 
-	void ResourceManager::Init(const std::string& _assertFolder)
+	void ResourceManager::Init(const STRING_TYPE& _assertFolder)
 	{
 		m_rootAssetFolder = _assertFolder + "/";
 		TSugarLoader::Instance().Init();
@@ -59,7 +57,7 @@
 		TToppingLoader::Instance().Init();
 	}
  	
- 	TTexture* ResourceManager::FetchTexture(const std::string&  _textureName)
+ 	TTexture* ResourceManager::FetchTexture(const STRING_TYPE&  _textureName)
  	{
  		auto it = FTextures.find(_textureName);
  		if(it != FTextures.end())
@@ -79,7 +77,7 @@
  		}
  	}
 
- 	SKYBOX_GUID ResourceManager::FetchSkybox(const std::string&  _skyboxFolder, const std::string& _extension)
+ 	SKYBOX_GUID ResourceManager::FetchSkybox(const STRING_TYPE&  _skyboxFolder, const STRING_TYPE& _extension)
  	{
  		auto it = m_skyboxIdentifiers.find(_skyboxFolder);
  		if(it != m_skyboxIdentifiers.end())
@@ -102,7 +100,7 @@
  		}
  	}
 
-	TGGXBRDF* ResourceManager::FetchBRDF(const std::string&  _brdfFileName)
+	TGGXBRDF* ResourceManager::FetchBRDF(const STRING_TYPE&  _brdfFileName)
  	{
  		auto it = m_brdfs.find(_brdfFileName);
  		if(it != m_brdfs.end())
@@ -120,7 +118,7 @@
  		}
  	}
 
-	GEOMETRY_GUID ResourceManager::FetchGeometry(const TShader& parShader, const std::string&  _fileName)
+	GEOMETRY_GUID ResourceManager::FetchGeometry(const TShader& parShader, const STRING_TYPE&  _fileName)
 	{
 		// Try to get the resource
  		auto it = m_geometryIdentifiers.find(_fileName);
@@ -144,7 +142,7 @@
 		return InsertGeometry(_fileName, newModel);
 	}
 
-	GEOMETRY_GUID ResourceManager::InstanciateRunTimeGeometry(const std::string& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+	GEOMETRY_GUID ResourceManager::InstanciateRunTimeGeometry(const STRING_TYPE& _name, const TShader& parShader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
 	{
 		TGeometry* geo = CreateGeometry(parShader, _dataArray, _numVert, _indexArray, num_faces);
 		return InsertGeometry(_name, geo);
@@ -169,10 +167,10 @@
 	}
 
 	/*
-	std::vector<int> ResourceManager::LoadObjToTexture(const std::string&  parFileName, std::vector<TTexture*>& parTexturetable)
+	std::vector<int> ResourceManager::LoadObjToTexture(const STRING_TYPE&  parFileName, std::vector<TTexture*>& parTexturetable)
 	{
 		// Looking in the databaseModel
-		std::string model = parFileName;
+		STRING_TYPE model = parFileName;
   		INPUT_ERROR("Loading obj file to texture: "<<model); 
 		// Liste des vertices
 		std::vector<Vector3> listePoints;
@@ -256,12 +254,12 @@
 			TShape & currentShape = *shape;
 			int nbShape = (int)currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
-			std::vector<std::string> sample;
+			std::vector<STRING_TYPE> sample;
 			split(currentShape.info[0],' ', sample); 
 			int dimShape = (int)sample.size();
 			ASSERT_MSG_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
 	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
-			std::vector<std::string> sample2;
+			std::vector<STRING_TYPE> sample2;
 			split(sample[2],'/', sample2);
 			int nbInfo = (int)sample2.size();
 
@@ -276,13 +274,13 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices;
+					std::vector<STRING_TYPE> vertices;
 					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						Vector3& point = listePoints[convertFromString<int>(*vertice)-1];
+						Vector3& point = listePoints[convert_from_string<int>(*vertice)-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -305,15 +303,15 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices;
+					std::vector<STRING_TYPE> vertices;
 					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						std::vector<std::string> dataVert;
+						std::vector<STRING_TYPE> dataVert;
 						split(*vertice,'/', dataVert);
-						Vector3& point = listePoints[convertFromString<int>(dataVert[0])-1];
+						Vector3& point = listePoints[convert_from_string<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -322,7 +320,7 @@
 						data[3+decalage] = PACK_DATA(0.0, 1000000.0);
 						data[4+decalage] = PACK_DATA(0.0, 1000000.0);
 						data[5+decalage] = PACK_DATA(1.0, 1000000.0);
-						Vector2& mapp = uvList[convertFromString<int>(dataVert[1])-1];
+						Vector2& mapp = uvList[convert_from_string<int>(dataVert[1])-1];
 						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
 						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
 						data[8+decalage] = PACK_DATA(0.0, 1000000.0);
@@ -336,15 +334,15 @@
 				int lineNumber = 0;
 				foreach_macro(prim, currentShape.info)
 				{
-					std::vector<std::string> vertices;
+					std::vector<STRING_TYPE> vertices;
 					split(*prim,' ', vertices);
 					int verticeCounter = 0;
 					foreach_macro(vertice, vertices)
 					{
 						// Vertex position
-						std::vector<std::string> dataVert;
+						std::vector<STRING_TYPE> dataVert;
 						split(*vertice,'/', dataVert);
-						Vector3& point = listePoints[convertFromString<int>(dataVert[0])-1];
+						Vector3& point = listePoints[convert_from_string<int>(dataVert[0])-1];
 						const int decalage = verticeCounter*verticeSize+ lineSize * lineNumber;
 						data[decalage] = PACK_DATA(point.x, 1000000.0);
 						data[1+ decalage] = PACK_DATA(point.y, 1000000.0);
@@ -352,13 +350,13 @@
 						// std::cout<<"decalage "<<decalage<<std::endl;
 						// std::cout<<"Point "<<point.x<<" "<<point.y<<" "<<point.z<<" "<<std::endl;
 						// Vertex normal
-						Vector3& norm = normales[convertFromString<int>(dataVert[2])-1];
+						Vector3& norm = normales[convert_from_string<int>(dataVert[2])-1];
 						data[3+decalage] = PACK_DATA(norm.x, 1000000.0);
 						data[4+decalage] = PACK_DATA(norm.y, 1000000.0);
 						data[5+decalage] = PACK_DATA(norm.z, 1000000.0);
 						// std::cout<<"Normale "<<norm.x<<" "<<norm.y<<" "<<norm.z<<" "<<std::endl;
 
-						Vector2& mapp = uvList[convertFromString<int>(dataVert[1])-1];
+						Vector2& mapp = uvList[convert_from_string<int>(dataVert[1])-1];
 						data[6+decalage] = PACK_DATA(mapp.x, 1000000.0);
 						data[7+decalage] = PACK_DATA(mapp.y, 1000000.0);
 						data[8+decalage] = PACK_DATA(0.0, 1000000.0);

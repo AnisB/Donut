@@ -17,7 +17,7 @@
 #ifndef DONUT_SCENE_NODE
 #define DONUT_SCENE_NODE
 
-// Donut includes
+// donut includes
 #include "graphics/drawable.h"
 #include "containers/vector.h"
 #include "memory/common.h"
@@ -26,7 +26,7 @@
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Foward declaration
 	class TCollector;
@@ -35,6 +35,7 @@ namespace Donut
 	class TSceneNode : public TNode
 	{
 	public:
+		ALLOCATOR_BASED;
 		// Consrtuctor
 		TSceneNode(TAllocator& _alloc);
 

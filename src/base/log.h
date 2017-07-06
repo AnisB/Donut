@@ -24,7 +24,7 @@
 #include <iostream>
 #include <cstdio>
 
-namespace Donut
+namespace donut
 {
 	// Defining the different available log levels
 	namespace TLogLevel
@@ -46,20 +46,21 @@ namespace Donut
 		virtual ~TLoggerInterface() {}
 
 		// The virtual logging function that must be 
-		virtual void Log(TLogLevel::Type _logLevel, const char* _tag, const char* _message) = 0;
+		virtual void log(TLogLevel::Type _logLevel, const char* _tag, const char* _message) = 0;
 	};
 
 	// Access the default logger
-	TLoggerInterface* DefaultLogger();
-	void SetDefaultLogger(TLoggerInterface* _loggerInterface);
+	TLoggerInterface* default_logger();
+	void set_default_logger(TLoggerInterface* _loggerInterface);
+	void reset_logger();
 
 	// General print macro
 	#define PRINT_GENERAL(LEVEL, TAG, ENONCE)\
 	{\
 		STREAM_TYPE collector;\
 		collector<<ENONCE;\
-		Donut::TLoggerInterface* logger = Donut::DefaultLogger();\
-		logger->Log(LEVEL, TAG, collector.str().c_str());\
+		donut::TLoggerInterface* logger = donut::default_logger();\
+		logger->log(LEVEL, TAG, collector.str().c_str());\
 	}
 
 	// General purpose MACROS
@@ -70,13 +71,13 @@ namespace Donut
 		#define PRINT_ERROR(TAG, ENONCE) {}
 	#else
 		#if _DEBUG
-		#define PRINT_DEBUG(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::DEBUG, TAG, ENONCE)
+		#define PRINT_DEBUG(TAG, ENONCE) PRINT_GENERAL(donut::TLogLevel::DEBUG, TAG, ENONCE)
 		#else
 		#define PRINT_DEBUG(TAG, ENONCE) {}
 		#endif
-		#define PRINT_INFO(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::INFO, TAG, ENONCE)
-		#define PRINT_WARNING(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::WARNING, TAG, ENONCE)
-		#define PRINT_ERROR(TAG, ENONCE) PRINT_GENERAL(Donut::TLogLevel::ERROR_TAG, TAG, ENONCE)
+		#define PRINT_INFO(TAG, ENONCE) PRINT_GENERAL(donut::TLogLevel::INFO, TAG, ENONCE)
+		#define PRINT_WARNING(TAG, ENONCE) PRINT_GENERAL(donut::TLogLevel::WARNING, TAG, ENONCE)
+		#define PRINT_ERROR(TAG, ENONCE) PRINT_GENERAL(donut::TLogLevel::ERROR_TAG, TAG, ENONCE)
 	#endif
 }
 #endif

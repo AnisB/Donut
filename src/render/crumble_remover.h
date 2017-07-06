@@ -7,7 +7,7 @@
 #include "core/frustum.h"
 #include "core/box3.h"
 
-namespace Donut
+namespace donut
 {
 	// This class is able to remove request that are considered too small
 	class TCrumbleRemover : public TProcessor

@@ -19,10 +19,10 @@
 #include "graphics/geometry.h"
 #include "graphics/shadermanager.h"
 
-namespace Donut
+namespace donut
 {
 	// Constructor
-	TSimpleFX::TSimpleFX(const std::string& _vertex, const std::string& _fragment)
+	TSimpleFX::TSimpleFX(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment)
 	: TVFX(TShader(_vertex, _fragment))
 	{
 
@@ -44,7 +44,7 @@ namespace Donut
 		TVFX::Init();
 	}
 
-	void TSimpleFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TSimpleFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

@@ -24,7 +24,7 @@
 // STL include
 #include <map>
 
-namespace Donut
+namespace donut
 {
 	#define CANVAS_VERTEX_SHADER "shaders/canvas/vertex.glsl"
 	#define CANVAS_FRAGMENT_SHADER "shaders/canvas/fragment.glsl"
@@ -38,12 +38,12 @@ namespace Donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		virtual void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
+		virtual void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData) = 0;
 		// Attaching a texture to a vfx
-	 	virtual void AddTexture(TTexture* _texture, const std::string& _nameInMaterial);
-	 	virtual void AddCubeMap(TSkyboxTexture* _skybox, const std::string& _nameInMaterial);
+	 	virtual void AddTexture(TTexture* _texture, const STRING_TYPE& _nameInMaterial);
+	 	virtual void AddCubeMap(TSkyboxTexture* _skybox, const STRING_TYPE& _nameInMaterial);
 	protected:
-		void BindBufferOutput(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previous);
+		void BindBufferOutput(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previous);
 	protected:
 		// Material
 		TMaterial m_material;

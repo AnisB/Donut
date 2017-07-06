@@ -26,10 +26,11 @@
  #include "multithread/usualthreadsafeobjects.h"
  #include "graphics/drawable.h"
  #include "core/node.h"
+ #include "graphics/gpu_backend.h"
  #include <string>
  #include <vector>
 
- namespace Donut
+ namespace donut
  {
 
  	namespace TRenderingLook
@@ -80,6 +81,7 @@
 		GLFWwindow * FWindow;
 		bool FIsFullScreen;
 		IVector2 FWindowSize;
+		GPUBackendAPI m_gpuBackendApi;
 
 		// Is Rendering member
 		TThreadSafeBolean FIsRendering;

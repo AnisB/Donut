@@ -16,16 +16,18 @@
 
 // Library includes
 #include "tools/GeometryConverters.h"
+#include "base/security.h"
+#include "base/log.h"
 
 // STL includes
 #include <fstream>
 int main(int argc, char** argv)
 {
 	ASSERT_MSG(argc == 3, "Wrong number of parameters, you should specify the input an output files.");
-	std::string inputFile(argv[1]);
-	std::string outputFile(argv[2]);
-	GENERAL_INFO("Inputfile is "<<inputFile<<" Output file will be "<<outputFile);
-	Donut::ConvertWavefrontToEgg(inputFile, outputFile);
-	GENERAL_INFO("Conversion done");
+	STRING_TYPE inputFile(argv[1]);
+	STRING_TYPE outputFile(argv[2]);
+	PRINT_INFO("Conversion", "Inputfile is "<<inputFile<<" Output file will be "<<outputFile);
+	donut::ConvertWavefrontToEgg(inputFile, outputFile);
+	PRINT_INFO("Conversion","Conversion done");
 	return 0;
 }

@@ -14,13 +14,13 @@
 *
 **/
 
-// Donut includes
+// donut includes
 #include "matrix3.h"
 
 // STL includes
 #include <string.h>
 
-namespace Donut
+namespace donut
 {
 	void matrix3(Matrix3& _mat, MatrixInit::Type reset)
 	{

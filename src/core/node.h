@@ -26,7 +26,7 @@
 // STL includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
     // Foward declare
     class TCollector;
@@ -35,6 +35,7 @@ namespace Donut
 	class TNode
 	{
 	public:
+		ALLOCATOR_BASED;
 		// Consrtuctor
 		TNode(TAllocator& _alloc);
 		//Destructor

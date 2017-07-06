@@ -7,6 +7,7 @@ file(
   Source_File 
   ${LIB_PATH}/*.h
   ${LIB_PATH}/*.ih
+  ${LIB_PATH}/*.inl
   ${LIB_PATH}/*.cpp
     )
 add_library(${LIB_NAME} ${Source_File})

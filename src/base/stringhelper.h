@@ -6,17 +6,16 @@
 #include <sstream>
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// The string base and types (in case i'd like to move to wstring or whatever)
 	#define STRING_TYPE std::string
 	#define CHAR_TYPE char
 	#define STREAM_TYPE std::stringstream
 
-
 	// Generic converter to string
 	template <typename T>
-	STRING_TYPE convertToString(const T& _value)
+	STRING_TYPE convert_to_string(const T& _value)
 	{
 		STREAM_TYPE stream;
 		stream << _value;
@@ -25,7 +24,7 @@ namespace Donut
 
 	// Generic converter from string
 	template <typename T>
-	T convertFromString(const STRING_TYPE& _string)
+	T convert_from_string(const STRING_TYPE& _string)
 	{
 		STREAM_TYPE stream(_string);
 		T val;
@@ -34,10 +33,10 @@ namespace Donut
 	}
 
 	// Takes a string and removes multiple spaces from it
-	void removeMultSpace(STRING_TYPE& parString);
+	void remove_multiple_spaces(STRING_TYPE& parString);
 
 	// Splits parstring with parSeparator
-	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out);
+	void split(const STRING_TYPE& parString, char parSeparator, std::vector<STRING_TYPE>& _out);
 }
 
 #endif // BASE_STRING_HELPER_H

@@ -15,7 +15,6 @@
  **/
 
 // Library includes
-#include "base/common.h"
 #include "resourcemanager.h"
 #include "resource/common.h"
 #include "tools/fileloader.h"
@@ -35,7 +34,7 @@
 
 
 
-namespace Donut
+namespace donut
 {
     TToppingLoader::TToppingLoader()
     {
@@ -58,25 +57,25 @@ namespace Donut
     void TToppingLoader::LoadToppings()
     {   
 		// Fetch the root asset directory
-        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
 		
 		// Fetch the asset directory to parse
-        std::string toppingDirectory(rootAssetDirectory + "/common/toppings");
+        STRING_TYPE toppingDirectory(rootAssetDirectory + "/common/toppings");
 
 		// Look for all the topping files in the target directory 
-        std::vector<std::string> toppingFiles;
+        std::vector<STRING_TYPE> toppingFiles;
         GetExtensionFileList(toppingDirectory, ".topping", toppingFiles);
 
-		// Create a descriptor for each
-        foreach_macro(topping, toppingFiles)
+		// Create a descriptor for
+        for(auto& topping : toppingFiles)
         {
 			// Parse the descriptor
             TToppingDescriptor newTopping;
-            ParseToppingFile(*topping, newTopping);
+            ParseToppingFile(topping, newTopping);
 
 			// Append it
 			TOPPING_GUID guid = InsertTopping(newTopping);
-            RESOURCE_INFO("Topping "<< newTopping.name<<" file: "<< *topping);
+            RESOURCE_INFO("Topping "<< newTopping.name<<" file: "<< topping);
         }
     }
 
@@ -90,7 +89,7 @@ namespace Donut
 		return toppingIndex;
 	}
 
-    TOPPING_GUID TToppingLoader::FetchMaterial(const std::string& _toppingFile)
+    TOPPING_GUID TToppingLoader::FetchMaterial(const STRING_TYPE& _toppingFile)
     {
         // Log the request
         RESOURCE_DEBUG(_toppingFile<<" is requested");
@@ -121,16 +120,16 @@ namespace Donut
         TMaterial& targetMaterial = _targetTopping.data;
 
         // Request all the textures that this material requires
-        foreach_macro(tex, targetMaterial.textures)
+        for(auto& tex : targetMaterial.textures)
         {
-            TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex->file);
-            tex->texID = texPtr->FID;
+            TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex.file);
+			tex.texID = texPtr->FID;
         }
 
-        foreach_macro(brdfIT, targetMaterial.brfds)
+        for(auto& brdfIT : targetMaterial.brfds)
         {
-            TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT->file);
-            brdf->id = brdfIT->texID;
+            TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT.file);
+			brdfIT.texID = brdf->id;
         }
 
         // Load the shader into memory

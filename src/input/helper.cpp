@@ -14,14 +14,12 @@
  *
  **/
 
-// Donut includes
+// donut includes
 #include "input/common.h"
 #include "helper.h"
 #include "defaultinputmanager.h"
 
-#include <base/common.h>
-
-namespace Donut
+namespace donut
 {
 	// The library input manager
  	static TInputManager* InManager = new TDefaultInputManager();

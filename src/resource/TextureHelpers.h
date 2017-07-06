@@ -21,20 +21,20 @@
 
 #include "Texture.h"
  
-namespace Donut
+namespace donut
 {
 	namespace TextureHelpers
 	{
 		// Img helpers
-	    std::string ImgTypeToString(TImgType::Type parType);
-		TImgType::Type GetImgType(const std::string & parImg);
+	    STRING_TYPE ImgTypeToString(TImgType::Type parType);
+		TImgType::Type GetImgType(const STRING_TYPE & parImg);
 
 		// Texture helpers
-	 	TTexture * LoadTexture(const std::string & parImg);
+	 	TTexture * LoadTexture(const STRING_TYPE & parImg);
 	 	void CreateTexture(TTexture* parTex);
 
 	 	// Skybox helpers
-	 	TSkyboxTexture* LoadSkybox(const std::string& _location, TImgType::Type _type);
+	 	TSkyboxTexture* LoadSkybox(const STRING_TYPE& _location, TImgType::Type _type);
 	 	void CreateSkybox(TSkyboxTexture* _skyboxTex);
 
 	 	// Other
@@ -45,8 +45,8 @@ namespace Donut
 	 	void BindToCubeMap(GLuint parType, TTexture* parTexture);
 
 	 	// GPU to CPU methods
-	 	void TakeScreenShot(const std::string& parFileName);
-	    void SaveTextureToFile(const std::string& parFileName, const TTexture * parTexture);
+	 	void TakeScreenShot(const STRING_TYPE& parFileName);
+	    void SaveTextureToFile(const STRING_TYPE& parFileName, const TTexture * parTexture);
 	}
 }
 

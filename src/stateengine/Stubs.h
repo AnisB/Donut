@@ -17,7 +17,7 @@
 #ifndef STATE_ENGINE_STUBS
 #define STATE_ENGINE_STUBS
 
- namespace Donut
+ namespace donut
  {
  	void NoCallBack()
  	{

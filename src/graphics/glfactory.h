@@ -18,15 +18,16 @@
 #define GL_FACTORY_GRAPHICS_DONUT
 
 //Library includes
-#include "base/common.h"
 #include "graphics/common.h"
 #include "graphics/geometry.h"
 #include "graphics/shader.h"
 #include "graphics/shaderdata.h"
+#include "base/platform.h"
+
 // STL includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Generic purpose functions
 	bool CheckGLState(bool _clearState = false);
@@ -53,7 +54,7 @@ namespace Donut
 	// Creates a geometry into the GPU
 	TGeometry* CreateGeometry(const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
-#if _DEBUG
+#if 0
 	#define GL_API_CHECK_START() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the start of "<<FUNCTION_NAME)}
 	#define GL_API_CHECK_MIDDLE() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the middle of "<<FUNCTION_NAME)}
 	#define GL_API_CHECK_END() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the end of "<<FUNCTION_NAME)}

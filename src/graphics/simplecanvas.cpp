@@ -18,7 +18,7 @@
 #include "simplecanvas.h"
 #include "graphics/glfactory.h"
 
-namespace Donut
+namespace donut
 {
 	// Creation
 	TSimpleCanvas::TSimpleCanvas(int _width, int _height)

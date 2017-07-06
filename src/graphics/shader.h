@@ -25,7 +25,7 @@
 // STL includes
 #include <vector>
 
- namespace Donut
+ namespace donut
  {
  	// Basic shader (this does mean that we do not replace the default gl pipeline)
 	#define BASIC_SHADER -1
@@ -46,8 +46,8 @@
 		
 		// Constructors
 		TShader();
-		TShader(const std::string& _vertex, const std::string& _fragment);
-		TShader(const std::string& _vertex, const std::string& _geometry, const std::string& _fragment);
+		TShader(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment);
+		TShader(const STRING_TYPE& _vertex, const STRING_TYPE& _geometry, const STRING_TYPE& _fragment);
 		TShader(const TShaderFileID& _vertex, const TShaderFileID& _fragment);
 		TShader(const TShader& _shader);
 

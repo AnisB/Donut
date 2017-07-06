@@ -15,7 +15,7 @@
  **/
 #include "geometry.h"
 
-namespace Donut
+namespace donut
 {
     void TGeometry::Draw(bool _isTess) const
     {

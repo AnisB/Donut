@@ -25,12 +25,12 @@
 #include <string.h>
 #include <vector>
 
-namespace Donut
+namespace donut
 {
     struct TBuildIn
     {
         TShaderData::Type dataType;
-        std::string name;
+        STRING_TYPE name;
     };
 
 
@@ -48,8 +48,8 @@ namespace Donut
 	struct TBRDFInfo
 	{
 		int offset;
-		std::string name;
-		std::string file;
+		STRING_TYPE name;
+		STRING_TYPE file;
 		GLuint texID;
 		TBRDFInfo()
 		{
@@ -69,8 +69,8 @@ namespace Donut
     struct TTextureInfo
     {
         int offset;
-        std::string name;
-        std::string file;
+        STRING_TYPE name;
+        STRING_TYPE file;
         GLuint texID;
         TTextureNature::Type type;
         TTextureInfo()
@@ -91,8 +91,8 @@ namespace Donut
     struct TCubeMapInfo
     {
         int offset;
-        std::string name;
-        std::string path;
+        STRING_TYPE name;
+        STRING_TYPE path;
         GLuint cmID;
         TCubeMapInfo()
         {

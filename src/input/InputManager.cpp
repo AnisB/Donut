@@ -16,7 +16,7 @@
 
 #include "inputmanager.h"
  
-namespace Donut
+namespace donut
 {
 	TInputManager::TInputManager()
 	{

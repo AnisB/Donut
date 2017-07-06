@@ -8,16 +8,16 @@
 #include "resource/resourcemanager.h"
 #include "tools/fileloader.h"
 
-namespace Donut
+namespace donut
 {
 	// Handle a light node from its descreiptor
 	TLight* HandleLightNode(const TLightDescriptor& _lightDesc)
 	{
 		TLight* newLight = new TLight();
-		newLight->SetPosition(convertFromString<Vector3>(_lightDesc.pos));
-		newLight->SetDiffuse(convertFromString<Vector4>(_lightDesc.diff));
-		newLight->SetSpecular(convertFromString<Vector4>(_lightDesc.spec));
-		newLight->SetRay(convertFromString<float>(_lightDesc.ray));
+		newLight->SetPosition(convert_from_string<Vector3>(_lightDesc.pos));
+		newLight->SetDiffuse(convert_from_string<Vector4>(_lightDesc.diff));
+		newLight->SetSpecular(convert_from_string<Vector4>(_lightDesc.spec));
+		newLight->SetRay(convert_from_string<float>(_lightDesc.ray));
 		return newLight;
 	}
 
@@ -47,21 +47,20 @@ namespace Donut
 		// Instanciate the right noide type
 		if(_node.scenenode)
 		{
-			node = new TSceneNode(*CommonAllocator());
+			node = new TSceneNode(*common_allocator());
 		}
 		else
 		{
-			node = new TNode(*CommonAllocator());
+			node = new TNode(*common_allocator());
 		}
 
 		// Setting the matrix transform
-		node->SetTransformationMatrix(convertFromString<Matrix4>(_node.tm));
+		node->SetTransformationMatrix(convert_from_string<Matrix4>(_node.tm));
 
 		// Setting its progeny
-		foreach_macro(nodeIT, _node.nodes)
+		for(auto& node_element : _node.nodes)
 		{
-			const TNodeDescriptor& currentNodeDescriptor = **nodeIT;
-			node->AttachChild(HandleNode(currentNodeDescriptor));
+			node->AttachChild(HandleNode(*node_element));
 		}
 
 		// If it is a scene node, make sure models are handled
@@ -69,11 +68,10 @@ namespace Donut
 		{
 			// Downcast it to a scene node
 			TSceneNode* sceneNode = static_cast<TSceneNode*>(node);
-			foreach_macro(sugarIT, _node.models)
+			for(const auto& sugar_name : _node.models)
 			{
-				const STRING_TYPE& sugarName = *sugarIT;
-				TSugarInstance* sugarInstance = CreateSugarInstance(sugarName);
-				sceneNode->AppendDrawable(sugarInstance);
+				TSugarInstance* sugar_instance = CreateSugarInstance(sugar_name);
+				sceneNode->AppendDrawable(sugar_instance);
 			}
 		}
 
@@ -102,11 +100,10 @@ namespace Donut
 
 		// Handle the lights
 		const std::vector<TLightDescriptor>& lights = _desc.illumination.lights;
-		foreach_macro(light, lights)
+		for(const auto& light_descriptor : lights)
 		{
-			const TLightDescriptor& currentLightDescriptor = *light;
-			TLight* newLight = HandleLightNode(currentLightDescriptor);
-			flour->lights.push_back(newLight);
+			TLight* new_light = HandleLightNode(light_descriptor);
+			flour->lights.push_back(new_light);
 		}
 
 		// If a skybox was defined, handle it

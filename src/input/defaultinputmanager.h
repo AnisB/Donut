@@ -16,14 +16,14 @@
 #ifndef DEFAULT_INPUT_MANAGER_DONUT 
 #define DEFAULT_INPUT_MANAGER_DONUT
 
-// Donut includes
+// donut includes
 #include "inputManager.h"
 #include "core/camera.h"
 
 // STL includes
 #include <map>
 
-namespace Donut
+namespace donut
 {
 	class TDefaultInputManager : public TInputManager
 	{

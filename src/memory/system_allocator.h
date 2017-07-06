@@ -7,7 +7,7 @@
 // External includes
 #include <unordered_set>
 
-namespace Donut
+namespace donut
 {
 	class TSystemAllocator : public TAllocator
 	{
@@ -20,10 +20,6 @@ namespace Donut
 
 		// Frees a memory spot given
 		virtual void deallocate(void* _ptr);
-
-		// Function that aswers to the question, has this bloc
-		// been allocated by this allocator ?
-		virtual bool owns(void* _ptr);
 	};
 }
 

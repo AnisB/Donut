@@ -16,7 +16,6 @@
 
 // Library includes
 #include "pipelineloader.h"
-#include "base/common.h"
 #include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
 
@@ -34,7 +33,7 @@
 #include <errno.h>
 #include <fstream>
 
-namespace Donut
+namespace donut
 {
     TPipelineLoader::TPipelineLoader()
     {
@@ -57,21 +56,21 @@ namespace Donut
 
     void TPipelineLoader::LoadPipelines()
     {   
-        const std::string& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-        std::string pipelineFolder(rootAssetDirectory + "/common/pipelines");
+        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+        STRING_TYPE pipelineFolder(rootAssetDirectory + "/common/pipelines");
 
-        std::vector<std::string> pipelineFiles;
+        std::vector<STRING_TYPE> pipelineFiles;
         GetExtensionFileList(pipelineFolder, ".pipeline", pipelineFiles);
-        foreach_macro(pipeline, pipelineFiles)
+        for(auto& pipeline : pipelineFiles)
         {
             TPipelineDescriptor newPipeline;
-            ParsePipelineFile(*pipeline, newPipeline);
-            RESOURCE_INFO("Pipeline "<< newPipeline.name<<" file: "<< *pipeline);
+            ParsePipelineFile(pipeline, newPipeline);
+            RESOURCE_INFO("Pipeline "<< newPipeline.name<<" file: "<< pipeline);
             m_pipelines[newPipeline.name] = newPipeline;
         }
     }
    
-    const TPipelineDescriptor& TPipelineLoader::FetchPipeline(const std::string& _pipelineName)
+    const TPipelineDescriptor& TPipelineLoader::FetchPipeline(const STRING_TYPE& _pipelineName)
     {
         RESOURCE_DEBUG(_pipelineName<<" is requested");
         auto ite = m_pipelines.find(_pipelineName);

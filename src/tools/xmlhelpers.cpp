@@ -1,9 +1,8 @@
 // Library includes
 #include "xmlhelpers.h"
 #include "fileloader.h"
-#include "base/common.h"
 
-namespace Donut
+namespace donut
 {
     // Shader data
     #define VERTEX_SHADER_NODE_TOKEN "vertex"

@@ -16,13 +16,13 @@
 
 
  #include "drawable.h"
- #include "Base/Common.h"
  #include "ShaderManager.h"
 
-namespace Donut
+namespace donut
 {
 	TDrawable::TDrawable()
 	{
+		// Nothing to do
 	}
 
 	TDrawable::~TDrawable()

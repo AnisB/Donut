@@ -18,12 +18,13 @@
 #include <Engine/Engine.h>
 #include <graphics/gl_backend.h>
 
+using namespace donut;
 int main()
 {
-	Donut::TEngine * engine = new Donut::TEngine();
+	TEngine * engine = new TEngine();
 
 	// Context info
-	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	TGraphicsSettings newContext = GL::default_settings();
 	newContext.window_name = "testRenderer";
 
 	// Lanching the test

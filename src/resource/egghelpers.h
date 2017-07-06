@@ -4,7 +4,7 @@
 // Library includes
 #include "common.h"
 
-namespace Donut
+namespace donut
 {
 	// Foward declare
 	struct TEgg;

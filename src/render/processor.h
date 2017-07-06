@@ -4,7 +4,7 @@
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Foward declare
 	struct TRenderRequest;

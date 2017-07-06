@@ -1,11 +1,10 @@
 // Library include
-#include "base/macro.h"
 #include "collector.h"
 #include "graphics/material.h"
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
 
-namespace Donut
+namespace donut
 {
 	TCollector::TCollector()
 	{

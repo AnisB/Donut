@@ -1,21 +1,26 @@
 // Library includes
 #include "log.h"
-#include "baselogger.h"
+#include "base_logger.h"
 
-namespace Donut
+namespace donut
 {
 	// This the default logger we provide for the user
 	TBaseLogger __donutDefaultLogger;
 	TLoggerInterface* defaultLogger = &__donutDefaultLogger;
 
 	// Access the default logger
-	TLoggerInterface* DefaultLogger()
+	TLoggerInterface* default_logger()
 	{
 		return defaultLogger;
 	}
 
-	void SetDefaultLogger(TLoggerInterface* _loggerInterface)
+	void set_default_logger(TLoggerInterface* _loggerInterface)
 	{
 		defaultLogger = _loggerInterface;
+	}
+
+	void reset_logger()
+	{
+		defaultLogger = &__donutDefaultLogger;
 	}
 }

@@ -18,7 +18,6 @@
 #define DONUT_PIPELINE_LOADER
 
 // Library includes
-#include "base/common.h"
 #include "graphics/shaderdata.h"
 #include "recipe/pipelinedescriptor.h"
 
@@ -26,7 +25,7 @@
 #include <vector>
 #include <map>
 
-namespace Donut
+namespace donut
 {
     // Class that manages the rendering pipelines
     class TPipelineLoader : public Singleton<TPipelineLoader>
@@ -41,14 +40,14 @@ namespace Donut
 
             // This function searches for a given sugar file and determines either or 
             // not it has been found and returns it if it has.
-            const TPipelineDescriptor& FetchPipeline(const std::string& _pipelineName);
+            const TPipelineDescriptor& FetchPipeline(const STRING_TYPE& _pipelineName);
         protected:
             // Parses the sugar sub_directory
             void LoadPipelines();
 
         protected:
-            std::string m_pipelineFolder;
-            std::map<std::string, TPipelineDescriptor> m_pipelines;
+            STRING_TYPE m_pipelineFolder;
+            std::map<STRING_TYPE, TPipelineDescriptor> m_pipelines;
     };
 }
 #endif // DONUT_PIPELINE_LOADER

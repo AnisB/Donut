@@ -18,14 +18,13 @@
 #include "Mesh.h"
 #include "resource/resourcemanager.h"
 #include "resource/sugarloader.h"
-#include "Base/Common.h"
 #include "MultiThread/Defines.h"
 
 // External includes
 #include <string.h>
 
 
-namespace Donut
+namespace donut
 {
 	TMesh::TMesh(TOPPING_GUID _toppingGUID, GEOMETRY_GUID _geometry)
  	: TDrawable()

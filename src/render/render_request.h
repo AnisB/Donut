@@ -9,7 +9,7 @@
 // External includes
 #include <map>
 
-namespace Donut
+namespace donut
 {
 	// This structure encapsulates everything that is required to draw a geometry with a material in a given scene
 	struct TRenderRequest
@@ -23,7 +23,7 @@ namespace Donut
 	};
 
 	// Processed a render request (draw it to the screen)
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniformHandler>& _uniforms);
+	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniformHandler>& _uniforms);
 }
 
 #endif // RENDER_REQUEST_H

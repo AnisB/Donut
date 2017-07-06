@@ -16,7 +16,7 @@
 #ifndef BUTTER_TYPES_H
 #define BUTTER_TYPES_H
 
-namespace Donut
+namespace donut
 {
 	// Vector types
 	// doubles

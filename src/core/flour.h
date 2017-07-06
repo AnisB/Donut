@@ -24,12 +24,11 @@
 #include "graphics/light.h"
 #include "graphics/sphericalharmonics.h"
 #include "resource/types.h"
-#include "base/macro.h"
 
 // STL includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Foward declare
 	class TMesh;
@@ -51,9 +50,10 @@ namespace Donut
 			if(root)
 				delete root;
 
-			foreach_macro(light, lights)
+			for (auto light : lights)
 			{
-				delete *light;
+				delete light;
+
 			}
 
 			if(sh)

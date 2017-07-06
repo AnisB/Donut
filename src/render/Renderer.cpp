@@ -17,23 +17,14 @@
 
 #include "Renderer.h"
 
-#include "Base/Common.h"
 #include "Input/helper.h"
-#include "Base/Macro.h"
 #include "graphics/glfactory.h"
-#include "graphics/gl_backend.h"
  
 #include <stdlib.h>
 #include <stdio.h>
  
- namespace Donut
+ namespace donut
  {
-
-	static void error_callback(int error, const char* description)
-	{
-	    GRAPHICS_ERROR(error<<" "<<description);
-	}
-
 	// Class TRenderer
  	TRenderer::TRenderer()
  	: FWindowSize()
@@ -54,13 +45,12 @@
  		if(!FInitDone)
  		{
 			// Fetch the GL rendering backend
-			GPUBackendAPI gl_backend;
-			build_rendering_backend(RenderingBackEnd::OPENGL, gl_backend);
+			build_rendering_backend(RenderingBackEnd::OPENGL, m_gpuBackendApi);
 
 			// Init the render backend
-			gl_backend.init_render_system();
+			m_gpuBackendApi.init_render_system();
 			// Create a window
-			FWindow = (GLFWwindow*) gl_backend.render_window(gl_backend.create_render_environment(parContext));
+			FWindow = (GLFWwindow*)m_gpuBackendApi.render_window(m_gpuBackendApi.create_render_environment(parContext));
 			FIsRendering.SetValue(true);
 			FInitDone = true;
  		}
@@ -75,11 +65,13 @@
  	
  	void TRenderer::DestroyRenderWindow()
  	{
- 		GRAPHICS_DEBUG("Destroying window.");	
- 		ASSERT(FWindow != NULL);
- 		glfwTerminate();
- 		FWindow = NULL;
- 		FInitDone = false;
+		if (FInitDone)
+		{
+			GRAPHICS_DEBUG("Destroying window.");
+			m_gpuBackendApi.destroy_render_environment((uint64_t)FWindow);
+			m_gpuBackendApi.shutdown_render_system();
+			FInitDone = false;
+		}
  	}	
 
  	void TRenderer::HideRenderWindow()

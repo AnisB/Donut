@@ -7,7 +7,7 @@
 #include "rapidxml.hpp"
 
 
-namespace Donut
+namespace donut
 {
 	// PIPELINE TOKENS
     #define PIPELINE_NODE_TOKEN "pipeline"
@@ -28,7 +28,7 @@ namespace Donut
     #define SHADER_NODE_TYPE_TOKEN "shader"
     #define TEXTURES_NODE_TYPE_TOKEN "textures"
 
-    TVFXTag::Type GetVFXTag(const std::string& _tag)
+    TVFXTag::Type GetVFXTag(const STRING_TYPE& _tag)
     {
         if(_tag == "simplefx")
         {
@@ -52,7 +52,7 @@ namespace Donut
         } 
     }
 
-    TCanvasTag::Type GetCanvasTag(const std::string& _tag)
+    TCanvasTag::Type GetCanvasTag(const STRING_TYPE& _tag)
     {
         if(_tag == "empty")
         {
@@ -73,7 +73,7 @@ namespace Donut
         } 
     }
 
-    TPassTag::Type GetPassTag(const std::string& _tag)
+    TPassTag::Type GetPassTag(const STRING_TYPE& _tag)
     {
         if(_tag == "geometry")
         {
@@ -89,7 +89,7 @@ namespace Donut
         } 
     }
 
-    void ParsePipelineFile(const std::string& _pipelineFileName, TPipelineDescriptor& _pipeline)
+    void ParsePipelineFile(const STRING_TYPE& _pipelineFileName, TPipelineDescriptor& _pipeline)
     {
         // reading the text file
         std::vector<char> buffer;

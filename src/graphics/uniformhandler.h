@@ -23,7 +23,7 @@
 // STL includes
 #include <string>
 
-namespace Donut
+namespace donut
 {
 	namespace TShaderData
 	{
@@ -42,7 +42,7 @@ namespace Donut
 	struct TUniformGeneric
 	{
 		// Data constructor
-		TUniformGeneric(TShaderData::Type _type, const std::string& _name)
+		TUniformGeneric(TShaderData::Type _type, const STRING_TYPE& _name)
 		: type(_type)
 		, name (_name)
 		{
@@ -62,13 +62,13 @@ namespace Donut
 		virtual void Inject(const TShader& _shader) = 0;
 		// Data
 	    TShaderData::Type type;
-		std::string name;
+		STRING_TYPE name;
 	};
 
 	template <typename T>
 	struct TUniform : public TUniformGeneric
 	{
-		TUniform(TShaderData::Type _type, const std::string& _name, const T& _value)
+		TUniform(TShaderData::Type _type, const STRING_TYPE& _name, const T& _value)
 		: TUniformGeneric(_type, _name)
 		, value(_value)
 		{
@@ -104,7 +104,7 @@ namespace Donut
 
 		// Setting value
 		template <typename T>
-		void SetValue(TShaderData::Type _type, const std::string& _name, const T& _value);
+		void SetValue(TShaderData::Type _type, const STRING_TYPE& _name, const T& _value);
 		
 		template <typename T>
 		T& GetValue();
@@ -120,7 +120,7 @@ namespace Donut
 	};
 
 	template <typename T>
-	void TUniformHandler::SetValue(TShaderData::Type _type, const std::string& _name, const T& _value)
+	void TUniformHandler::SetValue(TShaderData::Type _type, const STRING_TYPE& _name, const T& _value)
 	{
 		if(m_uniform)
 		{

@@ -22,7 +22,7 @@
 // STL inlcudes
 #include <math.h>
 
-namespace Donut 
+namespace donut 
 {
 	// Cst
 	Camera::Camera()
@@ -102,7 +102,7 @@ namespace Donut
 		m_projectionView = m_projection * m_viewMatrix;
 	}
 
-	void Camera::AppendUniforms(std::map<std::string, TUniformHandler>& _uniforms)
+	void Camera::AppendUniforms(std::map<STRING_TYPE, TUniformHandler>& _uniforms)
 	{
 		// Injecting view matrix
 		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", m_viewMatrix);

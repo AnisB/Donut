@@ -16,12 +16,10 @@
 
 // Library includes
 #include "shadermanager.h"
-#include "base/common.h"
 #include "graphics/common.h"
 #include "graphics/material.h"
 #include "resource/resourcemanager.h"
 #include "graphics/glfactory.h"
-#include "base/macro.h"
 #include "butter/stream.h"
 #include "butter/matrix3.h"
 
@@ -30,9 +28,9 @@
 // STL includes
 #include <stdlib.h>
 
-namespace Donut 
+namespace donut 
 {
-	void CheckShader(GLuint _shaderID, const std::string& _shaderFileName)
+	void CheckShader(GLuint _shaderID, const STRING_TYPE& _shaderFileName)
 	{
 		// flags
 	    GLint result = GL_FALSE;
@@ -87,9 +85,9 @@ namespace Donut
  		GL_API_CHECK_START();
 
 		// Here we should delete all the shaders that where created
-		foreach_macro(shader, FPrograms)
+		for(auto& shader : FPrograms)
 		{
-			glDeleteProgram(shader->FProgramID);
+			glDeleteProgram(shader.FProgramID);
 		}
 
  		GL_API_CHECK_END();
@@ -101,7 +99,7 @@ namespace Donut
 
 		// We make shure the shader was not created before
 		GRAPHICS_DEBUG("Fetching shader kernel");
-		tryget(result, FPrograms, _shader);
+		auto& result = FPrograms.find(_shader);
 		if(result != FPrograms.end())
 		{
 			GRAPHICS_DEBUG("Already created shader kernel");
@@ -126,9 +124,9 @@ namespace Donut
 		char shaderFlags = 0;
 		if(_shader.FVertexShader!=BASIC_SHADER)
 		{
-			std::string vsFile;
+			STRING_TYPE vsFile;
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			const std::string& vertexShaderFileName = shaderFileHandler.GetShaderFile(_shader.FVertexShader);
+			const STRING_TYPE& vertexShaderFileName = shaderFileHandler.GetShaderFile(_shader.FVertexShader);
 			GRAPHICS_DEBUG(vertexShaderFileName);
             ReadFile(ResourceManager::Instance().RelativePath(vertexShaderFileName).c_str(),vsFile);
 			const char * vsFile_ptr = vsFile.c_str();
@@ -141,8 +139,8 @@ namespace Donut
 		}
 		if(_shader.FTessControl!=BASIC_SHADER)
 		{
-			std::string tcsFile;
-			const std::string& tessControlShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessControl);
+			STRING_TYPE tcsFile;
+			const STRING_TYPE& tessControlShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessControl);
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
             ReadFile(ResourceManager::Instance().RelativePath(tessControlShaderFileName).c_str(),tcsFile);
 			const char * tcsFile_ptr = tcsFile.c_str();
@@ -156,8 +154,8 @@ namespace Donut
 
 		if(_shader.FTessEval!=BASIC_SHADER)
 		{
-			std::string tesFile;
-			const std::string& tessEvalShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessEval);
+			STRING_TYPE tesFile;
+			const STRING_TYPE& tessEvalShaderFileName = shaderFileHandler.GetShaderFile(_shader.FTessEval);
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
             ReadFile(ResourceManager::Instance().RelativePath(tessEvalShaderFileName).c_str(),tesFile);
 			const char * tesFile_ptr = tesFile.c_str();
@@ -171,8 +169,8 @@ namespace Donut
 
 		if(_shader.FGeometryShader!=BASIC_SHADER)
 		{
-			std::string gsFile;
-			const std::string& geometryShaderFileName = shaderFileHandler.GetShaderFile(_shader.FGeometryShader);
+			STRING_TYPE gsFile;
+			const STRING_TYPE& geometryShaderFileName = shaderFileHandler.GetShaderFile(_shader.FGeometryShader);
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
             ReadFile(ResourceManager::Instance().RelativePath(geometryShaderFileName).c_str(),gsFile);
 			const char * gsFile_ptr = gsFile.c_str();
@@ -184,8 +182,8 @@ namespace Donut
 		}
 		if(_shader.FFragmentShader!=BASIC_SHADER)
 		{
-			std::string fsFile;
-			const std::string& fragmentShaderFileName = shaderFileHandler.GetShaderFile(_shader.FFragmentShader);
+			STRING_TYPE fsFile;
+			const STRING_TYPE& fragmentShaderFileName = shaderFileHandler.GetShaderFile(_shader.FFragmentShader);
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
             ReadFile(ResourceManager::Instance().RelativePath(fragmentShaderFileName).c_str(), fsFile);
 			const char * fsFile_ptr = fsFile.c_str();
@@ -289,14 +287,14 @@ namespace Donut
 
 	// Injections
 	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Vector3& parValue, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const Vector3& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 		GL_API_CHECK_END();
 	}
 	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Vector4& _value, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const Vector4& _value, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
@@ -304,7 +302,7 @@ namespace Donut
 	}
 	
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const int& _value, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const int& _value, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 		GLuint location = glGetUniformLocation(parProgram.FProgramID, parName.c_str());
@@ -313,7 +311,7 @@ namespace Donut
 	}
 
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const float& _value, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const float& _value, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform1f( glGetUniformLocation(parProgram.FProgramID, parName.c_str()), _value);
@@ -321,7 +319,7 @@ namespace Donut
 	}
 
 	template <>
-	void ShaderManager::InjectV(const TShader& parProgram, const float* _values, int _nbValues, const std::string& parName)
+	void ShaderManager::InjectV(const TShader& parProgram, const float* _values, int _nbValues, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform1fv( glGetUniformLocation(parProgram.FProgramID, parName.c_str()),_nbValues, _values);
@@ -329,7 +327,7 @@ namespace Donut
 	}
 
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 		float mat[16];
@@ -339,7 +337,7 @@ namespace Donut
 	}
 
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Matrix3& parValue, const std::string& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const Matrix3& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 		float mat[9];
@@ -348,7 +346,7 @@ namespace Donut
 		GL_API_CHECK_END();
 	}
 
-	void ShaderManager::InjectTex(const TShader& parProgram, GLuint _textureID, const std::string& parName, GLuint _spot)
+	void ShaderManager::InjectTex(const TShader& parProgram, GLuint _textureID, const STRING_TYPE& parName, GLuint _spot)
 	{
 		GL_API_CHECK_START();
 	    BindTex(_textureID, _spot);
@@ -358,7 +356,7 @@ namespace Donut
 		GL_API_CHECK_END();
 	}
 
-	void ShaderManager::InjectCubeMap(const TShader& parProgram, GLuint _textureID, const std::string& parName, GLuint _spot)
+	void ShaderManager::InjectCubeMap(const TShader& parProgram, GLuint _textureID, const STRING_TYPE& parName, GLuint _spot)
 	{
 		GL_API_CHECK_START();
 	    BindCubeMap(_textureID, _spot);
@@ -370,13 +368,13 @@ namespace Donut
 
 	void ShaderManager::InjectMaterial(const TShader& _shader, const TMaterial& _material)
 	{
-		foreach_macro(uni, _material.uniforms)
+		for(auto& uni : _material.uniforms)
 		{
-			uni->Inject(_shader);
+			uni.Inject(_shader);
 		}
-		foreach_macro(tex, _material.textures)
+		for(auto& tex : _material.textures)
 		{
-			ShaderManager::Instance().InjectTex(_shader, tex->texID, tex->name, tex->offset);
+			ShaderManager::Instance().InjectTex(_shader, tex.texID, tex.name, tex.offset);
 		}
 	}
 }

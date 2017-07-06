@@ -20,7 +20,7 @@
 #include "graphics/shadermanager.h"
 #include "resource/resourcemanager.h"
 
-namespace Donut
+namespace donut
 {
 	// Constructor
 	TSkyboxFX::TSkyboxFX(const TShader& _shader)
@@ -63,7 +63,7 @@ namespace Donut
 		m_camera = _camera;
 	}
 
-	void TSkyboxFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TSkyboxFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

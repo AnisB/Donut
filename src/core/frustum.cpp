@@ -7,7 +7,7 @@
 // External includes
 #include <algorithm>
 
-namespace Donut
+namespace donut
 {
 	// Build a plane's data from 3 points
 	Vector4 BuildPlane(const Vector3& _a, const Vector3& _b, const Vector3& _c)

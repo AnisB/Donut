@@ -16,7 +16,7 @@
 
 #include <math.h>
 
-namespace Donut
+namespace donut
 {
 
 	// Constructors;

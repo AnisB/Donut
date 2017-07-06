@@ -16,11 +16,9 @@
 
 #include "vfxpass.h"
 #include "graphics/common.h"
-#include "base/Common.h"
-#include "Base/Macro.h"
 #include "resource/resourcemanager.h"
 
- namespace Donut
+ namespace donut
  {
  	//CLASS IMPLEMENTATION
 	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx)

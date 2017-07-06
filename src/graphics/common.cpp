@@ -1,8 +1,8 @@
 // Library includes
 #include "common.h"
-#include "memory/systemallocator.h"
+#include "memory/system_allocator.h"
 
-namespace Donut
+namespace donut
 {
 	static TSystemAllocator allocator;
 

@@ -1,23 +1,24 @@
 // Library include
 #include "GeometryConverters.h"
 #include "base/stringhelper.h"
+#include "base/log.h"
+#include "base/security.h"
 #include "butter/vector3.h"
 #include "resource/egg.h"
 
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
-
 	struct TShape
 	{
-		std::vector<std::string> info;
+		std::vector<STRING_TYPE> info;
 	};
 
 	TEgg* CreateEggFromWavefront(const STRING_TYPE& _wavefrontFIle)
 	{
-		GENERAL_INFO("Trying to load Wavefront: " << _wavefrontFIle);
+		PRINT_ERROR("Tools", "Trying to load Wavefront: " << _wavefrontFIle);
 		// Liste des vertices
 		std::vector<Vector3> listePoints;
 		// Liste des infos par point
@@ -34,7 +35,7 @@ namespace Donut
 			ASSERT_FAIL_MSG("Cannot find _model obj: " << _wavefrontFIle);
 			return NULL;
 		}
-		std::string line;
+		STRING_TYPE line;
 		while (getline(in, line))
 		{
 			if (line.substr(0, 2) == "o ")
@@ -44,7 +45,7 @@ namespace Donut
 					if (line.substr(0, 2) == "v ")
 					{
 						// INPUT_DEBUG("Nouveau vertice.");
-						std::stringstream s(line.substr(2));
+						STREAM_TYPE s(line.substr(2));
 						Vector3 v;
 						s >> v.x;
 						s >> v.y;
@@ -94,18 +95,17 @@ namespace Donut
 			}
 		}
 		TEgg * newModel = new TEgg();
-		unsigned int* indices;
 
-		foreach_macro(shape, shapes)
+		for (const auto& shape : shapes)
 		{
-			TShape & currentShape = *shape;
+			const TShape & currentShape = shape;
 			int nbShape = (int)currentShape.info.size();
 			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modele, une ligne commencant par f error");
-			std::vector<std::string> sample;
+			std::vector<STRING_TYPE> sample;
 			split(currentShape.info[0], ' ', sample);
 			int dimShape = (int)sample.size();
 			ASSERT_MSG_NO_RELEASE((dimShape == 3 || dimShape == 4), "Shape de dimension autre que 3 ou 4");
-			std::vector<std::string> sample2;
+			std::vector<STRING_TYPE> sample2;
 			split(sample[2], '/', sample2);
 			int nbInfo = (int)sample2.size();
 
@@ -118,17 +118,17 @@ namespace Donut
 				float* texCoord = normalArray + 3 * dimShape*nbShape;
 
 				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
+				for (auto& prim : currentShape.info)
 				{
-					std::vector<std::string> vertices;
-					split(*prim, ' ', vertices);
+					std::vector<STRING_TYPE> vertices;
+					split(prim, ' ', vertices);
 					int primSize = (int)vertices.size();
 					if (vertices.size() == 3)
 					{
 						Vector3 points[3];
-						points[0] = listePoints[convertFromString<int>(vertices[0]) - 1];
-						points[1] = listePoints[convertFromString<int>(vertices[1]) - 1];
-						points[2] = listePoints[convertFromString<int>(vertices[2]) - 1];
+						points[0] = listePoints[convert_from_string<int>(vertices[0]) - 1];
+						points[1] = listePoints[convert_from_string<int>(vertices[1]) - 1];
+						points[2] = listePoints[convert_from_string<int>(vertices[2]) - 1];
 
 						const Vector3& v0 = points[1] - points[0];
 						const Vector3& v1 = points[2] - points[0];
@@ -149,10 +149,10 @@ namespace Donut
 					else // 4
 					{
 						/*
-						const Vector3& point0 = listePoints[convertFromString<int>(vertices[0]-1];
-						const Vector3& point1 = listePoints[convertFromString<int>(vertices[1]-1];
-						const Vector3& point2 = listePoints[convertFromString<int>(vertices[2]-1];
-						const Vector3& point3 = listePoints[convertFromString<int>(vertices[3]-1];
+						const Vector3& point0 = listePoints[convert_from_string<int>(vertices[0]-1];
+						const Vector3& point1 = listePoints[convert_from_string<int>(vertices[1]-1];
+						const Vector3& point2 = listePoints[convert_from_string<int>(vertices[2]-1];
+						const Vector3& point3 = listePoints[convert_from_string<int>(vertices[3]-1];
 						*/
 						ASSERT_NOT_IMPLEMENTED();
 					}
@@ -174,26 +174,26 @@ namespace Donut
 				float* texCoordArray = normalArray + 3 * dimShape*nbShape;
 
 				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
+				for(auto& prim : currentShape.info)
 				{
-					std::vector<std::string> vertices;
-					split(*prim, ' ', vertices);
+					std::vector<STRING_TYPE> vertices;
+					split(prim, ' ', vertices);
 					int primSize = (int)vertices.size();
 					if (primSize == 3)
 					{
 						Vector3 points[3];
-						std::vector<std::string> dataVert0, dataVert1, dataVert2;
+						std::vector<STRING_TYPE> dataVert0, dataVert1, dataVert2;
 						split(vertices[0], '/', dataVert0);
 						split(vertices[1], '/', dataVert1);
 						split(vertices[2], '/', dataVert2);
-						points[0] = listePoints[convertFromString<int>(dataVert0[0]) - 1];
-						points[1] = listePoints[convertFromString<int>(dataVert1[0]) - 1];
-						points[2] = listePoints[convertFromString<int>(dataVert2[0]) - 1];
+						points[0] = listePoints[convert_from_string<int>(dataVert0[0]) - 1];
+						points[1] = listePoints[convert_from_string<int>(dataVert1[0]) - 1];
+						points[2] = listePoints[convert_from_string<int>(dataVert2[0]) - 1];
 
 						Vector2 texCoord[3];
-						texCoord[0] = uvList[convertFromString<int>(dataVert0[1]) - 1];
-						texCoord[1] = uvList[convertFromString<int>(dataVert1[1]) - 1];
-						texCoord[2] = uvList[convertFromString<int>(dataVert2[1]) - 1];
+						texCoord[0] = uvList[convert_from_string<int>(dataVert0[1]) - 1];
+						texCoord[1] = uvList[convert_from_string<int>(dataVert1[1]) - 1];
+						texCoord[2] = uvList[convert_from_string<int>(dataVert2[1]) - 1];
 
 						const Vector3& v0 = points[1] - points[0];
 						const Vector3& v1 = points[2] - points[0];
@@ -236,31 +236,31 @@ namespace Donut
 				float* texCoordArray = normalArray + 3 * dimShape*nbShape;
 
 				int verticeCounter = 0;
-				foreach_macro(prim, currentShape.info)
+				for(auto& prim : currentShape.info)
 				{
-					std::vector<std::string> vertices;
-					split(*prim, ' ', vertices);
+					std::vector<STRING_TYPE> vertices;
+					split(prim, ' ', vertices);
 					int primSize = (int)vertices.size();
 					if (primSize == 3)
 					{
 						Vector3 points[3];
-						std::vector<std::string> dataVert0, dataVert1, dataVert2;
+						std::vector<STRING_TYPE> dataVert0, dataVert1, dataVert2;
 						split(vertices[0], '/', dataVert0);
 						split(vertices[1], '/', dataVert1);
 						split(vertices[2], '/', dataVert2);
-						points[0] = listePoints[convertFromString<int>(dataVert0[0]) - 1];
-						points[1] = listePoints[convertFromString<int>(dataVert1[0]) - 1];
-						points[2] = listePoints[convertFromString<int>(dataVert2[0]) - 1];
+						points[0] = listePoints[convert_from_string<int>(dataVert0[0]) - 1];
+						points[1] = listePoints[convert_from_string<int>(dataVert1[0]) - 1];
+						points[2] = listePoints[convert_from_string<int>(dataVert2[0]) - 1];
 
 						Vector2 texCoord[3];
-						texCoord[0] = uvList[convertFromString<int>(dataVert0[1]) - 1];
-						texCoord[1] = uvList[convertFromString<int>(dataVert1[1]) - 1];
-						texCoord[2] = uvList[convertFromString<int>(dataVert2[1]) - 1];
+						texCoord[0] = uvList[convert_from_string<int>(dataVert0[1]) - 1];
+						texCoord[1] = uvList[convert_from_string<int>(dataVert1[1]) - 1];
+						texCoord[2] = uvList[convert_from_string<int>(dataVert2[1]) - 1];
 
 						Vector3 normals[3];
-						normals[0] = normales[convertFromString<int>(dataVert0[2]) - 1];
-						normals[1] = normales[convertFromString<int>(dataVert1[2]) - 1];
-						normals[2] = normales[convertFromString<int>(dataVert2[2]) - 1];
+						normals[0] = normales[convert_from_string<int>(dataVert0[2]) - 1];
+						normals[1] = normales[convert_from_string<int>(dataVert1[2]) - 1];
+						normals[2] = normales[convert_from_string<int>(dataVert2[2]) - 1];
 
 						for (int i = 0; i < 3; ++i)
 						{

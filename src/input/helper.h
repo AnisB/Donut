@@ -21,7 +21,7 @@
 #include "defines.h"
 #include <input/inputManager.h>
 
-namespace Donut
+namespace donut
 {
 	// Sets the input manager 
 	void SetInputManager(TInputManager* parInputManager);

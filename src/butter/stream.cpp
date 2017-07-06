@@ -2,7 +2,7 @@
 #include "stream.h"
 
 
-namespace Donut
+namespace donut
 {
 	// Stream operator overload
 	std::istream& operator>>(std::istream& _stream, Vector2& _val)

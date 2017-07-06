@@ -1,15 +1,17 @@
 #ifndef RECIPE_IDENTIFIER_H
 #define RECIPE_IDENTIFIER_H
 
-#include "base/common.h"
+// Library incldudes
+#include "base/platform.h"
+#include "base/stringhelper.h"
 
-namespace Donut
+namespace donut
 {
 	// Define the type
-	typedef unsigned long int RECIPE_GUID;
+	typedef uint64_t RECIPE_GUID;
 
 	// Generate the guid
-	RECIPE_GUID GetFileHash(const std::string& _filename);	
+	RECIPE_GUID GetFileHash(const STRING_TYPE& _filename);	
 }
 
 #endif // RECIPE_IDENTIFIER_H

@@ -20,19 +20,19 @@
 
 // Library includes
 #include "graphics/visualeffect.h"
-namespace Donut
+namespace donut
 {
 	class TSimpleFX : public TVFX
 	{
 	public:
 		// Creation/Destruction
-		TSimpleFX(const std::string& _vertex, const std::string& _fragment);
+		TSimpleFX(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment);
 		TSimpleFX(const TShader& _shader);
 		~TSimpleFX();
 		// Init
 		virtual void Init();
 		// Drawing it
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 	};
 }
 

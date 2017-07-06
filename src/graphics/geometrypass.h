@@ -33,7 +33,7 @@
 // STL includes
 #include <vector>
  
- namespace Donut
+ namespace donut
  {
 	class TGeometryPass : public TPass
 	{

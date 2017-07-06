@@ -2,14 +2,13 @@
 #define TOPPING_DESCRIPTOR_H
 
 // Library includes
-#include "base/common.h"
 #include "graphics/material.h"
 #include "identifier.h"
 
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Flour descriptor
 	struct TToppingDescriptor
@@ -32,7 +31,7 @@ namespace Donut
 	};
 
 	// Build a descriptor from a file 
-	void ParseToppingFile(const std::string& _fileName, TToppingDescriptor& _output);
+	void ParseToppingFile(const STRING_TYPE& _fileName, TToppingDescriptor& _output);
     bool HasChanged(const TToppingDescriptor& _toppingDescriptor);
 }
 

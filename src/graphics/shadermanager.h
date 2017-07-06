@@ -27,7 +27,7 @@
 // STL includes
 #include <unordered_set>
 
-namespace Donut
+namespace donut
 {
 	// Foward declare 
 	struct TMaterial;
@@ -50,10 +50,10 @@ namespace Donut
 
  		// Data injection
  		template <typename T>
- 		void Inject(const TShader& parProgram, const T& _value, const std::string& parName);
+ 		void Inject(const TShader& parProgram, const T& _value, const STRING_TYPE& parName);
 
  		template <typename T>
- 		void InjectV(const TShader& parProgram, const T* _value, int _nbVal, const std::string& parName);
+ 		void InjectV(const TShader& parProgram, const T* _value, int _nbVal, const STRING_TYPE& parName);
 		
 		// Inject Material
 		void InjectMaterial(const TShader& _shader, const TMaterial& _material);
@@ -66,8 +66,8 @@ namespace Donut
 		void UnbindCubeMap(GLuint parOffset);
 
 		// Texture injection function
-		void InjectTex(const TShader& parProgram, GLuint _texID, const std::string& parName, GLuint parOffset);
-		void InjectCubeMap(const TShader& parProgram, GLuint _texID, const std::string& parName, GLuint parOffset);
+		void InjectTex(const TShader& parProgram, GLuint _texID, const STRING_TYPE& parName, GLuint parOffset);
+		void InjectCubeMap(const TShader& parProgram, GLuint _texID, const STRING_TYPE& parName, GLuint parOffset);
  	private:
  		std::unordered_set<TShader,TShaderHasher> FPrograms;
  	};

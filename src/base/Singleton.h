@@ -14,10 +14,9 @@
 *
 **/
 
-#ifndef SINGLETON_BASE_DONUT
-#define SINGLETON_BASE_DONUT
+#pragma once
 
-namespace Donut
+namespace donut
 {
   template <typename T>
   class Singleton
@@ -64,5 +63,3 @@ namespace Donut
   template <typename T>
   T* Singleton<T>::FInstance = nullptr;
 }
-
-#endif // SINGLETON_BASE_DONUT

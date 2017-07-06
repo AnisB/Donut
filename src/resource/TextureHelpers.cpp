@@ -14,7 +14,6 @@
  *
  **/
 
-#include <base/common.h>
 #include <graphics/Common.h>
 #include <graphics/glfactory.h>
 #include <input/Common.h>
@@ -30,15 +29,15 @@
 #include <png.h>
 #elif WIN32
 #endif
-namespace Donut
+namespace donut
 {
 
  namespace TextureHelpers
  {
- 	TImgType::Type GetImgType(const std::string & parImg)
+ 	TImgType::Type GetImgType(const STRING_TYPE & parImg)
  	{
  		size_t stringLength = parImg.size();
- 		const std::string& extension = parImg.substr(parImg.find_last_of(".") + 1, stringLength - 1);
+ 		const STRING_TYPE& extension = parImg.substr(parImg.find_last_of(".") + 1, stringLength - 1);
     	if(extension == "png")
     	{
     	    return TImgType::PNG;
@@ -61,7 +60,7 @@ namespace Donut
 	    }
 	}
 
-    std::string ImgTypeToString(TImgType::Type parType)
+    STRING_TYPE ImgTypeToString(TImgType::Type parType)
     {
         switch(parType)
         {
@@ -460,7 +459,7 @@ namespace Donut
     }
 
 
- 	TTexture * LoadTexture(const std::string & parImg)
+ 	TTexture * LoadTexture(const STRING_TYPE & parImg)
  	{
  		TImgType::Type typeImg = GetImgType(parImg);
 
@@ -498,7 +497,7 @@ namespace Donut
             NZ
         };
     }
-    std::string SkyboxComponentToString(TSkyboxComponent::Type parType)
+    STRING_TYPE SkyboxComponentToString(TSkyboxComponent::Type parType)
     {
         switch(parType)
         {
@@ -518,15 +517,15 @@ namespace Donut
         return "";
     }
     
-    std::string ConcatFileName(const std::string& parFolderName,TSkyboxComponent::Type parType,TImgType::Type parImgType )
+    STRING_TYPE ConcatFileName(const STRING_TYPE& parFolderName,TSkyboxComponent::Type parType,TImgType::Type parImgType )
     {
-        std::string filename(parFolderName);
+        STRING_TYPE filename(parFolderName);
         filename+=SkyboxComponentToString(parType);
         filename+=TextureHelpers::ImgTypeToString(parImgType);
         return filename;
     }
 
-    TSkyboxTexture* LoadSkybox(const std::string&  _skyboxFolder, TImgType::Type parType)
+    TSkyboxTexture* LoadSkybox(const STRING_TYPE&  _skyboxFolder, TImgType::Type parType)
     {
         TSkyboxTexture * skybox = new TSkyboxTexture(_skyboxFolder);
         skybox->textures[0] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PX,parType));
@@ -595,7 +594,7 @@ namespace Donut
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
-    void TakeScreenShot(const std::string& parFileName)
+    void TakeScreenShot(const STRING_TYPE& parFileName)
     {
 #if __posix__
         unsigned char *pdata = new unsigned char[1280*720*3];
@@ -639,7 +638,7 @@ namespace Donut
 #endif
     }
 
-    void SaveTextureToFile(const std::string& parFileName, const TTexture* parTexture)
+    void SaveTextureToFile(const STRING_TYPE& parFileName, const TTexture* parTexture)
     {
 #if __posix__
         float *pdata = (float*)(parTexture->FData);

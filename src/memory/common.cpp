@@ -1,16 +1,16 @@
 // Library includes
 #include "common.h"
-#include "systemallocator.h"
+#include "system_allocator.h"
 
-namespace Donut
+namespace donut
 {
 	// This variable is used to process all common memory space allocation (if no particular behavior)
 	// is requested, this is only new that is tolered in the whole library.
-	static TAllocator* commonAllocator = new TSystemAllocator();
+	static TSystemAllocator __common_allocator;
 
 	// Return the common allocator ptr
-	TAllocator* CommonAllocator()
+	TAllocator* common_allocator()
 	{
-		return commonAllocator;
+		return &__common_allocator;
 	}
 }

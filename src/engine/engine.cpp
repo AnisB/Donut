@@ -17,23 +17,21 @@
 // ----------------------------------------
 //  Includes
 // ----------------------------------------
-// Donut includes
+// donut includes
 #include "Engine.h"
 #include "engine/common.h"
-
-#include <base/common.h>
 
 // ----------------------------------------
 //  Implementation
 // ----------------------------------------
 
-namespace Donut
+namespace donut
 {
  	TEngine::TEngine()
  	: FRenderingRunning(false)
  	, m_scene(nullptr)
  	{
- 		FRenderer = new Donut::TRenderer();
+ 		FRenderer = new TRenderer();
  		ENGINE_INFO("Engine created");
  	}
  	

@@ -16,10 +16,9 @@
 
 // Library includes
 #include "shaderfilehandler.h"
-#include "base/macro.h"
 #include "base/security.h"
 
-namespace Donut
+namespace donut
 {
 	static TShaderFileID s_shaderCounter = 0;
 	// Init and uninit
@@ -34,9 +33,9 @@ namespace Donut
 	}
 
 	// Methods
-	TShaderFileID TShaderFileHandler::RegisterShaderFile(const std::string& _shaderFile)
+	TShaderFileID TShaderFileHandler::RegisterShaderFile(const STRING_TYPE& _shaderFile)
 	{
-		tryget(result, m_shaderKeys, _shaderFile);
+		auto result = m_shaderKeys.find(_shaderFile);
 		if(result == m_shaderKeys.end())
 		{
 			m_shaderKeys[_shaderFile] = s_shaderCounter;
@@ -49,9 +48,9 @@ namespace Donut
 		}
 	}
 
-	const std::string& TShaderFileHandler::GetShaderFile(const TShaderFileID& _shaderID)
+	const STRING_TYPE& TShaderFileHandler::GetShaderFile(const TShaderFileID& _shaderID)
 	{
-		tryget(result, m_inverseShaderKeys, _shaderID);
+		auto result = m_inverseShaderKeys.find(_shaderID);
 		if(result == m_inverseShaderKeys.end())
 		{
 			ASSERT_MSG(result != m_inverseShaderKeys.end(), "Shader "<<_shaderID<<" was required but never registered");
@@ -59,9 +58,9 @@ namespace Donut
 		return result->second;
 	}
 
-	bool TShaderFileHandler::IsRegistered(const std::string& _shaderFile)
+	bool TShaderFileHandler::IsRegistered(const STRING_TYPE& _shaderFile)
 	{
-		tryget(result, m_shaderKeys, _shaderFile);
+		auto result = m_shaderKeys.find(_shaderFile);
 		return (result != m_shaderKeys.end());
 	}
 }

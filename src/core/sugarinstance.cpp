@@ -16,11 +16,7 @@
 #include "sugarinstance.h"
 #include "core/mesh.h"
 
-#include "Base/Common.h"
-#include "Base/Macro.h"
-
-
-namespace Donut
+namespace donut
 {
 	TSugarInstance::TSugarInstance()
 	{
@@ -46,9 +42,9 @@ namespace Donut
 	// Evaluate the sugar instance
 	void TSugarInstance::Evaluate(TCollector& _collector, const Matrix4& _tm)
 	{
-		foreach_macro(mesh, m_meshes)
+		for (auto& mesh : m_meshes)
 		{
-			(*mesh)->Evaluate(_collector, _tm);
+			mesh->Evaluate(_collector, _tm);
 		}
 	}
 }

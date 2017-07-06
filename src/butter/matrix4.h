@@ -23,7 +23,7 @@
 // STL includes
 #include <iostream>
 
-namespace Donut
+namespace donut
 {
 	// Init Functions
 	void matrix4(Matrix4& _mat, MatrixInit::Type _init = MatrixInit::Zero);

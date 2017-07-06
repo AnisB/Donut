@@ -18,10 +18,10 @@
 #include "effectcanvas.h"
 #include "graphics/glfactory.h"
 
-namespace Donut
+namespace donut
 {
 	// Creation
-	TEffectCanvas::TEffectCanvas(int _width, int _height, const std::string& _outTexName)
+	TEffectCanvas::TEffectCanvas(int _width, int _height, const STRING_TYPE& _outTexName)
 	: TCanvas(_width, _height)
 	, m_texName(_outTexName)
 	{

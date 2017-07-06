@@ -21,7 +21,7 @@
 #include <butter/Vector3.h>
 #include "graphics/ShaderManager.h"
  
- namespace Donut
+ namespace donut
  {
 	class TLight
 	{

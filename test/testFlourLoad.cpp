@@ -35,36 +35,36 @@ int main(int argc, char** argv)
 	if (argc == 3)
 	{
 		sceneName = argv[2];
-		Donut::ResourceManager::Instance().Init(argv[1]);
+		donut::ResourceManager::Instance().Init(argv[1]);
 	}
 	else
 	{
 		sceneName = "TeapotArmy";
-		Donut::ResourceManager::Instance().Init("assets");
+		donut::ResourceManager::Instance().Init("assets");
 	}
 
 	// Creating the rendering window
-	Donut::TRenderer * window = new Donut::TRenderer();
+	donut::TRenderer * window = new donut::TRenderer();
 	// Context info
-	Donut::TGraphicsSettings newContext = Donut::GL::default_settings();
+	donut::TGraphicsSettings newContext = donut::GL::default_settings();
 	newContext.window_name = "testFlourLoad";
 	window->CreateRenderWindow(newContext);
 
-	Donut::TFlour* flour = Donut::GenerateFlour(sceneName);
-	Donut::TPipeline* renderingPipeline;
-	renderingPipeline = Donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
+	donut::TFlour* flour = donut::GenerateFlour(sceneName);
+	donut::TPipeline* renderingPipeline;
+	renderingPipeline = donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);
 	window->Init();
 	
-	Donut::Camera* camera = renderingPipeline->camera;
-	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
+	donut::Camera* camera = renderingPipeline->camera;
+	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::GetInputManager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght,1.0,2000.0);
 	
 	while(window->IsRendering())
 	{
 		window->Draw();
-		Donut::FarmEvents();
+		donut::FarmEvents();
 		inManager->Update();
 	}
 

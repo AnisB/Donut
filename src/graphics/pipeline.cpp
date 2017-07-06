@@ -30,11 +30,10 @@
 #include "environmentfx.h"
 #include "skyboxfx.h"
 // Other
-#include "base/macro.h"
 #include "resource/resourcemanager.h"
 #include "geometrypass.h"
 
-namespace Donut
+namespace donut
 {
 	TPipeline::TPipeline()
 	{
@@ -43,25 +42,24 @@ namespace Donut
 
 	TPipeline::~TPipeline()
 	{
-		foreach_macro(passIT, passes)
+		for(auto& pass : passes)
 		{
-			delete *passIT;
+			delete pass;
 		}
 		delete camera;
 	}
 
 	void TPipeline::BuildPipelineData()
 	{
-		foreach_macro(pass, passes)
+		for(auto& pass : passes)
 		{
-			TPass* currentPass = *pass;
-			const TBufferOutput* bufferOutput =  currentPass->GetOutput();
-			foreach_macro(buf, bufferOutput->buffers)
+			const TBufferOutput* bufferOutput =  pass->GetOutput();
+			for(auto& buffer : bufferOutput->buffers)
 			{
 				TTextureInfo newTex;
-				newTex.texID = buf->texID;
+				newTex.texID = buffer.texID;
 				newTex.offset = (int)pipelineData.buffers.size();
-				newTex.name = buf->name;
+				newTex.name = buffer.name;
 				pipelineData.buffers.push_back(newTex);
 			}				
 		}
@@ -82,12 +80,12 @@ namespace Donut
 		const TPipelineDescriptor& pipelineDesc = TPipelineLoader::Instance().FetchPipeline(_scene->pipelineName);
 		GRAPHICS_INFO("Creating pipeline "<<pipelineDesc.name);
 
-		foreach_macro(pass, pipelineDesc.passes)
+		for(auto& pass : pipelineDesc.passes)
 		{
 			// Fetching the pointers
-			if(pass->tag == TPassTag::GEOMETRY)
+			if(pass.tag == TPassTag::GEOMETRY)
 			{
-				const TPipelineCanvas& canvasDesc = pass->canvas;
+				const TPipelineCanvas& canvasDesc = pass.canvas;
 				TCanvas* canvas = nullptr;
 				switch(canvasDesc.tag)
 				{
@@ -116,9 +114,9 @@ namespace Donut
 				pipeline->passes.push_back(geometryPass);
 
 			}
-			else if (pass->tag == TPassTag::VFX)
+			else if (pass.tag == TPassTag::VFX)
 			{
-				const TPipelineCanvas& canvasDesc = pass->canvas;
+				const TPipelineCanvas& canvasDesc = pass.canvas;
 				TCanvas* canvas = nullptr;
 				switch(canvasDesc.tag)
 				{
@@ -142,7 +140,7 @@ namespace Donut
 					break;
 				}
 
-				const TPipelineVFX& vfxDescriptor = pass->vfx;
+				const TPipelineVFX& vfxDescriptor = pass.vfx;
 				TVFX* vfx = nullptr;
 				switch(vfxDescriptor.tag)
 				{
@@ -183,9 +181,9 @@ namespace Donut
 				}
 
 				ASSERT_POINTER_NOT_NULL_NO_RELEASE(vfx);
-				foreach_macro(tex2D, vfxDescriptor.textures)
+				for(auto& tex2D : vfxDescriptor.textures)
 				{
-					vfx->AddTexture(ResourceManager::Instance().FetchTexture(tex2D->file), tex2D->name);
+					vfx->AddTexture(ResourceManager::Instance().FetchTexture(tex2D.file), tex2D.name);
 				}
 
 				TVFXPass* vfxPass = new TVFXPass(canvas, vfx);

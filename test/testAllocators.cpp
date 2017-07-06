@@ -1,10 +1,12 @@
 #include "containers/vector.h"
 #include "containers/array.h"
+#include "base/log.h"
 #include "base/security.h"
 
+using namespace donut;
 int main()
 {
-	Donut::TArray<int> intArray(*Donut::CommonAllocator());
+	TArray<int> intArray(*common_allocator());
 	for(int i = 0; i < 1000; ++i)
 	{
 		intArray.push_back(i);
@@ -25,7 +27,7 @@ int main()
 
 	ASSERT_MSG(intArray.size() == 0 && intArray.capacity() == 0, "Wrong size");
 
-	Donut::TArray<float> floatVector(*Donut::CommonAllocator());
+	TArray<float> floatVector(*common_allocator());
 	for(int i = 0; i < 1000; ++i)
 	{
 		floatVector.push_back(i);
@@ -47,5 +49,5 @@ int main()
 	ASSERT_MSG(floatVector.size() == 0 && floatVector.capacity() == 0, "Wrong size");
 
 
-	GENERAL_INFO("SUCCESS");
+	PRINT_INFO("Test", "SUCCESS");
 }

@@ -1,7 +1,7 @@
 // Library includes
-#include "baselogger.h"
+#include "base_logger.h"
 
-namespace Donut
+namespace donut
 {
 	// Color list
 	#define DEFAULT "\033[0m"
@@ -24,7 +24,7 @@ namespace Donut
 
 	}
 
-	void TBaseLogger::Log(TLogLevel::Type _logLevel, const char* _tag, const char* _message)
+	void TBaseLogger::log(TLogLevel::Type _logLevel, const char* _tag, const char* _message)
 	{
 		switch(_logLevel)
 		{

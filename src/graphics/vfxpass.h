@@ -28,7 +28,7 @@
 // STL includes
 #include <vector>
  
- namespace Donut
+ namespace donut
  {
 	class TVFXPass : public TPass
 	{
@@ -56,7 +56,7 @@
 		Camera * m_camera;
 		TCanvas * m_canvas;
 		TVFX* m_vfx;
-		std::map<std::string, TUniformHandler> m_values;
+		std::map<STRING_TYPE, TUniformHandler> m_values;
 	};
 	// END CLASS DECLARATION
  }

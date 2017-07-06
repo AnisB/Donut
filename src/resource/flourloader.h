@@ -18,13 +18,12 @@
 **/
 
 // Library includes
-#include "base/common.h"
 #include "recipe/flourdescriptor.h"
-
+#include "base/Singleton.h"
 // Extrernal includes
 #include <map>
 
-namespace Donut 
+namespace donut 
 {
 	class TFlourLoader : public Singleton<TFlourLoader>
 	{

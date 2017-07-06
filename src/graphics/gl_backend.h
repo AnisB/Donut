@@ -4,7 +4,7 @@
 // Library includes
 #include "gpu_backend.h"
 
-namespace Donut
+namespace donut
 {
 	namespace GL
 	{

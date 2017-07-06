@@ -17,7 +17,7 @@
 // Library includes
 #include "core/mesh.h"
 
-namespace Donut
+namespace donut
 {
 	// Foward declaration
 	class TSugarInstance;
@@ -28,9 +28,9 @@ namespace Donut
 	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID);
 	
 		// Default meshes
-	TMesh* CreateCube(double _length, std::string _materialName = "DEFAULT");
-	TMesh* CreateSphere(double _radius, std::string _materialName = "DEFAULT");
-	TMesh* CreatePlane(double _with, double _length, std::string _materialName = "DEFAULT");
+	TMesh* CreateCube(double _length, STRING_TYPE _materialName = "DEFAULT");
+	TMesh* CreateSphere(double _radius, STRING_TYPE _materialName = "DEFAULT");
+	TMesh* CreatePlane(double _with, double _length, STRING_TYPE _materialName = "DEFAULT");
 		// Create a sugar instance
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
+	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName);
 }

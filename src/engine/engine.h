@@ -18,11 +18,11 @@
 #ifndef DONUT_ENGINE
 #define DONUT_ENGINE
 
-// Donut includes
+// donut includes
 #include <input/helper.h>
 #include <Render/Renderer.h>
 
-namespace Donut
+namespace donut
 {
  	class TEngine
  	{

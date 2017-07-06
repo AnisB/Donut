@@ -25,7 +25,7 @@
 #include <list>
 #include <map>
 
-namespace Donut
+namespace donut
 {
     class TSugarLoader : public Singleton<TSugarLoader>
     {
@@ -39,12 +39,12 @@ namespace Donut
 
             // This function searches for a given sugar file and determines either or 
             // not it has been found and returns it if it has.
-            const TSugarDescriptor& FetchSugar(const std::string& parModel);
+            const TSugarDescriptor& FetchSugar(const STRING_TYPE& parModel);
         protected:
             // Parses the sugar sub_directory
             void LoadSugars();
         protected:
-            std::map<std::string, TSugarDescriptor> FSugars;
+            std::map<STRING_TYPE, TSugarDescriptor> FSugars;
     };
 }
 #endif // DONUT_SUGAR_LOADER

@@ -29,7 +29,7 @@
 #include "base/log.h"
 #include "memory/common.h"
 
-namespace Donut
+namespace donut
 {
 	#define FLUSH_GL_ERROR 0x1
 

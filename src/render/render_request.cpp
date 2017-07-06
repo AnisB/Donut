@@ -3,10 +3,10 @@
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
 
-namespace Donut
+namespace donut
 {
 	// Processed a render request
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniformHandler>& _uniforms)
+	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniformHandler>& _uniforms)
 	{
 		// Fetch the real data to process
 		TGeometry* geom = ResourceManager::Instance().RequestRuntimeGeometry(_request.geometry);
@@ -18,9 +18,9 @@ namespace Donut
 
 		// Draw the geometry
 		ShaderManager::Instance().InjectMaterial(targetShader, *mat);
-		foreach_macro(uniform, _uniforms)
+		for(auto& uniform : _uniforms)
 		{
-			const TUniformHandler& handler = uniform->second;
+			const TUniformHandler& handler = uniform.second;
 			handler.Inject(targetShader);
 		}
 		// Fetch the view projection matrix

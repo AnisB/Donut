@@ -18,7 +18,7 @@
 #include "gbuffercanvas.h"
 #include "graphics/glfactory.h"
 
-namespace Donut
+namespace donut
 {
 	// Creation
 	TGBufferCanvas::TGBufferCanvas(int _width, int _height)

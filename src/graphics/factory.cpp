@@ -16,7 +16,6 @@
 
 // Library includes
 #include "factory.h"
-#include "base/common.h"
 #include "core/sugarinstance.h"
 #include "core/mesh.h"
 #include "graphics/common.h"
@@ -28,7 +27,7 @@
 // External includes
 #include <float.h>
 
-namespace Donut
+namespace donut
 {
 	// Cube Data
 	GLfloat cubeVertexL[216] = { 
@@ -185,7 +184,7 @@ namespace Donut
 		1, 2, 3
 	};
 
-	TMesh* CreateCube(double _length, std::string _materialName)
+	TMesh* CreateCube(double _length, STRING_TYPE _materialName)
 	{
 		static int cubeCounter = 0;
  		GLfloat data[216];
@@ -199,7 +198,7 @@ namespace Donut
 		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 
 		// Generating the geometry name
- 		std::string meshName = "Cube_";
+ 		STRING_TYPE meshName = "Cube_";
  		meshName += std::to_string(cubeCounter++);
  		
  		// Creating the geometry
@@ -213,7 +212,7 @@ namespace Donut
 		return newMesh;
 	}
 
-    TMesh* CreatePlane(double _with, double _length, std::string _materialName)
+    TMesh* CreatePlane(double _with, double _length, STRING_TYPE _materialName)
 	{
 		// Create the geometry buffer
 		static int planeCounter = 0;
@@ -229,7 +228,7 @@ namespace Donut
  		}
 
  		// Generate the geometry name
- 		std::string meshName = "Plane_";
+ 		STRING_TYPE meshName = "Plane_";
  		meshName += std::to_string(planeCounter++);
 
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
@@ -252,7 +251,7 @@ namespace Donut
 		return nullptr;
 	}
 
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName)
+	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName)
 	{
 		// Fetch the sugar descriptor
 		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
@@ -261,10 +260,10 @@ namespace Donut
 		TSugarInstance* newSugarInstance = new TSugarInstance();
 
 		// For each renderable in the renderables array
-		foreach_macro(renderable, sugar.renderables)
+		for(auto& renderable : sugar.renderables)
 		{
 			// Fetch the renderable descriptor
-			const TRenderableDescriptor& renderableDescriptor = renderable->second;
+			const TRenderableDescriptor& renderableDescriptor = renderable.second;
 
 			// Fetch the material
 			TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
@@ -289,7 +288,7 @@ namespace Donut
 		static int FSQCounter = 0;
 		TMaterial defaultMat;
  		defaultMat.shader = _shader;
- 		std::string meshName = "FSQ_";	
+ 		STRING_TYPE meshName = "FSQ_";	
  		meshName += std::to_string(FSQCounter++);
  		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 

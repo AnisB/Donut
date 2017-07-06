@@ -22,7 +22,7 @@
 #include <vector>
 #include <map>
 
- namespace Donut
+ namespace donut
  {
 
  	class TTransition;

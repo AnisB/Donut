@@ -7,7 +7,7 @@
 #include "core/frustum.h"
 #include "core/box3.h"
 
-namespace Donut
+namespace donut
 {
 	// This class is able to process frustrum culling for a given set of render requests
 	class TFrustumCuller : public TProcessor

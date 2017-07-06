@@ -1,7 +1,7 @@
 // Library includes
 #include "egg.h"
 
-namespace Donut
+namespace donut
 {
 
 	std::ostream& operator<<(std::ostream& _os, const TEgg& _eggInstance)

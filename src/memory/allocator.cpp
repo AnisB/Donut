@@ -1,15 +1,15 @@
 // Library includes
 #include "allocator.h"
 
-namespace Donut
+namespace donut
 {
 	TAllocator::TAllocator()
 	{
-
+		// Nothing to do
 	}
 
 	TAllocator::~TAllocator()
 	{
-
+		// Nothing to do
 	}
 }

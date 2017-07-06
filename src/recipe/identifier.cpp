@@ -10,15 +10,16 @@
 #include <unistd.h>
 #else
 #include <time.h>
-#endif 
-namespace Donut
+#endif
+
+namespace donut
 {
-	RECIPE_GUID GetFileHash(const std::string& _filename)
+	RECIPE_GUID GetFileHash(const STRING_TYPE& _filename)
 	{
 		char buffer[20];
 		struct stat attrib;                
 		stat(_filename.c_str(), &attrib);
    		strftime(buffer,20,"%x - %I_%M_%S", localtime(&(attrib.st_ctime)));
-		return std::hash<std::string>()(std::string(buffer));
+		return std::hash<STRING_TYPE>()(STRING_TYPE(buffer));
 	}
 }

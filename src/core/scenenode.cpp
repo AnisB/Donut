@@ -15,12 +15,9 @@
  **/
 
 #include "scenenode.h"
-#include "Base/Common.h"
-#include "Base/Macro.h"
 #include "Render/Collector.h"
 
-
-namespace Donut
+namespace donut
 {
 	TSceneNode::TSceneNode(TAllocator& _alloc)
 	: TNode(_alloc)
@@ -41,14 +38,14 @@ namespace Donut
 		const Matrix4& currentTransform = _parentTransform * m_transform;
 
 		// Evaluate the drawables
-		foreach_macro(drawable, m_drawables)
+		for(auto& drawable : m_drawables)
 		{
-            (*drawable)->Evaluate(_requestCollector, currentTransform);
+            drawable->Evaluate(_requestCollector, currentTransform);
 		}
 
-		foreach_macro(son, m_sons)
+		for(auto& son : m_sons)
 		{
-            (*son)->Evaluate(_requestCollector, currentTransform);
+            son->Evaluate(_requestCollector, currentTransform);
 		}
 	}
 

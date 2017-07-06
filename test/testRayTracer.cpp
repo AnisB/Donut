@@ -16,7 +16,6 @@
 
 //Includes engine
 #include <Render/Renderer.h>
-#include <base/common.h>
 #include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
 #include <resource/sugarloader.h>
@@ -29,28 +28,28 @@
 // Autres includes
 #include <cmath> 
 /*
-using namespace Donut;
+using namespace donut;
 
 // La texture de points de controle
 TTexture* triangles = NULL;
 // La fenetre de rendu
-Donut::TRenderer * window = NULL;
+donut::TRenderer * window = NULL;
 // Les surface a afficher
-Donut::TMesh* surface = NULL;
+donut::TMesh* surface = NULL;
 // Le gestionnaire d'input
-Donut::TDefaultInputManager * inManager = NULL;
+donut::TDefaultInputManager * inManager = NULL;
 // Noeud de scene principal
-Donut::TSceneNode* node;
+donut::TSceneNode* node;
 
 void init()
 {
 	// Spécifie le répertoire de chargement des modèles
-	Donut::TSugarLoader::Instance().Init("data");	
+	donut::TSugarLoader::Instance().Init("data");	
 	// Creating the rendering window
-	window = new Donut::TRenderer();
+	window = new donut::TRenderer();
 
 	// Context info
-	Donut::TGraphicsSettings newContext;
+	donut::TGraphicsSettings newContext;
 	newContext.windowName = "bezierProgram";
 	newContext.width = 512;
 	newContext.lenght = 386;
@@ -59,34 +58,34 @@ void init()
 	window->Init();
 
 	// Getting the camera
-	Donut::Camera* camera = window->GetCamera();
+	donut::Camera* camera = window->GetCamera();
 	// On définit un gestionnaire d'input
-	Donut::TDefaultInputManager* inManager = static_cast<Donut::TDefaultInputManager*>(Donut::GetInputManager());
+	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::GetInputManager());
 	inManager->FCamera = camera;
 	// On définit la perspective
 	camera->DefinePerspective(29.0,1280.0/720.0,1.0,500.0);
 	// On déplace la camera
-	camera->Translate(Donut::vector3(0,0,-20));
+	camera->Translate(donut::vector3(0,0,-20));
 }
 
 void initScene()
 {
-	Donut::TRenderPass* pass= window->GetPasses()[0];
-	Donut::TNode* root= pass->GetRoot();
+	donut::TRenderPass* pass= window->GetPasses()[0];
+	donut::TNode* root= pass->GetRoot();
 
 	// On crée la surface 1 à la position TVec3(0,0,-70) en utilisant le modèle de nom "Plane"
-	surface = Donut::CreateSugarInstance("FSQuad");
+	surface = donut::CreateSugarInstance("FSQuad");
 	// On génère le shader associé a ce modèle
 	// On crée les points de controle
-	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");
-	// std::vector<TTexture*> triangles = Donut::ResourceManager::Instance().LoadObjToTexture("data/models/test/cube.obj");
+	// std::vector<TTexture*> triangles = donut::ResourceManager::Instance().LoadObjToTexture("data/models/teapot/model.obj");
+	// std::vector<TTexture*> triangles = donut::ResourceManager::Instance().LoadObjToTexture("data/models/test/cube.obj");
 	std::vector<TTexture*> triangles;
-	std::vector<int> nbShapes = Donut::ResourceManager::Instance().LoadObjToTexture("data/geometry/teapot.obj",triangles);
+	std::vector<int> nbShapes = donut::ResourceManager::Instance().LoadObjToTexture("data/geometry/teapot.obj",triangles);
 	TextureHelpers::CreateDataTexture(triangles[0]);
 	// On l'injecte dans chacun des modèles
 	surface->AddTexture(triangles[0], "triangles");
 	// On crée un noeud de scene
-	node = new Donut::TSceneNode();
+	node = new donut::TSceneNode();
 	// On lui ajoute chacun des drawable
 	node->AddDrawable(surface);
 	// On ajoute le noeud créé au noeud racine
@@ -107,7 +106,7 @@ void renderLoop()
 	while(window->IsRendering())
 	{
 		window->Draw();
-		Donut::FarmEvents();
+		donut::FarmEvents();
 		inManager->Update();
 	}
 }

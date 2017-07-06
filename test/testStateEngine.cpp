@@ -21,12 +21,12 @@
 
 int main()
 {
-	Donut::TStateEngineManager  & semRef = Donut::TStateEngineManager::Instance();
+	donut::TStateEngineManager  & semRef = donut::TStateEngineManager::Instance();
 
-	Donut::TStateEngine * engine = semRef.CreateInstance(1);
-	Donut::TStateEngine * engine2 = semRef.CreateInstance(2);
+	donut::TStateEngine * engine = semRef.CreateInstance(1);
+	donut::TStateEngine * engine2 = semRef.CreateInstance(2);
 
-	Donut::TStateEngineManager::Instance().DestroySpecificInstance(1);
+	donut::TStateEngineManager::Instance().DestroySpecificInstance(1);
 	
-	Donut::TStateEngineManager::Instance().DestroyAllInstances();
+	donut::TStateEngineManager::Instance().DestroyAllInstances();
 }

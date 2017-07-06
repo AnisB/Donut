@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-namespace Donut
+namespace donut
 {
     struct TMaterial
     {

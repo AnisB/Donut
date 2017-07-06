@@ -23,7 +23,7 @@
 #include "core/camera.h"
 #include "core/mesh.h"
 
-namespace Donut
+namespace donut
 {
 	class TSkyboxFX : public TVFX
 	{
@@ -36,7 +36,7 @@ namespace Donut
 		void SetSkybox(SKYBOX_GUID _skybox);
 		void SetCamera(Camera* _camera);
 		// Drawing it
-		void Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 	protected:
 		SKYBOX_GUID m_skybox;
 		Camera* m_camera;

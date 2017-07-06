@@ -22,7 +22,7 @@
 #include "graphics/material.h"
 #include "resource/texture.h"
 
-namespace Donut
+namespace donut
 {
 	// Foward declaration
 	struct TGeometry;

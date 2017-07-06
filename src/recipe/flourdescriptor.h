@@ -2,42 +2,42 @@
 #define FLOUR_DESCRIPTOR_H
 
 // Library includes
-#include "base/common.h"
 #include "identifier.h"
+#include "base/stringhelper.h"
 
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	// Environement SH descriptor
 	struct TSHDescriptor
 	{
-		std::string red;
-		std::string green;
-		std::string blue;
+		STRING_TYPE red;
+		STRING_TYPE green;
+		STRING_TYPE blue;
 	};
 
 	// Light source descriptor
 	struct TLightDescriptor
 	{
-		std::string pos;
-		std::string diff;
-		std::string spec;
-		std::string ray;
+		STRING_TYPE pos;
+		STRING_TYPE diff;
+		STRING_TYPE spec;
+		STRING_TYPE ray;
 	};
 
 	// Skybox descriptor
 	struct TSkyboxDescriptor
 	{
-		std::string location;
-		std::string extension;
+		STRING_TYPE location;
+		STRING_TYPE extension;
 	};
 
 	// Sugar descriptor
 	struct TModelDescriptor
 	{
-		std::string sugarname;
+		STRING_TYPE sugarname;
 	};
 	
 	// Node descriptor
@@ -53,9 +53,9 @@ namespace Donut
 		}
 
 		bool scenenode;
-		std::string tm;
+		STRING_TYPE tm;
 		std::vector<TNodeDescriptor*> nodes;
-		std::vector<std::string> models;
+		std::vector<STRING_TYPE> models;
 	};
 
 	// Illumination descriptor
@@ -73,11 +73,11 @@ namespace Donut
 
 		}
 		// Generic data
-		std::string name;
-		std::string file;
+		STRING_TYPE name;
+		STRING_TYPE file;
 
 		// Rendering data
-		std::string pipeline;
+		STRING_TYPE pipeline;
 		// Illumination data
 		TSHDescriptor* sh;
 		TSkyboxDescriptor* skybox;
@@ -90,7 +90,7 @@ namespace Donut
 	};
 
 	// Build a descriptor from a file 
-	void ParseFlourFile(const std::string& _fileName, TFlourDescriptor& _output);
+	void ParseFlourFile(const STRING_TYPE& _fileName, TFlourDescriptor& _output);
     bool HasChanged(const TFlourDescriptor& _flourDescriptor);
 }
 

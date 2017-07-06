@@ -9,15 +9,14 @@
 * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 * GNU General Public License for more details.
 *
-* You should have received a copy of the GNU General Public License
+* You should have received a 
+copy of the GNU General Public License
 * along with this program. If not, see <http://www.gnu.org/licenses/>.
 *
 **/
 
 // Library includes
 #include "flourloader.h"
-
-#include "base/common.h"
 
 #include "butter/stream.h"
 
@@ -37,7 +36,7 @@
 #include <fstream>
 
 
-namespace Donut
+namespace donut
 {
 	// XML file token
 	#define SCENE_TOKEN "flour"
@@ -94,16 +93,16 @@ namespace Donut
 
         std::vector<STRING_TYPE> flourFiles;
         GetExtensionFileList(floursDirectory, ".flour", flourFiles);
-        foreach_macro(flour, flourFiles)
+        for(auto& flour : flourFiles)
         {
         	TFlourDescriptor flrDsr;
-        	ParseFlourFile(*flour, flrDsr);
+        	ParseFlourFile(flour, flrDsr);
         	m_flours[flrDsr.name] = flrDsr;
             RESOURCE_INFO("Flour "<< flrDsr.name<<" file: "<< flrDsr.file);
         }
 	}
 
-	const TFlourDescriptor& TFlourLoader::FetchFlour(const std::string& _flourFileName)
+	const TFlourDescriptor& TFlourLoader::FetchFlour(const STRING_TYPE& _flourFileName)
 	{
         RESOURCE_DEBUG(_flourFileName<<" is requested");
         auto ite = m_flours.find(_flourFileName);

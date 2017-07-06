@@ -4,7 +4,7 @@
 #include "crumble_remover.h"
 #include "resource/resourcemanager.h"
 
-namespace Donut
+namespace donut
 {
 	TDispatcher::TDispatcher()
 	{

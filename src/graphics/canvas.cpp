@@ -21,7 +21,7 @@
 
 // STL includes
 
-namespace Donut
+namespace donut
 {
 	// Init and delete
 	TCanvas::TCanvas(int _width, int _height)

@@ -21,7 +21,7 @@
 #include "Transition.h"
 
 
-namespace Donut
+namespace donut
 {
 	class TStateEngine
 	{	

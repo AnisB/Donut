@@ -19,7 +19,7 @@
 #include "types.h"
 
 
-namespace Donut
+namespace donut
 {
 	// inline methods
 		// Constructors

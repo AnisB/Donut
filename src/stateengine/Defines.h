@@ -16,14 +16,16 @@
 
 
 
-	#ifndef STATE_ENGINE_DEFINES
-	#define STATE_ENGINE_DEFINES
+#ifndef STATE_ENGINE_DEFINES
+#define STATE_ENGINE_DEFINES
 
-	#include <assert.h>
+#include "base/stringhelper.h"
 
- #include <iostream>
+#include <assert.h>
 
- namespace Donut
+#include <iostream>
+
+ namespace donut
  {
  	typedef int TStateId; 
  	typedef int TTransitionId;
@@ -53,7 +55,7 @@
 
  		int FId;
 	#if _DEBUG
- 		std::string FDebugStateEngineName;
+ 		STRING_TYPE FDebugStateEngineName;
 	#endif
  	};
  }

@@ -7,7 +7,7 @@
 // External includes
 #include <float.h>
 
-namespace Donut
+namespace donut
 {
 	TBox3::TBox3()
 	{

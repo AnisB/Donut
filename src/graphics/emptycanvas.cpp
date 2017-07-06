@@ -18,7 +18,7 @@
 #include "emptycanvas.h"
 #include "graphics/glfactory.h"
 
-namespace Donut
+namespace donut
 {
 	// Creation
 	TEmptyCanvas::TEmptyCanvas(int _width, int _height)

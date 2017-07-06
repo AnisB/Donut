@@ -1,6 +1,6 @@
 // Library includes
 
-namespace Donut
+namespace donut
 {
 	void containers_dummy()
 	{

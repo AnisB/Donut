@@ -2,14 +2,13 @@
 #define PIPELINE_DESCRIPTOR_H
 
 // Libary includes
-#include "base/common.h"
 #include "graphics/shaderdata.h"
 #include "identifier.h"
 
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
 	namespace TCanvasTag
     {
@@ -48,7 +47,7 @@ namespace Donut
     struct TPipelineCanvas
     {
         TCanvasTag::Type tag;
-        std::string output;
+        STRING_TYPE output;
     };
 
     struct TPipelineVFX
@@ -69,14 +68,14 @@ namespace Donut
     struct TPipelineDescriptor
     {
         std::vector<TPipelinePass> passes;
-        std::string name;
-        std::string file;
+        STRING_TYPE name;
+        STRING_TYPE file;
         // For tracking the file's state
         RECIPE_GUID id;
     };
 
     // Generate a pipeline descriptor from a file
-    void ParsePipelineFile(const std::string& _pipelineFileName, TPipelineDescriptor& _pipeline);
+    void ParsePipelineFile(const STRING_TYPE& _pipelineFileName, TPipelineDescriptor& _pipeline);
     bool HasChanged(const TPipelineDescriptor& _pipelineDescriptor);
 
 }

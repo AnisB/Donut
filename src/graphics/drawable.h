@@ -23,7 +23,7 @@
 #include "graphics/canvas.h"
 #include "render/collector.h"
 
-namespace Donut
+namespace donut
 {
 	class TDrawable
 	{

@@ -27,7 +27,7 @@
 // Library includes
 #include <map>
 
- namespace Donut
+ namespace donut
  {
 	class TMesh : public TDrawable
 	{

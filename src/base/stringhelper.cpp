@@ -5,24 +5,23 @@
 // External includes
 #include <vector>
 
-namespace Donut
+namespace donut
 {
-
-	bool BothAreSpaces(CHAR_TYPE lhs, CHAR_TYPE rhs) 
+	bool both_are_spaces(CHAR_TYPE lhs, CHAR_TYPE rhs) 
 	{ 
 		return (lhs == rhs) && (lhs == ' '); 
 	}
 
 	void removeMultSpace(STRING_TYPE& _str) 
 	{
-		STRING_TYPE::iterator new_end = std::unique(_str.begin(), _str.end(), BothAreSpaces);
+		STRING_TYPE::iterator new_end = std::unique(_str.begin(), _str.end(), both_are_spaces);
 		_str.erase(new_end, _str.end());  
 	}
 
-	void split(const std::string& parString, char parSeparator, std::vector<std::string>& _out)
+	void split(const STRING_TYPE& parString, char parSeparator, std::vector<STRING_TYPE>& _out)
 	{
-		std::stringstream streamObj(parString);
-		std::string item;
+		STREAM_TYPE streamObj(parString);
+		STRING_TYPE item;
 		while (std::getline(streamObj, item, parSeparator))
 		{
 			_out.push_back(item);

@@ -16,10 +16,8 @@
 
 #include "StateEngineManager.h"
 #include <stateengine/Common.h>
-#include <Base/Common.h>
-#include "Base/Macro.h"
 
-namespace Donut
+namespace donut
 {
 
   TStateEngineManager::TStateEngineManager()
@@ -49,22 +47,20 @@ namespace Donut
 
   void TStateEngineManager::DestroyAllInstances()
   {
-  	foreach_macro(instance, FInstances)
+  	for(auto& instance : FInstances)
   	{
-  		if(instance->second !=NULL)
+  		if(instance.second != nullptr)
   		{
-  			TStateEngine * tmp = instance->second;
-  			delete tmp;
+  			delete instance.second;
   		}
   	}
   	FInstances.clear();
     STATE_ENGINE_DEBUG("All State Engine Instances where destroyed");
-
   }
 
   TStateEngine * TStateEngineManager::CreateInstance(int parStateId)
   {
-    Donut::TStateEngine * stateEngine = new Donut::TStateEngine(parStateId);
+    TStateEngine * stateEngine = new TStateEngine(parStateId);
     TStateEngineId stateId(parStateId);
     ASSERT(FInstances[stateId] == NULL);
     FInstances[stateId] = stateEngine;

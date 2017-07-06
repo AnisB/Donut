@@ -16,19 +16,19 @@
 #ifndef GRAPHICS_SETTINGS_DONUT
 #define GRAPHICS_SETTINGS_DONUT
 
-#include <string>
+#include "base/stringhelper.h"
 	
-namespace Donut
+namespace donut
 {
     // Default context data
     #define DEFAULT_WIDTH 1280 
 	#define DEFAULT_LENGHT 720
-	#define DEFAULT_NAME "Donut"
+	#define DEFAULT_NAME "donut"
 	#define DEFAULT_FULLSCREEN false
 
 	struct TGraphicsSettings
 	{
-		std::string window_name;
+		STRING_TYPE window_name;
 		uint32_t width;
 		uint32_t lenght;
 		bool fullScreen;

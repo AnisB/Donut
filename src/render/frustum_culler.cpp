@@ -4,7 +4,7 @@
 #include "butter/matrix4.h"
 #include "butter/vector4.h"
 
-namespace Donut
+namespace donut
 {
 	// Cst
 	TFrustumCuller::TFrustumCuller()

@@ -6,7 +6,7 @@
 // External includes
 #include "rapidxml.hpp"
 
-namespace Donut
+namespace donut
 {
         // XML file token
         #define FLOUR_NODE_TOKEN "flour"
@@ -147,7 +147,7 @@ namespace Donut
         {
                 for(rapidxml::xml_node<> *currentLightSource = _illumination->first_node(); currentLightSource; currentLightSource = currentLightSource->next_sibling())
                 {
-                        const std::string& nodeName = currentLightSource->name();
+                        const STRING_TYPE& nodeName = currentLightSource->name();
                         if(nodeName == LIGHT_TOKEN)
                         {       
                                 TLightDescriptor light;
@@ -161,7 +161,7 @@ namespace Donut
                 }
         }
 
-        void ParseFlourFile(const std::string& _fileName, TFlourDescriptor& _output)
+        void ParseFlourFile(const STRING_TYPE& _fileName, TFlourDescriptor& _output)
 	{
 		// Registering the file name
 		_output.file = _fileName;

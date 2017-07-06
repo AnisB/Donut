@@ -20,13 +20,13 @@
 // Library includes
 #include "canvas.h"
 
-namespace Donut
+namespace donut
 {
 	class TEffectCanvas : public TCanvas
 	{
 	public:
 		// Creation
-		TEffectCanvas(int _width, int _height, const std::string& _outputName);
+		TEffectCanvas(int _width, int _height, const STRING_TYPE& _outputName);
 		virtual ~TEffectCanvas();
 
 		// Inheritance exigences
@@ -34,7 +34,7 @@ namespace Donut
 		virtual void Enable();
 		virtual void Disable();
 	protected:
-		std::string m_texName;
+		STRING_TYPE m_texName;
 	};
 	// END CLASS DECLARATION
 }

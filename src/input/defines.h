@@ -19,7 +19,7 @@
 
 #include <graphics/common.h>
 
-namespace Donut
+namespace donut
 {
 	namespace TKeyCode
 	{

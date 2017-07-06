@@ -18,9 +18,8 @@
 #define INPUT_MANAGER_DONUT
 
 #include "defines.h"
-#include <base/common.h>
 
-namespace Donut
+namespace donut
 {
 	class TInputManager
 	{

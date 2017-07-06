@@ -18,7 +18,7 @@
 #include "vector3.h"
 #include "vector4.h"
 
-namespace Donut
+namespace donut
 {
 	// Default values;
 	const Vector2 v2_ZERO = vector2(0.0, 0.0);

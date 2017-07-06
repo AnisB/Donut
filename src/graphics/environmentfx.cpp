@@ -16,10 +16,9 @@
 
 // Library includes
 #include "environmentfx.h"
-#include "base/macro.h"
 #include "graphics/geometry.h"
 
-namespace Donut
+namespace donut
 {
 	#define ENVIRONMENT_VERTEX "common/shaders/ssfx/sh/vertex.glsl"
 	#define ENVIRONMENT_FRAGMENT "common/shaders/ssfx/sh/fragment.glsl" 
@@ -46,7 +45,7 @@ namespace Donut
 		TVFX::Init();
 	}
 
-	void TEnvironmentFX::Draw(std::map<std::string, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TEnvironmentFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

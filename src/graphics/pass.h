@@ -23,7 +23,7 @@
 // STL includes
 #include <vector>
  
- namespace Donut
+ namespace donut
  {
 	class TPass
 	{

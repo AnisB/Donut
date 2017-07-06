@@ -1,13 +1,6 @@
-#ifndef ALLOCATOR_H
-#define ALLOCATOR_H
+#pragma once
 
-// External includes
-#if __posix__
-#include <unistd.h>
-#elif WIN32
-#endif
-
-namespace Donut
+namespace donut
 {
 	// Memory allocation
 	struct memory_block
@@ -28,11 +21,5 @@ namespace Donut
 
 		// Frees a memory spot given
 		virtual void deallocate(void* _ptr) = 0;
-
-		// Function that aswers to the question, has this bloc
-		// been allocated by this allocator ?
-		virtual bool owns(void* _ptr) = 0;
 	};
 }
-
-#endif // ALLOCATOR_H

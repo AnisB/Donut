@@ -2,14 +2,13 @@
 #define SUGAR_DESCRIPTOR_H
 
 // Library includes
-#include "base/common.h"
 #include "graphics/material.h"
 #include "identifier.h"
 
 // External includes
 #include <map>
 
-namespace Donut
+namespace donut
 {
 	// Renderable descriptor
 	struct TRenderableDescriptor

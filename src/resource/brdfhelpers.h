@@ -7,11 +7,11 @@
 #include "graphics/common.h"
 #include "common.h"
 
-namespace Donut
+namespace donut
 {
 	namespace BRDFHelpers
 	{
-		TGGXBRDF* LoadBRDF(const std::string& _name);
+		TGGXBRDF* LoadBRDF(const STRING_TYPE& _name);
 		void CreateBRDF(TGGXBRDF* _brdf);
 	}
 }

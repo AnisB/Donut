@@ -18,14 +18,13 @@
 #define DONUT_TOPPING_LOADER
 
 // Library includes
-#include "base/common.h"
 #include "recipe/toppingdescriptor.h"
 
 // External includes
 #include <vector>
 #include <map>
 
-namespace Donut
+namespace donut
 {
     // Class that manages the rendering pipelines
     class TToppingLoader : public Singleton<TToppingLoader>
@@ -40,7 +39,7 @@ namespace Donut
 
             // This function searches for a given toppping file and determines either or 
             // not it has been found and returns it if it has.
-			TOPPING_GUID FetchMaterial(const std::string& _toppingName);
+			TOPPING_GUID FetchMaterial(const STRING_TYPE& _toppingName);
 
 			// Method required by rendering threads
 			TMaterial* RequestRuntimeMaterial(TOPPING_GUID _toppingGUID) { return &m_toppings[_toppingGUID].data; }
@@ -56,10 +55,10 @@ namespace Donut
 
         protected:
 			// The root folder that contains all the toppings
-            std::string m_toppingsFolder;
+            STRING_TYPE m_toppingsFolder;
 
 			// The loaded into memory toppings
-			std::map<std::string, TOPPING_GUID> m_toppingsIdentifiers;
+			std::map<STRING_TYPE, TOPPING_GUID> m_toppingsIdentifiers;
 			std::vector<TToppingDescriptor> m_toppings;
     };
 }

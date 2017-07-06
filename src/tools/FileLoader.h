@@ -17,38 +17,38 @@
 #define DONUT_FILE_LOADER
 
 // LIbrary includes
- #include "base/common.h"
- #include "resource/egg.h"
- #include "butter/vector3.h"
- #include "butter/vector4.h"
- #include "butter/matrix4.h"
+#include "resource/egg.h"
+#include "butter/vector3.h"
+#include "butter/vector4.h"
+#include "butter/matrix4.h"
+#include"base/stringhelper.h"
 
 // Std includes
 #include <vector>
 #include <string>
 #include <sstream>
 
-namespace Donut
+namespace donut
 {
 	//Loads file , free with mallpoc
-	void ReadFile(char const* fn, std::string& _output);
+	void ReadFile(char const* fn, STRING_TYPE& _output);
 	void ReadFile(char const* fn, std::vector<char>& _output);
 	// Writes s in f
 	bool WriteFile(char *fn, char *s);
 
 	template<typename T>
-	void stringConvertArray(const std::string& _param, std::vector<T>& _values)
+	void stringConvertArray(const STRING_TYPE& _param, std::vector<T>& _values)
 	{
-		std::vector<std::string> stringValues;
+		std::vector<STRING_TYPE> stringValues;
 		split(_param, ' ',stringValues);
-		foreach_macro(val, stringValues)
+		for(const auto& val : stringValues)
 		{
-			_values.push_back(convertFromString<T>(*val));
+			_values.push_back(convert_from_string<T>(val));
 		}
 	}
 
 	// This function returns the list of file of a given extension in the ouputcontainer
-	void GetExtensionFileList(const std::string& _directory, const std::string& _fileExtension, std::vector<std::string>& _outContainer);
+	void GetExtensionFileList(const STRING_TYPE& _directory, const STRING_TYPE& _fileExtension, std::vector<STRING_TYPE>& _outContainer);
 }
 
 #endif // FILE_LOADER

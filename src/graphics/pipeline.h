@@ -18,13 +18,13 @@
 #ifndef GRAPHIC_PIPELINE_FACTORY_DONUT
 #define GRAPHIC_PIPELINE_FACTORY_DONUT
 
-// Donut includes
+// donut includes
 #include "pass.h"
 #include "light.h"
 #include "core/node.h"
 #include "core/flour.h"
 
-namespace Donut
+namespace donut
 {
 	struct TPipeline
 	{

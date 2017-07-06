@@ -17,16 +17,14 @@
 #include "StateEngine.h"
 
 #include "Defines.h"
-#include <Base/Common.h>
 #include <stateengine/Common.h>
 #include "StateEngineManager.h"
-#include "Base/Macro.h"
 
 //--------------------------------------------------------------------
 // TStateEngine
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
-namespace Donut
+namespace donut
 {
  	TStateEngine::TStateEngine(int parStateId) : FId (parStateId)
  	{
@@ -34,16 +32,16 @@ namespace Donut
  	
  	TStateEngine::~TStateEngine()
  	{
- 		foreach_macro(state, FStates)
+ 		for(auto& state : FStates)
  		{
- 			ASSERT_NO_RELEASE(state->second);
- 			delete state->second;
+ 			ASSERT_NO_RELEASE(state.second);
+ 			delete state.second;
  		}
 
- 		foreach_macro(transition, FTransitions)
+ 		for(auto& transition : FTransitions)
  		{
- 			ASSERT_NO_RELEASE(transition->second);
- 			delete transition->second;
+ 			ASSERT_NO_RELEASE(transition.second);
+ 			delete transition.second;
  		}
  	}
 	
@@ -65,13 +63,13 @@ namespace Donut
  		bool hasChangedState = false;
  		const std::map<TTransitionId, TTransition *> & associatedTransitions = currentState->GetTransitions();
 
- 		foreach_macro(transition, associatedTransitions)
+ 		for(auto& transition : associatedTransitions)
  		{
  			currentState->TransitionCallBack();
- 			if(transition->second->EvaluateTransition())
+ 			if(transition.second->EvaluateTransition())
  			{
  				currentState->Leave();
- 				FCurrentState =transition->second->GetNextStateId();
+ 				FCurrentState = transition.second->GetNextStateId();
  				TAtomicState * nextState = FStates[FCurrentState];
  				nextState->Enter();
  				hasChangedState= true;
@@ -90,13 +88,13 @@ namespace Donut
  		currentState->Update(parDt);
 
  		const std::map<TTransitionId, TTransition *> & associatedTransitions = currentState->GetTransitions();
- 		foreach_macro(transition, associatedTransitions)
+ 		for(auto& transition : associatedTransitions)
  		{
  			currentState->TransitionCallBack();
- 			if(transition->second->EvaluateTransition())
+ 			if(transition.second->EvaluateTransition())
  			{
  				currentState->Leave();
- 				FCurrentState =transition->second->GetNextStateId();
+ 				FCurrentState = transition.second->GetNextStateId();
  				TAtomicState * nextState = FStates[FCurrentState];
  				nextState->Enter();
  				break;

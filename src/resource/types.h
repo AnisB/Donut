@@ -1,7 +1,7 @@
 #ifndef RESOURCES_TYPES_H
 #define RESOURCES_TYPES_H
 
-namespace Donut
+namespace donut
 {
 	// The resource identifiers
 	typedef unsigned long int GEOMETRY_GUID;

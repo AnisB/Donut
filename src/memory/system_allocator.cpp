@@ -1,9 +1,8 @@
 // Library includes
-#include "systemallocator.h"
-#include "base/common.h"
+#include "system_allocator.h"
 #include "base/security.h"
 
-namespace Donut
+namespace donut
 {
 	TSystemAllocator::TSystemAllocator()
 	{
@@ -28,12 +27,5 @@ namespace Donut
 	void TSystemAllocator::deallocate(void* _ptr)
 	{
 		free(_ptr);
-	}
-
-	// Function that aswers to the question, has this bloc
-	// been allocated by this allocator ?
-	bool TSystemAllocator::owns(void* _ptr)
-	{
-		return true;
 	}
 }

@@ -4,7 +4,7 @@
 // Library includes
 #include "butter/types.h"
 
-namespace Donut
+namespace donut
 {
 	// Foward declare
 	class TBox3;
