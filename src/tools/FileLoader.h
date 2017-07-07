@@ -21,7 +21,7 @@
 #include "butter/vector3.h"
 #include "butter/vector4.h"
 #include "butter/matrix4.h"
-#include"base/stringhelper.h"
+#include "base/stringhelper.h"
 
 // Std includes
 #include <vector>

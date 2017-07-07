@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "memory/common.h"
+
 namespace donut
 {
   template <typename T>
@@ -31,7 +33,7 @@ namespace donut
     {
       if (FInstance == nullptr)
       {
-        FInstance = new T;
+        FInstance = make_new<T>(common_allocator());
       }
 
       return (static_cast<T*> (FInstance));
@@ -50,7 +52,7 @@ namespace donut
     {
       if (FInstance != nullptr)
       {
-        delete FInstance;
+        make_delete<T>(FInstance);
         FInstance = nullptr;
       }
     }

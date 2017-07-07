@@ -17,6 +17,7 @@
 #include <iostream>
 #include <Engine/Engine.h>
 #include <graphics/gl_backend.h>
+#include <base/platform.h>
 
 using namespace donut;
 int main()
@@ -29,13 +30,13 @@ int main()
 
 	// Lanching the test
 	engine->LaunchRendering(newContext);
-	GENERIC_SLEEP(1);
+	SLEEP_FUNCTION(1);
 	engine->PauseRendering();
-	GENERIC_SLEEP(1);
+	SLEEP_FUNCTION(1);
 	engine->ResumeRendering();
-	GENERIC_SLEEP(1);
+	SLEEP_FUNCTION(1);
 	engine->StopRendering();
-	GENERIC_SLEEP(1);
+	SLEEP_FUNCTION(1);
 	delete engine;
 	return 0;
 

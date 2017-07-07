@@ -18,7 +18,6 @@
 #include "platform.h"
 #include "log.h"
 #include "security.h"
-#include "const.h"
 
 // External includes
 #include <assert.h>

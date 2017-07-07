@@ -18,7 +18,6 @@
 #include "Mesh.h"
 #include "resource/resourcemanager.h"
 #include "resource/sugarloader.h"
-#include "MultiThread/Defines.h"
 
 // External includes
 #include <string.h>

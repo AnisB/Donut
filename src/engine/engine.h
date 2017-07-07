@@ -14,13 +14,13 @@
 *
 **/
 
+#pragma once
 
-#ifndef DONUT_ENGINE
-#define DONUT_ENGINE
 
 // donut includes
 #include <input/helper.h>
 #include <Render/Renderer.h>
+#include <thread>
 
 namespace donut
 {
@@ -42,8 +42,7 @@ namespace donut
 
  	private:
  		// Data required to launch the rendering thread
- 		THREAD_ID FTRenderingThread;
- 		THREAD_DATA FThreadData;
+ 		std::thread* _rendering_thread;
  		bool FRenderingRunning;
  	protected:
  		// A pointer to the renderer
@@ -51,4 +50,3 @@ namespace donut
  		TFlour* m_scene;
  	};
 }
-#endif // DONUT_ENGINE

@@ -2,6 +2,8 @@
 
 // Library includes
 #include "memory/common.h"
+#include "base/platform.h"
+#include "base/security.h"
 
 namespace donut
 {

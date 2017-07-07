@@ -95,7 +95,6 @@ GENERATE_LIB("${SOURCES}/memory" memory "DonutLib")
 GENERATE_LIB("${SOURCES}/butter" butter "DonutLib")
 GENERATE_LIB("${SOURCES}/engine" engine "DonutLib")
 GENERATE_LIB("${SOURCES}/input" input "DonutLib")
-GENERATE_LIB("${SOURCES}/multithread" multithread "DonutLib")
 GENERATE_LIB("${SOURCES}/render" render "DonutLib")
 GENERATE_LIB("${SOURCES}/core" core "DonutLib")
 GENERATE_LIB("${SOURCES}/recipe" recipe "DonutLib")
@@ -104,7 +103,7 @@ GENERATE_LIB("${SOURCES}/resource" resource "DonutLib")
 GENERATE_LIB("${SOURCES}/stateengine" state_engine "DonutLib")
 GENERATE_LIB("${SOURCES}/tools" tools "DonutLib")
 
-SET(CORELIBS ${CORELIBS} base containers butter memory engine input core multithread render graphics recipe resource state_engine tools)
+SET(CORELIBS ${CORELIBS} base containers butter memory engine input core render graphics recipe resource state_engine tools)
 
 # Adding the tests if we should
 IF(TESTS)

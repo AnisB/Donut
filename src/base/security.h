@@ -48,7 +48,6 @@ namespace donut
 	#define ASSERT_NO_RELEASE(Enonce) {}
 	#define ASSERT_MSG_NO_RELEASE(Enonce, MSG) {}
 #endif
-	
 }
 
 #endif // DONUT_BASE_SECURITY

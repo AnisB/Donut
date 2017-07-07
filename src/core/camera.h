@@ -5,7 +5,6 @@
 #include "butter/types.h"
 #include "core/frustum.h"
 #include "graphics/uniformhandler.h"
-#include "multithread/usualthreadsafeobjects.h"
 
 // STL includes
 #include <vector>

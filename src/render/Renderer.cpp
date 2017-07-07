@@ -30,14 +30,14 @@
  	: FWindowSize()
  	, FIsFullScreen(false)
  	, FWindow(NULL)
- 	, FIsRendering(false)
+ 	, _is_running(false)
  	, FInitDone(false)
  	{
 
  	}
  	TRenderer::~TRenderer()
  	{
-		FIsRendering.SetValue(false);
+		_is_running = false;
  	}
 
  	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext)
@@ -51,7 +51,7 @@
 			m_gpuBackendApi.init_render_system();
 			// Create a window
 			FWindow = (GLFWwindow*)m_gpuBackendApi.render_window(m_gpuBackendApi.create_render_environment(parContext));
-			FIsRendering.SetValue(true);
+			_is_running = true;
 			FInitDone = true;
  		}
  		else
@@ -145,13 +145,13 @@
 
 	bool TRenderer::IsRendering()
 	{
-		return (FIsRendering.GetValue() && !glfwWindowShouldClose(FWindow));
+		return (_is_running && !glfwWindowShouldClose(FWindow));
 
 	}
 
 	void TRenderer::SetRendering(bool parVal)
 	{
-		FIsRendering.SetValue(parVal);
+		_is_running = parVal;
 	}
 
 	// END CLASS DECLARATION
@@ -166,6 +166,6 @@
 			realGraphicRenderer->Draw();
 		}
 		GRAPHICS_DEBUG("Window isn't rendering anymore");
-		THREAD_EXIT(0);
+		return 0;
 	}
 }

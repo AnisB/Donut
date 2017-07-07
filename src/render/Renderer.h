@@ -23,12 +23,12 @@
  #include "graphics/settings.h"
  #include "graphics/pass.h"
  #include <butter/types.h>
- #include "multithread/usualthreadsafeobjects.h"
  #include "graphics/drawable.h"
  #include "core/node.h"
  #include "graphics/gpu_backend.h"
  #include <string>
  #include <vector>
+#include <atomic>
 
  namespace donut
  {
@@ -84,7 +84,7 @@
 		GPUBackendAPI m_gpuBackendApi;
 
 		// Is Rendering member
-		TThreadSafeBolean FIsRendering;
+		std::atomic_bool _is_running;
 
 		TPipeline* m_pipeline;
 	};

@@ -20,7 +20,6 @@
 #include "base/singleton.h"
 #include "graphics/uniformhandler.h"
 #include "recipe/sugardescriptor.h"
-#include "multithread/usualthreadsafeobjects.h"
 
 #include <list>
 #include <map>

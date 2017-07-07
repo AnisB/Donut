@@ -30,6 +30,7 @@ namespace donut
  	TEngine::TEngine()
  	: FRenderingRunning(false)
  	, m_scene(nullptr)
+ 	, _rendering_thread(nullptr)
  	{
  		FRenderer = new TRenderer();
  		ENGINE_INFO("Engine created");
@@ -37,6 +38,12 @@ namespace donut
  	
  	TEngine::~TEngine()
  	{	
+ 		if(_rendering_thread)
+ 		{
+ 			delete _rendering_thread;
+ 			_rendering_thread = nullptr;
+ 		}
+
  		delete FRenderer;
  	}
 
@@ -47,11 +54,8 @@ namespace donut
  		FRenderer->CreateRenderWindow(parContext);
  		FRenderer->SetPipeline(pipeline);
  		InitScene();
-#if __posix__
- 		FThreadData = CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
-#elif WIN32
- 		CREATE_THREAD(FTRenderingThread,CreateRenderingThread,FRenderer);
-#endif
+
+ 		_rendering_thread = new std::thread(CreateRenderingThread, FRenderer);
  		ENGINE_INFO("Redering thread created");
  		FRenderingRunning = true;
  		
@@ -60,7 +64,9 @@ namespace donut
  	void TEngine::StopRendering()
  	{
  		FRenderer->SetRendering(false);
- 		THREAD_JOIN(FTRenderingThread, FThreadData, NULL);
+ 		_rendering_thread->join();
+ 		delete _rendering_thread;
+ 		_rendering_thread = nullptr;
  		FRenderer->DestroyRenderWindow();
  		ENGINE_INFO("Rendering stoped");
  		FRenderingRunning = false;
@@ -69,7 +75,9 @@ namespace donut
  	void TEngine::PauseRendering()
  	{
  		FRenderer->SetRendering(false);
- 		THREAD_JOIN(FTRenderingThread, FThreadData,NULL);
+ 		_rendering_thread->join();
+ 		delete _rendering_thread;
+ 		_rendering_thread = nullptr;
  		FRenderer->HideRenderWindow();
  		ENGINE_INFO("Rendering paused");
 
@@ -80,7 +88,7 @@ namespace donut
  		ASSERT_MSG_NO_RELEASE(FRenderingRunning, "Rendering is not launched.")
  		FRenderer->ShowRenderWindow();
  		FRenderer->SetRendering(true);
- 		FThreadData = CREATE_THREAD(FTRenderingThread, CreateRenderingThread, FRenderer);
+ 		_rendering_thread = new std::thread(CreateRenderingThread, FRenderer);
  		ENGINE_INFO("Rendering resumed");
  	}
 
