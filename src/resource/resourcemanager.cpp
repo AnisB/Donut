@@ -17,7 +17,6 @@
 #include "ResourceManager.h"
 
 #include "TextureHelpers.h"
-#include "brdfhelpers.h"
 #include "resource/Common.h"
 #include "input/Common.h"
 #include <Base/Security.h>

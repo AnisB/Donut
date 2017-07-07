@@ -124,13 +124,6 @@ namespace donut
         {
 			shift = BuildTexturesDescriptor(textures, _topping.data.textures, shift);
         }
-
-		// Fetching external shader data
-		rapidxml::xml_node<>* brdf = topping_root->first_node(BRDF_NODE_TOKEN);
-		if(brdf)
-		{
-			shift = BuildBRDFDescriptor(brdf, _topping.data.brfds, shift);
-		}
     }
 
     bool HasChanged(const TToppingDescriptor& _toppingDescriptor)
