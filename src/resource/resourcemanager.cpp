@@ -100,24 +100,6 @@
  		}
  	}
 
-	TGGXBRDF* ResourceManager::FetchBRDF(const STRING_TYPE&  _brdfFileName)
- 	{
- 		auto it = m_brdfs.find(_brdfFileName);
- 		if(it != m_brdfs.end())
- 		{
-			RESOURCE_DEBUG(_brdfFileName<<" already loaded");
- 			return it->second;
- 		}
- 		else
- 		{
- 			RESOURCE_INFO("Reading "<<_brdfFileName);
- 			TGGXBRDF* brdf =  BRDFHelpers::LoadBRDF(RootAssetsFolder() + _brdfFileName);
- 			m_brdfs[_brdfFileName] = brdf;
- 			BRDFHelpers::CreateBRDF(brdf);
- 			return brdf;
- 		}
- 	}
-
 	GEOMETRY_GUID ResourceManager::FetchGeometry(const TShader& parShader, const STRING_TYPE&  _fileName)
 	{
 		// Try to get the resource

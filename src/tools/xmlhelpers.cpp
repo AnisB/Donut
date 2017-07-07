@@ -14,7 +14,6 @@ namespace donut
 
     // Textures
     #define TEXTURE_2D_NODE_TOKEN "texture2D"
-    #define GGX_NODE_TOKEN "ggx"
     #define TEXTURE_NAME_TOKEN "name"
     #define TEXTURE_FILE_LOCATION_TOKEN "location"
 
@@ -76,20 +75,4 @@ namespace donut
         }
 		return index;
     }
-
-	// Builds the textures from a xml node
-	int BuildBRDFDescriptor(rapidxml::xml_node<>* _brdfsNode, std::vector<TBRDFInfo>& _brdfArray, int _initialShift)
-	{
-		int index = _initialShift;
-		for (rapidxml::xml_node<>* ggxNode = _brdfsNode->first_node(GGX_NODE_TOKEN); ggxNode; ggxNode = ggxNode->next_sibling())
-		{
-			TBRDFInfo ggx;
-			ggx.offset = index;
-			ggx.name = ggxNode->first_attribute(TEXTURE_NAME_TOKEN)->value();
-			ggx.file = ggxNode->first_attribute(TEXTURE_FILE_LOCATION_TOKEN)->value();
-			_brdfArray.push_back(ggx);
-			index++;
-		}
-		return index;
-	}
 }

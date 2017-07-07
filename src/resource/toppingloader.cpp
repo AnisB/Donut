@@ -126,12 +126,6 @@ namespace donut
 			tex.texID = texPtr->FID;
         }
 
-        for(auto& brdfIT : targetMaterial.brfds)
-        {
-            TGGXBRDF* brdf = ResourceManager::Instance().FetchBRDF(brdfIT.file);
-			brdfIT.texID = brdf->id;
-        }
-
         // Load the shader into memory
         ShaderManager::Instance().CreateShader(targetMaterial.shader);
 

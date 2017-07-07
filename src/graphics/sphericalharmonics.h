@@ -21,7 +21,6 @@
 // STL includes
 #include <vector>
 
- 
 namespace donut
 {
 	// Foward declarations

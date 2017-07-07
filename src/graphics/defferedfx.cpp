@@ -51,11 +51,11 @@ namespace donut
 		TVFX::Init();
 	}
 
-	void TDefferedFX::SetLights(std::vector<TLight*>& _lights)
+	void TDefferedFX::SetLights(std::vector<TLight>& _lights)
 	{
 		// Setting the internal data
 		m_nbLights = _lights.size();
-		m_lights = _lights;
+		m_lights = &_lights[0];
 		
 		// Make sure we did not explode the number of lights
 		ASSERT_MSG_NO_RELEASE(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
@@ -74,7 +74,7 @@ namespace donut
 		// Inject the lights
 		for(int lightIndex = 0; lightIndex < m_nbLights; ++lightIndex)
 		{
-			m_lights[lightIndex]->InjectData(m_material.shader, lightIndex);
+			m_lights[lightIndex].InjectData(m_material.shader, lightIndex);
 		}
 
 		// Draw the frame

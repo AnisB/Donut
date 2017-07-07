@@ -48,7 +48,7 @@ namespace donut
         }
         else if(_type == TOKEN_VEC4)
         {
-            _handler.SetValue(TShaderData::VEC4, _name, Vector4());
+            _handler.SetValue(TShaderData::VEC4, _name, vector4(1.0, 1.0, 1.0, 1.0));
         }
         else if(_type == TOKEN_MAT3)
         {

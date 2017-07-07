@@ -26,7 +26,6 @@
 
 #include "base/singleton.h"
 #include "texture.h"
-#include "ggxbrdf.h"
 #include "egg.h"
 #include "types.h"
 
@@ -55,10 +54,6 @@
  		}
 
  	// Fetching methods
-		// Returns a pointer to a given brdf file (using its filepath)
- 		// If it has not been loaded yet, it loads the brdf data into the GPU RAM
- 		// Else it returns a pointer to what has been loaded
- 		TGGXBRDF* FetchBRDF(const STRING_TYPE& _brdfFileName);
  		// Returns a pointer to a given texture (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
@@ -91,7 +86,6 @@
 		STRING_TYPE m_rootAssetFolder;
 
 		// Data records
-		std::map<STRING_TYPE, TGGXBRDF*> m_brdfs;
 		std::map<STRING_TYPE, TTexture*> FTextures;
 
 			// Skybox data

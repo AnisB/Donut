@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<topping name="white">
+   <shader>
+      <vertex location="common/shaders/uniform_color/vertex.glsl"/>
+      <geometry location="common/shaders/uniform_color/geometry.glsl"/>
+      <fragment location="common/shaders/uniform_color/fragment.glsl"/>
+   </shader>
+   <built_in_data>
+   </built_in_data>
+   <extern_data>
+      <data type="vec4" name="uniform_color" value="1.0 1.0 1.0 1.0"/>
+   </extern_data>
+   <textures>
+   </textures>
+</topping>

@@ -50,12 +50,6 @@ namespace donut
 			if(root)
 				delete root;
 
-			for (auto light : lights)
-			{
-				delete light;
-
-			}
-
 			if(sh)
 				delete sh;
 		}
@@ -65,7 +59,7 @@ namespace donut
 		STRING_TYPE pipelineName;
 		
 		TNode* root;
-		std::vector<TLight*> lights;
+		std::vector<TLight> lights;
 		TSphericalHarmonics* sh;
 		SKYBOX_GUID skybox;
 	};

@@ -34,11 +34,11 @@ namespace donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		void SetLights(std::vector<TLight*>& _lights);
+		void SetLights(std::vector<TLight>& _lights);
 		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 
 	protected:
-		std::vector<TLight*> m_lights;
+		TLight* m_lights;
 		size_t m_nbLights;
 	};
 }

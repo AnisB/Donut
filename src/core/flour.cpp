@@ -10,15 +10,13 @@
 
 namespace donut
 {
-	// Handle a light node from its descreiptor
-	TLight* HandleLightNode(const TLightDescriptor& _lightDesc)
+	// Builda light from its descriptor
+	void build_from_descriptor(const TLightDescriptor& light_descriptor, TLight& new_light)
 	{
-		TLight* newLight = new TLight();
-		newLight->SetPosition(convert_from_string<Vector3>(_lightDesc.pos));
-		newLight->SetDiffuse(convert_from_string<Vector4>(_lightDesc.diff));
-		newLight->SetSpecular(convert_from_string<Vector4>(_lightDesc.spec));
-		newLight->SetRay(convert_from_string<float>(_lightDesc.ray));
-		return newLight;
+		new_light.SetPosition(convert_from_string<Vector3>(light_descriptor.pos));
+		new_light.SetDiffuse(convert_from_string<Vector4>(light_descriptor.diff));
+		new_light.SetSpecular(convert_from_string<Vector4>(light_descriptor.spec));
+		new_light.SetRay(convert_from_string<float>(light_descriptor.ray));
 	}
 
 	// Handle a spherical harmonic from its descriptor
@@ -79,7 +77,6 @@ namespace donut
 		return node;
 	}
 
-
 	// Fetch a flour descriptor and build an instance of it
 	TFlour* GenerateFlour(const STRING_TYPE& _flourName)
 	{
@@ -99,11 +96,12 @@ namespace donut
 		}
 
 		// Handle the lights
-		const std::vector<TLightDescriptor>& lights = _desc.illumination.lights;
-		for(const auto& light_descriptor : lights)
+		const std::vector<TLightDescriptor>& light_descriptors = _desc.illumination.lights;
+		uint32_t num_lights = light_descriptors.size();
+		flour->lights.resize(num_lights);
+		for(uint32_t light_idx = 0; light_idx < num_lights; ++light_idx)
 		{
-			TLight* new_light = HandleLightNode(light_descriptor);
-			flour->lights.push_back(new_light);
+			build_from_descriptor(light_descriptors[light_idx], flour->lights[light_idx]);
 		}
 
 		// If a skybox was defined, handle it
