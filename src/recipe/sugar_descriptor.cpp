@@ -1,5 +1,5 @@
 //Library include
-#include "sugardescriptor.h"
+#include "sugar_descriptor.h"
 #include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
 
@@ -26,28 +26,40 @@ namespace donut
     #define MATERIAL_NODE_TOKEN "material"
     #define MATERIAL_NAME_TOKEN "name"
 
-	void HandleRenderableArray(TSugarDescriptor& _descriptor, rapidxml::xml_node<>* _renderableListNodeNode)
+	void HandleRenderableArray(TSugarDescriptor& sugar_descriptor, rapidxml::xml_node<>* renderable_list_node)
 	{
-		for (rapidxml::xml_node<>* renderableNode = _renderableListNodeNode->first_node(RENDERABLE_NODE_TOKEN); renderableNode; renderableNode = renderableNode->next_sibling())
+        // Count the number of renderables in the sugar
+        uint32_t num_renderabes = 0;
+		for (auto rend_node = renderable_list_node->first_node(RENDERABLE_NODE_TOKEN); rend_node; rend_node = rend_node->next_sibling(), ++num_renderabes)
 		{
-			TRenderableDescriptor renderable;
+        }
+
+        // Allocate the required memory
+        sugar_descriptor._renderables.resize(num_renderabes);
+
+        // Fill the allocated renderables
+        uint32_t renderable_idx = 0;
+        for (auto rend_node = renderable_list_node->first_node(RENDERABLE_NODE_TOKEN); rend_node; rend_node = rend_node->next_sibling(), ++renderable_idx)
+        {
+            // Fetch the renderable to fill
+			TRenderableDescriptor& current_renderable = sugar_descriptor._renderables[renderable_idx];
+
             // Fetching the renderableID
-            renderable.id = renderableNode->first_attribute(GEOMETRY_ID_NODE_TOKEN)->value();
+            current_renderable._id = rend_node->first_attribute(GEOMETRY_ID_NODE_TOKEN)->value();
 
 			// Fetching the geometry
-			rapidxml::xml_node<>* geometry = renderableNode->first_node(GEOMETRY_NODE_TOKEN);
+			rapidxml::xml_node<>* geometry = rend_node->first_node(GEOMETRY_NODE_TOKEN);
 			ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
 			{
-				renderable.geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
+				current_renderable._geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
 			}
 
 			// Fetching the data
-			rapidxml::xml_node<>* material = renderableNode->first_node(MATERIAL_NODE_TOKEN);
+			rapidxml::xml_node<>* material = rend_node->first_node(MATERIAL_NODE_TOKEN);
 			ASSERT_POINTER_NOT_NULL_NO_RELEASE(material);
 			{
-				renderable.material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
+				current_renderable._material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
 			}
-			_descriptor.renderables[renderable.id] = renderable;
 		}
 	}
 
@@ -58,10 +70,10 @@ namespace donut
         ReadFile(_fileLocation.c_str(), buffer);
 
         // Set the file location
-        _sugar.file = _fileLocation;
+        _sugar._file = _fileLocation;
 
         // compute the GUID
-        _sugar.id = GetFileHash(_fileLocation);
+        _sugar._id = GetFileHash(_fileLocation);
 
         // Parsing it
         rapidxml::xml_document<> doc;
@@ -72,20 +84,18 @@ namespace donut
         ASSERT_POINTER_NOT_NULL_NO_RELEASE(sugar_root);
 
         // Fetching the name
-        _sugar.name = sugar_root->first_attribute(SUGAR_NAME_TOKEN)->value();
+        _sugar._name = sugar_root->first_attribute(SUGAR_NAME_TOKEN)->value();
 
 		// Fetching the renderables
 		rapidxml::xml_node<>* renderableArray = sugar_root->first_node(RENDERABLES_NODE_TOKEN);
 		ASSERT_POINTER_NOT_NULL_NO_RELEASE(renderableArray);
 
 		HandleRenderableArray(_sugar, renderableArray);
-
-
     }
 
     bool HasChanged(const TSugarDescriptor& _sugarDescriptor)
     {
-        RECIPE_GUID id = GetFileHash(_sugarDescriptor.file);
-        return id != _sugarDescriptor.id;
+        RECIPE_GUID id = GetFileHash(_sugarDescriptor._file);
+        return id != _sugarDescriptor._id;
     }
 }

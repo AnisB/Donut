@@ -25,7 +25,7 @@
 #include "butter/stream.h"
 #include "rapidxml.hpp"
 #include "tools/xmlhelpers.h"
-#include "recipe/sugardescriptor.h"
+#include "recipe/sugar_descriptor.h"
 
 // STL includes
 #include <stdlib.h>
@@ -68,8 +68,8 @@ namespace donut
         {
             TSugarDescriptor newSugar;
             ParseSugarFile(sugar, newSugar);
-            FSugars[newSugar.name] = newSugar;
-            RESOURCE_INFO("Sugar "<< newSugar.name<<" file: "<< sugar);
+            FSugars[newSugar._name] = newSugar;
+            RESOURCE_INFO("Sugar "<< newSugar._name<<" file: "<< sugar);
         }
     }
 

@@ -19,7 +19,7 @@
 
 #include "base/singleton.h"
 #include "graphics/uniformhandler.h"
-#include "recipe/sugardescriptor.h"
+#include "recipe/sugar_descriptor.h"
 
 #include <list>
 #include <map>

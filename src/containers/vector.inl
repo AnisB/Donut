@@ -114,4 +114,16 @@ namespace donut
 		// Increase the size
 		_size++;
 	}
+
+	// Copy operator
+	template <typename T>
+	void TVector<T>::operator=(const TVector<T>& vec)
+	{
+		uint32_t final_size = vec.size();
+		resize(final_size);
+		for(uint32_t ele_idx = 0; ele_idx < final_size; ++ele_idx)
+		{
+			_data[ele_idx] = vec[ele_idx];
+		}
+	}
 }

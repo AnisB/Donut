@@ -260,17 +260,17 @@ namespace donut
 		TSugarInstance* newSugarInstance = new TSugarInstance();
 
 		// For each renderable in the renderables array
-		for(auto& renderable : sugar.renderables)
+		for(auto& renderable : sugar._renderables)
 		{
 			// Fetch the renderable descriptor
-			const TRenderableDescriptor& renderableDescriptor = renderable.second;
+			const TRenderableDescriptor& renderableDescriptor = renderable;
 
 			// Fetch the material
-			TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(renderableDescriptor.material);
+			TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(renderableDescriptor._material);
 			const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 			
 			// Fetch the geometry
-			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(mat->shader, renderableDescriptor.geometry);
+			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(mat->shader, renderableDescriptor._geometry);
 			
 			// Create the renderable mesh
 			TMesh* newMesh = new TMesh(topping, geometry);

@@ -32,8 +32,8 @@ namespace donut
 		~TVector();
 
 		// Accessors
-		inline uint32_t size() {return _size;}
-		inline uint32_t capacity() {return _capacity;}
+		inline uint32_t size() const {return _size;}
+		inline uint32_t capacity() const {return _capacity;}
 
 		// Resize the array
 		void resize(uint32_t size);
@@ -47,7 +47,16 @@ namespace donut
 		// Reserve memory in the array
 		void reserve(uint32_t _space);
 
+		// Copy operator
+		void operator=(const TVector<T>& vec);
+
 		inline T& operator[](uint32_t index)
+		{
+			ASSERT_NO_RELEASE(index < _size);
+			return _data[index];
+		}
+
+		inline const T& operator[] (uint32_t index) const
 		{
 			ASSERT_NO_RELEASE(index < _size);
 			return _data[index];
