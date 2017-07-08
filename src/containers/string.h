@@ -17,6 +17,7 @@ namespace donut
 		// Cst
 		TString(TAllocator& allocator);
 		TString(const char* str, TAllocator& allocator);
+		TString(uint32_t str_size, TAllocator& allocator);
 
 		// Accessors
 		inline char* str() { return _data.begin(); }
