@@ -24,16 +24,6 @@
 #include "tools/xmlhelpers.h"
 #include "resource/toppingloader.h"
 
-// STL includes
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <string.h>
-#include <errno.h>
-#include <fstream>
-
-
-
 namespace donut
 {
     TToppingLoader::TToppingLoader()
@@ -57,14 +47,11 @@ namespace donut
     void TToppingLoader::LoadToppings()
     {   
 		// Fetch the root asset directory
-        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
+        const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 		
-		// Fetch the asset directory to parse
-        STRING_TYPE toppingDirectory(rootAssetDirectory + "/common/toppings");
-
 		// Look for all the topping files in the target directory 
         std::vector<STRING_TYPE> toppingFiles;
-        GetExtensionFileList(toppingDirectory, ".topping", toppingFiles);
+		get_all_files_with_extension(root_asset_dir.c_str(), ".topping", toppingFiles);
 
 		// Create a descriptor for
         for(auto& topping : toppingFiles)

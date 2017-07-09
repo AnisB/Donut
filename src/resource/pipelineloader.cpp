@@ -25,14 +25,6 @@
 #include "butter/types.h"
 #include "butter/stream.h"
 
-// STL includes
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <string.h>
-#include <errno.h>
-#include <fstream>
-
 namespace donut
 {
     TPipelineLoader::TPipelineLoader()
@@ -56,11 +48,10 @@ namespace donut
 
     void TPipelineLoader::LoadPipelines()
     {   
-        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-        STRING_TYPE pipelineFolder(rootAssetDirectory + "/common/pipelines");
+        const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 
         std::vector<STRING_TYPE> pipelineFiles;
-        GetExtensionFileList(pipelineFolder, ".pipeline", pipelineFiles);
+		get_all_files_with_extension(root_asset_dir.c_str(), ".pipeline", pipelineFiles);
         for(auto& pipeline : pipelineFiles)
         {
             TPipelineDescriptor newPipeline;

@@ -17,11 +17,10 @@
 // Library includes
 #include "Mesh.h"
 #include "resource/resourcemanager.h"
-#include "resource/sugarloader.h"
+#include "resource/sugar_loader.h"
 
 // External includes
 #include <string.h>
-
 
 namespace donut
 {

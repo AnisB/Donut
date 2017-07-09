@@ -48,7 +48,7 @@ namespace donut
 	}
 
 	// This function returns the list of file of a given extension in the ouputcontainer
-	void GetExtensionFileList(const STRING_TYPE& _directory, const STRING_TYPE& _fileExtension, std::vector<STRING_TYPE>& _outContainer);
+	void get_all_files_with_extension(const char* root_dir_path, const char* file_extension, std::vector<STRING_TYPE>& _outContainer);
 }
 
 #endif // FILE_LOADER

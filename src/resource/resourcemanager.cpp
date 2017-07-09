@@ -21,7 +21,7 @@
 #include "input/Common.h"
 #include <Base/Security.h>
 #include "graphics/glfactory.h"
-#include "sugarLoader.h"
+#include "sugar_loader.h"
 #include "toppingloader.h"
 #include "pipelineloader.h"
 #include "flourloader.h"

@@ -20,7 +20,7 @@
 #include "core/mesh.h"
 #include "graphics/common.h"
 #include "core/mesh.h"
-#include "resource/sugarloader.h"
+#include "resource/sugar_loader.h"
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
 

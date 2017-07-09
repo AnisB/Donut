@@ -33,7 +33,7 @@ namespace donut
             TSugarLoader();
             ~TSugarLoader();
             
-            // if it is registers it into memory
+            // Parse the project and search for sugar files
             void Init();
 
             // This function searches for a given sugar file and determines either or 

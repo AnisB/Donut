@@ -38,36 +38,6 @@ copy of the GNU General Public License
 
 namespace donut
 {
-	// XML file token
-	#define SCENE_TOKEN "flour"
-	#define ROOT_TOKEN "root"
-	#define NODE_TOKEN "node"
-	#define SCENE_NODE_TOKEN "scenenode"
-	#define MODEL_TOKEN "model"
-	#define SUGAR_TOKEN "sugar"
-	#define NODE_TRANSFORM_MATRIX_TOKEN "TM"
-	// Light data
-	#define ILLUMINATION_TOKEN "illumination"
-	#define SPHERICAL_HARMONICS "envSH"
-	#define DEGREE_SPHERICAL_HARMONICS "degree"
-	#define RED_COEFF_SPHERICAL_HARMONICS "red"
-	#define GREEN_COEFF_SPHERICAL_HARMONICS "green"
-	#define BLUE_COEFF_SPHERICAL_HARMONICS "blue"
-	#define LIGHT_TOKEN "light"
-	#define LIGHT_POS_TOKEN "pos"
-	#define LIGHT_DIFF_TOKEN "diff"
-	#define LIGHT_SPEC_TOKEN "spec"
-	#define LIGHT_RAY_TOKEN "ray"
-	// Skybox data
-	#define SKYBOX_TOKEN "skybox"
-	#define SKYBOX_EXTENSION_TOKEN "extension"
-	#define SKYBOX_LOCATION_TOKEN "location"
-
-	// Pipeline data
-	#define PIPELINE_NODE_TOKEN "pipeline"
-	#define PIPELINE_NAME_TOKEN "name"
-
-
 	TFlourLoader::TFlourLoader()
 	{
 
@@ -87,12 +57,10 @@ namespace donut
 
 	void TFlourLoader::LoadFlours()
 	{
-		
-		const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-		STRING_TYPE floursDirectory(rootAssetDirectory + "/common/flours");
+		const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 
         std::vector<STRING_TYPE> flourFiles;
-        GetExtensionFileList(floursDirectory, ".flour", flourFiles);
+        get_all_files_with_extension(root_asset_dir.c_str(), ".flour", flourFiles);
         for(auto& flour : flourFiles)
         {
         	TFlourDescriptor flrDsr;

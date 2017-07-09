@@ -18,7 +18,7 @@
 #include <Render/Renderer.h>
 #include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
-#include <resource/sugarloader.h>
+#include <resource/sugar_loader.h>
 #include <resource/texturehelpers.h>
 #include "graphics/factory.h"
 #include <core/SceneNode.h>

@@ -15,8 +15,7 @@
  **/
 
 // Library includes
-#include "sugarloader.h"
-#include "base/stringhelper.h"
+#include "sugar_loader.h"
 #include "resourcemanager.h"
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
@@ -27,23 +26,12 @@
 #include "tools/xmlhelpers.h"
 #include "recipe/sugar_descriptor.h"
 
-// STL includes
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/types.h>
-#include <string.h>
-#include <errno.h>
-#include <fstream>
-
-
-
 namespace donut
 {
     TSugarLoader::TSugarLoader()
     {
 
     }
-
 
     TSugarLoader::~TSugarLoader()
     {
@@ -59,11 +47,14 @@ namespace donut
 
     void TSugarLoader::LoadSugars()
     {   
-        const STRING_TYPE& rootAssetDirectory = ResourceManager::Instance().RootAssetsFolder();
-        STRING_TYPE sugarDirectory(rootAssetDirectory + "/common/sugars");
+        // Fetch the root asset dir
+        const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 
+        // Grab all the sugar files
         std::vector<STRING_TYPE> sugarFiles;
-        GetExtensionFileList(sugarDirectory, ".sugar", sugarFiles);
+		get_all_files_with_extension(root_asset_dir.c_str(), ".sugar", sugarFiles);
+
+        // Parse them and register them
         for(auto& sugar : sugarFiles)
         {
             TSugarDescriptor newSugar;

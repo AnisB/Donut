@@ -89,55 +89,71 @@ namespace donut
 		return(status);
 	}
 
-	void GetExtensionFileList(const STRING_TYPE& _directoryPath, const STRING_TYPE& _fileExtension, std::vector<STRING_TYPE>& _outContainer)
+	bool path_is_file(const char *path)
+	{
+	    struct stat path_stat;
+	    stat(path, &path_stat);
+	    return S_ISREG(path_stat.st_mode) != 0;
+	}
+
+	void get_all_files_with_extension(const char* root_dir_path, const char* file_extension, std::vector<STRING_TYPE>& matching_files)
 	{
         // Opening the directory
         DIR * directory;
-        directory = opendir (_directoryPath.c_str());
+        directory = opendir (root_dir_path);
+
         if (! directory) 
         {
-#if __posix__
-            ASSERT_FAIL_MSG("Error in directory: "<< _directoryPath<<" Error n°: "<< strerror (errno)); 
-#elif WIN32
-			char msg[20];
-            ASSERT_FAIL_MSG("Error in directory: "<< _directoryPath<<" Error n°: "<< strerror_s (msg, errno));
-#endif
+            ASSERT_FAIL_MSG("Error in directory: "<< root_dir_path <<" Error n°: "<< strerror (errno)); 
         }
 
-        int extensionSize = _fileExtension.size();
+        uint32_t extensionSize = strlen(file_extension);
 
-        // For each file in the directory
+        // For each entry in the directory
         while (1) 
         {
         	// If each new entry
             struct dirent* newEntry;
             newEntry = readdir (directory);
-            if (! newEntry) 
+            if (! newEntry)
             {
+            	// The entry is not valid, we done
                 break;
             }
 
             // Get its filename
-            STRING_TYPE fileName(newEntry->d_name);
-            // Reject non matching entries
-            if((fileName=="..")|| (fileName==".") || fileName.size() < extensionSize)
-            {
-                continue;
-            }
+            STRING_TYPE entry_name(newEntry->d_name);
 
-           	if( fileName.substr(fileName.size() - extensionSize, fileName.size())!= _fileExtension)
+            // Reject dummy entries
+            if((entry_name=="..")|| (entry_name=="."))
             {
                 continue;
             }
-            // OK this file is concerned we add it
-            STRING_TYPE newFilename = _directoryPath;
-            newFilename += "/";
-            newFilename += fileName;
-            _outContainer.push_back(newFilename);
+            STRING_TYPE absolute_path = root_dir_path;
+            absolute_path += "/";
+            absolute_path += entry_name;
+
+            // Check if the entry is a directory or not
+            bool is_file = path_is_file(absolute_path.c_str());
+
+            if(is_file)
+            {
+            	if( entry_name.size() < extensionSize || entry_name.substr(entry_name.size() - extensionSize, entry_name.size())!= file_extension)
+	            {
+	                continue;
+	            }
+	            // We find anice fella over here
+            	matching_files.push_back(absolute_path);
+            }
+            else
+            {
+            	// We need to go recursive
+            	get_all_files_with_extension(absolute_path.c_str(), file_extension, matching_files);
+            }
         }
         if (closedir (directory)) 
         {
-            ASSERT_FAIL_MSG("Error while closing directory: "<< _directoryPath); 
+            ASSERT_FAIL_MSG("Error while closing directory: "<< root_dir_path);
             return;
         }
 	}

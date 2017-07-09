@@ -34,7 +34,7 @@ namespace donut
 	#define RESOURCE_ERROR(ENONCE) PRINT_ERROR (__RESOURCE_PRINT_NAMESPACE, ENONCE)	
 
 	// This allocator should be used for everything related to resource management
-	TAllocator* ResourceAllocator();
+	TAllocator* resource_allocator();
 }
 
 #endif // RESOURCE_COMMON_H
