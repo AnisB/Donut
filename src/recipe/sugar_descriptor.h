@@ -25,6 +25,9 @@ namespace donut
 	// Sugar descriptor
 	struct TSugarDescriptor
     {
+	private:
+		TSugarDescriptor(const TSugarDescriptor&);
+	public:
     	// Required stuff for allocation
     	ALLOCATOR_BASED;
 		TSugarDescriptor(TAllocator* allocator = common_allocator()) : _renderables(*allocator) {}

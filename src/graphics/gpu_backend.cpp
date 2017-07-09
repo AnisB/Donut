@@ -19,6 +19,7 @@ namespace donut
 				backend_api.render_window = GL::render_window;
 			}
 			break;
+		#if defined(VULKAN_SUPPORTED)
 			case RenderingBackEnd::VULKAN:
 			{
 				backend_api.init_render_system = VK::init_render_system;
@@ -28,6 +29,7 @@ namespace donut
 				backend_api.render_window = VK::render_window;
 			}
 			break;
+		#endif
 			default:
 				ASSERT_FAIL_MSG("Unsupported RenderingBackEnd");
 		};

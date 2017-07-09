@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<sugar name="Soil">
-	<renderables>
-		<renderable id="0">
-		   <geometry type="egg" location="common/geometry/soil.egg"/>
-		   <material name="farmhouse_base"/>
-		</renderable>
-	</renderables>
-</sugar>

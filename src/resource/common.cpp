@@ -5,11 +5,11 @@
 namespace donut
 {
 	// Create the resource allocator
-	static TSystemAllocator resource_allocator;
+	static TSystemAllocator __resource_allocator;
 
 	// This allocator should be used for everything related to resource management
-	TAllocator* ResourceAllocator()
+	TAllocator* resource_allocator()
 	{
-		return &resource_allocator;
+		return &__resource_allocator;
 	}
 }

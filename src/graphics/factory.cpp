@@ -254,7 +254,7 @@ namespace donut
 	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName)
 	{
 		// Fetch the sugar descriptor
-		TSugarDescriptor sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
+		const TSugarDescriptor& sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
 
 		// Create a sugar instance
 		TSugarInstance* newSugarInstance = new TSugarInstance();

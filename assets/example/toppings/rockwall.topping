@@ -12,6 +12,6 @@
       <data type="float" name="reflection" value="0.0"/>
 	</extern_data>
 	<textures>
-		<texture2D name="textureCmp" location="common/textures/rockwall.bmp"/>
+		<texture2D name="textureCmp" location="example/textures/rockwall.bmp"/>
 	</textures>
 </topping>

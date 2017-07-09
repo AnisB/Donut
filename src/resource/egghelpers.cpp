@@ -9,8 +9,15 @@ namespace donut
 		TEgg* newEgg = new TEgg();
 		std::fstream in;
 		in.open(_eggFileLocation.c_str(), std::fstream::in | std::ios::binary);
-		in >> (*newEgg);
-		in.close();
+		if (in.is_open())
+		{
+			in >> (*newEgg);
+			in.close();
+		}
+		else
+		{
+			ASSERT_FAIL("File " << _eggFileLocation << " not found");
+		}
 		return newEgg;
 	}
 }

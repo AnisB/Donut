@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<topping name="stormtrooper_base">
+<topping name="farmhouse_base">
    <shader>
       <vertex location="common/shaders/base/vertex.glsl"/>
       <geometry location="common/shaders/base/geometry.glsl"/>
@@ -8,8 +8,9 @@
    <built_in_data>
    </built_in_data>
    <extern_data>
+      <data type="float" name="reflection" value="0.5"/>
    </extern_data>
    <textures>
-      <texture2D name="textureCmp" location="common/textures/Stormtrooper_D.bmp"/>
+      <texture2D name="textureCmp" location="example/textures/farmHouse.jpg"/>
    </textures>
 </topping>

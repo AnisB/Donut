@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<sugar name="TransparentTeapot">
+<sugar name="mirror_teapot">
 	<renderables>
 		<renderable id="0">
-			<geometry type="egg" location="common/geometry/teapot.egg"/>
+			<geometry type="egg" location="common/eggs/teapot.egg"/>
 			<material name="mirror"/>
 		</renderable>
 	</renderables>

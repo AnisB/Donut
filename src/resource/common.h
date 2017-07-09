@@ -14,9 +14,7 @@
 *
 **/
 
-#ifndef RESOURCE_COMMON_H
-#define RESOURCE_COMMON_H
-
+#pragma once
 
 // donut includes
 #include <base/log.h>
@@ -36,5 +34,3 @@ namespace donut
 	// This allocator should be used for everything related to resource management
 	TAllocator* resource_allocator();
 }
-
-#endif // RESOURCE_COMMON_H
