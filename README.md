@@ -27,4 +27,4 @@ Pipeline recipe:
 
 Render queue dispatcher:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/example/dispatcher.png)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/dispatcher.png)
