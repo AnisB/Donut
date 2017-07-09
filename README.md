@@ -7,24 +7,24 @@ Description here => http://anisb.github.io/projects.html#-Donut
 
 The teapot army scene:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/ssr.png)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/ssr.png)
 
 Sample sugar file:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/sugar.PNG)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/sugar.PNG)
 
 Sample topping file:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/topping.png)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/topping.png)
 
 Sample scene file:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/scene.PNG)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/scene.PNG)
 
 Pipeline recipe:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/pipeline.PNG)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/pipeline.PNG)
 
 Render queue dispatcher:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/assets/example/dispatcher.png)
+![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/example/dispatcher.png)
