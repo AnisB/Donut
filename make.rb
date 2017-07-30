@@ -8,6 +8,7 @@ require 'optparse'
 $options = {}
 $compiler = ["vc14"]
 $platform = ["win64"]
+$build = ["debug", "release"]
 
 # Build variables
 $script_dir = File.expand_path(File.dirname(__FILE__))
@@ -22,9 +23,8 @@ def parse_options(argv, options)
 		opts.on('-c',  '--compiler <compiler>', "Target compiler [#{$compiler.join(", ")}]") { |v| options[:compiler] = v }
 		opts.on('-p',  '--platform <platform>', "The target platform [#{$platform.join(", ")}]" ) { |v| options[:platform] = v }
 		opts.on('-t', '--tests', "Generate tests for the library (and run them if generated)" ) { |v| options[:tests] = v }
-		opts.on('-d', '--debug_build', 'Compiles the project in a debug build') { options[:debug_build] = true }
-		opts.on('-r', '--release_build', 'Compiles the project in a release build') { options[:release_build] = true }
-		opts.on('-h',  '--help', 'Displays Help') do
+		opts.on('-b', '--build', "Compiles the project in a given build [#{$build.join(", ")}]") { |v| options[:build] = v }
+		opts.on('-h',  '--help', "Displays Help") do
 			puts opts
 			exit 1
 		end
@@ -60,14 +60,9 @@ if $options[:tests] == nil
 	$options[:tests] = true
 end
 
-if $options[:debug_build] == nil
-	$options[:debug_build] = true
+if $options[:build] == nil
+	$options[:build] = "release"
 end
-
-if $options[:release_build] == nil
-	$options[:release_build] = true
-end
-
 
 def create_dir_if_does_not_exist (directory_name)
 	Dir.mkdir(directory_name) unless File.exists?(directory_name)
@@ -146,17 +141,14 @@ def generate_project()
 	end
 end
 
-def compile_project()
+def compile_engine()
 	Dir.chdir($build_directory) do
 		# Compile the project in release mode
-		if $options[:release_build]
+		if $options[:build] == "release"
 			if !system(CMAKE_EXE + " --build . --config Release")
 				exit 1
 			end
-		end
-
-		# Compile the project in debug mode
-		if $options[:debug_build]
+		elsif $options[:build] == "debug"
 			if !system(CMAKE_EXE + " --build . --config Debug")
 				exit 1
 			end
@@ -164,6 +156,7 @@ def compile_project()
 	end
 end
 
+# Parse the options that have been fed in the command line
 parse_options(ARGV, $options)
 
 # Generate the directory names
@@ -172,5 +165,5 @@ generate_build_directory()
 # Generate the project
 generate_project()
 
-# Compile the project
-compile_project()
+# Compile the engine
+compile_engine()
