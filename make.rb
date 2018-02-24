@@ -6,7 +6,7 @@ require 'optparse'
 
 # option variables
 $options = {}
-$compiler = ["vc14"]
+$compiler = ["vc14", "vc15"]
 $platform = ["win64"]
 $build = ["debug", "release"]
 
@@ -45,7 +45,7 @@ end
 
 # Setting the default OptionParser
 if $options[:compiler] == nil
-	$options[:compiler] = "vc14"
+	$options[:compiler] = "vc15"
 end
 
 if $options[:platform] == nil
@@ -82,6 +82,8 @@ def get_generator_name()
 
 	if $options[:compiler] == "vc14"
 		generator += "\"Visual Studio 14 2015"
+	elsif $options[:compiler] == "vc15"
+		generator += "\"Visual Studio 15 2017"
 	else
 		puts "\nERROR: Compiler '#{$options[:compiler]}' not recognized."
 		exit 1
