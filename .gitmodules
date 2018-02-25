@@ -1,3 +1,6 @@
 [submodule "Bento"]
 	path = Bento
 	url = https://github.com/AnisB/Bento
+[submodule "bento"]
+	path = bento
+	url = https://github.com/AnisB/bento.git
