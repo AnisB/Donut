@@ -1,142 +1,55 @@
 cmake_minimum_required(VERSION 3.0.2)
+project(donut)
 
-project(DonutEngine)
+# Declare the global variable folders
+set(BENTO_SDK_ROOT "${PROJECT_SOURCE_DIR}/bento")
+set(DONUT_ENGINE_ROOT "${PROJECT_SOURCE_DIR}/engine/")
+set(DONUT_TEST_ROOT "${PROJECT_SOURCE_DIR}/test/")
+set(DONUT_PROGRAM_ROOT "${PROJECT_SOURCE_DIR}/program/")
+set(THIRD_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/3rd/include/windows")
+set(THIRD_LIBRARY_DIRS "${PROJECT_SOURCE_DIR}/3rd/lib/windows")
 
+# Override the cmake module path
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
+
+# Enable filters for cmake
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-IF(SILENT)
-add_definitions( -D _SILENT )
-ENDIF(SILENT)
+# Define the cmake macros
+include(CMakePlatforms)
+include(CMakeMacros)
+include(CMakeBuildSettings)
 
-set(CMAKE_C_FLAGS_DEBUG "-D_DEBUG")
-set(CMAKE_CXX_FLAGS_DEBUG "-D_DEBUG")
+# Define the build options
+define_plaform_settings()
 
-# Setting the compiler data
-IF (NOT WIN32)
-set(CMAKE_BUILD_TYPE "Debug")
-add_definitions(-std=c++11) 
-SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g")
-ENDIF()
-SET(CMAKE_MACRO_DIRS "${PROJECT_SOURCE_DIR}/cmake/")
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/;${CMAKE_MODULE_PATH}")
-link_directories(${CMAKE_BINARY_DIR} /usr/local/lib/)
+# Print the platform's name
+message(STATUS "The build identifier is: ${NYX_PLATFORM_NAME}")
 
-# Setting the folder data
-set(SOURCES "${PROJECT_SOURCE_DIR}/src/")
-set(TEST "${PROJECT_SOURCE_DIR}/test/")
-set(PROGRAM "${PROJECT_SOURCE_DIR}/program/")
+# Create the list of allowed files to be included
+set(bento_source_extensions)
+list(APPEND bento_source_extensions ".h" ".cpp" ".inl" ".txt")
 
-# Setting the include and external includes and data
-IF(UNIX AND NOT APPLE)
-set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/linux")
-set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/linux")
-ENDIF()
-IF(APPLE)
-set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/mac")
-set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/mac")
-ENDIF()
-IF(WIN32)
-set(EXTERNAL_LIBS "${PROJECT_SOURCE_DIR}/external/windows")
-set(EXTERNAL_INCLUDES "${PROJECT_SOURCE_DIR}/include/windows")
-ENDIF()
+# Compile the bento SDK
+add_subdirectory(${BENTO_SDK_ROOT}/src)
 
-include(${CMAKE_MACRO_DIRS}/Macros.cmake)
+# Find opengl
+FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
 
-# Setting the needs
-IF(UNIX AND NOT APPLE)
-add_definitions( -D__posix__ )
-add_definitions( -D LINUX )
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-FIND_PACKAGE (X11 REQUIRED)
-# Support vulkan if available
-HANDLE_VULKAN()
-set(GRAPHIC_INCLUDE_DIR "${GRAPHIC_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIRS}")
-set(GRAPHIC_LIBS "${GRAPHIC_LIBS}" "${EXTERNAL_LIBS}/libglfw3.a" ${GLEW_LIBRARY} ${OPENGL_LIBRARIES} 
- ${X11_Xxf86vm_LIB} ${X11_Xrandr_LIB} ${X11_Xi_LIB} pthread)
-   SET(IMAGE_LIBS jpeg png)
-   SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
-ENDIF()
+# Find vulkan if available
+try_find_vulkan()
 
-IF(APPLE)
-  add_definitions( -DMACOSX)
-  add_definitions( -D__posix__ )
-  INCLUDE_DIRECTORIES ( /System/Library/Frameworks /usr/local/include/)
-  FIND_LIBRARY(COCOA_LIBRARY Cocoa)
-  FIND_LIBRARY(IOKIT_LIBRARY IOKit)
-  FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-  find_package(GLEW REQUIRED)
-  MARK_AS_ADVANCED (COCOA_LIBRARY
-                   GLFW_LIBRARY
-                   OpenGL_LIBRARY
-                   IOKIT_LIBRARY)
-  set(GRAPHIC_INCLUDE_DIR "${OPENGL_INCLUDE_DIRS}")
-  SET(GRAPHIC_LIBS ${COCOA_LIBRARY} ${GLEW_LIBRARY} ${OpenGL_LIBRARY} ${IOKIT_LIBRARY} "${EXTERNAL_LIBS}/libglfw3.a")
-  SET(IMAGE_LIBS jpeg png)
-  SET(CORELIBS ${GRAPHIC_LIBS} ${IMAGE_LIBS})
-ENDIF (APPLE)
+# Set the include directories
+set(COMBINED_INCLUDE_DIRS "${THIRD_INCLUDE_DIRS}" "${OPENGL_INCLUDE_DIRS}")
+set(COMBINED_INCLUDE_DIRS "${COMBINED_INCLUDE_DIRS}" "${GRAPHIC_INCLUDE_DIR}")
+SET(THIRD_PARTY_LIBRARIES "${GRAPHIC_LIBS}" "${THIRD_LIBRARY_DIRS}/lib-vc2015/glfw3.lib" "${THIRD_LIBRARY_DIRS}/glew32.lib" "${THIRD_LIBRARY_DIRS}/glew32s.lib" "opengl32.lib" "${THIRD_LIBRARY_DIRS}/libjpeg.lib")
+SET(THIRD_PARTY_BINARIES "${THIRD_LIBRARY_DIRS}/glew32.dll")
 
-IF(WIN32)
-  add_definitions( -DWIN32 )
-  set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD /Zi")
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd /Zi /Od")
-  FIND_LIBRARY(OpenGL_LIBRARY OpenGL )
-  # Support vulkan if available
-  HANDLE_VULKAN()
-  set(GRAPHIC_INCLUDE_DIR "${GRAPHIC_INCLUDE_DIR}" "${OPENGL_INCLUDE_DIRS}")
-  SET(GRAPHIC_LIBS "${GRAPHIC_LIBS}" "${EXTERNAL_LIBS}/lib-vc2015/glfw3.lib" "${EXTERNAL_LIBS}/glew32.lib" "${EXTERNAL_LIBS}/glew32s.lib" "opengl32.lib" "${EXTERNAL_LIBS}/libjpeg.lib")
-  SET(GRAPHIC_BINS "${EXTERNAL_LIBS}/glew32.dll")
-  SET(CORELIBS ${GRAPHIC_LIBS} )
-ENDIF()
-
-# Generating the libraries
-GENERATE_LIB("${SOURCES}/base" base "DonutLib")
-GENERATE_LIB("${SOURCES}/containers" containers "DonutLib")
-GENERATE_LIB("${SOURCES}/memory" memory "DonutLib")
-GENERATE_LIB("${SOURCES}/butter" butter "DonutLib")
-GENERATE_LIB("${SOURCES}/engine" engine "DonutLib")
-GENERATE_LIB("${SOURCES}/input" input "DonutLib")
-GENERATE_LIB("${SOURCES}/render" render "DonutLib")
-GENERATE_LIB("${SOURCES}/core" core "DonutLib")
-GENERATE_LIB("${SOURCES}/recipe" recipe "DonutLib")
-GENERATE_LIB("${SOURCES}/graphics" graphics "DonutLib")
-GENERATE_LIB("${SOURCES}/resource" resource "DonutLib")
-GENERATE_LIB("${SOURCES}/stateengine" state_engine "DonutLib")
-GENERATE_LIB("${SOURCES}/tools" tools "DonutLib")
-
-SET(CORELIBS ${CORELIBS} base containers butter memory engine input core render graphics recipe resource state_engine tools)
+# Compile the engine
+add_subdirectory(${DONUT_ENGINE_ROOT}/src)
 
 # Adding the tests if we should
-IF(TESTS)
-  add_subdirectory(${TEST})
-ENDIF(TESTS)
+add_subdirectory(${DONUT_TEST_ROOT})
 
 # Adding the programs if we should
-add_subdirectory(${PROGRAM})
-
-
-# Adding the links on linux and mac
-IF(UNIX)
-add_custom_command(
-    TARGET Tracing POST_BUILD
-    COMMAND ln -sf ${PROJECT_SOURCE_DIR}/assets ${PROJECT_BINARY_DIR}
-)
-ENDIF(UNIX)
-
-
-IF(WIN32)
-#sources
-file(TO_NATIVE_PATH "${PROJECT_SOURCE_DIR}/assets" link2)
-#global target
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/program/assets" programData)
-
-file(TO_NATIVE_PATH "${PROJECT_BINARY_DIR}/test/assets" testData)
-execute_process( COMMAND cmd.exe /c mklink /D ${programData} ${link2})
-execute_process( COMMAND cmd.exe /c mklink /D ${testData} ${link2})
-source_group("donut" FILES ${SOURCES})
-ENDIF(WIN32)
-
-
- 
-
-
+add_subdirectory(${DONUT_PROGRAM_ROOT})
