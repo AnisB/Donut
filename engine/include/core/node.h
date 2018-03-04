@@ -17,11 +17,11 @@
 #pragma once
 
 // Std includes
-#include "butter/matrix4.h"
 #include "bento_collection/vector.h"
 
 // Bento includes
 #include <bento_memory/common.h>
+#include <bento_math/matrix4.h>
 
 // STL includes
 #include <vector>
@@ -47,18 +47,18 @@ namespace donut
 		bool RemoveChild(TNode* _childNode);
 
 		// Utility functions
-		void SetTransformationMatrix(const Matrix4& _tm) { m_transform =_tm;}
+		void SetTransformationMatrix(const bento::Matrix4& _tm) { m_transform =_tm;}
 
 		// Access the son set
 		const bento::Vector<TNode*>& ChildList() {return m_sons;}
 		
 		// Evaluate this node and its subnodes
-		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
+		virtual void Evaluate(TCollector& _requestCollector, const bento::Matrix4& _parentTransform);
 
 	protected:
 		// Node data
 		TNode* m_parent;
 		bento::Vector<TNode*> m_sons;
-		Matrix4 m_transform;
+		bento::Matrix4 m_transform;
 	};
 }

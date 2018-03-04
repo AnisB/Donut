@@ -20,10 +20,11 @@
 #include "graphics/material.h"
 #include "resource/resourcemanager.h"
 #include "graphics/glfactory.h"
-#include "butter/stream.h"
-#include "butter/matrix3.h"
 
 #include "tools/fileloader.h"
+
+// Bento includes
+#include <bento_math/matrix3.h>
 
 // STL includes
 #include <stdlib.h>
@@ -287,14 +288,14 @@ namespace donut
 
 	// Injections
 	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Vector3& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const bento::Vector3& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform3f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 		GL_API_CHECK_END();
 	}
 	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Vector4& _value, const STRING_TYPE& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const bento::Vector4& _value, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 	    glUniform4f(glGetUniformLocation(parProgram.FProgramID, parName.c_str()), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
@@ -327,7 +328,7 @@ namespace donut
 	}
 
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Matrix4& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const bento::Matrix4& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
 		float mat[16];
@@ -337,12 +338,10 @@ namespace donut
 	}
 
  	template <>
-	void ShaderManager::Inject(const TShader& parProgram, const Matrix3& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(const TShader& parProgram, const bento::Matrix3& parValue, const STRING_TYPE& parName)
 	{
 		GL_API_CHECK_START();
-		float mat[9];
-		ToTable(parValue, &mat[0]);
-	    glUniformMatrix3fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, mat);
+	    glUniformMatrix3fv(glGetUniformLocation(parProgram.FProgramID, parName.c_str()),1,true, parValue.m);
 		GL_API_CHECK_END();
 	}
 

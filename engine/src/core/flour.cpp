@@ -1,21 +1,21 @@
 // Library includes
 #include "core/flour.h"
-#include "butter/stream.h"
 #include "core/scenenode.h"
 #include "graphics/factory.h"
 #include "core/sugarinstance.h"
 #include "resource/flourloader.h"
 #include "resource/resourcemanager.h"
 #include "tools/fileloader.h"
+#include "butter/stream.h"
 
 namespace donut
 {
 	// Builda light from its descriptor
 	void build_from_descriptor(const TLightDescriptor& light_descriptor, TLight& new_light)
 	{
-		new_light.SetPosition(convert_from_string<Vector3>(light_descriptor.pos));
-		new_light.SetDiffuse(convert_from_string<Vector4>(light_descriptor.diff));
-		new_light.SetSpecular(convert_from_string<Vector4>(light_descriptor.spec));
+		new_light.SetPosition(convert_from_string<bento::Vector3>(light_descriptor.pos));
+		new_light.SetDiffuse(convert_from_string<bento::Vector4>(light_descriptor.diff));
+		new_light.SetSpecular(convert_from_string<bento::Vector4>(light_descriptor.spec));
 		new_light.SetRay(convert_from_string<float>(light_descriptor.ray));
 	}
 
@@ -53,7 +53,7 @@ namespace donut
 		}
 
 		// Setting the matrix transform
-		node->SetTransformationMatrix(convert_from_string<Matrix4>(_node.tm));
+		node->SetTransformationMatrix(convert_from_string<bento::Matrix4>(_node.tm));
 
 		// Setting its progeny
 		for(auto& node_element : _node.nodes)

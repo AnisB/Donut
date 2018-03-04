@@ -3,8 +3,11 @@
 #include "base/stringhelper.h"
 #include "base/log.h"
 #include "base/security.h"
-#include "butter/vector3.h"
 #include "resource/egg.h"
+
+// Bento includes
+#include <bento_math/types.h>
+#include <bento_math/vector3.h>
 
 // External includes
 #include <vector>
@@ -20,10 +23,10 @@ namespace donut
 	{
 		PRINT_ERROR("Tools", "Trying to load Wavefront: " << _wavefrontFIle);
 		// Liste des vertices
-		std::vector<Vector3> listePoints;
+		std::vector<bento::Vector3> listePoints;
 		// Liste des infos par point
-		std::vector<Vector3> normales;
-		std::vector<Vector2> uvList;
+		std::vector<bento::Vector3> normales;
+		std::vector<bento::Vector2> uvList;
 
 		// Gestion des infos
 		std::vector<TShape> shapes;
@@ -46,7 +49,7 @@ namespace donut
 					{
 						// INPUT_DEBUG("Nouveau vertice.");
 						STREAM_TYPE s(line.substr(2));
-						Vector3 v;
+						bento::Vector3 v;
 						s >> v.x;
 						s >> v.y;
 						s >> v.z;
@@ -72,7 +75,7 @@ namespace donut
 						float u, v;
 						s >> u;
 						s >> v;
-						Vector2 map;
+						bento::Vector2 map;
 						map.x = u;
 						map.y = v;
 						uvList.push_back(map);
@@ -81,7 +84,7 @@ namespace donut
 					{
 						//INPUT_DEBUG("Normal.");
 						std::istringstream s(line.substr(2));
-						Vector3 normal;
+						bento::Vector3 normal;
 						s >> normal.x;
 						s >> normal.y;
 						s >> normal.z;
@@ -125,14 +128,14 @@ namespace donut
 					int primSize = (int)vertices.size();
 					if (vertices.size() == 3)
 					{
-						Vector3 points[3];
+						bento::Vector3 points[3];
 						points[0] = listePoints[convert_from_string<int>(vertices[0]) - 1];
 						points[1] = listePoints[convert_from_string<int>(vertices[1]) - 1];
 						points[2] = listePoints[convert_from_string<int>(vertices[2]) - 1];
 
-						const Vector3& v0 = points[1] - points[0];
-						const Vector3& v1 = points[2] - points[0];
-						const Vector3& normal = normalize(crossProd(v0, v1));
+						const bento::Vector3& v0 = points[1] - points[0];
+						const bento::Vector3& v1 = points[2] - points[0];
+						const bento::Vector3& normal = normalize(bento::cross(v0, v1));
 
 						for (int i = 0; i < 3; ++i)
 						{
@@ -181,7 +184,7 @@ namespace donut
 					int primSize = (int)vertices.size();
 					if (primSize == 3)
 					{
-						Vector3 points[3];
+						bento::Vector3 points[3];
 						std::vector<STRING_TYPE> dataVert0, dataVert1, dataVert2;
 						split(vertices[0], '/', dataVert0);
 						split(vertices[1], '/', dataVert1);
@@ -190,14 +193,14 @@ namespace donut
 						points[1] = listePoints[convert_from_string<int>(dataVert1[0]) - 1];
 						points[2] = listePoints[convert_from_string<int>(dataVert2[0]) - 1];
 
-						Vector2 texCoord[3];
+						bento::Vector2 texCoord[3];
 						texCoord[0] = uvList[convert_from_string<int>(dataVert0[1]) - 1];
 						texCoord[1] = uvList[convert_from_string<int>(dataVert1[1]) - 1];
 						texCoord[2] = uvList[convert_from_string<int>(dataVert2[1]) - 1];
 
-						const Vector3& v0 = points[1] - points[0];
-						const Vector3& v1 = points[2] - points[0];
-						const Vector3& normal = normalize(crossProd(v0, v1));
+						const bento::Vector3& v0 = points[1] - points[0];
+						const bento::Vector3& v1 = points[2] - points[0];
+						const bento::Vector3& normal = normalize(cross(v0, v1));
 
 						for (int i = 0; i < 3; ++i)
 						{
@@ -243,7 +246,7 @@ namespace donut
 					int primSize = (int)vertices.size();
 					if (primSize == 3)
 					{
-						Vector3 points[3];
+						bento::Vector3 points[3];
 						std::vector<STRING_TYPE> dataVert0, dataVert1, dataVert2;
 						split(vertices[0], '/', dataVert0);
 						split(vertices[1], '/', dataVert1);
@@ -252,12 +255,12 @@ namespace donut
 						points[1] = listePoints[convert_from_string<int>(dataVert1[0]) - 1];
 						points[2] = listePoints[convert_from_string<int>(dataVert2[0]) - 1];
 
-						Vector2 texCoord[3];
+						bento::Vector2 texCoord[3];
 						texCoord[0] = uvList[convert_from_string<int>(dataVert0[1]) - 1];
 						texCoord[1] = uvList[convert_from_string<int>(dataVert1[1]) - 1];
 						texCoord[2] = uvList[convert_from_string<int>(dataVert2[1]) - 1];
 
-						Vector3 normals[3];
+						bento::Vector3 normals[3];
 						normals[0] = normales[convert_from_string<int>(dataVert0[2]) - 1];
 						normals[1] = normales[convert_from_string<int>(dataVert1[2]) - 1];
 						normals[2] = normales[convert_from_string<int>(dataVert2[2]) - 1];

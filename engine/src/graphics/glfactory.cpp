@@ -255,7 +255,7 @@ namespace donut
 		return newModel;
 	}
 
-	void SetClearColor(const Vector4& _color)
+	void SetClearColor(const bento::Vector4& _color)
 	{
 		GL_API_CHECK_START();
 

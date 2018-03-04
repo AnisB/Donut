@@ -80,7 +80,7 @@
  		// initing the inputs
  		InputInit();
 
- 		SetClearColor(v4_ZERO); 
+ 		SetClearColor(bento::v4_ZERO); 
  			
 		uint64_t nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)

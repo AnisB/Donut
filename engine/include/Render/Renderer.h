@@ -14,18 +14,21 @@
  *
  **/
 
+#pragma once
 
- #ifndef DONUT_GRAPHIC_RENDERER
- #define DONUT_GRAPHIC_RENDERER
+// Library includes
+#include "graphics/common.h"
+#include "graphics/pipeline.h"
+#include "graphics/settings.h"
+#include "graphics/pass.h"
+#include "graphics/drawable.h"
+#include "core/node.h"
+#include "graphics/gpu_backend.h"
 
- #include "graphics/common.h"
- #include "graphics/pipeline.h"
- #include "graphics/settings.h"
- #include "graphics/pass.h"
- #include <butter/types.h>
- #include "graphics/drawable.h"
- #include "core/node.h"
- #include "graphics/gpu_backend.h"
+// Bento includes
+#include <bento_math/types.h>
+
+// External includes
  #include <string>
  #include <vector>
 #include <atomic>
@@ -80,7 +83,7 @@
 		bool FInitDone;
 		GLFWwindow * FWindow;
 		bool FIsFullScreen;
-		IVector2 FWindowSize;
+		bento::IVector2 FWindowSize;
 		GPUBackendAPI m_gpuBackendApi;
 
 		// Is Rendering member
@@ -92,4 +95,3 @@
 
 	void *CreateRenderingThread(void* parGraphicRenderer);
  }
- #endif // DONUT_GRAPHIC_RENDERER

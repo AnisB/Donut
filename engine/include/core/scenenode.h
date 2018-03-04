@@ -47,7 +47,7 @@ namespace donut
 		virtual void AppendDrawable(TDrawable* _drawables);
 
 		// Evaluate this node and its subnodes
-		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
+		virtual void Evaluate(TCollector& _requestCollector, const bento::Matrix4& _parentTransform);
 
 	protected:
 		bento::Vector<TDrawable*> m_drawables;

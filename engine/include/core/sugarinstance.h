@@ -42,7 +42,7 @@ namespace donut
 		TMesh* GetMesh(int _meshIndex);
 
 			// Evaluate the sugar instance
-		virtual void Evaluate(TCollector& _collector, const Matrix4& _tm);
+		virtual void Evaluate(TCollector& _collector, const bento::Matrix4& _tm);
 
 	protected:
 		std::vector<TMesh*> m_meshes;

@@ -15,7 +15,10 @@
 **/
 
 #include "input/DefaultInputManager.h"
-#include "butter/vector3.h"
+
+// Bento includes
+#include <bento_math/vector3.h>
+
 namespace donut
 {
 	TDefaultInputManager::TDefaultInputManager()
@@ -70,19 +73,19 @@ namespace donut
 		double delta = next-m_time;
 		if(FKeys[TKeyCode::W])
 		{
-			FCamera->Translate(vector3(0.0,0.0,delta*200));
+			FCamera->Translate(bento::vector3(0.0,0.0,delta*200));
 		}
 		if(FKeys[TKeyCode::S])
 		{
-			FCamera->Translate(vector3(0.0,0.0,-delta*200));
+			FCamera->Translate(bento::vector3(0.0,0.0,-delta*200));
 		}	
 		if(FKeys[TKeyCode::A])
 		{
-			FCamera->Translate(vector3(delta*200,0.0,0.0));
+			FCamera->Translate(bento::vector3(delta*200,0.0,0.0));
 		}
 		if(FKeys[TKeyCode::D])
 		{
-			FCamera->Translate(vector3(-delta*200,0.0,0.0));
+			FCamera->Translate(bento::vector3(-delta*200,0.0,0.0));
 		}
 		m_time =  next;
 		return delta;

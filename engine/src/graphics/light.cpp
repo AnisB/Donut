@@ -16,7 +16,9 @@
 
 
 #include "graphics/light.h"
-#include "butter/vector4.h"
+
+// Bento includes
+#include <bento_math/vector4.h>
 
 #define DEFAULT_RAY 30
 namespace donut
@@ -27,29 +29,29 @@ namespace donut
 	, FSpec()
 	, FRayon(DEFAULT_RAY)
 	{
-		FPosition = vector3(0.0);
-		FDiff = vector4(1.0);
-		FSpec = vector4(0.0);
+		FPosition = bento::vector3(0.0);
+		FDiff = bento::vector4(1.0);
+		FSpec = bento::vector4(0.0);
 	}
 	TLight::~TLight()
 	{
 		
 	}
 
-	void TLight::Translate(const Vector3& parVector)
+	void TLight::Translate(const bento::Vector3& parVector)
 	{
 		FPosition= FPosition + parVector;
 	}
 
-	void TLight::SetPosition(const Vector3& parVector)
+	void TLight::SetPosition(const bento::Vector3& parVector)
 	{
 		FPosition=parVector;
 	}
-	void TLight::SetSpecular(const Vector4& parColor)
+	void TLight::SetSpecular(const bento::Vector4& parColor)
 	{
 		FSpec=parColor;
 	}
-	void TLight::SetDiffuse(const Vector4& parColor)
+	void TLight::SetDiffuse(const bento::Vector4& parColor)
 	{
 		FDiff=parColor;
 	}
@@ -57,9 +59,9 @@ namespace donut
 	void TLight::InjectData(const TShader& _shader, size_t _lightIndex)
 	{
 		STRING_TYPE shift = "[" + convert_to_string(_lightIndex) + "]";
-		ShaderManager::Instance().Inject<Vector3>(_shader, FPosition, "lightSource"+shift+".position");
-		ShaderManager::Instance().Inject<Vector4>(_shader, FDiff , "lightSource"+shift+".diffuse");
-		ShaderManager::Instance().Inject<Vector4>(_shader, FSpec , "lightSource"+shift+".specular");	
+		ShaderManager::Instance().Inject<bento::Vector3>(_shader, FPosition, "lightSource"+shift+".position");
+		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FDiff , "lightSource"+shift+".diffuse");
+		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FSpec , "lightSource"+shift+".specular");
 		ShaderManager::Instance().Inject<float>(_shader, FRayon , "lightSource"+shift+".ray");	
 	}
  }

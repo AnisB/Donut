@@ -18,11 +18,12 @@
 #include "resource/resourcemanager.h"
 #include "resource/common.h"
 #include "tools/fileloader.h"
-#include "butter/types.h"
-#include "butter/stream.h"
 #include "rapidxml.hpp"
 #include "tools/xmlhelpers.h"
 #include "resource/toppingloader.h"
+
+// Bento includes
+#include <bento_math/types.h>
 
 namespace donut
 {

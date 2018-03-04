@@ -1,10 +1,11 @@
-#ifndef RENDER_REQUEST_H
-#define RENDER_REQUEST_H
+#pragma once
 
 // Library includes
 #include "resource/types.h"
-#include "butter/types.h"
 #include "graphics/uniformhandler.h"
+
+// Bento includes
+#include <bento_math/types.h>
 
 // External includes
 #include <map>
@@ -19,11 +20,9 @@ namespace donut
 		GEOMETRY_GUID geometry;
 
 		// Mesh transform
-		Matrix4 transform;
+		bento::Matrix4 transform;
 	};
 
 	// Processed a render request (draw it to the screen)
 	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniformHandler>& _uniforms);
 }
-
-#endif // RENDER_REQUEST_H

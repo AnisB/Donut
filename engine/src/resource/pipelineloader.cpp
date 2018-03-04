@@ -22,8 +22,9 @@
 #include "resource/resourcemanager.h"
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
-#include "butter/types.h"
-#include "butter/stream.h"
+
+// Bento includes
+#include <bento_math/types.h>
 
 namespace donut
 {

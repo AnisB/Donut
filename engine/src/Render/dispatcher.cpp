@@ -13,7 +13,7 @@ namespace donut
 		m_processors.push_back(new TCrumbleRemover());
 	}
 
-	void TDispatcher::ProcessRequests(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm)
+	void TDispatcher::ProcessRequests(std::vector<TRenderRequest>& _requests, const bento::Matrix4& _view, const TFrustum& _frusutm)
 	{
 		// Update the dispatcher internal data
 		UpdateData(_requests, _view);
@@ -33,7 +33,7 @@ namespace donut
 		}
 	}
 
-	void TDispatcher::UpdateData(std::vector<TRenderRequest>& _requests, const Matrix4& _view)
+	void TDispatcher::UpdateData(std::vector<TRenderRequest>& _requests, const bento::Matrix4& _view)
 	{
 		// Allocate any additional space for requests
 		size_t nbRequests = _requests.size();

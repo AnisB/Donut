@@ -57,7 +57,7 @@
 
 	private:
 		// Internal data
-		Matrix4 m_reference;
+		bento::Matrix4 m_reference;
 
 		// Rendering data
 		Camera * m_camera;

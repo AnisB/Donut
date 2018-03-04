@@ -40,7 +40,7 @@ namespace donut
 	}
 
 	// Evaluate the sugar instance
-	void TSugarInstance::Evaluate(TCollector& _collector, const Matrix4& _tm)
+	void TSugarInstance::Evaluate(TCollector& _collector, const bento::Matrix4& _tm)
 	{
 		for (auto& mesh : m_meshes)
 		{

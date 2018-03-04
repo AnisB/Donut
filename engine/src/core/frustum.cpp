@@ -1,36 +1,41 @@
 // Library include
 #include "core/frustum.h"
 #include "core/box3.h"
-#include "butter/vector3.h"
-#include "butter/vector4.h"
+
+// Bento includes
+#include <bento_math/vector3.h>
+#include <bento_math/vector4.h>
 
 // External includes
 #include <algorithm>
 
+#undef max
+#undef min
+
 namespace donut
 {
 	// Build a plane's data from 3 points
-	Vector4 BuildPlane(const Vector3& _a, const Vector3& _b, const Vector3& _c)
+	bento::Vector4 BuildPlane(const bento::Vector3& _a, const bento::Vector3& _b, const bento::Vector3& _c)
 	{
-		Vector4 planeData;
+		bento::Vector4 planeData;
 
 		// Compute the plane's normal
-		Vector3 planeNormal = normalize(crossProd(_b - _a, _c - _a));
+		bento::Vector3 planeNormal = normalize(bento::cross(_b - _a, _c - _a));
 
 		// Set the data
 		planeData.x = planeNormal.x;
 		planeData.y = planeNormal.y;
 		planeData.z = planeNormal.z;
-		planeData.w = -dotProd(_a, planeNormal);
+		planeData.w = -bento::dot(_a, planeNormal);
 
 		// Return the plane
 		return planeData;
 	}
 
 	// Fetch the normal from the plane data
-	const Vector3& Normal(const Vector4& _planeData)
+	const bento::Vector3& Normal(const bento::Vector4& _planeData)
 	{
-		return *reinterpret_cast<const Vector3*>(&_planeData.x);
+		return *reinterpret_cast<const bento::Vector3*>(&_planeData.x);
 	}
 
 	// Cst
@@ -64,23 +69,23 @@ namespace donut
 
 	void TFrustum::ComputeInternalData()
 	{
-		Vector3 near_center, far_center;
+		bento::Vector3 near_center, far_center;
 
 		// compute the centers of the near and far planes
-		near_center = v3_ZERO - v3_Z * nearD;
-		far_center = v3_ZERO - v3_Z * farD;
+		near_center = bento::v3_ZERO - bento::v3_Z * nearD;
+		far_center = bento::v3_ZERO - bento::v3_Z * farD;
 
 		// compute the 4 corners of the frustum on the near plane
-		pts[TFrustumPoints::NEAR_TOP_LEFT] = near_center + v3_Y * nh - v3_X * nw;
-		pts[TFrustumPoints::NEAR_TOP_RIGHT] = near_center + v3_Y * nh + v3_X * nw;
-		pts[TFrustumPoints::NEAR_BOTTOM_LEFT] = near_center - v3_Y * nh - v3_X * nw;
-		pts[TFrustumPoints::NEAR_BOTTOM_RIGHT] = near_center - v3_Y * nh + v3_X * nw;
+		pts[TFrustumPoints::NEAR_TOP_LEFT] = near_center + bento::v3_Y * nh - bento::v3_X * nw;
+		pts[TFrustumPoints::NEAR_TOP_RIGHT] = near_center + bento::v3_Y * nh + bento::v3_X * nw;
+		pts[TFrustumPoints::NEAR_BOTTOM_LEFT] = near_center - bento::v3_Y * nh - bento::v3_X * nw;
+		pts[TFrustumPoints::NEAR_BOTTOM_RIGHT] = near_center - bento::v3_Y * nh + bento::v3_X * nw;
 
 		// compute the 4 corners of the frustum on the far plane
-		pts[TFrustumPoints::FAR_TOP_LEFT] = far_center + v3_Y * fh - v3_X * fw;
-		pts[TFrustumPoints::FAR_TOP_RIGHT] = far_center + v3_Y * fh + v3_X * fw;
-		pts[TFrustumPoints::FAR_BOTTOM_LEFT] = far_center - v3_Y * fh - v3_X * fw;
-		pts[TFrustumPoints::FAR_BOTTOM_RIGHT] = far_center - v3_Y * fh + v3_X * fw;
+		pts[TFrustumPoints::FAR_TOP_LEFT] = far_center + bento::v3_Y * fh - bento::v3_X * fw;
+		pts[TFrustumPoints::FAR_TOP_RIGHT] = far_center + bento::v3_Y * fh + bento::v3_X * fw;
+		pts[TFrustumPoints::FAR_BOTTOM_LEFT] = far_center - bento::v3_Y * fh - bento::v3_X * fw;
+		pts[TFrustumPoints::FAR_BOTTOM_RIGHT] = far_center - bento::v3_Y * fh + bento::v3_X * fw;
 
 		// Compute the planes
 		pl[TFrustumPlanes::TOP] = BuildPlane(pts[TFrustumPoints::NEAR_TOP_RIGHT], pts[TFrustumPoints::NEAR_TOP_LEFT], pts[TFrustumPoints::FAR_TOP_LEFT]);
@@ -92,12 +97,12 @@ namespace donut
 	}
 
 	// A point is inside if it is on the positive side of all the planes
-	bool TFrustum::PointInFrustum(const Vector3& _point) const
+	bool TFrustum::PointInFrustum(const bento::Vector3& _point) const
 	{
 		// Check each plane
 		for (int i = 0; i < 6; ++i)
 		{
-			bool positive = (dotProd(Normal(pl[i]), _point) + pl[i].w) > 0.0;
+			bool positive = (bento::dot(Normal(pl[i]), _point) + pl[i].w) > 0.0;
 			if (!positive)
 			{
 				return false;
@@ -112,14 +117,14 @@ namespace donut
 		for (int i = 0; i<6; i++)
 		{
 			int out = 0;
-			out += ((dotProd(pl[i], vector4(_box.min.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.max.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.min.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.max.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.min.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.max.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.min.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((dotProd(pl[i], vector4(_box.max.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
 			if (out == 8) return true;
 		}
 
@@ -139,7 +144,7 @@ namespace donut
 	float TFrustum::MaxScreenPercentage(const TBox3& _box) const
 	{
 		// Fetche the dimension of the box
-		Vector3 dimension = _box.Width();
+		bento::Vector3 dimension = _box.Width();
 
 		// Fetch the maximal box dimension
 		float maxBoxDimension = std::max(dimension.x, dimension.y);

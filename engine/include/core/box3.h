@@ -1,9 +1,8 @@
-#ifndef BOX3_CORE_H
-#define BOX3_CORE_H
+#pragma once
 
-// Library includes
-#include "butter/types.h"
-#include "butter/vector3.h"
+// Bento includes
+#include <bento_math/types.h>
+#include <bento_math/vector3.h>
 
 namespace donut
 {
@@ -16,11 +15,11 @@ namespace donut
 
 	public:
 		void Reset();
-		Vector3 Center() const { return (max + min) / 2.0f; }
-		Vector3 Width() const { return (max - min); }
+		bento::Vector3 Center() const { return (max + min) / 2.0f; }
+		bento::Vector3 Width() const { return (max - min); }
 
 		// Override the max and min values if necessary
-		inline void IncludePoint(const Vector3& _pos)
+		inline void IncludePoint(const bento::Vector3& _pos)
 		{
 			// Override the miniaml
 			min.x = _pos.x < min.x ? _pos.x : min.x;
@@ -39,12 +38,10 @@ namespace donut
 		void operator=(const TBox3& _targetBox) {min = _targetBox.min; max = _targetBox.max;}
 
 	public:
-		Vector3 min;
-		Vector3 max;
+		bento::Vector3 min;
+		bento::Vector3 max;
 	};
 
 	// Helper functions for bounding boxes
-	TBox3 transform(const TBox3& _source, const Matrix4& _tm);
+	TBox3 transform(const TBox3& _source, const bento::Matrix4& _tm);
 }
-
-#endif // BOX3_CORE_H

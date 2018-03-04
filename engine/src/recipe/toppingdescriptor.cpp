@@ -44,19 +44,19 @@ namespace donut
     {
         if(_type == TOKEN_VEC3)
         {
-            _handler.SetValue(TShaderData::VEC3, _name, Vector3());
+            _handler.SetValue(TShaderData::VEC3, _name, bento::Vector3());
         }
         else if(_type == TOKEN_VEC4)
         {
-            _handler.SetValue(TShaderData::VEC4, _name, vector4(1.0, 1.0, 1.0, 1.0));
+            _handler.SetValue(TShaderData::VEC4, _name, bento::vector4(1.0, 1.0, 1.0, 1.0));
         }
         else if(_type == TOKEN_MAT3)
         {
-            _handler.SetValue(TShaderData::MAT3, _name, Matrix3());
+            _handler.SetValue(TShaderData::MAT3, _name, bento::Matrix3());
         }
         else if(_type == TOKEN_MAT4)
         {
-            _handler.SetValue(TShaderData::MAT4, _name, Matrix4());
+            _handler.SetValue(TShaderData::MAT4, _name, bento::Matrix4());
         }
         else if(_type == TOKEN_FLOAT)
         {

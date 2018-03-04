@@ -14,6 +14,7 @@
  *
  **/
 
+// Library includes
 #include <graphics/pipeline.h>
 #include <Render/Renderer.h>
 #include <Input/helper.h>
@@ -24,10 +25,11 @@
 #include <resource/flourLoader.h>
 #include <graphics/factory.h>
 #include <graphics/gl_backend.h>
-
 #include <core/scenenode.h>
-#include <butter/vector3.h>
-#include <butter/vector4.h>
+
+// Bento includes
+#include <bento_math/vector3.h>
+#include <bento_math/vector4.h>
 
 int main(int argc, char** argv)
 {

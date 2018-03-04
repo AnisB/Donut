@@ -14,12 +14,14 @@
  *
  **/
 
+#pragma once
 
-#ifndef DONUT_LIGHT
-#define DONUT_LIGHT
-
-#include <butter/Vector3.h>
+// library includs
 #include "graphics/ShaderManager.h"
+
+
+// Bento includes
+#include <bento_math/Vector3.h>
  
  namespace donut
  {
@@ -28,18 +30,17 @@
 	public:
 		TLight();
 		~TLight();
-		void Translate(const Vector3& _vector);
-		void SetPosition(const Vector3& _vector);
-		void SetSpecular(const Vector4& _color);
-		void SetDiffuse(const Vector4& _color);
+		void Translate(const bento::Vector3& _vector);
+		void SetPosition(const bento::Vector3& _vector);
+		void SetSpecular(const bento::Vector4& _color);
+		void SetDiffuse(const bento::Vector4& _color);
 		void SetRay(float _ray) {FRayon = _ray;}
 		void InjectData(const TShader& _shader, size_t _lightIndex);
 
 	protected:
-		Vector3 FPosition;
-		Vector4 FDiff;
-		Vector4 FSpec;
+		bento::Vector3 FPosition;
+		bento::Vector4 FDiff;
+		bento::Vector4 FSpec;
 		float FRayon;
 	};
  }
- #endif // DONUT_LIGHT

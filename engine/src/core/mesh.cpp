@@ -36,7 +36,7 @@ namespace donut
 
  	}
 	
-	void TMesh::Evaluate(TCollector& _request, const Matrix4& _tm)
+	void TMesh::Evaluate(TCollector& _request, const bento::Matrix4& _tm)
 	{
 		// Build our new render request
 		TRenderRequest newRequest;

@@ -1,8 +1,10 @@
 // Library include
 #include "render/crumble_remover.h"
 #include "resource/resourcemanager.h"
-#include "butter/matrix4.h"
-#include "butter/vector4.h"
+
+// Bento includes
+#include <bento_math/matrix4.h>
+#include <bento_math/vector4.h>
 
 namespace donut
 {
@@ -19,7 +21,7 @@ namespace donut
 	}
 
 	// Process the render requests
-	void TCrumbleRemover::Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes,const Matrix4& _view, const TFrustum& _frusutm)
+	void TCrumbleRemover::Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes,const bento::Matrix4& _view, const TFrustum& _frusutm)
 	{
 		// Fetch the amount of remaining requests to process
 		size_t nbRequests = _requests.size();

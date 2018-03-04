@@ -4,6 +4,9 @@
 // Library includes
 #include "processor.h"
 
+// Bento includes
+#include <bento_math/types.h>
+
 // External includes
 #include <vector>
 
@@ -17,9 +20,9 @@ namespace donut
 
 	public:
 		void Reset();
-		void ProcessRequests(std::vector<TRenderRequest>& _requests, const Matrix4& _view, const TFrustum& _frusutm);
+		void ProcessRequests(std::vector<TRenderRequest>& _requests, const bento::Matrix4& _view, const TFrustum& _frusutm);
 	protected:
-		void UpdateData(std::vector<TRenderRequest>& _requests, const Matrix4& _view);
+		void UpdateData(std::vector<TRenderRequest>& _requests, const bento::Matrix4& _view);
 	protected:
 		std::vector<TProcessor*> m_processors;
 		std::vector<TBox3> m_vs_bb;

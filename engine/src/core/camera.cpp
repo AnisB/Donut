@@ -17,7 +17,9 @@
 // Library includes
 #include "core/Camera.h"
 #include "core/common.h"
-#include "butter/matrix3.h"
+
+// Bento includes
+#include <bento_math/matrix3.h>
 
 // STL inlcudes
 #include <math.h>
@@ -41,7 +43,7 @@ namespace donut
 	, m_position()
 	{
 		SetIdentity(m_viewMatrix);
-		SetIdentity(m_viewMatrix_inverse);
+		bento::set_identity(m_viewMatrix_inverse);
 		SetIdentity(m_projection);
 		SetIdentity(m_projectionView);
 	}
@@ -85,19 +87,19 @@ namespace donut
 	}
 
 	// Apply a translation
-	void Camera::Translate(const Vector3& _dir)
+	void Camera::Translate(const bento::Vector3& _dir)
 	{
 		// Compute the translation in view space
-		const Vector3& dir = m_viewMatrix_inverse * _dir;
+		const bento::Vector3& dir = m_viewMatrix_inverse * _dir;
 		// Update position
-		m_position = m_position + vector3(dir.x, dir.y, dir.z);
+		m_position = m_position + bento::vector3(dir.x, dir.y, dir.z);
 		UpdateViewData();
 	}
 
 	// Update the view data
 	void Camera::UpdateViewData()
 	{
-		m_viewMatrix = RotateXAxis(m_pitch) * RotateYAxis(m_yaw) * Translate_M4(m_position);
+		m_viewMatrix = bento::RotateXAxis(m_pitch) * bento::RotateYAxis(m_yaw) * Translate_M4(m_position);
 		m_viewMatrix_inverse = Inverse3x3(m_viewMatrix);
 		m_projectionView = m_projection * m_viewMatrix;
 	}
@@ -105,13 +107,13 @@ namespace donut
 	void Camera::AppendUniforms(std::map<STRING_TYPE, TUniformHandler>& _uniforms)
 	{
 		// Injecting view matrix
-		_uniforms["view"].SetValue<Matrix4>(TShaderData::MAT4, "view", m_viewMatrix);
+		_uniforms["view"].SetValue<bento::Matrix4>(TShaderData::MAT4, "view", m_viewMatrix);
 		// Injecting inversed view matrix
-		_uniforms["view_inverse"].SetValue<Matrix3>(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
+		_uniforms["view_inverse"].SetValue<bento::Matrix3>(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
 		// Injecting projection matrix
-		_uniforms["projection"].SetValue<Matrix4>(TShaderData::MAT4, "projection", m_projection);
+		_uniforms["projection"].SetValue<bento::Matrix4>(TShaderData::MAT4, "projection", m_projection);
 		// Injecting projection matrix
-		_uniforms["viewprojection"].SetValue<Matrix4>(TShaderData::MAT4, "viewprojection", m_projection*m_viewMatrix);
+		_uniforms["viewprojection"].SetValue<bento::Matrix4>(TShaderData::MAT4, "viewprojection", m_projection*m_viewMatrix);
 		// Injecting zbuffer fcoef
 		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance

@@ -5,14 +5,14 @@
 namespace donut
 {
 	// Stream operator overload
-	std::istream& operator>>(std::istream& _stream, Vector2& _val)
+	std::istream& operator>>(std::istream& _stream, bento::Vector2& _val)
 	{
 		_stream>>_val.x;
 		_stream>>_val.y;
 		return _stream;
 	}
 
-	std::ostream& operator<<(std::ostream& _stream, Vector2& _val)
+	std::ostream& operator<<(std::ostream& _stream, bento::Vector2& _val)
 	{
 		_stream<<_val.x;
 		_stream<<' ';
@@ -21,7 +21,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::istream& operator>>(std::istream& _stream, Vector3& _val)
+	std::istream& operator>>(std::istream& _stream, bento::Vector3& _val)
 	{
 		_stream>>_val.x;
 		_stream>>_val.y;
@@ -29,7 +29,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::ostream& operator<<(std::ostream& _stream, Vector3& _val)
+	std::ostream& operator<<(std::ostream& _stream, bento::Vector3& _val)
 	{
 		_stream<<_val.x;
 		_stream<<' ';
@@ -40,7 +40,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::istream& operator>>(std::istream& _stream, Vector4& _val)
+	std::istream& operator>>(std::istream& _stream, bento::Vector4& _val)
 	{
 		_stream>>_val.x;
 		_stream>>_val.y;
@@ -49,7 +49,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::ostream& operator<<(std::ostream& _stream, Vector4& _val)
+	std::ostream& operator<<(std::ostream& _stream, bento::Vector4& _val)
 	{
 		_stream<<_val.x;
 		_stream<<' ';
@@ -62,7 +62,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::istream& operator>>(std::istream& _stream, Matrix4& _val)
+	std::istream& operator>>(std::istream& _stream, bento::Matrix4& _val)
 	{
 		for(size_t index = 0; index < 16; ++index)
 		{
@@ -71,7 +71,7 @@ namespace donut
 		return _stream;
 	}
 
-	std::ostream& operator<<(std::ostream& _stream, Matrix4& _val)
+	std::ostream& operator<<(std::ostream& _stream, bento::Matrix4& _val)
 	{
 		for(size_t index = 0; index < 16; ++index)
 		{

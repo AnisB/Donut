@@ -1,7 +1,7 @@
 // Library include
 #include "core/box3.h"
-#include "butter/vector3.h"
-#include "butter/matrix4.h"
+#include "bento_math/vector3.h"
+#include "bento_math/matrix4.h"
 #include "base/security.h"
 
 // External includes
@@ -21,14 +21,14 @@ namespace donut
 
 	void TBox3::Reset()
 	{
-		min = vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		max = -vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		min = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		max = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 	}
 
-	TBox3 transform(const TBox3 & _inputBox, const Matrix4 & _mat)
+	TBox3 transform(const TBox3 & _inputBox, const bento::Matrix4 & _mat)
 	{
 		// Get the translation vector
-		const Vector3& translate = GetTranslate(_mat);
+		const bento::Vector3& translate = GetTranslate(_mat);
 
 		// Create the output box
 		TBox3 new_box;
@@ -40,20 +40,20 @@ namespace donut
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				av = _mat.m[i * 4 + j] * atIndex_Cst(_inputBox.min, j);
-				bv = _mat.m[i * 4 + j] * atIndex_Cst(_inputBox.max, j);
+				av = _mat.m[i * 4 + j] * bento::at_index(_inputBox.min, j);
+				bv = _mat.m[i * 4 + j] * bento::at_index(_inputBox.max, j);
 
 				if (av < bv)
 				{
-					atIndex(new_box.min, i) += av;
-					atIndex(new_box.max, i) += bv;
+					bento::at_index(new_box.min, i) += av;
+					bento::at_index(new_box.max, i) += bv;
 
 				}
 				else
 				{
 
-					atIndex(new_box.min, i) += bv;
-					atIndex(new_box.max, i) += av;
+					bento::at_index(new_box.min, i) += bv;
+					bento::at_index(new_box.max, i) += av;
 				}
 			}
 		}
@@ -67,7 +67,7 @@ namespace donut
 		{
 			// Include it
 			float* posPtr = _pointCoords + 3 * pIdx;
-			const Vector3& targetPoint = vector3(posPtr[0], posPtr[1], posPtr[2]);
+			const bento::Vector3& targetPoint = bento::vector3(posPtr[0], posPtr[1], posPtr[2]);
 			IncludePoint(targetPoint);
 		}
 	}

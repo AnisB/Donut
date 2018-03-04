@@ -18,10 +18,12 @@
 
 // LIbrary includes
 #include "resource/egg.h"
-#include "butter/vector3.h"
-#include "butter/vector4.h"
-#include "butter/matrix4.h"
 #include "base/stringhelper.h"
+
+// Bento includes
+#include <bento_math/vector3.h>
+#include <bento_math/matrix4.h>
+#include <bento_math/vector4.h>
 
 // Std includes
 #include <vector>

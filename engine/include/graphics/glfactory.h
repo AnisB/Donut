@@ -41,7 +41,7 @@ namespace donut
 	void DeleteFrameBuffer(GLuint& _frameBuffer);
 	void BindToFrameBuffer(const TTextureInfo& _tex);
 	void ClearBuffer();
-	void SetClearColor(const Vector4& _color);
+	void SetClearColor(const bento::Vector4& _color);
 
 	// Texture creation and deletion
 	void CreateTexture(TTextureInfo& _tex, int parWidth, int parHeight);

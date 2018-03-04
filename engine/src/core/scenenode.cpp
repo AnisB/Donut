@@ -32,10 +32,10 @@ namespace donut
 	}
 
 	// Parse this node and its subnodes
-	void TSceneNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
+	void TSceneNode::Evaluate(TCollector& _requestCollector, const bento::Matrix4& _parentTransform)
 	{
 		// For each drawable attached to this node
-		const Matrix4& currentTransform = _parentTransform * m_transform;
+		const bento::Matrix4& currentTransform = _parentTransform * m_transform;
 
 		// Evaluate the drawables
 		for(auto& drawable : m_drawables)

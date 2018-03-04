@@ -24,9 +24,9 @@ namespace donut
 			handler.Inject(targetShader);
 		}
 		// Fetch the view projection matrix
-		const Matrix4& viewprojection = _uniforms["viewprojection"].GetValue<Matrix4>();
-		ShaderManager::Instance().Inject<Matrix4>(targetShader, viewprojection * _request.transform, "modelviewprojection");
-		ShaderManager::Instance().Inject<Matrix4>(targetShader, _request.transform, "model");
+		const bento::Matrix4& viewprojection = _uniforms["viewprojection"].GetValue<bento::Matrix4>();
+		ShaderManager::Instance().Inject<bento::Matrix4>(targetShader, viewprojection * _request.transform, "modelviewprojection");
+		ShaderManager::Instance().Inject<bento::Matrix4>(targetShader, _request.transform, "model");
 
 		geom->Draw(targetShader.FIsTesselated);
 

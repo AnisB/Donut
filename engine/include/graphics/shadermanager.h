@@ -14,15 +14,16 @@
 *
 **/
 
-#ifndef SHADER_MANAGER_DONUT 
-#define SHADER_MANAGER_DONUT
+#pragma once
 
 // Library includes
 #include "shader.h"
 
 #include "base/singleton.h"
-#include "butter/Vector3.h"
-#include "butter/Matrix4.h"
+
+// Bento includes
+#include <bento_math/Vector3.h>
+#include <bento_math/Matrix4.h>
 
 // STL includes
 #include <unordered_set>
@@ -72,5 +73,3 @@ namespace donut
  		std::unordered_set<TShader,TShaderHasher> FPrograms;
  	};
  }
-
- #endif //SHADER_MANAGER_DONUT

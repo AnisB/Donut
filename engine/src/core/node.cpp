@@ -31,7 +31,7 @@ namespace donut
 	, m_parent(nullptr)
 	{
 		// Make sure the root is centered at origin
-		matrix4(m_transform, MatrixInit::Identity);
+		bento::SetIdentity(m_transform);
 	}
 
 	TNode::~TNode()
@@ -54,7 +54,7 @@ namespace donut
 	}
 
 	// Parse this node and its subnodes
-	void TNode::Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform)
+	void TNode::Evaluate(TCollector& _requestCollector, const bento::Matrix4& _parentTransform)
 	{
 		// For each subnode, parse
 		for(auto son : m_sons)

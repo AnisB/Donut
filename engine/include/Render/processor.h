@@ -1,6 +1,10 @@
 #ifndef REQUEST_PROCESSOR_H
 #define REQUEST_PROCESSOR_H
 
+// Bento includes
+#include <bento_math/types.h>
+
+
 // External includes
 #include <vector>
 
@@ -18,7 +22,7 @@ namespace donut
 		TProcessor() {}
 		virtual ~TProcessor() {}
 	public:
-		virtual void Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes, const Matrix4& _view, const TFrustum& _frusutm) = 0;
+		virtual void Process(std::vector<TRenderRequest>& _requests, std::vector<TBox3>& _vsBoxes, const bento::Matrix4& _view, const TFrustum& _frusutm) = 0;
 	};
 }
 

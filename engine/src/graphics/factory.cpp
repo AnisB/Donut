@@ -294,8 +294,8 @@ namespace donut
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
 		GEOMETRY_GUID guid = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
 		TGeometry* geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
-		geo->os_bb.max = vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		geo->os_bb.min = -vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		geo->os_bb.max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		geo->os_bb.min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		return guid;
 	}
 

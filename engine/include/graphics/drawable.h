@@ -33,7 +33,7 @@ namespace donut
 		virtual ~TDrawable();
 
 		// Evaluate the drawable
-		virtual void Evaluate(TCollector& _collector, const Matrix4& _tm) = 0;
+		virtual void Evaluate(TCollector& _collector, const bento::Matrix4& _tm) = 0;
 	};
 }
  #endif // DONUT_DRAWABLE_OBJECT
