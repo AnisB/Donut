@@ -182,3 +182,7 @@ if(Vulkan_FOUND)
   add_definitions( -DVULKAN_SUPPORTED )
 endif(Vulkan_FOUND)
 ENDMACRO()
+
+macro(copy_next_to_binary target_project target_asset)
+    add_custom_command(TARGET ${target_project} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different "${target_asset}" $<TARGET_FILE_DIR:${target_project}>)
+endmacro()

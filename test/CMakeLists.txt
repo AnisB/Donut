@@ -19,3 +19,6 @@ if(Vulkan_FOUND)
 	bento_exe("testvulkan" "tests" "testvulkan.cpp" "${DONUT_ENGINE_INCLUDE};${THIRD_PARTY_INCLUDE_DIRS}")
 	target_link_libraries("testvulkan" "donut_engine" "bento_sdk" "${THIRD_PARTY_LIBRARIES}")
 endif(Vulkan_FOUND)
+
+# Copy the binaries
+copy_next_to_binary("testFlourLoad" "${THIRD_PARTY_BINARIES}")

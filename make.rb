@@ -12,8 +12,10 @@ $build = ["debug", "release"]
 
 # Build variables
 $script_dir = File.expand_path(File.dirname(__FILE__))
-$platform_name =  nil
-$build_directory = nil
+$root_build_dir = nil
+$cmake_directory =  nil
+$output_directory = nil
+$platform_name = nil
 
 CMAKE_EXE = "cmake"
 
@@ -45,7 +47,7 @@ end
 
 # Setting the default OptionParser
 if $options[:compiler] == nil
-	$options[:compiler] = "vc14"
+	$options[:compiler] = "vc15"
 end
 
 if $options[:platform] == nil
@@ -70,10 +72,15 @@ end
 
 # Generate the required directires
 def generate_build_directory()
-	# Generate the platform name
+	$script_dir = File.expand_path(File.dirname(__FILE__))
 	$platform_name = $options[:compiler] + "_" + $options[:platform]
-	# Generate the build directory name
-	$build_directory = "build_" + $platform_name
+	$root_build_dir = $script_dir + "/build_" + $platform_name
+	$cmake_directory =  $root_build_dir + "/cmake_output"
+	$output_directory = $root_build_dir + "/output_dir"
+
+	create_dir_if_does_not_exist($root_build_dir)
+	create_dir_if_does_not_exist($cmake_directory)
+	create_dir_if_does_not_exist($output_directory)
 end
 
 # Functions that generates the generator string based on the compiler and the platform for cmake
@@ -101,37 +108,25 @@ end
 
 # String that defines the platform name that we will be compiling for (unique according to the target compiler/linktype/platform)
 def get_platform_name()
-	return " -DPLATFORM_NAME=" + $platform_name
+	return " -DBENTO_PLATFORM_NAME=" + $platform_name
 end
 
-# Function that evaluates if tests are generated (only applicable to windows for the moment)
-def get_test_flag()
-	tests = ""
-
-	if $options[:tests] == true
-		tests = " -DTESTS=TRUE"
-	else
-		tests = " -DTESTS=FALSE"
-	end
-
-	return tests
+def get_output_dir_name()
+	return " -DBENTO_OUTPUTDIR=" + $output_directory
 end
 
 # For a given setup, generates projects and compiles the library
 def generate_project()
-	# Create the build folder
-	create_dir_if_does_not_exist($build_directory)
-
-	# Move into the build build_directory if possible
-	Dir.chdir($build_directory) do
+	# Move into the cmake_directory if possible
+	Dir.chdir($cmake_directory) do
 		# We need to build the cmake command
-		command = CMAKE_EXE + " .."
+		command = CMAKE_EXE + " ../.."
 		# Get the generator name
 		command += get_generator_name()
-		# Shall the tests be generated ?
-		command += get_test_flag()
-		# Inject the platfomr name
+		# Inject the platfom name
 		command += get_platform_name()
+		# Inject the platfom name
+		command += get_output_dir_name()
 
 		# Execute the cmake command
 		if !system(command)
@@ -144,7 +139,7 @@ def generate_project()
 end
 
 def compile_engine()
-	Dir.chdir($build_directory) do
+	Dir.chdir($cmake_directory) do
 		# Compile the project in release mode
 		if $options[:build] == "release"
 			if !system(CMAKE_EXE + " --build . --config Release")
