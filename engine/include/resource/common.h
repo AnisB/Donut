@@ -19,7 +19,7 @@
 // donut includes
 #include <base/log.h>
 #include <base/security.h>
-#include <memory/common.h>
+#include <bento_memory/common.h>
 
 namespace donut
 {
@@ -32,5 +32,5 @@ namespace donut
 	#define RESOURCE_ERROR(ENONCE) PRINT_ERROR (__RESOURCE_PRINT_NAMESPACE, ENONCE)	
 
 	// This allocator should be used for everything related to resource management
-	TAllocator* resource_allocator();
+	bento::IAllocator* resource_allocator();
 }

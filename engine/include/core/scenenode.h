@@ -14,15 +14,16 @@
  *
  **/
 
-#ifndef DONUT_SCENE_NODE
-#define DONUT_SCENE_NODE
+#pragma once
 
 // donut includes
 #include "graphics/drawable.h"
-#include "containers/vector.h"
-#include "memory/common.h"
 #include "node.h"
- 
+
+// Bento includes
+#include <bento_collection/vector.h>
+#include <bento_memory/common.h>
+
 // External includes
 #include <vector>
 
@@ -37,7 +38,7 @@ namespace donut
 	public:
 		ALLOCATOR_BASED;
 		// Consrtuctor
-		TSceneNode(TAllocator& _alloc);
+		TSceneNode(bento::IAllocator& _alloc);
 
 		// Destructor
 		~TSceneNode();
@@ -49,7 +50,6 @@ namespace donut
 		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
 
 	protected:
-		TVector<TDrawable*> m_drawables;
+		bento::Vector<TDrawable*> m_drawables;
 	};
 }
-#endif //DONUT_SCENE_NODE

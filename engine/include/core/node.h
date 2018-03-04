@@ -14,14 +14,14 @@
 *
 **/
 
-#ifndef DONUT_NODE
-#define DONUT_NODE
-
+#pragma once
 
 // Std includes
 #include "butter/matrix4.h"
-#include "containers/vector.h"
-#include "memory/common.h"
+#include "bento_collection/vector.h"
+
+// Bento includes
+#include <bento_memory/common.h>
 
 // STL includes
 #include <vector>
@@ -37,7 +37,7 @@ namespace donut
 	public:
 		ALLOCATOR_BASED;
 		// Consrtuctor
-		TNode(TAllocator& _alloc);
+		TNode(bento::IAllocator& _alloc);
 		//Destructor
 		virtual ~TNode();
 
@@ -50,7 +50,7 @@ namespace donut
 		void SetTransformationMatrix(const Matrix4& _tm) { m_transform =_tm;}
 
 		// Access the son set
-		const TVector<TNode*>& ChildList() {return m_sons;}
+		const bento::Vector<TNode*>& ChildList() {return m_sons;}
 		
 		// Evaluate this node and its subnodes
 		virtual void Evaluate(TCollector& _requestCollector, const Matrix4& _parentTransform);
@@ -58,8 +58,7 @@ namespace donut
 	protected:
 		// Node data
 		TNode* m_parent;
-		TVector<TNode*> m_sons;
+		bento::Vector<TNode*> m_sons;
 		Matrix4 m_transform;
 	};
 }
-#endif

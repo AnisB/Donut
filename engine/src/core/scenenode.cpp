@@ -19,7 +19,7 @@
 
 namespace donut
 {
-	TSceneNode::TSceneNode(TAllocator& _alloc)
+	TSceneNode::TSceneNode(bento::IAllocator& _alloc)
 	: TNode(_alloc)
 	, m_drawables(_alloc)
 	{

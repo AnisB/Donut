@@ -1,12 +1,14 @@
 // Library includes
 #include "graphics/common.h"
-#include "memory/system_allocator.h"
+
+// Bento includes
+#include <bento_memory/system_allocator.h>
 
 namespace donut
 {
-	static TSystemAllocator allocator;
+	static bento::SystemAllocator allocator;
 
-	TAllocator* graphics_allocator()
+	bento::IAllocator* graphics_allocator()
 	{
 		return &allocator;
 	}

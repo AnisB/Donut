@@ -25,7 +25,7 @@
 namespace donut
 {
 	// Cst
-	TNode::TNode(TAllocator& _alloc)
+	TNode::TNode(bento::IAllocator& _alloc)
 	: m_transform()
 	, m_sons(_alloc)
 	, m_parent(nullptr)

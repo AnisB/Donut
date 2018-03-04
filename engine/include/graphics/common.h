@@ -14,8 +14,7 @@
 *
 **/
 
-#ifndef GRAPHICS_COMMON_H
-#define GRAPHICS_COMMON_H
+#pragma once
 
 #include <GL/glew.h>
 
@@ -27,7 +26,7 @@
 
 // Library includes
 #include "base/log.h"
-#include "memory/common.h"
+#include "bento_memory/common.h"
 
 namespace donut
 {
@@ -41,7 +40,5 @@ namespace donut
 	#define GRAPHICS_INFO(ENONCE) PRINT_INFO (__GRAPHICS_PRINT_NAMESPACE, ENONCE)
 	#define GRAPHICS_ERROR(ENONCE) PRINT_ERROR (__GRAPHICS_PRINT_NAMESPACE, ENONCE)
 
-	TAllocator* graphics_allocator();
+	bento::IAllocator* graphics_allocator();
 }
-
-#endif // GRAPHICS_COMMON_H

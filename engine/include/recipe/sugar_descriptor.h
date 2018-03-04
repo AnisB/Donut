@@ -1,10 +1,11 @@
-#ifndef SUGAR_DESCRIPTOR_H
-#define SUGAR_DESCRIPTOR_H
+#pragma once
 
 // Library includes
-#include "containers/vector.h"
 #include "graphics/material.h"
 #include "identifier.h"
+
+// Bento includes
+#include <bento_collection/vector.h>
 
 // External includes
 #include <map>
@@ -30,7 +31,7 @@ namespace donut
 	public:
     	// Required stuff for allocation
     	ALLOCATOR_BASED;
-		TSugarDescriptor(TAllocator* allocator = common_allocator()) : _renderables(*allocator) {}
+		TSugarDescriptor(bento::IAllocator* allocator = bento::common_allocator()) : _renderables(*allocator) {}
 
     	// Name of the sugar
         STRING_TYPE _name;
@@ -39,7 +40,7 @@ namespace donut
         STRING_TYPE _file;
 
         // The set of renderables for this sugar
-		TVector<TRenderableDescriptor> _renderables;
+		bento::Vector<TRenderableDescriptor> _renderables;
         
         // Identifier that tracks the state of the file
         RECIPE_GUID _id;
@@ -51,5 +52,3 @@ namespace donut
 	// Check if the identification of a sugar is still coherent with the file
     bool HasChanged(const TSugarDescriptor& _sugarDescriptor);
 }
-
-#endif // SUGAR_DESCRIPTOR_H

@@ -45,11 +45,11 @@ namespace donut
 		// Instanciate the right noide type
 		if(_node.scenenode)
 		{
-			node = new TSceneNode(*common_allocator());
+			node = new TSceneNode(*bento::common_allocator());
 		}
 		else
 		{
-			node = new TNode(*common_allocator());
+			node = new TNode(*bento::common_allocator());
 		}
 
 		// Setting the matrix transform
