@@ -19,7 +19,6 @@
 #include "resource/TextureHelpers.h"
 #include "resource/Common.h"
 #include "input/Common.h"
-#include <Base/Security.h>
 #include "graphics/glfactory.h"
 #include "resource/sugar_loader.h"
 #include "resource/toppingloader.h"
@@ -111,7 +110,7 @@
 
 		// Load the file into memory
 		TEgg* container = ReadEggFile(RelativePath(_fileName));
-		ASSERT_MSG(container != nullptr, "Geomtry file couldn't be read");
+		assert_msg(container != nullptr, "Geomtry file couldn't be read");
 
 		// Instanciate the runtime geometry
 		TGeometry* newModel = CreateGeometry(parShader, container->vertsNormalsUVs, container->nbVertices, container->faces, container->nbFaces);
@@ -166,7 +165,7 @@
 		in.open(model.c_str(), std::fstream::in);
 	  	if (!in) 
 	  	{ 
-	  		ASSERT_FAIL_MSG("Cannot find model obj: "<<model); 
+	  		assert_fail_msg("Cannot find model obj: "<<model); 
 	  		return std::vector<int>(0);
 	  	}
 		string line;
@@ -234,11 +233,11 @@
 		{
 			TShape & currentShape = *shape;
 			int nbShape = (int)currentShape.info.size();
-			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
+			assert_msg_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modèle, aucune ligne commencant par f error");
 			std::vector<STRING_TYPE> sample;
 			split(currentShape.info[0],' ', sample); 
 			int dimShape = (int)sample.size();
-			ASSERT_MSG_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
+			assert_msg_NO_RELEASE(dimShape==3, "Shape de dimension autre que 3 ou 4");
 	  		INPUT_DEBUG("Model line: "<<currentShape.info[0]); 
 			std::vector<STRING_TYPE> sample2;
 			split(sample[2],'/', sample2);

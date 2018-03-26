@@ -1,4 +1,7 @@
-//Library include
+// Bento include
+#include <bento_base/security.h>
+
+// Library include
 #include "recipe/toppingdescriptor.h"
 #include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
@@ -68,7 +71,7 @@ namespace donut
         }
         else
         {
-            ASSERT_FAIL_MSG("Unsupported uniform type "<<_type);
+            assert_fail("Unsupported uniform type");
         }
     }
 
@@ -90,20 +93,20 @@ namespace donut
 
         // Fetching the root sugar node
         rapidxml::xml_node<>* topping_root = doc.first_node(TOPPING_ROOT_NODE_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(topping_root);
+        assert(topping_root);
 
         // Fetching the name
         _topping.name = topping_root->first_attribute(TOPPING_NAME_TOKEN)->value();
 
         // Fetching the shader data
         rapidxml::xml_node<>* shaderNode = topping_root->first_node(SHADER_NODE_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(shaderNode);
+        assert(shaderNode);
         BuildShaderDescriptor(shaderNode, _topping.data.shader);
 
         // Fetching external shader data
         rapidxml::xml_node<>* extern_data = topping_root->first_node(EXTERNAL_DATA_NODE_TOKEN);
         {
-            ASSERT_POINTER_NOT_NULL_NO_RELEASE(extern_data);
+            assert(extern_data);
 
             // Handeling the floats
             for(rapidxml::xml_node<> *unif = extern_data->first_node(); unif; unif = unif->next_sibling())

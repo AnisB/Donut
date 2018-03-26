@@ -1,8 +1,10 @@
+// Bento includes
+#include <bento_base/security.h>
+
 // Library include
 #include "tools/GeometryConverters.h"
 #include "base/stringhelper.h"
 #include "base/log.h"
-#include "base/security.h"
 #include "resource/egg.h"
 
 // Bento includes
@@ -35,7 +37,7 @@ namespace donut
 		in.open(_wavefrontFIle.c_str(), std::fstream::in);
 		if (!in)
 		{
-			ASSERT_FAIL_MSG("Cannot find _model obj: " << _wavefrontFIle);
+			assert_fail_msg("Cannot find _model obj");
 			return NULL;
 		}
 		STRING_TYPE line;
@@ -103,11 +105,11 @@ namespace donut
 		{
 			const TShape & currentShape = shape;
 			int nbShape = (int)currentShape.info.size();
-			ASSERT_MSG_NO_RELEASE(currentShape.info.size()>0, "Dans le fichier de modele, une ligne commencant par f error");
+			assert_msg(currentShape.info.size()>0, "Dans le fichier de modele, une ligne commencant par f error");
 			std::vector<STRING_TYPE> sample;
 			split(currentShape.info[0], ' ', sample);
 			int dimShape = (int)sample.size();
-			ASSERT_MSG_NO_RELEASE((dimShape == 3 || dimShape == 4), "Shape de dimension autre que 3 ou 4");
+			assert_msg((dimShape == 3 || dimShape == 4), "Shape de dimension autre que 3 ou 4");
 			std::vector<STRING_TYPE> sample2;
 			split(sample[2], '/', sample2);
 			int nbInfo = (int)sample2.size();
@@ -157,7 +159,7 @@ namespace donut
 						const Vector3& point2 = listePoints[convert_from_string<int>(vertices[2]-1];
 						const Vector3& point3 = listePoints[convert_from_string<int>(vertices[3]-1];
 						*/
-						ASSERT_NOT_IMPLEMENTED();
+						assert_fail();
 					}
 				}
 				// Creating the IBO
@@ -219,7 +221,7 @@ namespace donut
 					}
 					else // 4
 					{
-						ASSERT_NOT_IMPLEMENTED();
+						assert_fail();
 					}
 				}
 				newModel->nbVertices = verticeCounter;
@@ -282,7 +284,7 @@ namespace donut
 					}
 					else // 4
 					{
-						ASSERT_NOT_IMPLEMENTED();
+						assert_fail();
 					}
 				}
 				newModel->nbVertices = verticeCounter;

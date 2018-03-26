@@ -55,9 +55,9 @@ namespace donut
 	TGeometry* CreateGeometry(const TShader& _shader, float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
 
 #if 0
-	#define GL_API_CHECK_START() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the start of "<<FUNCTION_NAME)}
-	#define GL_API_CHECK_MIDDLE() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the middle of "<<FUNCTION_NAME)}
-	#define GL_API_CHECK_END() {ASSERT_MSG_NO_RELEASE(CheckGLState(), "GL error at the end of "<<FUNCTION_NAME)}
+	#define GL_API_CHECK_START() {assert_msg_NO_RELEASE(CheckGLState(), "GL error at the start of "<<FUNCTION_NAME)}
+	#define GL_API_CHECK_MIDDLE() {assert_msg_NO_RELEASE(CheckGLState(), "GL error at the middle of "<<FUNCTION_NAME)}
+	#define GL_API_CHECK_END() {assert_msg_NO_RELEASE(CheckGLState(), "GL error at the end of "<<FUNCTION_NAME)}
 #else
 	#define GL_API_CHECK_START() {}
 	#define GL_API_CHECK_MIDDLE() {}

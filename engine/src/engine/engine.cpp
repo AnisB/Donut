@@ -17,6 +17,9 @@
 // ----------------------------------------
 //  Includes
 // ----------------------------------------
+// Bento includes
+#include <bento_base/security.h>
+
 // donut includes
 #include "engine/Engine.h"
 #include "engine/common.h"
@@ -49,7 +52,7 @@ namespace donut
 
  	void TEngine::LaunchRendering(const TGraphicsSettings& parContext)
  	{
- 		ASSERT_MSG_NO_RELEASE(!FRenderingRunning, "Rendering already launched, it is just paused.");
+ 		assert_msg(!FRenderingRunning, "Rendering already launched, it is just paused.");
  		TPipeline* pipeline = GenerateGraphicPipeline(m_scene, parContext.width, parContext.lenght);
  		FRenderer->CreateRenderWindow(parContext);
  		FRenderer->SetPipeline(pipeline);
@@ -85,7 +88,7 @@ namespace donut
 
  	void TEngine::ResumeRendering()
  	{
- 		ASSERT_MSG_NO_RELEASE(FRenderingRunning, "Rendering is not launched.")
+		assert_msg(FRenderingRunning, "Rendering is not launched.");
  		FRenderer->ShowRenderWindow();
  		FRenderer->SetRendering(true);
  		_rendering_thread = new std::thread(CreateRenderingThread, FRenderer);

@@ -1,3 +1,6 @@
+// Bento include
+#include <bento_base/security.h>
+
 // Engine includes
 #include "render/renderer.h"
 #include "Input/helper.h"
@@ -41,7 +44,7 @@
  		else
  		{
  			GRAPHICS_DEBUG("This window has already been created.");
- 			ASSERT(FWindow != NULL);
+ 			assert(FWindow != NULL);
  			glfwShowWindow(FWindow);
  		}
  		return true;
@@ -61,14 +64,14 @@
  	void TRenderer::HideRenderWindow()
  	{
  		GRAPHICS_DEBUG("Hiding window.");	
- 		ASSERT(FWindow != NULL);
+ 		assert(FWindow != NULL);
  		glfwHideWindow(FWindow);
  	}	
 
  	void TRenderer::ShowRenderWindow()
  	{
  		GRAPHICS_DEBUG("Showing window.");	
- 		ASSERT(FWindow != NULL);
+		assert(FWindow != NULL);
  		glfwShowWindow(FWindow);
  	}	
 

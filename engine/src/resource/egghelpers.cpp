@@ -14,10 +14,6 @@ namespace donut
 			in >> (*newEgg);
 			in.close();
 		}
-		else
-		{
-			ASSERT_FAIL_MSG("File " << _eggFileLocation << " not found");
-		}
 		return newEgg;
 	}
 }

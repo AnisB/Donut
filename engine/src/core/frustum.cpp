@@ -117,25 +117,25 @@ namespace donut
 		for (int i = 0; i<6; i++)
 		{
 			int out = 0;
-			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.min.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.max.y, _box.min.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.min.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.min.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
-			out += ((bento::dot(pl[i], bento::vector4(_box.max.x, _box.max.y, _box.max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._min.x, _box._min.y, _box._min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._max.x, _box._min.y, _box._min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._min.x, _box._max.y, _box._min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._max.x, _box._max.y, _box._min.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._min.x, _box._min.y, _box._max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._max.x, _box._min.y, _box._max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._min.x, _box._max.y, _box._max.z, 1.0f)) < 0.0) ? 1 : 0);
+			out += ((bento::dot(pl[i], bento::vector4(_box._max.x, _box._max.y, _box._max.z, 1.0f)) < 0.0) ? 1 : 0);
 			if (out == 8) return true;
 		}
 
 		// Secondly, check the intersection behind
 		int out;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].x > _box.max.x) ? 1 : 0); if (out == 8) return true;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].x < _box.min.x) ? 1 : 0); if (out == 8) return true;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].y > _box.max.y) ? 1 : 0); if (out == 8) return true;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].y < _box.min.y) ? 1 : 0); if (out == 8) return true;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].z > _box.max.z) ? 1 : 0); if (out == 8) return true;
-		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].z < _box.min.z) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].x > _box._max.x) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].x < _box._min.x) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].y > _box._max.y) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].y < _box._min.y) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].z > _box._max.z) ? 1 : 0); if (out == 8) return true;
+		out = 0; for (int i = 0; i<8; i++) out += ((pts[i].z < _box._min.z) ? 1 : 0); if (out == 8) return true;
 
 		// OK we have an intersection here
 		return false;
@@ -144,13 +144,13 @@ namespace donut
 	float TFrustum::MaxScreenPercentage(const TBox3& _box) const
 	{
 		// Fetche the dimension of the box
-		bento::Vector3 dimension = _box.Width();
+		bento::Vector3 dimension = _box.width();
 
 		// Fetch the maximal box dimension
 		float maxBoxDimension = std::max(dimension.x, dimension.y);
 
 		// Fetch the minimal far screen dimension
-		float minScreenDimension = std::min(tang * -_box.min.z * 2, tang * -_box.min.z * ratio * 2);
+		float minScreenDimension = std::min(tang * -_box._min.z * 2, tang * -_box._min.z * ratio * 2);
 
 		// return the percentage
 		return maxBoxDimension / minScreenDimension;

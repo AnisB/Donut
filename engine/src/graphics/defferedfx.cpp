@@ -58,7 +58,7 @@ namespace donut
 		m_lights = &_lights[0];
 		
 		// Make sure we did not explode the number of lights
-		ASSERT_MSG_NO_RELEASE(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
+		assert_msg(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
 	}
 
 	void TDefferedFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)

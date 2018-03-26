@@ -14,9 +14,11 @@
  *
  **/
 
+// Bento includes
+#include <bento_base/security.h>
+
 // donut include
 #include "tools/fileloader.h"
-#include "base/security.h"
 
 // STL include 
 #include <stdio.h>
@@ -34,7 +36,7 @@ namespace donut
 {
 	void ReadFile( char const* fn, STRING_TYPE& _output) 
 	{
-		ASSERT_MSG(fn != NULL, "Empty file name to load");
+		assert_msg(fn != NULL, "Empty file name to load");
 		std::ifstream fileReader (fn);
 		if (fileReader.is_open())
 		{
@@ -48,12 +50,12 @@ namespace donut
 		}
 		else
 		{
-			ASSERT_FAIL_MSG("Failed could not be loaded "<<fn);
+			assert_fail_msg("Failed could not be loaded ");
 		}
 	}
 	void ReadFile( char const* fn, std::vector<char>& _output) 
 	{
-		ASSERT_MSG(fn != NULL, "Empty file name to load");
+		assert_msg(fn != NULL, "Empty file name to load");
 		std::ifstream fileReader (fn);
 		if (fileReader.is_open())
 		{
@@ -63,7 +65,7 @@ namespace donut
 		}
 		else
 		{
-			ASSERT_FAIL_MSG("Failed could not be loaded "<<fn);
+			assert_fail_msg("Failed could not be loaded ");
 		}
 	}	
 	bool WriteFile(char *fn, char *s) 
@@ -104,7 +106,7 @@ namespace donut
 
         if (! directory) 
         {
-            ASSERT_FAIL_MSG("Error in directory: "<< root_dir_path <<" Error n°: "<< strerror (errno)); 
+            assert_fail_msg("Error in directory"); 
         }
 
         uint32_t extensionSize = (uint32_t)strlen(file_extension);
@@ -153,7 +155,7 @@ namespace donut
         }
         if (closedir (directory)) 
         {
-            ASSERT_FAIL_MSG("Error while closing directory: "<< root_dir_path);
+            assert_fail_msg("Error while closing directory");
             return;
         }
 	}

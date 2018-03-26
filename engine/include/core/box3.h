@@ -14,32 +14,34 @@ namespace donut
 		~TBox3();
 
 	public:
-		void Reset();
-		bento::Vector3 Center() const { return (max + min) / 2.0f; }
-		bento::Vector3 Width() const { return (max - min); }
+		// Reset the members to the default values
+		void reset();
+		bento::Vector3 center() const { return (_max + _min) / 2.0f; }
+		bento::Vector3 width() const { return (_max - _min); }
 
 		// Override the max and min values if necessary
 		inline void IncludePoint(const bento::Vector3& _pos)
 		{
 			// Override the miniaml
-			min.x = _pos.x < min.x ? _pos.x : min.x;
-			min.y = _pos.y < min.y ? _pos.y : min.y;
-			min.z = _pos.z < min.z ? _pos.z : min.z;
+			_min.x = _pos.x < _min.x ? _pos.x : _min.x;
+			_min.y = _pos.y < _min.y ? _pos.y : _min.y;
+			_min.z = _pos.z < _min.z ? _pos.z : _min.z;
 
 			// Override the maximal
-			max.x = _pos.x > max.x ? _pos.x : max.x;
-			max.y = _pos.y > max.y ? _pos.y : max.y;
-			max.z = _pos.z > max.z ? _pos.z : max.z;
+			_max.x = _pos.x > _max.x ? _pos.x : _max.x;
+			_max.y = _pos.y > _max.y ? _pos.y : _max.y;
+			_max.z = _pos.z > _max.z ? _pos.z : _max.z;
 		}
 
 		// Include a set of points using a float buffer
 		void IncludePoints(float* _pointCoords, int _nbPoints);
 
-		void operator=(const TBox3& _targetBox) {min = _targetBox.min; max = _targetBox.max;}
+		// Assignment operator
+		void operator=(const TBox3& _targetBox) {_min = _targetBox._min; _max = _targetBox._max;}
 
 	public:
-		bento::Vector3 min;
-		bento::Vector3 max;
+		bento::Vector3 _min;
+		bento::Vector3 _max;
 	};
 
 	// Helper functions for bounding boxes

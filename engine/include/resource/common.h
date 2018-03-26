@@ -18,7 +18,6 @@
 
 // donut includes
 #include <base/log.h>
-#include <base/security.h>
 #include <bento_memory/common.h>
 
 namespace donut

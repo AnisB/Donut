@@ -14,14 +14,16 @@
  *
  **/
 
+// Bento includes
+#include "bento_math/types.h"
+#include "bento_base/stream.h"
+
 // Library includes
 #include "resource/sugar_loader.h"
 #include "resource/resourcemanager.h"
 #include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 #include "tools/fileloader.h"
-#include "butter/types.h"
-#include "butter/stream.h"
 #include "rapidxml.hpp"
 #include "tools/xmlhelpers.h"
 #include "recipe/sugar_descriptor.h"
@@ -68,7 +70,6 @@ namespace donut
     {
         RESOURCE_DEBUG(parModel<<" is requested");
         auto ite = FSugars.find(parModel);
-        ASSERT_MSG((ite!=FSugars.end()), "Sugar model not found: "<<parModel);
         return ite->second;
     }
 

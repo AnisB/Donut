@@ -1,4 +1,4 @@
-//Library include
+// Library include
 #include "recipe/sugar_descriptor.h"
 #include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
@@ -49,14 +49,14 @@ namespace donut
 
 			// Fetching the geometry
 			rapidxml::xml_node<>* geometry = rend_node->first_node(GEOMETRY_NODE_TOKEN);
-			ASSERT_POINTER_NOT_NULL_NO_RELEASE(geometry);
+			assert(geometry);
 			{
 				current_renderable._geometry = geometry->first_attribute(GEOMETRY_LOCATION_TOKEN)->value();
 			}
 
 			// Fetching the data
 			rapidxml::xml_node<>* material = rend_node->first_node(MATERIAL_NODE_TOKEN);
-			ASSERT_POINTER_NOT_NULL_NO_RELEASE(material);
+			assert(material);
 			{
 				current_renderable._material = material->first_attribute(MATERIAL_NAME_TOKEN)->value();
 			}
@@ -81,14 +81,14 @@ namespace donut
 
         // Fetching the root sugar node
         rapidxml::xml_node<>* sugar_root = doc.first_node(SUGAR_ROOT_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(sugar_root);
+        assert(sugar_root);
 
         // Fetching the name
         _sugar._name = sugar_root->first_attribute(SUGAR_NAME_TOKEN)->value();
 
 		// Fetching the renderables
 		rapidxml::xml_node<>* renderableArray = sugar_root->first_node(RENDERABLES_NODE_TOKEN);
-		ASSERT_POINTER_NOT_NULL_NO_RELEASE(renderableArray);
+		assert(renderableArray);
 
 		HandleRenderableArray(_sugar, renderableArray);
     }

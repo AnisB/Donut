@@ -179,7 +179,7 @@ namespace donut
 
                 // Fetching the root sugar node
                 rapidxml::xml_node<>* flour = doc.first_node(FLOUR_NODE_TOKEN);
-                ASSERT_POINTER_NOT_NULL_NO_RELEASE(flour);
+                assert(flour);
 
                 // Fetch the name
                 _output.name = flour->first_attribute(FLOUR_NAME_TOKEN)->value();

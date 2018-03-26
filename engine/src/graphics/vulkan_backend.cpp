@@ -115,7 +115,7 @@ namespace donut
 
 		VkQueue retrieve_queue_by_index(VKRenderEnvironment* render_environement, uint32_t queue_index)
 		{
-			ASSERT_NO_RELEASE(render_environement);
+			assert(render_environement);
 			VkQueue graphicsQueue;
 			vkGetDeviceQueue(render_environement->logical_device, queue_index, 0, &graphicsQueue);
 			return graphicsQueue;
@@ -124,7 +124,7 @@ namespace donut
 		RenderEnvironment create_render_environment(const TGraphicsSettings& graphic_settings)
 		{
 			TAllocator* allocator = graphics_allocator();
-			ASSERT_NO_RELEASE(allocator != nullptr);
+			assert(allocator != nullptr);
 
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
@@ -156,7 +156,7 @@ namespace donut
 
 			if (vkCreateInstance(&create_info, nullptr, &vk_re->instance) != VK_SUCCESS)
 			{
-				ASSERT_FAIL_MSG("Failed to create a vulkan instance");
+				assert_fail_msg("Failed to create a vulkan instance");
 				return 0;
 			}
 
@@ -165,7 +165,7 @@ namespace donut
 			vkEnumeratePhysicalDevices(vk_re->instance, &deviceCount, nullptr);
 			if (deviceCount == 0)
 			{
-				ASSERT_FAIL_MSG("No vulkan compatible devices");
+				assert_fail_msg("No vulkan compatible devices");
 				return 0;
 			}
 
@@ -174,7 +174,7 @@ namespace donut
 
 			// Evaluate the device 
 			uint64_t best_device = first_compatible_device(devices.begin(), deviceCount);
-			ASSERT_MSG(best_device != -1, "No compatible vulkan device");
+			assert_msg(best_device != -1, "No compatible vulkan device");
 			// Keep track of the phyisical device
 			vk_re->physical_device = devices[best_device];
 
@@ -186,7 +186,7 @@ namespace donut
 			
 			// Check for the queues
 			find_graphics_queue(queueFamilies.begin(), queueFamilyCount, vk_re->queue_indexes);
-			ASSERT_MSG(vk_re->queue_indexes.graphics_queue !=  -1, "No valid graphics queue found")
+			assert_msg(vk_re->queue_indexes.graphics_queue !=  -1, "No valid graphics queue found")
 
 			// Queue creation descriptor
 			VkDeviceQueueCreateInfo queue_create_info = {};
@@ -207,13 +207,13 @@ namespace donut
 
 			if (vkCreateDevice(devices[best_device], &device_create_info, nullptr, &vk_re->logical_device) != VK_SUCCESS)
 			{
-				ASSERT_FAIL_MSG("Logical device creation failed");
+				assert_fail_msg("Logical device creation failed");
 				return 0;
 			}
 
 			// Create the surface
 			if (glfwCreateWindowSurface(vk_re->instance, vk_re->window, nullptr, &(vk_re->surface)) != VK_SUCCESS)
-				ASSERT_FAIL_MSG("Surface creation failed");
+				assert_fail_msg("Surface creation failed");
 
 			// Queck for the present support
 			find_present_queue(vk_re, queueFamilyCount);

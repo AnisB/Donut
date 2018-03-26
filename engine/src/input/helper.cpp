@@ -37,7 +37,7 @@ namespace donut
 	}
 	void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
-	    ASSERT_NO_RELEASE(InManager != NULL);
+	    assert(InManager != NULL);
 	    if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	    {
 	        glfwSetWindowShouldClose(window, GL_TRUE);
@@ -59,7 +59,7 @@ namespace donut
 
  	void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
  	{
-	    ASSERT_NO_RELEASE(InManager != NULL);
+	    assert(InManager != NULL);
 	    if(action == GLFW_PRESS)
 	    {
 		    InManager->MousePressed((TMouseCode::Type)button);
@@ -77,7 +77,7 @@ namespace donut
 
  	void mouse_pos_callback(GLFWwindow* window, double xpos, double ypos)
  	{
-	    ASSERT_NO_RELEASE(InManager != NULL);
+	    assert(InManager != NULL);
 	    int width, height;
 	    glfwGetFramebufferSize(window, &width, &height);
 	    double ratio = width / (float) height;

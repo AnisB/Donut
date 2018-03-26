@@ -22,7 +22,7 @@ namespace donut
 	void BuildShaderDescriptor(rapidxml::xml_node<>* _shaderNode, TShader& _shader)
 	{
 		// 
-		ASSERT_POINTER_NOT_NULL_NO_RELEASE(_shaderNode);
+		assert(_shaderNode);
 		
         // Fetch vertex shader
         rapidxml::xml_node<>* vertex = _shaderNode->first_node(VERTEX_SHADER_NODE_TOKEN);

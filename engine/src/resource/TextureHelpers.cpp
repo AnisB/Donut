@@ -108,7 +108,7 @@ namespace donut
         FILE* f = NULL;
 		fopen_s(&f, Filename, "rb");
 #endif
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(f);
+        assert(f);
 
         unsigned char info[54];
         fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
@@ -226,7 +226,7 @@ namespace donut
         if (fp == 0)
         {
             perror(file_name);
-            ASSERT_FAIL_MSG("File not found: "<<file_name);
+            assert_fail_msg("File not found: "<<file_name);
             return 0;
         }
 
@@ -235,7 +235,7 @@ namespace donut
 
         if (png_sig_cmp(header, 0, 8))
         {
-            ASSERT_FAIL_MSG("File is not a PNG: "<<file_name);
+            assert_fail_msg("File is not a PNG: "<<file_name);
             fclose(fp);
             return 0;
         }
@@ -243,7 +243,7 @@ namespace donut
         png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
         if (!png_ptr)
         {
-            ASSERT_FAIL_MSG("png_create_read_struct returned 0");
+            assert_fail_msg("png_create_read_struct returned 0");
             fclose(fp);
             return 0;
         }
@@ -344,7 +344,7 @@ namespace donut
         fclose(fp);
         return image;
 #elif WIN32
-		ASSERT_NOT_IMPLEMENTED()
+		assert_fail();
 		return nullptr;
 #endif
     }
@@ -355,7 +355,7 @@ namespace donut
 
         if (!hFile.is_open())
         {
-            ASSERT_FAIL_MSG("File not found: "<<file_name);
+            assert_fail_msg("File not found");
             return nullptr;
         }
         
@@ -385,7 +385,7 @@ namespace donut
                 break;
                 default: 
                     hFile.close();
-                    ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit Image.");
+                    assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit Image.");
             }
 
             image->FData = new unsigned char[size];
@@ -402,7 +402,7 @@ namespace donut
             if ((BitsPerPixel != 24) && (BitsPerPixel != 32))
             {
                 hFile.close();
-                ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit Image.");
+                assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit Image.");
                 return nullptr;
             }
 
@@ -450,7 +450,7 @@ namespace donut
         else
         {
             hFile.close();
-            ASSERT_FAIL_MSG("Invalid File Format. Required: 24 or 32 Bit TGA File.");
+            assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit TGA File.");
             return nullptr;
         }
 
@@ -480,7 +480,7 @@ namespace donut
 	    	    texture = LoadTGA(parImg.c_str());
 	    	    break;
     	    default:
-    	        ASSERT_FAIL_MSG("Unhandled type "<<parImg);
+    	        assert_fail_msg("Unhandled type");
 	    };
 	    return texture;
 	}
@@ -634,7 +634,7 @@ namespace donut
             jpeg_write_scanlines(&cinfo, &row_pointer, 1);
         }
 #elif WIN32
-	ASSERT_NOT_IMPLEMENTED()
+		assert_fail();
 #endif
     }
 
@@ -676,7 +676,7 @@ namespace donut
             jpeg_write_scanlines(&cinfo, &row_pointer, 1);
         }
 #elif WIN32
-	ASSERT_NOT_IMPLEMENTED()
+		assert_fail();
 #endif
     }
 

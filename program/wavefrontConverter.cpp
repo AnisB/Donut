@@ -23,7 +23,7 @@
 #include <fstream>
 int main(int argc, char** argv)
 {
-	ASSERT_MSG(argc == 3, "Wrong number of parameters, you should specify the input an output files.");
+	assert_msg(argc == 3, "Wrong number of parameters, you should specify the input an output files.");
 	STRING_TYPE inputFile(argv[1]);
 	STRING_TYPE outputFile(argv[2]);
 	PRINT_INFO("Conversion", "Inputfile is "<<inputFile<<" Output file will be "<<outputFile);

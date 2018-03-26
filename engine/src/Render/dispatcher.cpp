@@ -50,7 +50,7 @@ namespace donut
 
 			// Get the target box
 			TBox3& box = m_vs_bb[req];
-			box.Reset();
+			box.reset();
 
 			// Compute the camera space bounding box
 			box = transform(geom->os_bb, _view * currentRequest.transform);

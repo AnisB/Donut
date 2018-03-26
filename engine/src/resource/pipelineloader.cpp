@@ -14,6 +14,9 @@
  *
  **/
 
+// Bento includes
+#include <bento_base/security.h>
+
 // Library includes
 #include "resource/pipelineloader.h"
 #include "tools/fileloader.h"
@@ -66,7 +69,6 @@ namespace donut
     {
         RESOURCE_DEBUG(_pipelineName<<" is requested");
         auto ite = m_pipelines.find(_pipelineName);
-        ASSERT_MSG((ite!=m_pipelines.end()), "Pipeline not found: "<<_pipelineName);
         return ite->second;
     }
 

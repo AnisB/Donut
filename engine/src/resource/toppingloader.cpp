@@ -14,6 +14,9 @@
  *
  **/
 
+// Bento includes
+#include <bento_base/security.h>
+
 // Library includes
 #include "resource/resourcemanager.h"
 #include "resource/common.h"
@@ -86,7 +89,7 @@ namespace donut
         auto ite = m_toppingsIdentifiers.find(_toppingFile);
 
         // Just make sure it is defined somewhere
-        ASSERT_MSG((ite!= m_toppingsIdentifiers.end()), "Topping not found: "<<_toppingFile);
+		assert_msg((ite != m_toppingsIdentifiers.end()), "Topping not found");
 
         // We have to make sure that this topping is loaded into memory before loading it
         TToppingDescriptor& targetTopping = m_toppings[ite->second];

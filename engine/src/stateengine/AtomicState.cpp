@@ -43,7 +43,7 @@ namespace donut
 
  	TAtomicState::~TAtomicState()
  	{
- 		// ASSERT_MSG_NO_RELEASE(FStateData!=NULL, "The state data has been already deleted. you do not need to.")
+ 		// assert_msg_NO_RELEASE(FStateData!=NULL, "The state data has been already deleted. you do not need to.")
  		delete FStateData;
  	}
 

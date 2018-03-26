@@ -74,7 +74,6 @@ namespace donut
 	{
         RESOURCE_DEBUG(_flourFileName<<" is requested");
         auto ite = m_flours.find(_flourFileName);
-        ASSERT_MSG((ite!=m_flours.end()), "Sugar model not found: "<<_flourFileName);
         return ite->second;
 	}
 }

@@ -14,8 +14,10 @@
 *
 **/
 
+// Bento includes
+#include <bento_base/security.h>
+
 // Libarry includes
-#include "base/security.h"
 #include "core/common.h"
 #include "core/node.h"
 
@@ -47,7 +49,7 @@ namespace donut
 	void TNode::AttachChild(TNode* _node)
 	{
 		// Quick check
-		ASSERT_POINTER_NOT_NULL_NO_RELEASE(_node);
+		assert(_node);
 
 		// Append it to the son list
 		m_sons.push_back(_node);

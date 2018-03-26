@@ -1,8 +1,10 @@
+// Bento includes
+#include <bento_base/security.h>
+
 // Library includes
 #include "graphics/gpu_backend.h"
 #include "graphics/gl_backend.h"
 #include "graphics/vulkan_backend.h"
-#include "base/security.h"
 
 namespace donut
 {
@@ -31,7 +33,7 @@ namespace donut
 			break;
 		#endif
 			default:
-				ASSERT_FAIL_MSG("Unsupported RenderingBackEnd");
+				assert_fail_msg("Unsupported RenderingBackEnd");
 		};
 	}
 }

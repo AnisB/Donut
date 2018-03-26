@@ -1,3 +1,6 @@
+// Bento includes
+#include <bento_base/security.h>
+
 // Library include
 #include "recipe/pipelinedescriptor.h"
 #include "tools/xmlhelpers.h"
@@ -105,7 +108,7 @@ namespace donut
 
         // Fetching the root sugar node
         rapidxml::xml_node<>* pipeline_root = doc.first_node(PIPELINE_NODE_TOKEN);
-        ASSERT_POINTER_NOT_NULL_NO_RELEASE(pipeline_root);
+        assert(pipeline_root);
 
         // Fetching the pipeline's name
         _pipeline.name = pipeline_root->first_attribute(PIPELINE_NAME_TOKEN)->value();
@@ -160,7 +163,7 @@ namespace donut
             }
             else
             {
-                ASSERT_FAIL_MSG("Unkown pass type");
+                assert_fail_msg("Unkown pass type");
             }
 
             _pipeline.passes.push_back(pass);

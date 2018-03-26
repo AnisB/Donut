@@ -14,6 +14,8 @@
 *
 **/
 
+// Bento includes
+#include <bento_base/security.h>
 
 // Library includes
 #include "graphics/pipeline.h"
@@ -105,7 +107,7 @@ namespace donut
 					}
 					break;
 					default:
-					ASSERT_FAIL_MSG("Unexisting canvas type");
+						assert_fail_msg("Unexisting canvas type");
 					break;
 				}
 
@@ -136,7 +138,7 @@ namespace donut
 					}
 					break;
 					default:
-					ASSERT_FAIL_MSG("Unexisting canvas type");
+						assert_fail_msg("Unexisting canvas type");
 					break;
 				}
 
@@ -176,11 +178,11 @@ namespace donut
 					}
 					break;
 					default:
-					ASSERT_FAIL_MSG("Unexisting fx type");
+						assert_fail_msg("Unexisting fx type");
 					break;
 				}
 
-				ASSERT_POINTER_NOT_NULL_NO_RELEASE(vfx);
+				assert(vfx);
 				for(auto& tex2D : vfxDescriptor.textures)
 				{
 					vfx->AddTexture(ResourceManager::Instance().FetchTexture(tex2D.file), tex2D.name);
@@ -192,7 +194,7 @@ namespace donut
 			}
 			else
 			{
-				ASSERT_FAIL_MSG("Unexisting pass type");
+				assert_fail_msg("Unexisting pass type");
 			}
 		}
 		return pipeline;

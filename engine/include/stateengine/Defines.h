@@ -21,8 +21,6 @@
 
 #include "base/stringhelper.h"
 
-#include <assert.h>
-
 #include <iostream>
 
  namespace donut
