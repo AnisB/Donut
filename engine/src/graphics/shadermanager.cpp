@@ -3,7 +3,6 @@
 
 // Library includes
 #include "graphics/shadermanager.h"
-#include "graphics/common.h"
 #include "graphics/material.h"
 #include "resource/resourcemanager.h"
 #include "graphics/glfactory.h"
@@ -15,6 +14,13 @@
 
 // STL includes
 #include <stdlib.h>
+
+// External includes
+#include <GL/glew.h>
+#ifndef GLFW_INCLUDE_GL3
+#define GLFW_INCLUDE_GL3
+#endif
+#include <GLFW/glfw3.h>
 
 namespace donut 
 {

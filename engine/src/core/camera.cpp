@@ -16,7 +16,6 @@
 
 // Library includes
 #include "core/Camera.h"
-#include "core/common.h"
 
 // Bento includes
 #include <bento_math/matrix3.h>

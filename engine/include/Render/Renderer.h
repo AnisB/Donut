@@ -17,7 +17,6 @@
 #pragma once
 
 // Library includes
-#include "graphics/common.h"
 #include "graphics/pipeline.h"
 #include "graphics/settings.h"
 #include "graphics/pass.h"

@@ -61,14 +61,14 @@ namespace donut
 
 
 		// Texture binding/unbinding functions
-		void BindTex(GLuint _texID, GLuint parOffset);
-		void BindCubeMap(GLuint _texID, GLuint parOffset);
-		void UnbindTex(GLuint parOffset);
-		void UnbindCubeMap(GLuint parOffset);
+		void BindTex(uint32_t _texID, uint32_t parOffset);
+		void BindCubeMap(uint32_t _texID, uint32_t parOffset);
+		void UnbindTex(uint32_t parOffset);
+		void UnbindCubeMap(uint32_t parOffset);
 
 		// Texture injection function
-		void InjectTex(const TShader& parProgram, GLuint _texID, const STRING_TYPE& parName, GLuint parOffset);
-		void InjectCubeMap(const TShader& parProgram, GLuint _texID, const STRING_TYPE& parName, GLuint parOffset);
+		void InjectTex(const TShader& parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
+		void InjectCubeMap(const TShader& parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
  	private:
  		std::unordered_set<TShader,TShaderHasher> FPrograms;
  	};

@@ -1,24 +1,6 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-
-#ifndef SHADER_DATA_GRAPHICS_DONUT
-#define SHADER_DATA_GRAPHICS_DONUT
+#pragma once
 
 // Library includes
-#include "graphics/common.h"
 #include "graphics/uniformhandler.h"
 
 // STL includes
@@ -32,7 +14,6 @@ namespace donut
         TShaderData::Type dataType;
         STRING_TYPE name;
     };
-
 
     // Should be moved to texture when it will be refactored
     namespace TTextureNature 
@@ -50,7 +31,7 @@ namespace donut
 		int offset;
 		STRING_TYPE name;
 		STRING_TYPE file;
-		GLuint texID;
+		uint32_t texID;
 		TBRDFInfo()
 		{
 			offset = 0;
@@ -71,7 +52,7 @@ namespace donut
         int offset;
         STRING_TYPE name;
         STRING_TYPE file;
-        GLuint texID;
+        uint32_t texID;
         TTextureNature::Type type;
         TTextureInfo()
         {
@@ -93,7 +74,7 @@ namespace donut
         int offset;
         STRING_TYPE name;
         STRING_TYPE path;
-        GLuint cmID;
+        uint32_t cmID;
         TCubeMapInfo()
         {
             offset=0;
@@ -108,7 +89,3 @@ namespace donut
         }
     };
 }
-
-
-#endif // SHADER_DATA_GRAPHICS_DONUT
- 

@@ -1,8 +1,6 @@
-#ifndef RECIPE_IDENTIFIER_H
-#define RECIPE_IDENTIFIER_H
+#pragma once
 
 // Library incldudes
-#include "base/platform.h"
 #include "base/stringhelper.h"
 
 namespace donut
@@ -13,5 +11,3 @@ namespace donut
 	// Generate the guid
 	RECIPE_GUID GetFileHash(const STRING_TYPE& _filename);	
 }
-
-#endif // RECIPE_IDENTIFIER_H

@@ -26,7 +26,7 @@ namespace donut
 		return (e == GL_NO_ERROR);
 	}
 
-	GLuint CreateFrameBuffer()
+	uint32_t CreateFrameBuffer()
 	{
 		GL_API_CHECK_START();
 
@@ -42,7 +42,7 @@ namespace donut
 
 		return frameBufferIndex;
 	}
-	void BindFrameBuffer(GLuint parFrameBuffer)
+	void BindFrameBuffer(uint32_t parFrameBuffer)
 	{
 		GL_API_CHECK_START();
 		#if LINUX | WIN32
@@ -167,7 +167,7 @@ namespace donut
 		GL_API_CHECK_END();
 	}
 
-	void DeleteTextures(std::vector<GLuint>& _textures)
+	void DeleteTextures(std::vector<uint32_t>& _textures)
 	{
 		GL_API_CHECK_START();
 

@@ -5,7 +5,6 @@
 
 // Libray includes
 #include "graphics/shader.h"
-#include "resource/common.h"
 #include "graphics/shadermanager.h"
 
 // STL includes
