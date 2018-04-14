@@ -94,6 +94,7 @@ namespace donut
 			_shader.FProgramID = result->FProgramID;
 			_shader.FActive = result->FActive;
 			_shader.FIsTesselated = result->FIsTesselated;
+			GL_API_CHECK();
 			return true;
 		}
 

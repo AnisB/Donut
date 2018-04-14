@@ -1,12 +1,12 @@
-#ifndef RESOURCES_TYPES_H
-#define RESOURCES_TYPES_H
+#pragma once
+
+// External includes
+#include <stdint.h>
 
 namespace donut
 {
 	// The resource identifiers
-	typedef unsigned long int GEOMETRY_GUID;
-	typedef unsigned long int SKYBOX_GUID;
-	typedef unsigned long int TOPPING_GUID;
+	typedef uint32_t GEOMETRY_GUID;
+	typedef uint32_t SKYBOX_GUID;
+	typedef uint32_t TOPPING_GUID;
 }
-
-#endif // RESOURCES_TYPES_H

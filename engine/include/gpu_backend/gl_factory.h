@@ -1,5 +1,8 @@
 #pragma once
 
+// Bento includes
+#include <bento_base/security.h>
+
 // Internal includes
 #include "graphics/shader.h"
 #include "graphics/shaderdata.h"
@@ -90,8 +93,8 @@ namespace gl {
 		void bbox(GeometryObject geometry, TBox3& outbbox);
 	}
 
-	#if 0
-		#define GL_API_CHECK() {assert_msg_NO_RELEASE(check_state(), FUNCTION_NAME)}
+	#if 1
+		#define GL_API_CHECK() {assert_msg(gl::check_state(), FUNCTION_NAME);}
 	#else
 		#define GL_API_CHECK() {}
 	#endif

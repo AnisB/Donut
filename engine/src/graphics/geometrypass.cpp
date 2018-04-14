@@ -32,6 +32,7 @@
 	, m_flour(_flour)
 	, m_reference()
 	, m_camera(nullptr)
+	, m_skyboxDrawable(nullptr)
 	{
 		// Set identifity
 		SetIdentity(m_reference);
@@ -48,7 +49,10 @@
 		m_canvas->Init();
 
 		// Create the drawable for the skybox if there is some
-		m_skyboxDrawable = CreateSkyboxDrawable(m_flour->skybox);
+		if (m_flour->skybox != UINT32_MAX)
+		{
+			m_skyboxDrawable = CreateSkyboxDrawable(m_flour->skybox);
+		}
 	}
 
 	void TGeometryPass::Draw(const TBufferOutput& _previousData)
@@ -57,7 +61,11 @@
 		m_collector.Clear();
 
 		// Collect the requests
-		m_skyboxDrawable->Evaluate(m_collector, m_reference);
+		if (m_skyboxDrawable)
+		{
+			m_skyboxDrawable->Evaluate(m_collector, m_reference);
+		}
+
 		m_flour->root->Evaluate(m_collector, m_reference);
 
 		// Fetch the requests

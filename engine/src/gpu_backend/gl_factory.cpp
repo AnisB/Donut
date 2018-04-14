@@ -197,12 +197,16 @@ namespace gl {
 
 		void enable_depth_test(uint32_t frame_buffer)
 		{
+			GL_API_CHECK();
 			glEnable(GL_DEPTH_TEST);
+			GL_API_CHECK();
 		}
 
 		void disable_depth_test(uint32_t frame_buffer)
 		{
+			GL_API_CHECK();
 			glDisable(GL_DEPTH_TEST);
+			GL_API_CHECK();
 		}
 	}
 
@@ -249,8 +253,8 @@ namespace gl {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, source.FWidth, source.FHeight, 0, GL_RGBA, GL_FLOAT, 0);
 			glTexImage2D(GL_TEXTURE_2D, 0, source.FFormat, source.FWidth, source.FHeight, 0, source.FFormat, GL_UNSIGNED_BYTE, source.FData);
 			glGenerateMipmap(GL_TEXTURE_2D);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBindTexture(GL_TEXTURE_2D, 0);
@@ -345,18 +349,18 @@ namespace gl {
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned)*num_faces * 3, _indexArray, GL_STATIC_DRAW);
 
 			{
+				glEnableVertexAttribArray(0);
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+			}
+
+			{
 				glEnableVertexAttribArray(1);
-				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, 0);
+				glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat)*_numVert * 3));
 			}
 
 			{
 				glEnableVertexAttribArray(2);
-				glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat)*_numVert * 3));
-			}
-
-			{
-				glEnableVertexAttribArray(3);
-				glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat)*_numVert * 6));
+				glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(GLfloat)*_numVert * 6));
 			}
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);

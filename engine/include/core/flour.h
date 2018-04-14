@@ -41,6 +41,7 @@ namespace donut
 		, sh(nullptr)
 		, filename(_fileName)
 		, pipelineName("minimal")
+		, skybox(UINT32_MAX)
 		{
 
 		}

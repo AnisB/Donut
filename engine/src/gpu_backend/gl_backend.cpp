@@ -9,6 +9,7 @@
 #include "bento_base/security.h"
 #include "bento_base/log.h"
 #include "gpu_backend/gl_backend.h"
+#include "gpu_backend/gl_factory.h"
 #include "input/helper.h"
 
 
@@ -148,6 +149,9 @@ namespace donut
    			// Create the 
  			GLRenderEnvironement* gl_render_env = new GLRenderEnvironement();
  			gl_render_env->window = window_ptr;
+
+			// Clear the error state
+			gl::clear_state();
 
 			return (RenderEnvironment)gl_render_env;
 		}
