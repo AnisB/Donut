@@ -69,6 +69,7 @@ namespace donut
 	{
 		TFlourDescriptor()
 		: sh(nullptr)
+		, skybox(nullptr)
 		{
 
 		}

@@ -6,7 +6,6 @@
 // Engine includes
 #include "stateengine/StateEngine.h"
 #include "stateengine/Defines.h"
-#include <stateengine/Common.h>
 #include "stateengine/StateEngineManager.h"
 
 //--------------------------------------------------------------------

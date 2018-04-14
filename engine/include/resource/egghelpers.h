@@ -1,8 +1,7 @@
-#ifndef EGG_HELPERS_H
-#define EGG_HELPERS_H
+#pragma once
 
-// Library includes
-#include "common.h"
+// External includes
+#include <string>
 
 namespace donut
 {
@@ -10,7 +9,5 @@ namespace donut
 	struct TEgg;
 
 	// Read an egg file
-	TEgg* ReadEggFile(const STRING_TYPE& _eggFileLocation);
+	TEgg* ReadEggFile(const std::string& _eggFileLocation);
 }
-
-#endif // EGG_HELPERS_H

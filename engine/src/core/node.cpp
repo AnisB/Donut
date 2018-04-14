@@ -18,7 +18,6 @@
 #include <bento_base/security.h>
 
 // Libarry includes
-#include "core/common.h"
 #include "core/node.h"
 
 // External includes

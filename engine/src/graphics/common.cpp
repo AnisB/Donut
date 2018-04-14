@@ -1,6 +1,3 @@
-// Library includes
-#include "graphics/common.h"
-
 // Bento includes
 #include <bento_memory/system_allocator.h>
 

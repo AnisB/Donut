@@ -3,6 +3,7 @@
 #include "render/frustum_culler.h"
 #include "render/crumble_remover.h"
 #include "resource/resourcemanager.h"
+#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
@@ -46,14 +47,14 @@ namespace donut
 			TRenderRequest& currentRequest = _requests[req];
 
 			// Fetch the geometry to process
-			TGeometry* geom = ResourceManager::Instance().RequestRuntimeGeometry(currentRequest.geometry);
+			GeometryObject geom = ResourceManager::Instance().RequestRuntimeGeometry(currentRequest.geometry);
 
 			// Get the target box
 			TBox3& box = m_vs_bb[req];
-			box.reset();
+			gl::geometry::bbox(geom, box);
 
 			// Compute the camera space bounding box
-			box = transform(geom->os_bb, _view * currentRequest.transform);
+			box = transform(box, _view * currentRequest.transform);
 		}
 	}
 }

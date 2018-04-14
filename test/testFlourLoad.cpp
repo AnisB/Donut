@@ -1,18 +1,3 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
 
 // Library includes
 #include <graphics/pipeline.h>
@@ -24,8 +9,9 @@
 #include <resource/resourcemanager.h>
 #include <resource/flourLoader.h>
 #include <graphics/factory.h>
-#include <graphics/gl_backend.h>
 #include <core/scenenode.h>
+#include <gpu_backend/gl_backend.h>
+#include <gpu_backend/gl_factory.h>
 
 // Bento includes
 #include <bento_math/vector3.h>
@@ -48,7 +34,7 @@ int main(int argc, char** argv)
 	// Creating the rendering window
 	donut::TRenderer * window = new donut::TRenderer();
 	// Context info
-	donut::TGraphicsSettings newContext = donut::GL::default_settings();
+	donut::TGraphicSettings newContext = donut::gl::default_settings();
 	newContext.window_name = "testFlourLoad";
 	window->CreateRenderWindow(newContext);
 
@@ -59,14 +45,14 @@ int main(int argc, char** argv)
 	window->Init();
 	
 	donut::Camera* camera = renderingPipeline->camera;
-	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::GetInputManager());
+	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::input_manager());
 	inManager->FCamera = camera;
 	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght,1.0,2000.0);
 	
 	while(window->IsRendering())
 	{
 		window->Draw();
-		donut::FarmEvents();
+		window->collect_inputs();
 		inManager->Update();
 	}
 

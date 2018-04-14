@@ -1,23 +1,5 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
 
-#include <graphics/Common.h>
-#include <graphics/glfactory.h>
-#include <input/Common.h>
-#include <resource/Common.h>
+#include "gpu_backend/gl_factory.h"
 #include "resource/TextureHelpers.h"
  
 #include <stdio.h>
@@ -77,25 +59,6 @@ namespace donut
             break;
         };
     }
-    GLuint CreateTextureCube()
-    {
-        GLuint texID;   
-        glGenTextures(1, &texID);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, texID);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_BASE_LEVEL, 0); 
-        glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0); 
-        return texID;
-    }
-
-    void BindToCubeMap(GLuint parType, TTexture* parTexture)
-    {
-        glTexImage2D(parType, 0, parTexture->FFormat, parTexture->FWidth, parTexture->FHeight, 0, parTexture->FFormat, GL_UNSIGNED_BYTE, parTexture->FData);
-    }
 
     TTexture* LoadBMP(const char *Filename )
     {
@@ -118,7 +81,7 @@ namespace donut
         int l = *(int*)&info[22];
 
         TTexture* image = new TTexture(Filename,TImgType::BMP, w, l );
-        image->FFormat = GL_RGB;
+        image->FFormat = 0x1907;
 
         int size = 3 * w  * l ;
         unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
@@ -134,7 +97,6 @@ namespace donut
 
 		int shift = *(int*)&info[14];
 		shift /= 3;
-        INPUT_DEBUG("Shift for this BMP is "<< shift);
 		unsigned char* tampon = new unsigned char[w*3];
 		for (int i = 0; i < l; ++i)
 		{
@@ -182,20 +144,20 @@ namespace donut
         unsigned int w = info.output_width;
         unsigned int l = info.output_height;
         TTexture* image = new TTexture(FileName,TImgType::JPG, w, l );
-        image->FFormat = GL_RGB;
+        image->FFormat = 0x1907;
 
-        GLuint channels = info.num_components;
+        uint32_t channels = info.num_components;
 
-        GLuint type = GL_RGB;
+		uint32_t type = 0x1907;
 
         if(channels == 4)
         {
-            type = GL_RGBA;
+            type = 0x1908;
         }
 
-        GLuint bpp = channels * 8;
+		uint32_t bpp = channels * 8;
 
-        GLuint size = w * l * 3;
+		uint32_t size = w * l * 3;
 
         //read turn the uncompressed data into something ogl can read
         image->FData = new unsigned char[size];      //setup data for the data its going to be handling
@@ -378,10 +340,10 @@ namespace donut
             switch(BitsPerPixel)
             {
                 case 24:
-                    image->FFormat = GL_RGB;
+                    image->FFormat = 0x1907;
                 break;
                 case 32:
-                    image->FFormat = GL_RGBA;
+                    image->FFormat = 0x1908;
                 break;
                 default: 
                     hFile.close();
@@ -544,54 +506,6 @@ namespace donut
         TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, skybox->textures[5]);
         */
         return skybox;
-    }
-
-    void CreateSkybox(TSkyboxTexture* _skyboxTex)
-    {
-        _skyboxTex->id = CreateTextureCube();
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_X, _skyboxTex->textures[0]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, _skyboxTex->textures[1]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, _skyboxTex->textures[2]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, _skyboxTex->textures[3]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, _skyboxTex->textures[4]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, _skyboxTex->textures[5]);
-    }
-
-    void CreateTexture(TTexture* parTex)
-    {
-        RESOURCE_INFO("Creating GPU texture.");
-        glGenTextures(1, &(parTex->FID));
-        glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        glTexImage2D(GL_TEXTURE_2D, 0, parTex->FFormat, parTex->FWidth, parTex->FHeight, 0, parTex->FFormat, GL_UNSIGNED_BYTE, parTex->FData);
-        glGenerateMipmap(GL_TEXTURE_2D);  //Generate mipmaps now!!!
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_PRIORITY, 1.0); 
-
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    void CreateDataTexture(TTexture* parTex)
-    {
-        GRAPHICS_INFO("Creating data texture "<<parTex->FWidth<<"x"<<parTex->FHeight);
-
-        glGenTextures(1, &(parTex->FID));
-        glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    void ReLoadTexture(TTexture* parTex)
-    {
-        glBindTexture(GL_TEXTURE_2D, parTex->FID);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, parTex->FWidth, parTex->FHeight, 0, GL_RGB, GL_FLOAT, parTex->FData);
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     void TakeScreenShot(const STRING_TYPE& parFileName)

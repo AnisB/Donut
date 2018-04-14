@@ -15,7 +15,6 @@
  **/
 
 #include "graphics/vfxpass.h"
-#include "graphics/common.h"
 #include "resource/resourcemanager.h"
 
  namespace donut

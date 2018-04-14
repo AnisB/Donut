@@ -16,9 +16,7 @@
 
 // Libary includes
 #include "graphics/geometrypass.h"
-#include "graphics/common.h"
 #include "graphics/factory.h"
-#include "Base/log.h"
 #include "core/mesh.h"
 #include "resource/resourcemanager.h"
 

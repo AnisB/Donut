@@ -1,28 +1,13 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
-
 // Library includes
 #include "graphics/factory.h"
 #include "core/sugarinstance.h"
 #include "core/mesh.h"
-#include "graphics/common.h"
 #include "core/mesh.h"
 #include "resource/sugar_loader.h"
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
+#include "core/box3.h"
+#include "gpu_backend/gl_factory.h"
 
 // External includes
 #include <float.h>
@@ -30,7 +15,7 @@
 namespace donut
 {
 	// Cube Data
-	GLfloat cubeVertexL[216] = { 
+	float cubeVertexL[216] = {
 		// Vertex Data
 	1.0f, -1.0f, -1.0f, // 0
 	-1.0f, -1.0f, -1.0f,// 3
@@ -142,7 +127,7 @@ namespace donut
 
 
 	// Plane Data
-	GLfloat planeVertexBuffer[32] = { 
+	float planeVertexBuffer[32] = {
 		// Vertex Data
 	1.0f, 0.0f, -1.0f, // 0
 	-1.0f, 0.0f, -1.0f,// 3
@@ -165,7 +150,7 @@ namespace donut
 		2, 1, 3
 	};
 	// Full screen Quad Data
-	GLfloat FSQVertex[32] = { 
+	float FSQVertex[32] = {
 		-1.0f, -1.0f, 0.0f, 
 		-1.0f, 1.0f, 0.0f, 
 		1.0f, -1.0f, 0.0f, 
@@ -187,11 +172,11 @@ namespace donut
 	TMesh* CreateCube(double _length, STRING_TYPE _materialName)
 	{
 		static int cubeCounter = 0;
- 		GLfloat data[216];
+ 		float data[216];
  		memcpy(&data ,&cubeVertexL, 216*sizeof(float));
  		for(int i = 0; i<72; ++i)
  		{
- 			data[i]*=(GLfloat)_length;
+ 			data[i]*=(float)_length;
  		}
 
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
@@ -202,7 +187,6 @@ namespace donut
  		meshName += std::to_string(cubeCounter++);
  		
  		// Creating the geometry
- 		GRAPHICS_DEBUG("Creating cube "<<meshName);
 		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 24, cubeFacesL, 12);
 		
 		// Create the mesh instance
@@ -216,15 +200,15 @@ namespace donut
 	{
 		// Create the geometry buffer
 		static int planeCounter = 0;
- 		GLfloat data[32];
+		float data[32];
  		memcpy(&data ,&planeVertexBuffer, 32*sizeof(float));
  		for(int i = 0; i<4; ++i)
  		{
- 			data[3*i]*=(GLfloat)_with;
+ 			data[3*i]*=(float)_with;
  		}
  		for(int i = 0; i<4; ++i)
  		{
- 			data[3*i+2]*=(GLfloat)_length;
+ 			data[3*i+2]*=(float)_length;
  		}
 
  		// Generate the geometry name
@@ -235,7 +219,6 @@ namespace donut
 		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 
 		// Create the target geometry
- 		GRAPHICS_DEBUG("Creating plane "<<meshName);
 		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 4, planeIndexBuffer, 2);
 
 		// Create the mesh instance
@@ -288,14 +271,15 @@ namespace donut
 		static int FSQCounter = 0;
 		TMaterial defaultMat;
  		defaultMat.shader = _shader;
- 		STRING_TYPE meshName = "FSQ_";	
+ 		std::string meshName = "FSQ_";	
  		meshName += std::to_string(FSQCounter++);
- 		GRAPHICS_DEBUG("Creating FSQ "<<meshName);
 		ShaderManager::Instance().CreateShader(defaultMat.shader); 
 		GEOMETRY_GUID guid = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
-		TGeometry* geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
-		geo->os_bb._max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		geo->os_bb._min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		GeometryObject geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
+		TBox3 box;
+		box._max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		box._min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		gl::geometry::set_bbox(geo, box);
 		return guid;
 	}
 

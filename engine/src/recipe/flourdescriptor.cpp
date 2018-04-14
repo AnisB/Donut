@@ -154,10 +154,6 @@ namespace donut
                                 HandleLightNode_D(currentLightSource, light);
                                 _illuminationDes.lights.push_back(light);
                         }
-                        else
-                        {
-                                RESOURCE_INFO("Unsupported light source");
-                        }
                 }
         }
 

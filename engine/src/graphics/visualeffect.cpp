@@ -24,7 +24,7 @@ namespace donut
 {
 	// Constructor
 	TVFX::TVFX(const TShader& _shader)
-	: m_fsq(nullptr)
+	: m_fsq(0)
 	{
 		m_material.shader =  _shader;
 	}

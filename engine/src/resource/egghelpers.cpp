@@ -4,7 +4,7 @@
 
 namespace donut
 {
-	TEgg* ReadEggFile(const STRING_TYPE& _eggFileLocation)
+	TEgg* ReadEggFile(const std::string& _eggFileLocation)
 	{
 		TEgg* newEgg = new TEgg();
 		std::fstream in;

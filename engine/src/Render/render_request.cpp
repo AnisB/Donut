@@ -2,6 +2,7 @@
 #include "render/render_request.h"
 #include "resource/resourcemanager.h"
 #include "resource/toppingloader.h"
+#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
@@ -9,7 +10,7 @@ namespace donut
 	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniformHandler>& _uniforms)
 	{
 		// Fetch the real data to process
-		TGeometry* geom = ResourceManager::Instance().RequestRuntimeGeometry(_request.geometry);
+		GeometryObject geometry = ResourceManager::Instance().RequestRuntimeGeometry(_request.geometry);
 		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(_request.topping);
 
 		// Bind the shader
@@ -28,7 +29,8 @@ namespace donut
 		ShaderManager::Instance().Inject<bento::Matrix4>(targetShader, viewprojection * _request.transform, "modelviewprojection");
 		ShaderManager::Instance().Inject<bento::Matrix4>(targetShader, _request.transform, "model");
 
-		geom->Draw(targetShader.FIsTesselated);
+		// Render the geometry
+		gl::geometry::draw(geometry);
 
 		// DIsable the shader
 		ShaderManager::Instance().DisableShader();

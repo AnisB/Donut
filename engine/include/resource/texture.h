@@ -1,31 +1,5 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
+#pragma once
 
-
-
-#ifndef TEXTURE
-#define TEXTURE
-
-
-#ifdef MACOSX
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#endif
-
-#include <GLFW/glfw3.h>
 
 #include <string>
 
@@ -53,15 +27,15 @@ namespace TDataType
 
 struct TTexture
 {
-	GLuint            FID;
-    GLuint            FWidth;
-    GLuint            FHeight;
-    GLvoid *          FData;
+	uint32_t          FID;
+	uint32_t          FWidth;
+	uint32_t          FHeight;
+    unsigned char *   FData;
     TDataType::Type   FDataType;
 
     STRING_TYPE       FFileName;
     TImgType::Type    FType;
-    GLuint            FFormat;
+	uint32_t          FFormat;
     unsigned          FNbRef;
 
     TTexture(STRING_TYPE parFilename, TImgType::Type parType, int parWidth, int parHeight )
@@ -97,7 +71,7 @@ struct TTexture
                     delete [] (unsigned char*)FData;
                 break;
                 case TDataType::FLOAT:
-                    delete [] (GLfloat*)FData;
+                    delete [] (float*)FData;
                 break;
             }
         }
@@ -106,7 +80,7 @@ struct TTexture
 
 struct TSkyboxTexture
 {
-    GLuint             id;
+    uint32_t             id;
     TTexture*          textures[6];
     STRING_TYPE        filename;
 
@@ -120,7 +94,4 @@ struct TSkyboxTexture
     ~TSkyboxTexture( void )
     {
     }
-};
-
-#endif // TEXTURE
- 
+}; 

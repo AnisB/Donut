@@ -23,7 +23,6 @@
 #include "tools/xmlhelpers.h"
 
 #include "resource/resourcemanager.h"
-#include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 
 // Bento includes
@@ -44,10 +43,7 @@ namespace donut
 
     void TPipelineLoader::Init()
     {
-        RESOURCE_WARNING("========= PIPLINE LOADER INIT =========");
         LoadPipelines();
-        RESOURCE_WARNING("=====================================");
-
     }
 
     void TPipelineLoader::LoadPipelines()
@@ -60,14 +56,12 @@ namespace donut
         {
             TPipelineDescriptor newPipeline;
             ParsePipelineFile(pipeline, newPipeline);
-            RESOURCE_INFO("Pipeline "<< newPipeline.name<<" file: "<< pipeline);
             m_pipelines[newPipeline.name] = newPipeline;
         }
     }
    
     const TPipelineDescriptor& TPipelineLoader::FetchPipeline(const STRING_TYPE& _pipelineName)
     {
-        RESOURCE_DEBUG(_pipelineName<<" is requested");
         auto ite = m_pipelines.find(_pipelineName);
         return ite->second;
     }

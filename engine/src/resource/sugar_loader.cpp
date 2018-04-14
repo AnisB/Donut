@@ -21,7 +21,6 @@
 // Library includes
 #include "resource/sugar_loader.h"
 #include "resource/resourcemanager.h"
-#include "resource/common.h"
 #include "resource/shaderfilehandler.h"
 #include "tools/fileloader.h"
 #include "rapidxml.hpp"
@@ -42,9 +41,7 @@ namespace donut
 
     void TSugarLoader::Init()
     {
-        RESOURCE_WARNING("========= SUGAR LOADER INIT =========");
         LoadSugars();
-        RESOURCE_WARNING("=====================================");
     }
 
     void TSugarLoader::LoadSugars()
@@ -62,13 +59,11 @@ namespace donut
             TSugarDescriptor newSugar;
             ParseSugarFile(sugar, newSugar);
             FSugars[newSugar._name] = newSugar;
-            RESOURCE_INFO("Sugar "<< newSugar._name<<" file: "<< sugar);
         }
     }
 
     const TSugarDescriptor& TSugarLoader::FetchSugar(const STRING_TYPE& parModel)
     {
-        RESOURCE_DEBUG(parModel<<" is requested");
         auto ite = FSugars.find(parModel);
         return ite->second;
     }

@@ -1,22 +1,6 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
-
 // Library includes
 #include "graphics/simplecanvas.h"
-#include "graphics/glfactory.h"
+#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
@@ -39,8 +23,8 @@ namespace donut
 		m_output.height = m_height; 
 
 		// Creating the main frame buffer
-		m_frameBuffer = CreateFrameBuffer();
-		BindFrameBuffer(m_frameBuffer);
+		m_frameBuffer = gl::framebuffer::create();
+		gl::framebuffer::bind(m_frameBuffer);
 		// Creating the textures
 		// Memory allocation
 		m_output.buffers.resize(2);
@@ -50,36 +34,32 @@ namespace donut
 		color.name = "canvas";
 		color.type = TTextureNature::COLOR;
 		color.offset = 0;
-		CreateTexture(color, m_width, m_height);
- 		BindToFrameBuffer(color);
+		gl::texture2D::create(color, m_width, m_height);
+		gl::framebuffer::bind_texture(color);
 
  		// Depth buffer
 		TTextureInfo& depth = m_output.buffers[1];
 		depth.name = "depth";
 		depth.type = TTextureNature::DEPTH;
 		depth.offset = 1;
-		CreateTexture(depth, m_width, m_height);
- 		BindToFrameBuffer(depth);
- 		// Making sure everything is OK
- 		CheckFrameBuffer();
- 		UnBindFrameBuffer();
+		gl::texture2D::create(depth, m_width, m_height);
+		gl::framebuffer::bind_texture(depth);
+		// Making sure everything is OK
+		gl::framebuffer::check();
+		gl::framebuffer::unbind();
 	}
 
 	void TSimpleCanvas::Enable()
 	{
-		glEnable(GL_DEPTH_TEST);
- 		BindFrameBuffer(m_frameBuffer);
- 		glPushAttrib(GL_VIEWPORT_BIT | GL_ENABLE_BIT);
- 		ClearBuffer();
-		GLenum buffers[] = { GL_COLOR_ATTACHMENT0_EXT};
-    	glDrawBuffers(1, buffers);
+		gl::framebuffer::bind(m_frameBuffer);
+		gl::framebuffer::enable_depth_test(m_frameBuffer);
+		gl::framebuffer::clear(m_frameBuffer);
+		gl::framebuffer::set_num_render_targets(1);
 	}
 
 	void TSimpleCanvas::Disable()
 	{
-		glPopAttrib();
- 		UnBindFrameBuffer();
- 		glDisable(GL_DEPTH_TEST);
+		gl::framebuffer::disable_depth_test(m_frameBuffer);
+		gl::framebuffer::unbind();
 	}
-	// END CLASS DECLARATION
 }

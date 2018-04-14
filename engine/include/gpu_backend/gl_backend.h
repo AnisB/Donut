@@ -1,15 +1,12 @@
-#ifndef GL_BACKEND_H
-#define GL_BACKEND_H
+#pragma once
 
 // Library includes
 #include "gpu_backend.h"
 
 namespace donut
 {
-	namespace GL
+	namespace gl
 	{
-		typedef void (*ErrorCallBack)(int error, const char* description);
-
 		namespace GLData
 		{
 			enum Type
@@ -21,15 +18,15 @@ namespace donut
 		}
 
 		// Builds and returns a default graphics setting for an opengl environement
-		TGraphicsSettings default_settings();
+		TGraphicSettings default_settings();
 
 		// API functions
 		bool init_render_system();
 		void shutdown_render_system();
-		RenderEnvironment create_render_environment(const TGraphicsSettings& graphic_settings);
+		RenderEnvironment create_render_environment(const TGraphicSettings& graphic_settings);
 		void destroy_render_environment(RenderEnvironment render_environment);
 		RenderWindow render_window(RenderEnvironment render_environement);
+		void collect_inputs(RenderEnvironment render_environement);
+		float get_time();
 	}
 }
-
-#endif // GL_BACKEND_H

@@ -37,7 +37,7 @@ namespace donut
 		int m_width;
 		int m_height;
 		// GPU buffer index
-		GLuint m_frameBuffer;
+		uint32_t m_frameBuffer;
 		// What you will get from this canvas after drawing into it
 		TBufferOutput m_output;
 	};

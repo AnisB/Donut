@@ -80,7 +80,6 @@ namespace donut
 
 		// Fetch the pipeline that was specified
 		const TPipelineDescriptor& pipelineDesc = TPipelineLoader::Instance().FetchPipeline(_scene->pipelineName);
-		GRAPHICS_INFO("Creating pipeline "<<pipelineDesc.name);
 
 		for(auto& pass : pipelineDesc.passes)
 		{

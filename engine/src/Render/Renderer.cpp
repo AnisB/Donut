@@ -4,7 +4,7 @@
 // Engine includes
 #include "render/renderer.h"
 #include "Input/helper.h"
-#include "graphics/glfactory.h"
+#include "gpu_backend/gl_factory.h"
 
 // External includes 
 #include <stdlib.h>
@@ -27,7 +27,7 @@
 		_is_running = false;
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TGraphicsSettings& parContext)
+ 	bool TRenderer::CreateRenderWindow(const TGraphicSettings& parContext)
  	{
  		if(!FInitDone)
  		{
@@ -37,15 +37,14 @@
 			// Init the render backend
 			m_gpuBackendApi.init_render_system();
 			// Create a window
-			FWindow = (GLFWwindow*)m_gpuBackendApi.render_window(m_gpuBackendApi.create_render_environment(parContext));
+			_render_environement = m_gpuBackendApi.create_render_environment(parContext);
+			FWindow = m_gpuBackendApi.render_window(_render_environement);
 			_is_running = true;
 			FInitDone = true;
  		}
  		else
  		{
- 			GRAPHICS_DEBUG("This window has already been created.");
- 			assert(FWindow != NULL);
- 			glfwShowWindow(FWindow);
+			ShowRenderWindow();
  		}
  		return true;
  	}
@@ -54,7 +53,6 @@
  	{
 		if (FInitDone)
 		{
-			GRAPHICS_DEBUG("Destroying window.");
 			m_gpuBackendApi.destroy_render_environment((uint64_t)FWindow);
 			m_gpuBackendApi.shutdown_render_system();
 			FInitDone = false;
@@ -63,27 +61,21 @@
 
  	void TRenderer::HideRenderWindow()
  	{
- 		GRAPHICS_DEBUG("Hiding window.");	
  		assert(FWindow != NULL);
- 		glfwHideWindow(FWindow);
- 	}	
+		gl::window::hide(FWindow);
+	}
 
  	void TRenderer::ShowRenderWindow()
  	{
- 		GRAPHICS_DEBUG("Showing window.");	
 		assert(FWindow != NULL);
- 		glfwShowWindow(FWindow);
- 	}	
+		gl::window::show(FWindow);
+	}
 
  	bool TRenderer::Init()
  	{
  		bool isOk = true;
-		// Init the render thread context
-		glfwMakeContextCurrent(FWindow);
- 		// initing the inputs
- 		InputInit();
 
- 		SetClearColor(bento::v4_ZERO); 
+		gl::framebuffer::set_clear_color(0, bento::v4_ZERO);
  			
 		uint64_t nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
@@ -98,18 +90,19 @@
 	{
 		if(parLook == TRenderingLook::LINE)
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		}
 		else if(parLook == TRenderingLook::FILL)
 		{
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 	}
 
  	void TRenderer::Draw()
  	{ 	 
 		// We clear the global buffer
- 		ClearBuffer();
+ 		gl::framebuffer::clear(0);
+
 		int nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
         {
@@ -119,21 +112,18 @@
 			currentPass->Unbind();
         }
 		// Swap front and back buffer
-	  	glfwSwapBuffers (FWindow);
+		gl::window::swap(FWindow);
     }
-
-	void TRenderer::InputInit()
-	{
-		glfwSetKeyCallback(FWindow, key_callback);
-		glfwSetMouseButtonCallback(FWindow, mouse_button_callback);
-		glfwSetScrollCallback(FWindow, mouse_scroll_callback);
-		glfwSetCursorPosCallback(FWindow, mouse_pos_callback);
-	}
 
 	bool TRenderer::IsRendering()
 	{
-		return (_is_running && !glfwWindowShouldClose(FWindow));
+		return (_is_running && gl::window::is_active(FWindow));
 
+	}
+
+	void TRenderer::collect_inputs()
+	{
+		m_gpuBackendApi.collect_inputs(_render_environement);
 	}
 
 	void TRenderer::SetRendering(bool parVal)
@@ -147,12 +137,10 @@
 	{
 		TRenderer * realGraphicRenderer = (TRenderer*) parGraphicRenderer;
 		realGraphicRenderer->Init();
-		GRAPHICS_DEBUG("Init is done.");
 		while(realGraphicRenderer->IsRendering())
 		{
 			realGraphicRenderer->Draw();
 		}
-		GRAPHICS_DEBUG("Window isn't rendering anymore");
 		return 0;
 	}
 }

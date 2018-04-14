@@ -4,7 +4,6 @@
 // Library include
 #include "tools/GeometryConverters.h"
 #include "base/stringhelper.h"
-#include "base/log.h"
 #include "resource/egg.h"
 
 // Bento includes
@@ -23,7 +22,6 @@ namespace donut
 
 	TEgg* CreateEggFromWavefront(const STRING_TYPE& _wavefrontFIle)
 	{
-		PRINT_ERROR("Tools", "Trying to load Wavefront: " << _wavefrontFIle);
 		// Liste des vertices
 		std::vector<bento::Vector3> listePoints;
 		// Liste des infos par point

@@ -1,28 +1,9 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-
-
-
-#ifndef RESOURCE_MANAGER_DONUT
-#define RESOURCE_MANAGER_DONUT
+#pragma once
 
 // Library includes
 #include "graphics/shaderManager.h"
-#include "graphics/geometry.h"
 #include "graphics/material.h"
+#include "gpu_backend/gpu_backend.h"
 
 #include "base/singleton.h"
 #include "texture.h"
@@ -75,10 +56,10 @@
 		std::vector<int> LoadObjToTexture(const STRING_TYPE&  parFileName, std::vector<TTexture*>& parTexturetable);
 
 		TSkyboxTexture* RequestRuntimeSkybox(SKYBOX_GUID _skyboxIndex) { return m_skyboxes[_skyboxIndex]; }
-		TGeometry* RequestRuntimeGeometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
+		GeometryObject RequestRuntimeGeometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
 
 	protected:
-		GEOMETRY_GUID InsertGeometry(const STRING_TYPE& _path, TGeometry* _targetGeometry);
+		GEOMETRY_GUID InsertGeometry(const STRING_TYPE& _path, GeometryObject _targetGeometry);
 		SKYBOX_GUID InsertSkybox(const STRING_TYPE& _folder, TSkyboxTexture* _targetSkybox);
 
 	protected:
@@ -94,9 +75,6 @@
 			
 			// Geometry data
 		std::map<STRING_TYPE, GEOMETRY_GUID> m_geometryIdentifiers;
-		std::vector<TGeometry*> m_geometries;
-
+		std::vector<GeometryObject> m_geometries;
 	};
 }
-
-#endif // RESOURCE_MANAGER_DONUT
