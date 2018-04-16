@@ -116,6 +116,8 @@ namespace donut
 		// Injecting zbuffer fcoef
 		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance
+		_uniforms["camera_position"].SetValue<bento::Vector3>(TShaderData::VEC3, "camera_position", m_position);
+		// Injecting focus distance
 		_uniforms["focus"].SetValue<float>(TShaderData::FLOAT, "focus", m_focus);
 	}
 }

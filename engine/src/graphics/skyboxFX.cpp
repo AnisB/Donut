@@ -34,7 +34,7 @@ namespace donut
 
 		// Create the entry
  		TCubeMapInfo newCM;
-		newCM.cmID = skybox->id;
+		newCM.cmID = skybox->tex_id;
 		newCM.offset = 0;
 		newCM.name = "skybox";
 

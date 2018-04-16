@@ -1,7 +1,7 @@
 #version 410
 
-in vec3 position;
-in vec2 tex_coord;
+in layout(location=0) vec3 position;
+in layout(location=2) vec2 tex_coord;
 
 out vec2 texCoord;
 

@@ -109,6 +109,7 @@ namespace donut
 	1.0,0.0,
 	1.0,1.0,	
 	};
+
 	unsigned int cubeFacesL[36] = 
 	{ 
 		0, 1, 2,
@@ -123,6 +124,22 @@ namespace donut
 		17, 18, 19,
 		20, 21, 22,
 		21, 22, 23
+	};
+
+	unsigned int icubeFacesL[36] =
+	{
+		0, 2, 1,
+		1, 3, 2,
+		4, 6, 5,
+		5, 7, 6,
+		8, 10, 9,
+		9, 11, 10,
+		12, 14, 13,
+		13, 15, 14,
+		16, 18, 17,
+		17, 19, 18,
+		20, 22, 21,
+		21, 23, 22
 	};
 
 
@@ -164,19 +181,19 @@ namespace donut
 		1.0,0.0,
 		1.0,1.0,
 	};
-	unsigned int FSQIndex[32] = { 
+	uint32_t FSQIndex[6] = { 
 		0, 1, 2,
 		1, 2, 3
 	};
 
-	TMesh* CreateCube(double _length, STRING_TYPE _materialName)
+	TMesh* CreateCube(float _length, STRING_TYPE _materialName, bool inside = false)
 	{
 		static int cubeCounter = 0;
  		float data[216];
  		memcpy(&data ,&cubeVertexL, 216*sizeof(float));
  		for(int i = 0; i<72; ++i)
  		{
- 			data[i]*=(float)_length;
+ 			data[i] *= _length;
  		}
 
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
@@ -187,7 +204,7 @@ namespace donut
  		meshName += std::to_string(cubeCounter++);
  		
  		// Creating the geometry
-		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 24, cubeFacesL, 12);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 24, inside ? icubeFacesL: cubeFacesL, 12);
 		
 		// Create the mesh instance
 		TMesh* newMesh = new TMesh(topping, geometry);
@@ -285,22 +302,25 @@ namespace donut
 
 	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID)
 	{	
-		// Fetch the texture
-		TSkyboxTexture* skybox = ResourceManager::Instance().RequestRuntimeSkybox(_skyboxID);
-		
-		// Create the shader
+		// Create the geometry
+		TMesh* skybox = CreateCube(10.0f, "skybox", true);
+
+		// Request the shader
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial("skybox");
 		TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
 
+		// Fetch the texture
+		TSkyboxTexture* skybox_tex = ResourceManager::Instance().RequestRuntimeSkybox(_skyboxID);
+
+		// Add it to the material
  		TCubeMapInfo newCM;
-		newCM.cmID = skybox->id;
+		newCM.cmID = skybox_tex->tex_id;
 		newCM.offset = 0;
 		newCM.name = "skybox";
 		mat->cubeMaps.push_back(newCM);
+		mat->flags = RenderFlags::NO_CULLING;
 		
-		// Create the geometry
-		GEOMETRY_GUID fsq = CreateFullScreenQuad(mat->shader);
-		return new TMesh(topping, fsq);
+		return skybox;
 	}
 
 }

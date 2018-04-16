@@ -31,8 +31,7 @@ namespace donut
         #define LIGHT_RAY_TOKEN "ray"
         // Skybox data
         #define SKYBOX_TOKEN "skybox"
-        #define SKYBOX_EXTENSION_TOKEN "extension"
-        #define SKYBOX_LOCATION_TOKEN "location"
+        #define SKYBOX_SOURCE_TOKEN "source"
 
         // Pipeline data
         #define PIPELINE_NODE_TOKEN "pipeline"
@@ -44,11 +43,9 @@ namespace donut
 
         TSkyboxDescriptor* HandleSkyboxNode_D(rapidxml::xml_node<> * _skybox)
         {
-                rapidxml::xml_attribute<> *location = _skybox->first_attribute(SKYBOX_LOCATION_TOKEN);
-                rapidxml::xml_attribute<> *extension = _skybox->first_attribute(SKYBOX_EXTENSION_TOKEN);
+                rapidxml::xml_attribute<> *source = _skybox->first_attribute(SKYBOX_SOURCE_TOKEN);
                 TSkyboxDescriptor* skybox = new TSkyboxDescriptor();
-                skybox->location = location->value();
-                skybox->extension = extension->value();
+                skybox->source = source->value();
                 return skybox;
         }
 

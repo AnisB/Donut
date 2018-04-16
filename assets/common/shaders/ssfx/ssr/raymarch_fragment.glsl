@@ -172,7 +172,7 @@ void main()
 
 	// Why we didn't reach the end and we didn't get to the last step and it didn't overlap
 	for(int stepIdx = 0; continueCondition && (stepIdx < max_steps); ++stepIdx)
-	 {
+	{
 	 	// Compute the depth rage
 		rayZMin = prevZMaxEstimate;
 		rayZMax = (dPQk.z * 0.5 + PQk.z);
@@ -187,16 +187,16 @@ void main()
 		reflectionFactor = texture(specular, normalizeTexCoord(hitPixel)).z;
 		
 		// Compute the intersection
-		intersection = intersectsDepthBuffer(candidateData, rayZMin, rayZMax) && (reflectionFactor == 0.0);
+		intersection = intersectsDepthBuffer(candidateData, rayZMin, rayZMax) && (reflectionFactor < 1.0f);
 
 		// Adjust the parameter for next step
 		prevZMaxEstimate = rayZMax;
 		PQk += dPQk;
 
 		// Are we done with the rasterization? is the pixel matchting without being refective  and are we still processing a viable pixel (not oob)
-		continueCondition = (PQk.x*stepDir <= end) && !intersection && (candidateData.x != 0.0f);
+		continueCondition = (PQk.x * stepDir <= end) && !intersection && (candidateData.x != 0.0f);
 	}
 	
 	// return the target color
-	frag_color = (intersection? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse *vs_direction)) * reflection;
+	frag_color = (intersection ? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse * vs_direction)) * reflection;
 }

@@ -1,97 +1,74 @@
 #pragma once
 
-
+// External includes
 #include <string>
+#include <vector>
 
-
-namespace TImgType
+namespace donut
 {
-	enum Type
+	namespace TTextureFormat
 	{
-		JPG,
-		PNG,
-		BMP,
-		TGA,
-		NONE
+		enum Type
+		{
+			RGB = 3,
+			RGBA = 4,
+			NONE
+		};
+	}
+
+	namespace TTextureDataType
+	{
+		enum Type
+		{
+			UNSIGNED_BYTE = 1,
+			FLOAT = 8
+		};
+	}
+
+	struct TTexture
+	{
+		// The texture's data
+		uint32_t					tex_id;
+		uint32_t					width;
+		uint32_t					height;
+		TTextureFormat::Type		format;
+		TTextureDataType::Type		data_type;
+		std::vector<unsigned char>  data;
+
+		// Source file of the texture
+		std::string					file_path;
+
+		TTexture()
+			: width(0)
+			, height(0)
+			, data()
+			, file_path("")
+			, format(TTextureFormat::RGBA)
+			, data_type(TTextureDataType::UNSIGNED_BYTE)
+		{
+		}
+	};
+
+	namespace texture
+	{
+		// Function that retuens the in-memory size of a pixel
+		uint32_t pixel_size(const TTexture& target_texture);
+
+		// Returns a pointer to the start of a pixel
+		unsigned char* pixel(TTexture& target_texture, uint32_t p_width, uint32_t p_height);
+		const unsigned char* pixel(const TTexture& target_texture, uint32_t p_width, uint32_t p_height);
+	}
+
+	struct TSkyboxTexture
+	{
+		uint32_t		tex_id;
+		TTexture        faces[6];
+		std::string     file_path;
+
+		TSkyboxTexture()
+			: file_path("")
+			, tex_id(0)
+		{
+		}
 	};
 }
-
-namespace TDataType
-{
-    enum Type
-    {
-        FLOAT,
-        UNSIGNED_BYTE
-    };
-}
-
-struct TTexture
-{
-	uint32_t          FID;
-	uint32_t          FWidth;
-	uint32_t          FHeight;
-    unsigned char *   FData;
-    TDataType::Type   FDataType;
-
-    STRING_TYPE       FFileName;
-    TImgType::Type    FType;
-	uint32_t          FFormat;
-    unsigned          FNbRef;
-
-    TTexture(STRING_TYPE parFilename, TImgType::Type parType, int parWidth, int parHeight )
-        : FWidth ( parWidth  )
-        , FHeight( parHeight )
-        , FData ( NULL )
-        , FFileName ( parFilename )
-        , FType (parType)
-        , FNbRef(0)
-        , FDataType(TDataType::UNSIGNED_BYTE)
-        , FFormat(0)
-    {
-    }
-    TTexture(int parWidth, int parHeight )
-        : FWidth ( parWidth  )
-        , FHeight( parHeight )
-        , FData ( NULL )
-        , FFileName ( "RUNTIME" )
-        , FType (TImgType::NONE)
-        , FNbRef(0)
-        , FDataType(TDataType::UNSIGNED_BYTE)
-        , FFormat(0)
-    {
-    }
-
-    ~TTexture( void )
-    {
-        if( FData )
-        {
-            switch(FDataType)
-            {
-                case TDataType::UNSIGNED_BYTE:
-                    delete [] (unsigned char*)FData;
-                break;
-                case TDataType::FLOAT:
-                    delete [] (float*)FData;
-                break;
-            }
-        }
-    }
-};
-
-struct TSkyboxTexture
-{
-    uint32_t             id;
-    TTexture*          textures[6];
-    STRING_TYPE        filename;
-
-    TSkyboxTexture(const STRING_TYPE& _filename)
-    : filename ( _filename )
-    , id(0)
-    , textures()
-    {
-    }
-
-    ~TSkyboxTexture( void )
-    {
-    }
-}; 

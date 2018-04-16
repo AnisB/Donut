@@ -66,7 +66,7 @@ namespace donut
 	void TVFX::AddTexture(TTexture* parTex, const STRING_TYPE& _nameInMaterial)
  	{
 		TTextureInfo newTex;
-		newTex.texID = parTex->FID;
+		newTex.texID = parTex->tex_id;
 		newTex.offset = (int)m_material.textures.size();
 		newTex.name = _nameInMaterial;
 		m_material.textures.push_back(newTex);
@@ -75,7 +75,7 @@ namespace donut
  	void TVFX::AddCubeMap(TSkyboxTexture* _skybox, const STRING_TYPE& _nameInMaterial)
  	{
 		TCubeMapInfo newCM;
-		newCM.cmID = _skybox->id;
+		newCM.cmID = _skybox->tex_id;
 		newCM.offset = (int)m_material.cubeMaps.size();
 		newCM.name = _nameInMaterial;
 		m_material.cubeMaps.push_back(newCM);

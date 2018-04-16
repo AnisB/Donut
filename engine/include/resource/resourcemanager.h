@@ -46,7 +46,7 @@
 		// Returns a pointer to a given skybox (using its filepath)
  		// If it has not been loaded yet, it loads the texture into the CPU RAM and the GPU RAM
  		// Else it returns a pointer to what has been loaded
-		SKYBOX_GUID FetchSkybox(const STRING_TYPE& _skyboxFolder, const STRING_TYPE& _extension);
+		SKYBOX_GUID FetchSkybox(const STRING_TYPE& skybox_source);
 		// This function is not really supposed to be used on a perfomance oriented scene, it is a helper that is available for the user to create
 		// at runtime geometries and to register them for further access (it is used to create cubes, spheres, planes, etc etc)
 		// It is also used internally by the FetchGeometry method

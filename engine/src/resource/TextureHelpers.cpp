@@ -1,7 +1,13 @@
 
+// Bento includes
+#include <bento_base/log.h>
+
+// Engine includes
 #include "gpu_backend/gl_factory.h"
 #include "resource/TextureHelpers.h"
  
+
+// External includes
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
@@ -11,48 +17,58 @@
 #include <png.h>
 #elif WIN32
 #endif
+
 namespace donut
 {
+	namespace TextureExtension
+	{
+		enum Type
+		{
+			JPG = 0,
+			PNG = 1,
+			BMP = 2,
+			TGA = 3,
+			COUNT = 4
+		};
+	}
 
- namespace TextureHelpers
- {
- 	TImgType::Type GetImgType(const STRING_TYPE & parImg)
+	TextureExtension::Type GetImgType(const STRING_TYPE & parImg)
  	{
  		size_t stringLength = parImg.size();
  		const STRING_TYPE& extension = parImg.substr(parImg.find_last_of(".") + 1, stringLength - 1);
     	if(extension == "png")
     	{
-    	    return TImgType::PNG;
+    	    return TextureExtension::PNG;
     	}
     	else if(extension == "jpg" || extension == "jpeg")
     	{
-    	    return TImgType::JPG;
+    	    return TextureExtension::JPG;
     	}
     	else if(extension == "bmp")
     	{
-    	    return TImgType::BMP;
+    	    return TextureExtension::BMP;
     	}
     	else if(extension == "tga")
     	{
-    	    return TImgType::TGA;
+    	    return TextureExtension::TGA;
     	}
     	else 
     	{
-	        return TImgType::NONE;
+	        return TextureExtension::COUNT;
 	    }
 	}
 
-    STRING_TYPE ImgTypeToString(TImgType::Type parType)
+    STRING_TYPE ImgTypeToString(TextureExtension::Type parType)
     {
         switch(parType)
         {
-            case TImgType::PNG:
+            case TextureExtension::PNG:
                 return ".png";
-            case TImgType::BMP:
+            case TextureExtension::BMP:
                 return ".bmp";
-            case TImgType::JPG:
+            case TextureExtension::JPG:
                 return ".jpg";
-            case TImgType::TGA:
+            case TextureExtension::TGA:
                 return ".tga";
             default:
                 return "";
@@ -60,35 +76,42 @@ namespace donut
         };
     }
 
-    TTexture* LoadBMP(const char *Filename )
+    void read_bmp(const char * path_name, TTexture& output_texture )
     {
-        if( !Filename )
-            return NULL;
+		if (path_name == nullptr)
+		{
+			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Invalid texture path");
+			return;
+		}
 
 #if __posix__
         FILE* f = fopen(Filename, "rb");
 #elif WIN32
         FILE* f = NULL;
-		fopen_s(&f, Filename, "rb");
+		fopen_s(&f, path_name, "rb");
 #endif
         assert(f);
 
         unsigned char info[54];
         fread(info, sizeof(unsigned char), 54, f); // read the 54-byte header
 
-        // extract image height and width from header
-        int w = *(int*)&info[18];
-        int l = *(int*)&info[22];
+        // Extract the data from the texture
+        uint32_t w = *(int*)&info[18];
+		uint32_t h = *(int*)&info[22];
+		uint32_t data_size = 3 * w  * h;
 
-        TTexture* image = new TTexture(Filename,TImgType::BMP, w, l );
-        image->FFormat = 0x1907;
+		// Prepare the texture for writing
+		output_texture.width = w;
+		output_texture.height = h;
+		output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
+		output_texture.format = TTextureFormat::RGB;
+		output_texture.data.resize(data_size);
 
-        int size = 3 * w  * l ;
-        unsigned char* data = new unsigned char[size]; // allocate 3 bytes per pixel
-        fread(data, sizeof(unsigned char), size, f); // read the rest of the data at once
+		unsigned char* data = output_texture.data.data(); // allocate 3 bytes per pixel
+        fread(data, sizeof(unsigned char), data_size, f); // read the rest of the data at once
         fclose(f);
 
-        for(int i = 0; i < size; i += 3)
+        for(uint32_t i = 0; i < data_size; i += 3)
         {
                 unsigned char tmp = data[i];
                 data[i] = data[i+2];
@@ -98,23 +121,17 @@ namespace donut
 		int shift = *(int*)&info[14];
 		shift /= 3;
 		unsigned char* tampon = new unsigned char[w*3];
-		for (int i = 0; i < l; ++i)
+		for (uint32_t i = 0; i < h; ++i)
 		{
 			memcpy(tampon, data + i*w * 3 + shift * 3, (w - shift) * 3);
 			memcpy(tampon + (w - shift) * 3, data, shift * 3);
 			memcpy(data + i * w * 3, tampon, w * 3);
 		}
 		delete [] tampon;
-
-        // read the data.
-        image->FData = data;
-        return image;
     }
-    TTexture* LoadJPG(const char* FileName, bool Fast = true)
+    void read_jpg(const char* file_path, TTexture& output_texture)
     {
-        // printf("Loading jpg dude %s\n", FileName);
-
-        FILE* file = fopen(FileName, "rb");  //open the file
+        FILE* file = fopen(file_path, "rb");  //open the file
         struct jpeg_decompress_struct info;  //the jpeg decompress info
         struct jpeg_error_mgr err;           //the error handler
 
@@ -124,32 +141,32 @@ namespace donut
         //if the jpeg file didnt load exit
         if(!file)
         {
-            fprintf(stderr, "Error reading JPEG file %s!!!", FileName);
-            return NULL;
+			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Failed to load texture");
+            return;
         }
+		output_texture.file_path = file_path;
 
         jpeg_stdio_src(&info, file);    //tell the jpeg lib the file we'er reading
 
         jpeg_read_header(&info, TRUE);   //tell it to start reading it
 
-        //if it wants to be read fast or not
-        if(Fast)
-        {
-            info.do_fancy_upsampling = FALSE;
-        }
-
         jpeg_start_decompress(&info);    //decompress the file
 
-        //set the x and y
-        unsigned int w = info.output_width;
-        unsigned int l = info.output_height;
-        TTexture* image = new TTexture(FileName,TImgType::JPG, w, l );
-        image->FFormat = 0x1907;
+        // Read the texture data
+		uint32_t w = info.output_width;
+		uint32_t h = info.output_height;
+		uint32_t num_pixels = w * h;
+		uint32_t data_size = w * h * 3;
+
+		// Prepare the texture for writing
+		output_texture.width = w;
+		output_texture.height = h;
+		output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
+		output_texture.format = TTextureFormat::RGB;
+		output_texture.data.resize(data_size);
 
         uint32_t channels = info.num_components;
-
 		uint32_t type = 0x1907;
-
         if(channels == 4)
         {
             type = 0x1908;
@@ -157,12 +174,7 @@ namespace donut
 
 		uint32_t bpp = channels * 8;
 
-		uint32_t size = w * l * 3;
-
-        //read turn the uncompressed data into something ogl can read
-        image->FData = new unsigned char[size];      //setup data for the data its going to be handling
-
-        unsigned char* p1 = (unsigned char*)    image->FData;
+        unsigned char* p1 = (unsigned char*)output_texture.data.data();
         unsigned char** p2 = &p1;
         int numlines = 0;
 
@@ -175,11 +187,9 @@ namespace donut
         jpeg_finish_decompress(&info);   //finish decompressing this file
 
         fclose(file);                    //close the file
-
-        return image;
     }
 
-    TTexture* LoadPNG(const char* file_name)
+    TTexture* LoadPNG(const char* file_name, TTexture& output_texture)
     {
 #if __posix__
         png_byte header[8];
@@ -311,18 +321,16 @@ namespace donut
 #endif
     }
 
-    TTexture* LoadTGA(const char* file_name)
+    void read_tga(const char* file_name, TTexture& output_texture)
     {
         std::fstream hFile(file_name, std::ios::in | std::ios::binary);
 
         if (!hFile.is_open())
         {
             assert_fail_msg("File not found");
-            return nullptr;
+            return;
         }
         
-        TTexture* image = nullptr;
-
         std::uint8_t Header[18] = {0};
         static std::uint8_t DeCompressed[12] = {0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
         static std::uint8_t IsCompressed[12] = {0x0, 0x0, 0xA, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -334,117 +342,59 @@ namespace donut
             int BitsPerPixel = Header[16];
             int width  = Header[13] * 0xFF + Header[12];
             int height = Header[15] * 0xFF + Header[14];
-            int size  = ((width * BitsPerPixel + 31) / 32) * 4 * height;
-            image = new TTexture(file_name,TImgType::TGA, width, height);
+            int data_size  = ((width * BitsPerPixel + 31) / 32) * 4 * height;
+
+			output_texture.width = width;
+			output_texture.height = height;
+			output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
 
             switch(BitsPerPixel)
             {
                 case 24:
-                    image->FFormat = 0x1907;
+					output_texture.format = TTextureFormat::RGB;
                 break;
                 case 32:
-                    image->FFormat = 0x1908;
+					output_texture.format = TTextureFormat::RGBA;
                 break;
                 default: 
                     hFile.close();
                     assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit Image.");
             }
 
-            image->FData = new unsigned char[size];
-            hFile.read(reinterpret_cast<char*>(image->FData), size);
+			output_texture.data.resize(data_size);
+            hFile.read(reinterpret_cast<char*>(output_texture.data.data()), data_size);
         }
-        /*
-        else if (!std::memcmp(IsCompressed, &Header, sizeof(IsCompressed)))
-        {
-            BitsPerPixel = Header[16];
-            width  = Header[13] * 0xFF + Header[12];
-            height = Header[15] * 0xFF + Header[14];
-            size  = ((width * BitsPerPixel + 31) / 32) * 4 * height;
-
-            if ((BitsPerPixel != 24) && (BitsPerPixel != 32))
-            {
-                hFile.close();
-                assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit Image.");
-                return nullptr;
-            }
-
-            RGB Pixel = {0};
-            int CurrentByte = 0;
-            std::size_t CurrentPixel = 0;
-            ImageCompressed = true;
-            std::uint8_t ChunkHeader = {0};
-            int BytesPerPixel = (BitsPerPixel / 8);
-            ImageData.resize(width * height * sizeof(RGB));
-
-            do
-            {
-                hFile.read(reinterpret_cast<char*>(&ChunkHeader), sizeof(ChunkHeader));
-
-                if(ChunkHeader < 128)
-                {
-                    ++ChunkHeader;
-                    for(int I = 0; I < ChunkHeader; ++I, ++CurrentPixel)
-                    {
-                        hFile.read(reinterpret_cast<char*>(&Pixel), BytesPerPixel);
-
-                        ImageData[CurrentByte++] = Pixel.RGBA.B;
-                        ImageData[CurrentByte++] = Pixel.RGBA.G;
-                        ImageData[CurrentByte++] = Pixel.RGBA.R;
-                        if (BitsPerPixel > 24) ImageData[CurrentByte++] = Pixel.RGBA.A;
-                    }
-                }
-                else
-                {
-                    ChunkHeader -= 127;
-                    hFile.read(reinterpret_cast<char*>(&Pixel), BytesPerPixel);
-
-                    for(int I = 0; I < ChunkHeader; ++I, ++CurrentPixel)
-                    {
-                        ImageData[CurrentByte++] = Pixel.RGBA.B;
-                        ImageData[CurrentByte++] = Pixel.RGBA.G;
-                        ImageData[CurrentByte++] = Pixel.RGBA.R;
-                        if (BitsPerPixel > 24) ImageData[CurrentByte++] = Pixel.RGBA.A;
-                    }
-                }
-            } while(CurrentPixel < (width * height));
-        }
-        */
         else
         {
             hFile.close();
             assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit TGA File.");
-            return nullptr;
+            return;
         }
-
         hFile.close();
-        return image;
     }
 
-
- 	TTexture * LoadTexture(const STRING_TYPE & parImg)
+	void LoadTexture(const char* path_source, TTexture& output_texture)
  	{
- 		TImgType::Type typeImg = GetImgType(parImg);
+		TextureExtension::Type typeImg = GetImgType(path_source);
 
- 		TTexture * texture = NULL;
 	    switch (typeImg)
 	    {
-	    	case TImgType::PNG:
-                texture = LoadPNG(parImg.c_str());
+	    	case TextureExtension::PNG:
+                LoadPNG(path_source, output_texture);
 	    	    break;
-	    	case TImgType::JPG:
-	    	    texture = LoadJPG(parImg.c_str());
+	    	case TextureExtension::JPG:
+	    	    read_jpg(path_source, output_texture);
 
 	    	    break;
-	    	case TImgType::BMP:
-	    	    texture = LoadBMP(parImg.c_str());
+	    	case TextureExtension::BMP:
+	    	    read_bmp(path_source, output_texture);
 	    	    break;
-	    	case TImgType::TGA:
-	    	    texture = LoadTGA(parImg.c_str());
+	    	case TextureExtension::TGA:
+	    	    read_tga(path_source, output_texture);
 	    	    break;
     	    default:
     	        assert_fail_msg("Unhandled type");
 	    };
-	    return texture;
 	}
 
     namespace TSkyboxComponent
@@ -479,32 +429,93 @@ namespace donut
         return "";
     }
     
-    STRING_TYPE ConcatFileName(const STRING_TYPE& parFolderName,TSkyboxComponent::Type parType,TImgType::Type parImgType )
+    STRING_TYPE ConcatFileName(const STRING_TYPE& parFolderName,TSkyboxComponent::Type parType, TextureExtension::Type parImgType )
     {
         STRING_TYPE filename(parFolderName);
-        filename+=SkyboxComponentToString(parType);
-        filename+=TextureHelpers::ImgTypeToString(parImgType);
+        filename += SkyboxComponentToString(parType);
+        filename += ImgTypeToString(parImgType);
         return filename;
     }
 
-    TSkyboxTexture* LoadSkybox(const STRING_TYPE&  _skyboxFolder, TImgType::Type parType)
+    TSkyboxTexture* LoadSkybox(const STRING_TYPE&  skybox_source)
     {
-        TSkyboxTexture * skybox = new TSkyboxTexture(_skyboxFolder);
-        skybox->textures[0] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PX,parType));
-        skybox->textures[1] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NX,parType));
-        skybox->textures[2] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PY,parType));
-        skybox->textures[3] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NY,parType));
-        skybox->textures[4] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::PZ,parType));
-        skybox->textures[5] =  TextureHelpers::LoadTexture(ConcatFileName(_skyboxFolder,TSkyboxComponent::NZ,parType));
-        /*
-        skybox->FID = TextureHelpers::CreateTextureCube();
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_X, skybox->textures[0]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, skybox->textures[1]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, skybox->textures[2]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, skybox->textures[3]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, skybox->textures[4]);
-        TextureHelpers::BindToCubeMap(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, skybox->textures[5]);
-        */
+		// Read the combined texture
+		TTexture combined_texture;
+		LoadTexture(skybox_source.c_str(), combined_texture);
+
+		// Create the structure that will host the cubemap
+		TSkyboxTexture * skybox = new TSkyboxTexture();
+		skybox->file_path = skybox_source;
+
+		// We only support one type of cubemap for the moment
+		if ((combined_texture.width * 3) == (combined_texture.height * 4))
+		{
+			// Compute the face resolution
+			uint32_t cubemap_face_resolution = combined_texture.width / 4;
+
+			// Prepare the textures for writing
+			for (uint8_t face_idx = 0; face_idx < 6; ++face_idx)
+			{
+				// Set the data and allocate the memory space
+				TTexture& current_face = skybox->faces[face_idx];
+				current_face.width = cubemap_face_resolution;
+				current_face.height = cubemap_face_resolution;
+				current_face.format = combined_texture.format;
+				current_face.data_type = combined_texture.data_type;
+				current_face.data.resize(current_face.width * current_face.height * (uint8_t)current_face.format * (uint8_t)current_face.data_type);
+			
+				// Shift values that allow us to define for each face where to read the face data
+				uint32_t shift_w = 0;
+				uint32_t shift_h = 0;
+
+				if (face_idx == 0)
+				{
+					shift_w = 2 * cubemap_face_resolution;
+					shift_h = cubemap_face_resolution;
+				}
+				else if(face_idx == 1)
+				{
+					shift_w = 0;
+					shift_h = cubemap_face_resolution;
+				}
+				else if (face_idx == 2)
+				{
+					shift_w = cubemap_face_resolution;
+					shift_h = 0;
+				}
+				else if (face_idx == 3)
+				{
+					shift_w = cubemap_face_resolution;
+					shift_h =  2 * cubemap_face_resolution;
+				}
+				else if (face_idx == 4)
+				{
+					shift_w = cubemap_face_resolution;
+					shift_h = cubemap_face_resolution;
+				}
+				else if (face_idx == 5)
+				{
+					shift_w = 3 * cubemap_face_resolution;
+					shift_h = cubemap_face_resolution;
+				}
+
+				for (uint32_t h_idx = 0; h_idx < cubemap_face_resolution; ++h_idx)
+				{
+					for (uint32_t w_idx = 0; w_idx < cubemap_face_resolution; ++w_idx)
+					{
+						unsigned char* source_pixel = texture::pixel(combined_texture, w_idx + shift_w, h_idx + shift_h);
+						unsigned char* target_pixel = texture::pixel(current_face, w_idx, h_idx);
+						memcpy(target_pixel, source_pixel, texture::pixel_size(combined_texture));
+					}
+				}
+			}
+		}
+		else
+		{
+			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Unsupported cubemap format");
+			delete skybox;
+			return nullptr;
+		}
         return skybox;
     }
 
@@ -593,6 +604,4 @@ namespace donut
 		assert_fail();
 #endif
     }
-
-}
 }

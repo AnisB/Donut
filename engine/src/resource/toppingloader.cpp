@@ -91,7 +91,7 @@ namespace donut
         for(auto& tex : targetMaterial.textures)
         {
             TTexture* texPtr = ResourceManager::Instance().FetchTexture(tex.file);
-			tex.texID = texPtr->FID;
+			tex.texID = texPtr->tex_id;
         }
 
         // Load the shader into memory

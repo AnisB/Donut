@@ -359,5 +359,9 @@ namespace donut
 		{
 			ShaderManager::Instance().InjectTex(_shader, tex.texID, tex.name, tex.offset);
 		}
+		for (auto& tex : _material.cubeMaps)
+		{
+			ShaderManager::Instance().InjectCubeMap(_shader, tex.cmID, tex.name, tex.offset);
+		}
 	}
 }

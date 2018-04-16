@@ -38,10 +38,6 @@ void main()
   // Maybe should not be done?
   float d = texture(depth, texCoord).r;
   vec4 p4 = texture(position, texCoord);
-  if(p4.w == 0.0)
-  {
-    discard;
-  }
 
   vec3 p = p4.xyz;
   // Fetching the data
@@ -66,5 +62,5 @@ void main()
   }
   ao = ao / nbIterations;
   ao = pow(1.0 - ao, 2.0f);
-  frag_color = vec4(ao,ao,ao,1.0);
+  frag_color = p4.w == 1.0f ? vec4(ao,ao,ao,1.0) : vec4(1.0);
 }

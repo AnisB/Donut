@@ -34,7 +34,7 @@ namespace donut
 	// Handle a skybox from its descriptor
 	SKYBOX_GUID HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
 	{
-		return ResourceManager::Instance().FetchSkybox(_skybox.location, _skybox.extension);
+		return ResourceManager::Instance().FetchSkybox(_skybox.source);
 	}
 
 	// Handle a node  from its descriptor
@@ -97,7 +97,7 @@ namespace donut
 
 		// Handle the lights
 		const std::vector<TLightDescriptor>& light_descriptors = _desc.illumination.lights;
-		uint32_t num_lights = light_descriptors.size();
+		uint32_t num_lights = (uint32_t)light_descriptors.size();
 		flour->lights.resize(num_lights);
 		for(uint32_t light_idx = 0; light_idx < num_lights; ++light_idx)
 		{

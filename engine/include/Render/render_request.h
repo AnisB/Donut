@@ -12,12 +12,24 @@
 
 namespace donut
 {
+	namespace RenderFlags
+	{
+		enum Type
+		{
+			NONE = 0,
+			NO_CULLING = 1
+		};
+	}
+
 	// This structure encapsulates everything that is required to draw a geometry with a material in a given scene
 	struct TRenderRequest
 	{
 		// Instance data
 		TOPPING_GUID topping;
 		GEOMETRY_GUID geometry;
+
+		// Set of flags that need to be applied to this request
+		uint8_t render_flags;
 
 		// Mesh transform
 		bento::Matrix4 transform;

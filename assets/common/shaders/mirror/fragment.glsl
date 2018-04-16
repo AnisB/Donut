@@ -21,5 +21,5 @@ void main()
     frag_color[0] = vec4(1.0,1.0,1.0,1.0); // Albedo
     frag_color[1] = vec4(fnormal,1.0); // Camera space normal
     frag_color[2] = vec4(texCoord, 1.0, 1.0); // Specularity (sun contribution and reflectivity)
-    frag_color[3] = ecPos; // Camera space position
+    frag_color[3] = vec4(ecPos.xyz, 1.0f); // Camera space position
 }

@@ -30,8 +30,7 @@ namespace donut
 	// Skybox descriptor
 	struct TSkyboxDescriptor
 	{
-		STRING_TYPE location;
-		STRING_TYPE extension;
+		STRING_TYPE source;
 	};
 
 	// Sugar descriptor

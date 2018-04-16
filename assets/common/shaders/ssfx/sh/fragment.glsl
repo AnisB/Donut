@@ -7,6 +7,7 @@ out vec4 frag_color;
 
 // Uniform data
 uniform sampler2D normal;
+uniform sampler2D position;
 uniform mat3 view_inverse;
 
 // SH data
@@ -37,10 +38,11 @@ float computeEVal(vec3 worldSpaceNormal, float parCoeff[9])
 void main(void) 
 {
     vec3 normalV = texture(normal, texCoord).xyz;
+    vec4 position = texture(position, texCoord);
     normalV = view_inverse*normalV;
     float Ered = computeEVal(normalV, redCoeff);
     float Egreen = computeEVal(normalV, greenCoeff);
     float Eblue = computeEVal(normalV, blueCoeff);
     // Calcul de la lumière
-    frag_color = vec4(Ered,Egreen,Eblue, 1.0);
+    frag_color = position.w == 1.0f? vec4(Ered,Egreen,Eblue, 1.0) : vec4(0.0);
 }

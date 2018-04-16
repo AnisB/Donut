@@ -43,7 +43,6 @@ namespace donut
 		newRequest.geometry = m_geometry;
 		newRequest.topping = m_topping;
 		newRequest.transform = _tm;
-
 		// Appent it
 		_request.Append(newRequest);
 	}

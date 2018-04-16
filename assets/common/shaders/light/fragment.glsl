@@ -55,21 +55,22 @@ void main()
 	}
 
 	vec4 finalColor = vec4(0.0,0.0,0.0,0.0);
+	vec4 pixelPos = texture(position,texCoord);
+		
 	for(int lIndex = 0; lIndex < nbLights; ++lIndex)
 	{
 		// Computing light source position (view space)
 		vec3 lightPos = (view*vec4(lightSource[lIndex].position,1.0)).xyz;
 		// Fetching xyz position (view space)
-		vec3 pixelPos = texture(position,texCoord).xyz;
 
 		// Computing the light direction
-		vec3 l = lightPos - pixelPos;
+		vec3 l = lightPos - pixelPos.xyz;
 		// Computing the attenuation
 	 	float att = clamp(1.0-length(l)/lightSource[lIndex].ray,0.0,1.0)*clamp(dot(l,normal),0.0,1.0);
 		// Noramlizing it
 		l = normalize(l);
 		// Computing the view vector
-		vec3 v = normalize(-pixelPos);
+		vec3 v = normalize(-pixelPos.xyz);
 		// Computing the half vector
 		vec3 h = normalize(v + l);
 		// Illumination coeffs
@@ -77,5 +78,5 @@ void main()
 	    float Ispec = pow(clamp(dot(h,normal),0.0,1.0),10);
 	    finalColor += att*(Idiff*lightSource[lIndex].diffuse + Ispec*lightSource[lIndex].specular);
 	}
-	frag_color = vec4(finalColor.xyz, 1.0);
+	frag_color = pixelPos.w == 1.0f ? vec4(finalColor.xyz, 1.0) : vec4(0.0);
 }

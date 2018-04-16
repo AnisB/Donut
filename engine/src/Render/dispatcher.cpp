@@ -2,6 +2,7 @@
 #include "render/dispatcher.h"
 #include "render/frustum_culler.h"
 #include "render/crumble_remover.h"
+#include "resource/toppingloader.h"
 #include "resource/resourcemanager.h"
 #include "gpu_backend/gl_factory.h"
 
@@ -11,7 +12,7 @@ namespace donut
 	{
 		// Nothing to do here
 		m_processors.push_back(new TFrustumCuller());
-		m_processors.push_back(new TCrumbleRemover());
+		//m_processors.push_back(new TCrumbleRemover());
 	}
 
 	void TDispatcher::ProcessRequests(std::vector<TRenderRequest>& _requests, const bento::Matrix4& _view, const TFrustum& _frusutm)
@@ -48,6 +49,10 @@ namespace donut
 
 			// Fetch the geometry to process
 			GeometryObject geom = ResourceManager::Instance().RequestRuntimeGeometry(currentRequest.geometry);
+			const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(currentRequest.topping);
+
+			// Propagate the flags that have been raised by the material
+			currentRequest.render_flags = currentRequest.render_flags | mat->flags;
 
 			// Get the target box
 			TBox3& box = m_vs_bb[req];
