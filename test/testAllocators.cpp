@@ -1,11 +1,10 @@
 // Bento includes
 #include <bento_base/security.h>
+#include <bento_base/log.h>
+#include <bento_collection/vector.h>
 
 // Engine includes
-#include "bento_collection/vector.h"
-#include "base/log.h"
 
-using namespace donut;
 int main()
 {
 	bento::Vector<int> intArray(*bento::common_allocator());
@@ -32,7 +31,7 @@ int main()
 	bento::Vector<float> floatVector(*bento::common_allocator());
 	for(int i = 0; i < 1000; ++i)
 	{
-		floatVector.push_back(i);
+		floatVector.push_back((float)i);
 	}
 
 	assert_msg(floatVector.size() == 1000 && floatVector.capacity() >= 1000, "Wrong size");
@@ -51,5 +50,5 @@ int main()
 	assert_msg(floatVector.size() == 0 && floatVector.capacity() == 0, "Wrong size");
 
 
-	PRINT_INFO("Test", "SUCCESS");
+	bento::default_logger()->log(bento::LogLevel::info, "Test", "SUCCESS");
 }
