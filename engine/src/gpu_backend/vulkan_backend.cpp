@@ -12,11 +12,13 @@
 	#include <GLFW/glfw3native.h>
 #endif
 
+// Bento includes
+#include <bento_base/security.h>
+#include <bento_memory/common.h>
+#include <bento_collection/vector.h>
+
 // Library includes
-#include "graphics/gl_backend.h"
-#include "graphics/common.h"
-#include "containers/vector.h"
-#include "base/security.h"
+#include "gpu_backend/gl_backend.h"
 
 namespace donut
 {
@@ -45,9 +47,9 @@ namespace donut
 		};
 
 		// Builds and returns a default graphics setting for an opengl environement
-		TGraphicsSettings default_settings()
+		TGraphicSettings default_settings()
 		{
-			TGraphicsSettings settings;
+			TGraphicSettings settings;
 			settings.width = 1280;
 			settings.lenght = 720;
 			return settings;
@@ -121,14 +123,14 @@ namespace donut
 			return graphicsQueue;
 		}
 		
-		RenderEnvironment create_render_environment(const TGraphicsSettings& graphic_settings)
+		RenderEnvironment create_render_environment(const TGraphicSettings& graphic_settings)
 		{
-			TAllocator* allocator = graphics_allocator();
+			bento::IAllocator* allocator = bento::common_allocator();
 			assert(allocator != nullptr);
 
 			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-			VKRenderEnvironment* vk_re = make_new<VKRenderEnvironment>(allocator);
+			VKRenderEnvironment* vk_re = bento::make_new<VKRenderEnvironment>(*allocator);
 			vk_re->window = glfwCreateWindow(graphic_settings.width, graphic_settings.lenght, graphic_settings.window_name.c_str(), NULL, NULL);
 
 			uint32_t extension_count = 0;
@@ -169,7 +171,7 @@ namespace donut
 				return 0;
 			}
 
-			TVector<VkPhysicalDevice> devices(deviceCount, *common_allocator());
+			bento::Vector<VkPhysicalDevice> devices(*bento::common_allocator(), deviceCount);
 			vkEnumeratePhysicalDevices(vk_re->instance, &deviceCount, devices.begin());
 
 			// Evaluate the device 
@@ -181,12 +183,12 @@ namespace donut
 			uint32_t queueFamilyCount = 0;
 			vkGetPhysicalDeviceQueueFamilyProperties(vk_re->physical_device, &queueFamilyCount, nullptr);
 
-			TVector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount, *common_allocator());
+			bento::Vector<VkQueueFamilyProperties> queueFamilies(*bento::common_allocator(), queueFamilyCount);
 			vkGetPhysicalDeviceQueueFamilyProperties(vk_re->physical_device, &queueFamilyCount, queueFamilies.begin());
 			
 			// Check for the queues
 			find_graphics_queue(queueFamilies.begin(), queueFamilyCount, vk_re->queue_indexes);
-			assert_msg(vk_re->queue_indexes.graphics_queue !=  -1, "No valid graphics queue found")
+			assert_msg(vk_re->queue_indexes.graphics_queue != -1, "No valid graphics queue found");
 
 			// Queue creation descriptor
 			VkDeviceQueueCreateInfo queue_create_info = {};
@@ -228,13 +230,18 @@ namespace donut
 			vkDestroyDevice(vk_re->logical_device, nullptr);
 			vkDestroyInstance(vk_re->instance, nullptr);
 			glfwDestroyWindow(vk_re->window);
-			make_delete<VKRenderEnvironment>(*graphics_allocator(), vk_re);
+			bento::make_delete<VKRenderEnvironment>(*bento::common_allocator(), vk_re);
 		}
 
 		RenderWindow render_window(RenderEnvironment render_environement)
 		{
 			VKRenderEnvironment* vk_re = (VKRenderEnvironment*)render_environement;
 			return (RenderWindow)vk_re->window;
+		}
+
+		void collect_inputs(RenderEnvironment render_environement)
+		{
+			glfwPollEvents();
 		}
 	}
 }
