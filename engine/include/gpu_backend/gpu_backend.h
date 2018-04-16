@@ -22,6 +22,7 @@ namespace donut
 	typedef uint64_t RenderEnvironment;
 	typedef uint64_t RenderWindow;
 	typedef uint64_t GeometryObject;
+	typedef uint64_t FramebufferObject;
 
 	struct GPUBackendAPI
 	{

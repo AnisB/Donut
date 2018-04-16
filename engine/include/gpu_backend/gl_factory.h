@@ -33,29 +33,29 @@ namespace gl {
 	namespace framebuffer
 	{
 		// Frame buffer creation / destruction
-		uint32_t create();
-		void destroy(uint32_t frame_buffer);
+		FramebufferObject create();
+		void destroy(FramebufferObject frame_buffer);
 
 		// Function to check a previously created frame buffer
-		bool check();
+		bool check(FramebufferObject framebuffer);
 
 		// Function to bind and unbind a frame buffer
-		void bind(uint32_t frame_buffer);
-		void unbind();
+		void bind(FramebufferObject framebuffer);
+		void unbind(FramebufferObject framebuffer);
 
 		// Bind a given texture
-		void bind_texture(const TTextureInfo& _tex);
+		void bind_texture(FramebufferObject framebuffer, const TTextureInfo& _tex);
 
 		// Depth test function
-		void enable_depth_test(uint32_t frame_buffer);
-		void disable_depth_test(uint32_t frame_buffer);
+		void enable_depth_test(FramebufferObject framebuffer);
+		void disable_depth_test(FramebufferObject framebuffer);
 
 		// Framebuffer manipulation functions
-		void clear(uint32_t frame_buffer);
-		void set_clear_color(uint32_t frame_buffer, const bento::Vector4& _color);
+		void clear(FramebufferObject frame_buffer);
+		void set_clear_color(FramebufferObject frame_buffer, const bento::Vector4& _color);
 
 		// Set the number of render targets for this render target
-		void set_num_render_targets(uint8_t num_render_targets);
+		void set_num_render_targets(FramebufferObject frmabuffer, uint8_t num_render_targets);
 	}
 
 	// Texture2D API

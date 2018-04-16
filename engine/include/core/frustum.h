@@ -6,7 +6,7 @@
 namespace donut
 {
 	// Foward declare
-	class TBox3;
+	struct TBox3;
 
 	// Enum that defined all the possible planes of the frustum 
 	namespace TFrustumPlanes

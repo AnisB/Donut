@@ -13,7 +13,7 @@ namespace donut
 	// Foward declare
 	struct TRenderRequest;
 	struct Matrix4;
-	class TBox3;
+	struct TBox3;
 	class TFrustum;
 
 	class TProcessor

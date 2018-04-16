@@ -294,8 +294,8 @@ namespace donut
 		GEOMETRY_GUID guid = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
 		GeometryObject geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
 		TBox3 box;
-		box._max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		box._min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		box.max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		box.min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		gl::geometry::set_bbox(geo, box);
 		return guid;
 	}

@@ -8,68 +8,80 @@
 // External includes
 #include <float.h>
 
-namespace donut
-{
-	TBox3::TBox3()
+namespace donut {
+namespace box {
+
+	void reset(TBox3& target_box)
 	{
-		reset();
+		target_box.min = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		target_box.max = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 	}
 
-	TBox3::~TBox3()
+	bento::Vector3 center(const TBox3& target_box)
 	{
-
+		return (target_box.max + target_box.min) / 2.0f;
 	}
 
-	void TBox3::reset()
+	bento::Vector3 width(const TBox3& target_box)
 	{
-		_min = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		_max = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
+		return (target_box.max - target_box.min);
 	}
 
-	TBox3 transform(const TBox3 & _inputBox, const bento::Matrix4 & _mat)
+	void include_point(TBox3& target_box, const bento::Vector3& position)
+	{
+		target_box.min.x = position.x < target_box.min.x ? position.x : target_box.min.x;
+		target_box.min.y = position.y < target_box.min.y ? position.y : target_box.min.y;
+		target_box.min.z = position.z < target_box.min.z ? position.z : target_box.min.z;
+
+		target_box.max.x = position.x > target_box.max.x ? position.x : target_box.max.x;
+		target_box.max.y = position.y > target_box.max.y ? position.y : target_box.max.y;
+		target_box.max.z = position.z > target_box.max.z ? position.z : target_box.max.z;
+	}
+
+	void include_points(TBox3& target_box, const bento::Vector3* position, uint32_t num_points)
+	{
+		// For each point to include
+		for (uint32_t p_idx = 0; p_idx < num_points; ++p_idx)
+		{
+			// Include it
+			const bento::Vector3& target_point = position[p_idx];
+			include_point(target_box, target_point);
+		}
+	}
+
+	TBox3 transform(const TBox3 & target_box, const bento::Matrix4 & _mat)
 	{
 		// Get the translation vector
 		const bento::Vector3& translate = GetTranslate(_mat);
 
 		// Create the output box
 		TBox3 new_box;
-		new_box._min = translate;
-		new_box._max = translate;
+		new_box.min = translate;
+		new_box.max = translate;
 
 		float av, bv;
 		for (int i = 0; i < 3; i++)
 		{
 			for (int j = 0; j < 3; j++)
 			{
-				av = _mat.m[i * 4 + j] * bento::at_index(_inputBox._min, j);
-				bv = _mat.m[i * 4 + j] * bento::at_index(_inputBox._max, j);
+				av = _mat.m[i * 4 + j] * bento::at_index(target_box.min, j);
+				bv = _mat.m[i * 4 + j] * bento::at_index(target_box.max, j);
 
 				if (av < bv)
 				{
-					bento::at_index(new_box._min, i) += av;
-					bento::at_index(new_box._max, i) += bv;
+					bento::at_index(new_box.min, i) += av;
+					bento::at_index(new_box.max, i) += bv;
 
 				}
 				else
 				{
 
-					bento::at_index(new_box._min, i) += bv;
-					bento::at_index(new_box._max, i) += av;
+					bento::at_index(new_box.min, i) += bv;
+					bento::at_index(new_box.max, i) += av;
 				}
 			}
 		}
 		return new_box;
 	}
-
-	void TBox3::IncludePoints(float* _pointCoords, int _nbPoints)
-	{
-		// For each point to include
-		for (int pIdx = 0; pIdx < _nbPoints; ++pIdx)
-		{
-			// Include it
-			float* posPtr = _pointCoords + 3 * pIdx;
-			const bento::Vector3& targetPoint = bento::vector3(posPtr[0], posPtr[1], posPtr[2]);
-			IncludePoint(targetPoint);
-		}
-	}
+}
 }

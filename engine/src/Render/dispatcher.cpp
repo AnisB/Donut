@@ -59,7 +59,7 @@ namespace donut
 			gl::geometry::bbox(geom, box);
 
 			// Compute the camera space bounding box
-			box = transform(box, _view * currentRequest.transform);
+			box = box::transform(box, _view * currentRequest.transform);
 		}
 	}
 }

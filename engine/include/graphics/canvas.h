@@ -1,9 +1,13 @@
 #pragma once
 
 // Library includes
+#include "gpu_backend/gpu_backend.h"
 #include "graphics/shaderdata.h"
 #include "graphics/material.h"
 #include "resource/texture.h"
+
+// External includes
+#include <vector>
 
 namespace donut
 {
@@ -37,7 +41,7 @@ namespace donut
 		int m_width;
 		int m_height;
 		// GPU buffer index
-		uint32_t m_frameBuffer;
+		FramebufferObject m_frameBuffer;
 		// What you will get from this canvas after drawing into it
 		TBufferOutput m_output;
 	};

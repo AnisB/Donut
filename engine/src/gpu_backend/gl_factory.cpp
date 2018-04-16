@@ -53,7 +53,7 @@ namespace gl {
 
 	namespace framebuffer
 	{
-		uint32_t create()
+		FramebufferObject create()
 		{
 			GL_API_CHECK();
 			GLuint frameBufferIndex;
@@ -67,19 +67,20 @@ namespace gl {
 			return frameBufferIndex;
 		}
 
-		void destroy(uint32_t _frameBuffer)
+		void destroy(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
+			uint32_t framebuffer_idx = (uint32_t)frame_buffer;
 #if LINUX | WIN32
-			glDeleteFramebuffers(1, &_frameBuffer);
+			glDeleteFramebuffers(1, &framebuffer_idx);
 #endif
 #ifdef MACOSX
-			glDeleteFramebuffersEXT(1, &_frameBuffer);
+			glDeleteFramebuffersEXT(1, &framebuffer_idx);
 #endif
 			GL_API_CHECK();
 		}
 
-		bool check()
+		bool check(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 			if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -91,11 +92,11 @@ namespace gl {
 			return true;
 		}
 
-		void bind(uint32_t frame_buffer)
+		void bind(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 #if LINUX | WIN32
-			glBindFramebuffer(GL_FRAMEBUFFER, frame_buffer);
+			glBindFramebuffer(GL_FRAMEBUFFER, (uint32_t)frame_buffer);
 #endif
 #ifdef MACOSX
 			glBindFramebufferEXT(GL_FRAMEBUFFER, frame_buffer);
@@ -103,7 +104,7 @@ namespace gl {
 			GL_API_CHECK();
 		}
 
-		void unbind()
+		void unbind(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 #if LINUX | WIN32
@@ -116,21 +117,21 @@ namespace gl {
 			GL_API_CHECK();
 		}
 
-		void clear(uint32_t frame_buffer)
+		void clear(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			GL_API_CHECK();
 		}
 
-		void set_clear_color(uint32_t frame_buffer, const bento::Vector4& color)
+		void set_clear_color(FramebufferObject frame_buffer, const bento::Vector4& color)
 		{
 			GL_API_CHECK();
 			glClearColor(color.x, color.y, color.z, color.w);
 			GL_API_CHECK();
 		}
 
-		void bind_texture(const TTextureInfo& _tex)
+		void bind_texture(FramebufferObject frame_buffer, const TTextureInfo& _tex)
 		{
 			GL_API_CHECK();
 
@@ -164,7 +165,7 @@ namespace gl {
 			GL_API_CHECK();
 		}
 
-		void set_num_render_targets(uint8_t num_render_targets)
+		void set_num_render_targets(FramebufferObject frame_buffer, uint8_t num_render_targets)
 		{
 			switch(num_render_targets)
 			{
@@ -195,14 +196,14 @@ namespace gl {
 			}
 		}
 
-		void enable_depth_test(uint32_t frame_buffer)
+		void enable_depth_test(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 			glEnable(GL_DEPTH_TEST);
 			GL_API_CHECK();
 		}
 
-		void disable_depth_test(uint32_t frame_buffer)
+		void disable_depth_test(FramebufferObject frame_buffer)
 		{
 			GL_API_CHECK();
 			glDisable(GL_DEPTH_TEST);
@@ -395,7 +396,7 @@ namespace gl {
 			newModel->nbVertices = num_faces * 3;
 
 			// Build the OS AABB
-			newModel->os_bb.IncludePoints(_dataArray, _numVert);
+			box::include_points(newModel->os_bb, (const bento::Vector3*)_dataArray, _numVert);
 
 			GL_API_CHECK();
 

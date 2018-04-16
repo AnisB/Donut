@@ -35,11 +35,11 @@ namespace donut
 		color.type = TTextureNature::COLOR;
 		color.offset = 0;
 		gl::texture2D::create(color, m_width, m_height);
-		gl::framebuffer::bind_texture(color);
+		gl::framebuffer::bind_texture(m_frameBuffer, color);
 
  		// Making sure everything is OK
-		gl::framebuffer::check();
-		gl::framebuffer::unbind();
+		gl::framebuffer::check(m_frameBuffer);
+		gl::framebuffer::unbind(m_frameBuffer);
 	}
 
 	void TEffectCanvas::Enable()
@@ -47,12 +47,12 @@ namespace donut
 		gl::framebuffer::bind(m_frameBuffer);
 		gl::framebuffer::enable_depth_test(m_frameBuffer);
 		gl::framebuffer::clear(m_frameBuffer);
-		gl::framebuffer::set_num_render_targets(1);
+		gl::framebuffer::set_num_render_targets(m_frameBuffer, 1);
 	}
 
 	void TEffectCanvas::Disable()
 	{
 		gl::framebuffer::disable_depth_test(m_frameBuffer);
-		gl::framebuffer::unbind();
+		gl::framebuffer::unbind(m_frameBuffer);
 	}
 }
