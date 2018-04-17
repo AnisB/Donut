@@ -24,14 +24,8 @@ namespace donut
 		TVFX::Init();
 	}
 
-	void TSkyboxFX::SetSkybox(SKYBOX_GUID _skybox) 
+	void TSkyboxFX::SetSkybox(TSkyboxTexture* skybox)
 	{
-		// Keep track of the resource
-		m_skybox = _skybox;
-
-		// Request the runtime data
-		TSkyboxTexture* skybox = ResourceManager::Instance().RequestRuntimeSkybox(m_skybox);
-
 		// Create the entry
  		TCubeMapInfo newCM;
 		newCM.cmID = skybox->tex_id;

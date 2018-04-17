@@ -292,15 +292,11 @@ namespace donut
         return filename;
     }
 
-    TSkyboxTexture* LoadSkybox(const STRING_TYPE&  skybox_source)
-    {
+	void LoadSkybox(const char* path_source, TSkyboxTexture& output_skybox)
+	{
 		// Read the combined texture
 		TTexture combined_texture;
-		LoadTexture(skybox_source.c_str(), combined_texture);
-
-		// Create the structure that will host the cubemap
-		TSkyboxTexture * skybox = new TSkyboxTexture();
-		skybox->file_path = skybox_source;
+		LoadTexture(path_source, combined_texture);
 
 		// We only support one type of cubemap for the moment
 		if ((combined_texture.width * 3) == (combined_texture.height * 4))
@@ -312,7 +308,7 @@ namespace donut
 			for (uint8_t face_idx = 0; face_idx < 6; ++face_idx)
 			{
 				// Set the data and allocate the memory space
-				TTexture& current_face = skybox->faces[face_idx];
+				TTexture& current_face = output_skybox.faces[face_idx];
 				current_face.width = cubemap_face_resolution;
 				current_face.height = cubemap_face_resolution;
 				current_face.format = combined_texture.format;
@@ -368,95 +364,6 @@ namespace donut
 		else
 		{
 			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Unsupported cubemap format");
-			delete skybox;
-			return nullptr;
 		}
-        return skybox;
-    }
-
-    void TakeScreenShot(const STRING_TYPE& parFileName)
-    {
-#if __posix__
-        unsigned char *pdata = new unsigned char[1280*720*3];
-
-        ReadRGBFrameBuffer(1280, 720, pdata);
-        FILE *outfile;
-
-        if ((outfile = fopen(parFileName.c_str(), "wb")) == NULL) 
-        {
-            printf("can't open %s",parFileName.c_str());
-            return;
-        }
-
-        struct jpeg_compress_struct cinfo;
-        struct jpeg_error_mgr       jerr;
-
-        cinfo.err = jpeg_std_error(&jerr);
-        jpeg_create_compress(&cinfo);
-        jpeg_stdio_dest(&cinfo, outfile);
-
-        cinfo.image_width      = 1280;
-        cinfo.image_height     = 720;
-        cinfo.input_components = 3;
-        cinfo.in_color_space   = JCS_RGB;
-
-        jpeg_set_defaults(&cinfo);
-        /*set the quality [0..100]  */
-        jpeg_set_quality (&cinfo, 100, true);
-        jpeg_start_compress(&cinfo, true);
-
-        JSAMPROW row_pointer;
-        int row_stride = 1280 * 3;
-
-        while (cinfo.next_scanline < cinfo.image_height)
-        {
-            row_pointer = (JSAMPROW) &pdata[(cinfo.image_height-1-cinfo.next_scanline)*row_stride];
-            jpeg_write_scanlines(&cinfo, &row_pointer, 1);
-        }
-#elif WIN32
-		assert_fail();
-#endif
-    }
-
-    void SaveTextureToFile(const STRING_TYPE& parFileName, const TTexture* parTexture)
-    {
-#if __posix__
-        float *pdata = (float*)(parTexture->FData);
-
-        FILE *outfile;
-        if ((outfile = fopen(parFileName.c_str(), "wb")) == NULL) 
-        {
-            printf("can't open %s",parFileName.c_str());
-            return;
-        }
-
-        struct jpeg_compress_struct cinfo;
-        struct jpeg_error_mgr       jerr;
-
-        cinfo.err = jpeg_std_error(&jerr);
-        jpeg_create_compress(&cinfo);
-        jpeg_stdio_dest(&cinfo, outfile);
-
-        cinfo.image_width      = 1280;
-        cinfo.image_height     = 720;
-        cinfo.input_components = 3;
-        cinfo.in_color_space   = JCS_RGB;
-
-        jpeg_set_defaults(&cinfo);
-        /*set the quality [0..100]  */
-        jpeg_set_quality (&cinfo, 100, true);
-        jpeg_start_compress(&cinfo, true);
-
-        JSAMPROW row_pointer;
-        int row_stride = 1280 * 3;
-
-        while (cinfo.next_scanline < cinfo.image_height)
-        {
-            row_pointer = (JSAMPROW) &pdata[(cinfo.image_height-1-cinfo.next_scanline)*row_stride];
-            jpeg_write_scanlines(&cinfo, &row_pointer, 1);
-        }
-#elif WIN32
-		assert_fail();
-#endif
     }
 }

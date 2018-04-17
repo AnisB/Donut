@@ -24,6 +24,7 @@
 #include "graphics/light.h"
 #include "graphics/sphericalharmonics.h"
 #include "resource/types.h"
+#include "resource/texture.h"
 
 // STL includes
 #include <vector>
@@ -41,7 +42,7 @@ namespace donut
 		, sh(nullptr)
 		, filename(_fileName)
 		, pipelineName("minimal")
-		, skybox(UINT32_MAX)
+		, skybox(nullptr)
 		{
 
 		}
@@ -62,7 +63,7 @@ namespace donut
 		TNode* root;
 		std::vector<TLight> lights;
 		TSphericalHarmonics* sh;
-		SKYBOX_GUID skybox;
+		TSkyboxTexture* skybox;
 	};
 
 	// Flour builder

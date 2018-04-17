@@ -49,7 +49,7 @@
 		m_canvas->Init();
 
 		// Create the drawable for the skybox if there is some
-		if (m_flour->skybox != UINT32_MAX)
+		if (m_flour->skybox != nullptr)
 		{
 			m_skyboxDrawable = CreateSkyboxDrawable(m_flour->skybox);
 		}

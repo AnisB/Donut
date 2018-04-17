@@ -38,45 +38,33 @@
  	
  	TTexture* ResourceManager::FetchTexture(const STRING_TYPE&  _textureName)
  	{
- 		auto it = FTextures.find(_textureName);
- 		if(it != FTextures.end())
+ 		auto it = m_textures.find(_textureName);
+ 		if(it != m_textures.end())
  		{
- 			return it->second;
+ 			return &(it->second);
  		}
  		else
  		{
-			TTexture * texture = new TTexture();
-			LoadTexture((RootAssetsFolder() + _textureName).c_str(), *texture);
- 			FTextures[_textureName] = texture;
- 			gl::texture2D::create(*texture);
- 			return texture;
+			TTexture& texture = m_textures[_textureName];
+			LoadTexture((RootAssetsFolder() + _textureName).c_str(), texture);
+ 			gl::texture2D::create(texture);
+ 			return &texture;
  		}
  	}
 
- 	SKYBOX_GUID ResourceManager::FetchSkybox(const STRING_TYPE&  skybox_source)
+	TSkyboxTexture* ResourceManager::FetchSkybox(const STRING_TYPE&  skybox_source)
  	{
- 		auto it = m_skyboxIdentifiers.find(skybox_source);
- 		if(it != m_skyboxIdentifiers.end())
+ 		auto it = m_skyboxes.find(skybox_source);
+ 		if(it != m_skyboxes.end())
  		{
- 			return it->second;
- 		}
+			return &(it->second);
+		}
  		else
  		{
- 			// Read the skybox data into memory
- 			TSkyboxTexture* skybox =  LoadSkybox(RootAssetsFolder() + skybox_source);
- 			
- 			// Instciate the runtime data
- 			gl::textureCUBE::create(*skybox);
-
-			gl::texture2D::create(skybox->faces[0]);
-			gl::texture2D::create(skybox->faces[1]);
-			gl::texture2D::create(skybox->faces[2]);
-			gl::texture2D::create(skybox->faces[3]);
-			gl::texture2D::create(skybox->faces[4]);
-			gl::texture2D::create(skybox->faces[5]);
-
- 			// Register and return index
- 			return InsertSkybox(skybox_source, skybox);
+			TSkyboxTexture& skybox = m_skyboxes[skybox_source];
+			LoadSkybox((RootAssetsFolder() + skybox_source).c_str(), skybox);
+ 			gl::textureCUBE::create(skybox);
+ 			return &skybox;
  		}
  	}
 
@@ -116,14 +104,5 @@
 		m_geometries.push_back(target_geometry);
 		m_geometryIdentifiers[_path] = geometryIndex;
 		return geometryIndex;
-	}
-
-	SKYBOX_GUID ResourceManager::InsertSkybox(const STRING_TYPE& _path, TSkyboxTexture* _targetSkybox)
-	{
-		// Append the Index and the skybox
-		SKYBOX_GUID skyboxIndex = (uint32_t)m_skyboxes.size();
-		m_skyboxes.push_back(_targetSkybox);
-		m_skyboxIdentifiers[_path] = skyboxIndex;
-		return skyboxIndex;
 	}
 }

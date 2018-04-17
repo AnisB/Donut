@@ -33,12 +33,12 @@ namespace donut
 		~TSkyboxFX();
 		// Init
 		virtual void Init();
-		void SetSkybox(SKYBOX_GUID _skybox);
+		void SetSkybox(TSkyboxTexture* skybox);
 		void SetCamera(Camera* _camera);
 		// Drawing it
 		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
 	protected:
-		SKYBOX_GUID m_skybox;
+		TSkyboxTexture* m_skybox;
 		Camera* m_camera;
 	};
 }

@@ -25,7 +25,7 @@ namespace donut
 	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader);
 
 	// Drawable factory
-	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID);
+	TMesh* CreateSkyboxDrawable(TSkyboxTexture* skybox_tex);
 	
 		// Default meshes
 	TMesh* CreateCube(double _length, STRING_TYPE _materialName = "DEFAULT");

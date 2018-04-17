@@ -300,7 +300,7 @@ namespace donut
 		return guid;
 	}
 
-	TMesh* CreateSkyboxDrawable(SKYBOX_GUID _skyboxID)
+	TMesh* CreateSkyboxDrawable(TSkyboxTexture* skybox_tex)
 	{	
 		// Create the geometry
 		TMesh* skybox = CreateCube(10.0f, "skybox", true);
@@ -308,9 +308,6 @@ namespace donut
 		// Request the shader
 		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial("skybox");
 		TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
-
-		// Fetch the texture
-		TSkyboxTexture* skybox_tex = ResourceManager::Instance().RequestRuntimeSkybox(_skyboxID);
 
 		// Add it to the material
  		TCubeMapInfo newCM;

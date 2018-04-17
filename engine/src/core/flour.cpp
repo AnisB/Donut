@@ -32,7 +32,7 @@ namespace donut
 	}
 
 	// Handle a skybox from its descriptor
-	SKYBOX_GUID HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
+	TSkyboxTexture* HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
 	{
 		return ResourceManager::Instance().FetchSkybox(_skybox.source);
 	}

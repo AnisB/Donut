@@ -36,14 +36,10 @@ namespace donut
 		TTextureDataType::Type		data_type;
 		std::vector<unsigned char>  data;
 
-		// Source file of the texture
-		std::string					file_path;
-
 		TTexture()
 		: width(0)
 		, height(0)
 		, data()
-		, file_path("")
 		, format(TTextureFormat::NONE)
 		, data_type(TTextureDataType::NONE)
 		{
@@ -67,11 +63,9 @@ namespace donut
 	{
 		uint32_t		tex_id;
 		TTexture        faces[6];
-		std::string     file_path;
 
 		TSkyboxTexture()
-			: file_path("")
-			, tex_id(0)
+		: tex_id(0)
 		{
 		}
 	};
