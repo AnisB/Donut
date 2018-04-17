@@ -39,7 +39,7 @@ namespace donut
 		for (size_t req = 0; req < nbRequests; ++req)
 		{
 			// Is it outside the frustum
-			if (_frusutm.BoxOutside(_vsBoxes[req]) && (_requests[req].render_flags & RenderFlags::NO_CULLING == 0))
+			if (_frusutm.BoxOutside(_vsBoxes[req]) && ((_requests[req].render_flags & RenderFlags::NO_CULLING) == 0))
 			{
 				m_discardArray[req] = true;
 			}

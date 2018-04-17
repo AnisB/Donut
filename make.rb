@@ -47,7 +47,7 @@ end
 
 # Setting the default OptionParser
 if $options[:compiler] == nil
-	$options[:compiler] = "vc14"
+	$options[:compiler] = "vc15"
 end
 
 if $options[:platform] == nil

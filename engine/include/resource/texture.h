@@ -12,7 +12,7 @@ namespace donut
 		{
 			RGB = 3,
 			RGBA = 4,
-			NONE
+			NONE = 0
 		};
 	}
 
@@ -21,7 +21,8 @@ namespace donut
 		enum Type
 		{
 			UNSIGNED_BYTE = 1,
-			FLOAT = 8
+			FLOAT = 8,
+			NONE  = 0
 		};
 	}
 
@@ -39,12 +40,12 @@ namespace donut
 		std::string					file_path;
 
 		TTexture()
-			: width(0)
-			, height(0)
-			, data()
-			, file_path("")
-			, format(TTextureFormat::RGBA)
-			, data_type(TTextureDataType::UNSIGNED_BYTE)
+		: width(0)
+		, height(0)
+		, data()
+		, file_path("")
+		, format(TTextureFormat::NONE)
+		, data_type(TTextureDataType::NONE)
 		{
 		}
 	};
@@ -53,6 +54,9 @@ namespace donut
 	{
 		// Function that retuens the in-memory size of a pixel
 		uint32_t pixel_size(const TTexture& target_texture);
+
+		// Set the texture's data
+		void set_data(TTexture& target_texture, uint32_t width, uint32_t height, TTextureFormat::Type format, TTextureDataType::Type data_type);
 
 		// Returns a pointer to the start of a pixel
 		unsigned char* pixel(TTexture& target_texture, uint32_t p_width, uint32_t p_height);

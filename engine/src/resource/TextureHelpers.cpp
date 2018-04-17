@@ -5,18 +5,14 @@
 // Engine includes
 #include "gpu_backend/gl_factory.h"
 #include "resource/TextureHelpers.h"
+#include "tools/lodepng.h"
  
 
 // External includes
 #include <stdio.h>
 #include <stdlib.h>
 #include <fstream>
-#include <jpeglib.h>
-#include <jerror.h>
-#if __posix__
-#include <png.h>
-#elif WIN32
-#endif
+#include <stb_image.h>
 
 namespace donut
 {
@@ -129,197 +125,31 @@ namespace donut
 		}
 		delete [] tampon;
     }
-    void read_jpg(const char* file_path, TTexture& output_texture)
-    {
-        FILE* file = fopen(file_path, "rb");  //open the file
-        struct jpeg_decompress_struct info;  //the jpeg decompress info
-        struct jpeg_error_mgr err;           //the error handler
 
-        info.err = jpeg_std_error(&err);     //tell the jpeg decompression handler to send the errors to err
-        jpeg_create_decompress(&info);       //sets info to all the default stuff
+	void read_jpg(const char* texture_path, TTexture& texture)
+	{
+		// Components per pixel.
+		int cpp;
 
-        //if the jpeg file didnt load exit
-        if(!file)
-        {
-			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Failed to load texture");
-            return;
-        }
-		output_texture.file_path = file_path;
+		// Ask for always four components per pixels: RGBA
+		int width, height;
+		unsigned char *data = stbi_load(texture_path, &width, &height, &cpp, 3);
 
-        jpeg_stdio_src(&info, file);    //tell the jpeg lib the file we'er reading
+		if (data == nullptr) 
+		{
+			return;
+		}
 
-        jpeg_read_header(&info, TRUE);   //tell it to start reading it
+		// Resize the texture 
+		texture::set_data(texture, width, height, TTextureFormat::RGB, TTextureDataType::UNSIGNED_BYTE);
 
-        jpeg_start_decompress(&info);    //decompress the file
+		// Copy the read data
+		memcpy(texture.data.data(), data, texture.data.size());
 
-        // Read the texture data
-		uint32_t w = info.output_width;
-		uint32_t h = info.output_height;
-		uint32_t num_pixels = w * h;
-		uint32_t data_size = w * h * 3;
+		// Free the memory
+		stbi_image_free(data);
+	}
 
-		// Prepare the texture for writing
-		output_texture.width = w;
-		output_texture.height = h;
-		output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
-		output_texture.format = TTextureFormat::RGB;
-		output_texture.data.resize(data_size);
-
-        uint32_t channels = info.num_components;
-		uint32_t type = 0x1907;
-        if(channels == 4)
-        {
-            type = 0x1908;
-        }
-
-		uint32_t bpp = channels * 8;
-
-        unsigned char* p1 = (unsigned char*)output_texture.data.data();
-        unsigned char** p2 = &p1;
-        int numlines = 0;
-
-        while(info.output_scanline < info.output_height)
-        {
-            numlines = jpeg_read_scanlines(&info, p2, 1);
-            *p2 += numlines * 3 * info.output_width;
-        }
-
-        jpeg_finish_decompress(&info);   //finish decompressing this file
-
-        fclose(file);                    //close the file
-    }
-
-    TTexture* LoadPNG(const char* file_name, TTexture& output_texture)
-    {
-#if __posix__
-        png_byte header[8];
-
-        FILE *fp = fopen(file_name, "rb");
-        if (fp == 0)
-        {
-            perror(file_name);
-            assert_fail_msg("File not found: "<<file_name);
-            return 0;
-        }
-
-        // read the header
-        fread(header, 1, 8, fp);
-
-        if (png_sig_cmp(header, 0, 8))
-        {
-            assert_fail_msg("File is not a PNG: "<<file_name);
-            fclose(fp);
-            return 0;
-        }
-
-        png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-        if (!png_ptr)
-        {
-            assert_fail_msg("png_create_read_struct returned 0");
-            fclose(fp);
-            return 0;
-        }
-
-        // create png info struct
-        png_infop info_ptr = png_create_info_struct(png_ptr);
-        if (!info_ptr)
-        {
-            fprintf(stderr, "error: png_create_info_struct returned 0.\n");
-            png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-            fclose(fp);
-            return 0;
-        }
-
-        // create png info struct
-        png_infop end_info = png_create_info_struct(png_ptr);
-        if (!end_info)
-        {
-            fprintf(stderr, "error: png_create_info_struct returned 0.\n");
-            png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp) NULL);
-            fclose(fp);
-            return 0;
-        }
-
-        // the code in this if statement gets called if libpng encounters an error
-        if (setjmp(png_jmpbuf(png_ptr))) {
-            fprintf(stderr, "error from libpng\n");
-            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-            fclose(fp);
-            return 0;
-        }
-
-        // init png reading
-        png_init_io(png_ptr, fp);
-
-        // let libpng know you already read the first 8 bytes
-        png_set_sig_bytes(png_ptr, 8);
-
-        // read all the info up to the image data
-        png_read_info(png_ptr, info_ptr);
-
-        // variables to pass to get info
-        int bit_depth, color_type;
-        png_uint_32 temp_width, temp_height;
-
-        // get info about png
-        png_get_IHDR(png_ptr, info_ptr, &temp_width, &temp_height, &bit_depth, &color_type,
-            NULL, NULL, NULL);
-
-        TTexture* image = new TTexture(file_name,TImgType::PNG, temp_width, temp_height);
-        image->FFormat = GL_RGBA;
-
-        // Update the png info struct.
-        png_read_update_info(png_ptr, info_ptr);
-
-        // Row size in bytes.
-        int rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-
-        // glTexImage2d requires rows to be 4-byte aligned
-        rowbytes += 3 - ((rowbytes-1) % 4);
-
-        // Allocate the image_data as a big block, to be given to opengl
-        png_byte * image_data;
-        image_data = (unsigned char*)malloc(rowbytes * temp_height * sizeof(png_byte)+15);
-        if (image_data == NULL)
-        {
-            fprintf(stderr, "error: could not allocate memory for PNG image data\n");
-            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-            fclose(fp);
-            return 0;
-        }
-
-        // row_pointers is for pointing to image_data for reading the png with libpng
-        png_bytep * row_pointers = (unsigned char**)(malloc(temp_height * sizeof(png_bytep)));
-        if (row_pointers == NULL)
-        {
-            fprintf(stderr, "error: could not allocate memory for PNG row pointers\n");
-            png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-            free(image_data);
-            fclose(fp);
-            return 0;
-        }
-
-        // set the individual row_pointers to point at the correct offsets of image_data
-        int i;
-        for (i = 0; i < temp_height; i++)
-        {
-            row_pointers[temp_height - 1 - i] = image_data + i * rowbytes;
-        }
-
-        // read the png into image_data through row_pointers
-        png_read_image(png_ptr, row_pointers);
-
-        image->FData = image_data;
-        // clean up
-        png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
-        free(row_pointers);
-        fclose(fp);
-        return image;
-#elif WIN32
-		assert_fail();
-		return nullptr;
-#endif
-    }
 
     void read_tga(const char* file_name, TTexture& output_texture)
     {
@@ -373,6 +203,31 @@ namespace donut
         hFile.close();
     }
 
+	void read_png(const char* texture_path, TTexture& texture)
+	{
+		unsigned char *image = nullptr;
+		unsigned int width;
+		unsigned int height;
+
+		unsigned int ret = lodepng_decode32_file(&image, &width, &height, texture_path);
+
+		if (ret != 0)
+		{
+			if (image)
+				free(image);
+			return ;
+		}
+
+		// Resize the texture 
+		texture::set_data(texture, width, height, TTextureFormat::RGBA, TTextureDataType::UNSIGNED_BYTE);
+
+		// Copy the read data
+		memcpy(texture.data.data(), image, texture.data.size());
+
+		// Free the allocated buffer
+		free(image);
+	}
+
 	void LoadTexture(const char* path_source, TTexture& output_texture)
  	{
 		TextureExtension::Type typeImg = GetImgType(path_source);
@@ -380,7 +235,7 @@ namespace donut
 	    switch (typeImg)
 	    {
 	    	case TextureExtension::PNG:
-                LoadPNG(path_source, output_texture);
+                read_png(path_source, output_texture);
 	    	    break;
 	    	case TextureExtension::JPG:
 	    	    read_jpg(path_source, output_texture);

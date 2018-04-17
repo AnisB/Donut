@@ -2,6 +2,9 @@ cmake_minimum_required(VERSION 3.5)
 
 macro(define_plaform_settings)
 	if( PLATFORM_WINDOWS)
+		
+		add_definitions(-DSTB_IMAGE_IMPLEMENTATION)
+
 		add_compile_options(/Zi)
 		add_compile_options($<$<CONFIG:DEBUG>:/Od> $<$<NOT:$<CONFIG:DEBUG>>:/Ox>)
 		add_compile_options(/Ob2)

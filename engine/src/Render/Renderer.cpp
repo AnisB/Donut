@@ -103,8 +103,8 @@
 		// We clear the global buffer
  		gl::framebuffer::clear(0);
 
-		int nbPasses = m_pipeline->passes.size();
-        for(size_t pass = 0; pass < nbPasses; ++pass)
+		uint32_t nbPasses = (uint32_t)m_pipeline->passes.size();
+        for(uint32_t pass = 0; pass < nbPasses; ++pass)
         {
         	TPass * currentPass = m_pipeline->passes[pass];
 			currentPass->Bind();
