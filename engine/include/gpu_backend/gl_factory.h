@@ -17,9 +17,6 @@ namespace gl {
 	void clear_state();
 	bool check_state();
 
-	// Force the rendering pipeline to execute
-	void flush();
-
 	// Window API
 	namespace window
 	{
@@ -74,9 +71,6 @@ namespace gl {
 		void create(TSkyboxTexture& target_texture);
 		void destroy(TSkyboxTexture& target_texture);
 	}
-
-	// Reading from currentFrameBuffer
-	void ReadRGBFrameBuffer(int _width, int _length, unsigned char* _output);
 
 	// Geometry API
 	namespace geometry

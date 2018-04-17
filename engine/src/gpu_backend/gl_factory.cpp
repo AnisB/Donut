@@ -266,7 +266,7 @@ namespace gl {
 			glBindTexture(GL_TEXTURE_2D, source.tex_id);
 			uint32_t format = format_to_gl(source.format);
 			glTexImage2D(GL_TEXTURE_2D, 0, format, source.width, source.height, 0, format, GL_UNSIGNED_BYTE, source.data.data());
-			//glGenerateMipmap(GL_TEXTURE_2D);
+			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -343,16 +343,9 @@ namespace gl {
 		}
 	}
 
-	void ReadRGBFrameBuffer(int _width, int _length, unsigned char* _output)
-	{
-		GL_API_CHECK();
-		glReadPixels(0, 0, _width, _length, GL_RGB, GL_UNSIGNED_BYTE, _output);
-		GL_API_CHECK();
-	}
-
 	namespace geometry
 	{
-		struct TGeometry
+		struct GLGeometry
 		{
 			uint32_t vertexArray;
 			uint32_t vertexBuffer;
@@ -364,7 +357,7 @@ namespace gl {
 		GeometryObject create_vnt(float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
 		{
 			GL_API_CHECK();
-			TGeometry* newModel = new TGeometry();
+			GLGeometry* newModel = new GLGeometry();
 			glGenVertexArrays(1, &newModel->vertexArray);
 			glBindVertexArray(newModel->vertexArray);
 
@@ -412,7 +405,7 @@ namespace gl {
 		void draw(GeometryObject geometry_object)
 		{
 			if (geometry_object == 0) return;
-			TGeometry* geometry_obj = (TGeometry*)geometry_object;
+			GLGeometry* geometry_obj = (GLGeometry*)geometry_object;
 			glBindVertexArray(geometry_obj->vertexArray);
 			glDrawElements(GL_TRIANGLES, geometry_obj->nbVertices, GL_UNSIGNED_INT, 0);
 			glBindVertexArray(0);
@@ -421,14 +414,14 @@ namespace gl {
 		void set_bbox(GeometryObject geometry, const TBox3& outbbox)
 		{
 			if (geometry == 0) return;
-			TGeometry* geometry_obj = (TGeometry*)geometry;
+			GLGeometry* geometry_obj = (GLGeometry*)geometry;
 			geometry_obj->os_bb = outbbox;
 		}
 
 		void bbox(GeometryObject geometry, TBox3& outbbox)
 		{
 			if (geometry == 0) return;
-			TGeometry* geometry_obj = (TGeometry*)geometry;
+			GLGeometry* geometry_obj = (GLGeometry*)geometry;
 			outbbox = geometry_obj->os_bb;
 		}
 	}
