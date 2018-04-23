@@ -2,6 +2,7 @@
 #include <bento_base/security.h>
 
 // Library include
+#include "asset_compiler/egg_helpers.h"
 #include "tools/GeometryConverters.h"
 #include "base/stringhelper.h"
 #include "resource/egg.h"
@@ -12,6 +13,7 @@
 
 // External includes
 #include <vector>
+#include <fstream>
 
 namespace donut
 {
@@ -97,7 +99,7 @@ namespace donut
 				// Commentaire
 			}
 		}
-		TEgg * newModel = new TEgg();
+		TEgg* newModel = new TEgg(*bento::common_allocator());
 
 		for (const auto& shape : shapes)
 		{
@@ -115,12 +117,12 @@ namespace donut
 			// We only get the pos buffer from the obj
 			if (nbInfo == 1)
 			{
-				newModel->vertsNormalsUVs = new float[8 * dimShape*nbShape];
-				float* vertexArray = newModel->vertsNormalsUVs;
+				newModel->_vert_normal_uvs.resize(8 * dimShape*nbShape);
+				float* vertexArray = newModel->_vert_normal_uvs.begin();
 				float* normalArray = vertexArray + 3 * dimShape*nbShape;
 				float* texCoord = normalArray + 3 * dimShape*nbShape;
 
-				int verticeCounter = 0;
+				uint32_t verticeCounter = 0;
 				for (auto& prim : currentShape.info)
 				{
 					std::vector<STRING_TYPE> vertices;
@@ -161,22 +163,20 @@ namespace donut
 					}
 				}
 				// Creating the IBO
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for (int i = 0; i < verticeCounter; i++)
+				newModel->_indexes.resize(verticeCounter / 3);
+				for (uint32_t i = 0; i < verticeCounter / 3; i++)
 				{
-					newModel->faces[i] = i;
+					newModel->_indexes[i] = {3 * i, 3 * 1 + 1, 3 * i + 2};
 				}
-				newModel->nbFaces = verticeCounter / 3;
 			}
 			else if (nbInfo == 2)
 			{
-				newModel->vertsNormalsUVs = new float[8 * dimShape*nbShape];
-				float* vertexArray = newModel->vertsNormalsUVs;
+				newModel->_vert_normal_uvs.resize(8 * dimShape*nbShape);
+				float* vertexArray = newModel->_vert_normal_uvs.begin();
 				float* normalArray = vertexArray + 3 * dimShape*nbShape;
 				float* texCoordArray = normalArray + 3 * dimShape*nbShape;
 
-				int verticeCounter = 0;
+				uint32_t verticeCounter = 0;
 				for(auto& prim : currentShape.info)
 				{
 					std::vector<STRING_TYPE> vertices;
@@ -222,23 +222,21 @@ namespace donut
 						assert_fail();
 					}
 				}
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for (int i = 0; i < verticeCounter; i++)
+				newModel->_indexes.resize(verticeCounter / 3);
+				for (uint32_t i = 0; i < verticeCounter / 3; i++)
 				{
-					newModel->faces[i] = i;
+					newModel->_indexes[i] = { 3 * i, 3 * 1 + 1, 3 * i + 2 };
 				}
-				newModel->nbFaces = verticeCounter / 3;
 
 			}
 			else if (nbInfo == 3)
 			{
-				newModel->vertsNormalsUVs = new float[8 * dimShape*nbShape];
-				float* vertexArray = newModel->vertsNormalsUVs;
+				newModel->_vert_normal_uvs.resize(8 * dimShape*nbShape);
+				float* vertexArray = newModel->_vert_normal_uvs.begin();
 				float* normalArray = vertexArray + 3 * dimShape*nbShape;
 				float* texCoordArray = normalArray + 3 * dimShape*nbShape;
 
-				int verticeCounter = 0;
+				uint32_t verticeCounter = 0;
 				for(auto& prim : currentShape.info)
 				{
 					std::vector<STRING_TYPE> vertices;
@@ -285,30 +283,20 @@ namespace donut
 						assert_fail();
 					}
 				}
-				newModel->nbVertices = verticeCounter;
-				newModel->faces = new unsigned int[verticeCounter];
-				for (int i = 0; i < verticeCounter; i++)
+				newModel->_indexes.resize(verticeCounter / 3);
+				for (uint32_t i = 0; i < verticeCounter / 3; i++)
 				{
-					newModel->faces[i] = i;
+					newModel->_indexes[i] = { 3 * i, 3 * 1 + 1, 3 * i + 2 };
 				}
-				newModel->nbFaces = verticeCounter / 3;
 			}
 		}
 		return newModel;
-	}
-
-	void ExportEggFile(TEgg* eggInstance, const STRING_TYPE& _outputEggFile)
-	{
-		std::fstream out;
-		out.open(_outputEggFile.c_str(), std::fstream::out | std::ios::binary);
-		out << (*eggInstance);
-		out.close();
 	}
 
 	// This file takes a wavefront (.obj) and converts it to an egg file
 	void ConvertWavefrontToEgg(const STRING_TYPE& _wavefront, const STRING_TYPE& _outputEggFile)
 	{
 		TEgg* eggInstance = CreateEggFromWavefront(_wavefront);
-		ExportEggFile(eggInstance, _outputEggFile);
+		write_egg(_outputEggFile.c_str(), *eggInstance);
 	}
 }

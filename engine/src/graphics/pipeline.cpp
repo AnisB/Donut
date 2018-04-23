@@ -1,19 +1,3 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
-
 // Bento includes
 #include <bento_base/security.h>
 
@@ -32,7 +16,7 @@
 #include "graphics/environmentfx.h"
 #include "graphics/skyboxfx.h"
 // Other
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 #include "graphics/geometrypass.h"
 
 namespace donut
@@ -59,7 +43,7 @@ namespace donut
 			for(auto& buffer : bufferOutput->buffers)
 			{
 				TTextureInfo newTex;
-				newTex.texID = buffer.texID;
+				newTex.id = buffer.id;
 				newTex.offset = (int)pipelineData.buffers.size();
 				newTex.name = buffer.name;
 				pipelineData.buffers.push_back(newTex);
@@ -147,7 +131,7 @@ namespace donut
 				{
 					case TVFXTag::SIMPLEFX:
 					{
-						TSimpleFX* sfx = new TSimpleFX(vfxDescriptor.shader);
+						TSimpleFX* sfx = new TSimpleFX(vfxDescriptor.shader_pipeline);
 						vfx = sfx;
 					}
 					break;
@@ -170,7 +154,7 @@ namespace donut
 					break;
 					case TVFXTag::SKYBOX:
 					{
-						TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader);
+						TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader_pipeline);
 						skyboxFX->SetSkybox(_scene->skybox);
 						skyboxFX->SetCamera(camera);
 						vfx = skyboxFX;
@@ -182,9 +166,16 @@ namespace donut
 				}
 
 				assert(vfx);
-				for(auto& tex2D : vfxDescriptor.textures)
+				for(auto& shader_data : vfxDescriptor.data)
 				{
-					vfx->AddTexture(ResourceManager::Instance().FetchTexture(tex2D.file), tex2D.name);
+					switch (shader_data._type)
+					{
+						case TShaderData::TEXTURE2D:
+						{
+							vfx->AddTexture(ResourceManager::Instance().fetch_texture_id(shader_data._data.c_str()), shader_data._slot);
+						}
+						break;
+					}
 				}
 
 				TVFXPass* vfxPass = new TVFXPass(canvas, vfx);

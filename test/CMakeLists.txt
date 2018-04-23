@@ -3,9 +3,6 @@ add_definitions( -DDONUT_TESTS)
 bento_exe("testStateEngine" "tests" "testStateEngine.cpp" "${DONUT_ENGINE_INCLUDE};${THIRD_PARTY_INCLUDE_DIRS}")
 target_link_libraries("testStateEngine" "donut_engine" "bento_sdk" "${THIRD_PARTY_LIBRARIES}")
 
-bento_exe("testRayTracer" "tests" "testRayTracer.cpp" "${DONUT_ENGINE_INCLUDE};${THIRD_PARTY_INCLUDE_DIRS}")
-target_link_libraries("testRayTracer" "donut_engine" "bento_sdk" "${THIRD_PARTY_LIBRARIES}")
-
 bento_exe("testFlourLoad" "tests" "testFlourLoad.cpp" "${DONUT_ENGINE_INCLUDE};${THIRD_PARTY_INCLUDE_DIRS}")
 target_link_libraries("testFlourLoad" "donut_engine" "bento_sdk" "${THIRD_PARTY_LIBRARIES}")
 

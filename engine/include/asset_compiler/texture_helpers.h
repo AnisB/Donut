@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Texture.h"
+#include "resource/texture.h"
+#include "resource/skybox.h"
  
 namespace donut
 {
@@ -8,5 +9,5 @@ namespace donut
 	void LoadTexture(const char* path_source, TTexture& output_texture);
 
 	// Skybox helpers
-	void LoadSkybox(const char* path_source, TSkyboxTexture& output_skybox);
+	void LoadSkybox(const char* path_source, TSkybox& output_skybox);
 }

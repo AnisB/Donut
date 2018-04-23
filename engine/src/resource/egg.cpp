@@ -1,38 +1,34 @@
+// Bento includes
+#include <bento_base/stream.h>
+
 // Library includes
 #include "resource/egg.h"
 
-namespace donut
+using namespace donut;
+
+// Current version of the egg format
+const uint32_t EGG_DATA_VERSION = 0;
+
+namespace bento
 {
-
-	std::ostream& operator<<(std::ostream& _os, const TEgg& _eggInstance)
+	void pack_type(Vector<char>& buffer, const TEgg& egg)
 	{
-		_os.write((char*)&_eggInstance.nbVertices, sizeof(int));
-		_os.write((char*)_eggInstance.vertsNormalsUVs, sizeof(float) * 8 * _eggInstance.nbVertices);
-		_os.write((char*)&_eggInstance.nbFaces, sizeof(int));
-		_os.write((char*)_eggInstance.faces, sizeof(unsigned int) * 3 * _eggInstance.nbFaces);
-		return _os;
+		pack_bytes(buffer, EGG_DATA_VERSION);
+		pack_vector_bytes(buffer, egg._vert_normal_uvs);
+		pack_vector_bytes(buffer, egg._indexes);
 	}
 
-	std::istream& operator >> (std::istream& _is, TEgg& _eggInstance)
+	bool unpack_type(const char*& stream, TEgg& egg)
 	{
-		// Reading the number of vertices
-		_is.read((char*)&_eggInstance.nbVertices, sizeof(int));
+		// Read the version
+		uint32_t data_stream_version;
+		unpack_bytes(stream, data_stream_version);
 
-		// Allocating the vertex normal uv memory space
-		_eggInstance.vertsNormalsUVs = new float[8 * _eggInstance.nbVertices];
-
-		// Reading them
-		_is.read((char*)_eggInstance.vertsNormalsUVs, sizeof(float) * 8 * _eggInstance.nbVertices);
-
-		// Reading the number of faces
-		_is.read((char*)&_eggInstance.nbFaces, sizeof(int));
-
-		//Allocating the faces memory space
-		_eggInstance.faces = new unsigned int[3 * _eggInstance.nbFaces];
-
-		// Reading them
-		_is.read((char*)_eggInstance.faces, sizeof(unsigned int) * 3 * _eggInstance.nbFaces);
-
-		return _is;
+		// Stop if this does not match the current version
+		if (data_stream_version != EGG_DATA_VERSION) return false;
+		unpack_vector_bytes(stream, egg._vert_normal_uvs);
+		unpack_vector_bytes(stream, egg._indexes);
+		return true;
 	}
+
 }

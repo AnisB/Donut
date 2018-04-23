@@ -24,9 +24,9 @@ namespace donut
 
 			// Transform data
 				// Apply a yaw using a given angle
-			void Yaw(double parAngle);
+			void Yaw(float parAngle);
 				// Apply a pitch using a given angle
-			void Pitch(double parAngle);
+			void Pitch(float parAngle);
 				// Apply a translation
 			void Translate(const bento::Vector3& parDir);
 
@@ -43,7 +43,7 @@ namespace donut
 			const TFrustum& FrusumDescriptor() { return m_frustum; }
 
 			// Output the uniforms for rendering purposes
-			void AppendUniforms(std::map<STRING_TYPE, TUniformHandler>& _uniforms);
+			void AppendUniforms(std::map<std::string, TUniform>& _uniforms);
 
 			// Fetch the camera's position
 			const bento::Vector3& Position() {return m_position;}

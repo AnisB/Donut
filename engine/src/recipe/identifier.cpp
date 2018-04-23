@@ -14,11 +14,11 @@
 
 namespace donut
 {
-	RECIPE_GUID GetFileHash(const STRING_TYPE& _filename)
+	RECIPE_GUID GetFileHash(const char* _filename)
 	{
 		char buffer[20];
 		struct stat attrib;                
-		stat(_filename.c_str(), &attrib);
+		stat(_filename, &attrib);
    		strftime(buffer,20,"%x - %I_%M_%S", localtime(&(attrib.st_ctime)));
 		return std::hash<STRING_TYPE>()(STRING_TYPE(buffer));
 	}

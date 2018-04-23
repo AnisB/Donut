@@ -1,7 +1,10 @@
+// Bento include
+#include <bento_collection/vector.h>
+#include <bento_tools/file_system.h>
+
 // Library include
 #include "recipe/flourdescriptor.h"
 #include "tools/xmlhelpers.h"
-#include "tools/fileloader.h"
 
 // External includes
 #include "rapidxml.hpp"
@@ -154,73 +157,74 @@ namespace donut
                 }
         }
 
-        void ParseFlourFile(const STRING_TYPE& _fileName, TFlourDescriptor& _output)
-	{
-		// Registering the file name
-		_output.file = _fileName;
+        void ParseFlourFile(const char* file_location, TFlourDescriptor& _output)
+		{
+			// Registering the file name
+			_output.file = file_location;
 
-                // reading the text file
-                std::vector<char> buffer;
-                ReadFile(_fileName.c_str(), buffer);
+            // reading the text file
+			// reading the text file
+			bento::Vector<char> buffer(*bento::common_allocator());
+			bento::read_file(file_location, buffer, bento::FileType::Text);
 
-                // compute the id
-                _output.id = GetFileHash(_fileName);
+            // compute the id
+            _output.id = GetFileHash(file_location);
 
-                // Parsing it
-                rapidxml::xml_document<> doc;
-                doc.parse<0>(&buffer[0]);
+            // Parsing it
+            rapidxml::xml_document<> doc;
+            doc.parse<0>(&buffer[0]);
 
-                // Fetching the root sugar node
-                rapidxml::xml_node<>* flour = doc.first_node(FLOUR_NODE_TOKEN);
-                assert(flour);
+            // Fetching the root sugar node
+            rapidxml::xml_node<>* flour = doc.first_node(FLOUR_NODE_TOKEN);
+            assert(flour);
 
-                // Fetch the name
-                _output.name = flour->first_attribute(FLOUR_NAME_TOKEN)->value();
+            // Fetch the name
+            _output.name = flour->first_attribute(FLOUR_NAME_TOKEN)->value();
 
-                // Fetch the pipeline
-                rapidxml::xml_node<>* sh = flour->first_node(SPHERICAL_HARMONICS);
-                if(sh)
-                {
-                        _output.sh = HandleSphericalHarmonics_D(sh);
-                }
+            // Fetch the pipeline
+            rapidxml::xml_node<>* sh = flour->first_node(SPHERICAL_HARMONICS);
+            if(sh)
+            {
+                    _output.sh = HandleSphericalHarmonics_D(sh);
+            }
 
-                // Processing the geometry hierachy
-                rapidxml::xml_node<> *root = flour->first_node(ROOT_TOKEN);
-                if(root)
-                {
-                        _output.root = HandleNode_D(root);
-                }
+            // Processing the geometry hierachy
+            rapidxml::xml_node<> *root = flour->first_node(ROOT_TOKEN);
+            if(root)
+            {
+                    _output.root = HandleNode_D(root);
+            }
 
-                // Fetch the pipeline
-                rapidxml::xml_node<>* pipeline = flour->first_node(PIPELINE_NODE_TOKEN);
-                if(pipeline)
-                {
-                        _output.pipeline = pipeline->first_attribute(PIPELINE_NAME_TOKEN)->value();
-                }
-                else
-                {
-                        _output.pipeline = "minimal";
-                }
+            // Fetch the pipeline
+            rapidxml::xml_node<>* pipeline = flour->first_node(PIPELINE_NODE_TOKEN);
+            if(pipeline)
+            {
+                    _output.pipeline = pipeline->first_attribute(PIPELINE_NAME_TOKEN)->value();
+            }
+            else
+            {
+                    _output.pipeline = "minimal";
+            }
 
-                // Processing the illumination structures
-                rapidxml::xml_node<> *illumination = flour->first_node(ILLUMINATION_TOKEN);
-                if(illumination)
-                {
-                        HandleIlluminationNode_D(illumination, _output.illumination);
-                }
+            // Processing the illumination structures
+            rapidxml::xml_node<> *illumination = flour->first_node(ILLUMINATION_TOKEN);
+            if(illumination)
+            {
+                    HandleIlluminationNode_D(illumination, _output.illumination);
+            }
 
-                // Processing the skybox
-                rapidxml::xml_node<> *skybox = flour->first_node(SKYBOX_TOKEN);
-                if(skybox)
-                {
-                        _output.skybox = HandleSkyboxNode_D(skybox);
-                }
-	}
+            // Processing the skybox
+            rapidxml::xml_node<> *skybox = flour->first_node(SKYBOX_TOKEN);
+            if(skybox)
+            {
+                    _output.skybox = HandleSkyboxNode_D(skybox);
+            }
+		}
 
 
         bool HasChanged(const TFlourDescriptor& _flourDescriptor)
         {
-                RECIPE_GUID id = GetFileHash(_flourDescriptor.file);
-                return id != _flourDescriptor.id;
+			RECIPE_GUID id = GetFileHash(_flourDescriptor.file.c_str());
+			return id != _flourDescriptor.id;
         }
 }

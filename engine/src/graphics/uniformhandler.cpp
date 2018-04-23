@@ -3,59 +3,72 @@
 
 // Library includes
 #include "graphics/uniformhandler.h"
+#include "graphics/shadermanager.h"
 
 namespace donut
 {
-	TUniformHandler::TUniformHandler()
-	: m_uniform(nullptr)
+	TUniform::TUniform()
+	: type(TShaderData::INTEGER)
+	, slot("INVALID")
 	{
-
+		memcpy(data, 0, data_size());
 	}
-	TUniformHandler::~TUniformHandler()
+
+	TUniform::TUniform(const TUniform& uniform)
+	: type(uniform.type)
+	, slot(uniform.slot)
 	{
-		if(m_uniform)
+		memcpy(data, uniform.data, sizeof(uint64_t) * 8);
+	}
+
+	uint8_t TUniform::data_size() const
+	{
+		switch (type)
 		{
-			delete m_uniform;
+		case TShaderData::INTEGER:
+			return 4;
+			break;
+		case donut::TShaderData::FLOAT:
+			return 4;
+			break;
+		case donut::TShaderData::VEC3:
+			return 12;
+			break;
+		case donut::TShaderData::VEC4:
+			return 16;
+			break;
+		case donut::TShaderData::MAT3:
+			return 36;
+			break;
+		case donut::TShaderData::MAT4:
+			return 64;
+			break;
 		}
 	}
-	
-	TUniformHandler::TUniformHandler(TUniformHandler&& _uniformHandler)
-	{
-		m_uniform = _uniformHandler.m_uniform;
-		_uniformHandler.m_uniform = nullptr;
-	}
 
-	TUniformHandler& TUniformHandler::operator=(const TUniformHandler& _uniformHandler)
+	void TUniform::inject(ShaderPipelineObject shader) const
 	{
-		if(_uniformHandler.m_uniform)
-			m_uniform = _uniformHandler.m_uniform->Clone();
-		return *this;
-	}
-
-	TUniformHandler& TUniformHandler::operator=(TUniformHandler&& _uniformHandler)
-	{
-		m_uniform = _uniformHandler.m_uniform;
-		_uniformHandler.m_uniform = nullptr;
-		return *this;
-	}
-
-	TUniformHandler::TUniformHandler(const TUniformHandler& _uniformHandler)
-	{
-		m_uniform = _uniformHandler.m_uniform->Clone();
-	}
-
-	TShaderData::Type TUniformHandler::GetType() const
-	{
-		if(m_uniform)
+		switch (type)
 		{
-			return m_uniform->type;
+		case donut::TShaderData::INTEGER:
+			ShaderManager::Instance().Inject<int>(shader, reinterpret_cast<const int&>(data), slot);
+			break;
+		case donut::TShaderData::FLOAT:
+			ShaderManager::Instance().Inject<float>(shader, reinterpret_cast<const float&>(data), slot);
+			break;
+		case donut::TShaderData::VEC3:
+			ShaderManager::Instance().Inject<bento::Vector3>(shader, reinterpret_cast<const bento::Vector3&>(data), slot);
+			break;
+		case donut::TShaderData::VEC4:
+			ShaderManager::Instance().Inject<bento::Vector4>(shader, reinterpret_cast<const bento::Vector4&>(data), slot);
+			break;
+		case donut::TShaderData::MAT3:
+			ShaderManager::Instance().Inject<bento::Matrix3>(shader, reinterpret_cast<const bento::Matrix3&>(data), slot);
+			break;
+		case donut::TShaderData::MAT4:
+			ShaderManager::Instance().Inject<bento::Matrix4>(shader, reinterpret_cast<const bento::Matrix4&>(data), slot);
+			break;
 		}
-		return TShaderData::TYPE;
 	}
 
-	// Injecting an uniform variable
-	void TUniformHandler::Inject(const TShader& _shader) const
-	{
-		m_uniform->Inject(_shader);
-	}
 }

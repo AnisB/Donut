@@ -1,18 +1,4 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
+#pragma once
 
 // Library includes
 #include "core/mesh.h"
@@ -22,15 +8,15 @@ namespace donut
 	// Foward declaration
 	class TSugarInstance;
 
-	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader);
+	GEOMETRY_GUID CreateFullScreenQuad();
 
 	// Drawable factory
-	TMesh* CreateSkyboxDrawable(TSkyboxTexture* skybox_tex);
+	TMesh* CreateSkyboxDrawable(CUBEMAP_GUID cubemap);
 	
 		// Default meshes
-	TMesh* CreateCube(double _length, STRING_TYPE _materialName = "DEFAULT");
-	TMesh* CreateSphere(double _radius, STRING_TYPE _materialName = "DEFAULT");
-	TMesh* CreatePlane(double _with, double _length, STRING_TYPE _materialName = "DEFAULT");
+	TMesh* CreateCube(double _length, std::string _materialName = "DEFAULT");
+	TMesh* CreateSphere(double _radius, std::string _materialName = "DEFAULT");
+	TMesh* CreatePlane(double _with, double _length, std::string _materialName = "DEFAULT");
 		// Create a sugar instance
-	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName);
+	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
 }

@@ -10,7 +10,6 @@ namespace donut
 	struct TEgg;
 
 	void ConvertWavefrontToEgg(const STRING_TYPE& _wavefront, const STRING_TYPE& _outputEggFile);
-	void ExportEggFile(TEgg* eggInstance, const STRING_TYPE& _outputEggFile);
 }
 
 #endif // GEOMETRY_CONVERTERS_H

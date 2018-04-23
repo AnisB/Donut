@@ -3,7 +3,7 @@
 #include "render/frustum_culler.h"
 #include "render/crumble_remover.h"
 #include "resource/toppingloader.h"
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 #include "gpu_backend/gl_factory.h"
 
 namespace donut
@@ -48,11 +48,11 @@ namespace donut
 			TRenderRequest& currentRequest = _requests[req];
 
 			// Fetch the geometry to process
-			GeometryObject geom = ResourceManager::Instance().RequestRuntimeGeometry(currentRequest.geometry);
-			const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(currentRequest.topping);
+			GeometryObject geom = ResourceManager::Instance().request_runtime_geometry(currentRequest.geometry);
+			const TMaterial& mat = ResourceManager::Instance().request_runtime_material(currentRequest.material);
 
 			// Propagate the flags that have been raised by the material
-			currentRequest.render_flags = currentRequest.render_flags | mat->flags;
+			currentRequest.render_flags = currentRequest.render_flags | mat.flags;
 
 			// Get the target box
 			TBox3& box = m_vs_bb[req];

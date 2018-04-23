@@ -23,6 +23,9 @@ namespace donut
 	typedef uint64_t RenderWindow;
 	typedef uint64_t GeometryObject;
 	typedef uint64_t FramebufferObject;
+	typedef uint64_t TextureObject;
+	typedef uint64_t CubemapObject;
+	typedef uint64_t ShaderPipelineObject;
 
 	struct GPUBackendAPI
 	{

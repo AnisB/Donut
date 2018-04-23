@@ -17,7 +17,6 @@ namespace donut
 	// Foward declare 
 	struct TMaterial;
 
-
 	class ShaderManager : public Singleton<ShaderManager>
 	{
 
@@ -27,21 +26,21 @@ namespace donut
 		virtual ~ShaderManager();
 
  		// Creates a shader in GPU memory
- 		bool CreateShader(TShader& parShader);
+		ShaderPipelineObject create_shader(const TShaderPipelineDescriptor& pipeline_descriptor);
 
  		// Enables and disables a shader
- 		void EnableShader(const TShader& parProgram);
+ 		void EnableShader(ShaderPipelineObject parProgram);
  		void DisableShader( );
 
  		// Data injection
  		template <typename T>
- 		void Inject(const TShader& parProgram, const T& _value, const STRING_TYPE& parName);
+ 		void Inject(ShaderPipelineObject parProgram, const T& _value, const STRING_TYPE& parName);
 
  		template <typename T>
- 		void InjectV(const TShader& parProgram, const T* _value, int _nbVal, const STRING_TYPE& parName);
+ 		void InjectV(ShaderPipelineObject parProgram, const T* _value, int _nbVal, const STRING_TYPE& parName);
 		
 		// Inject Material
-		void InjectMaterial(const TShader& _shader, const TMaterial& _material);
+		void InjectMaterial(ShaderPipelineObject _shader, const TMaterial& _material);
 
 
 		// Texture binding/unbinding functions
@@ -51,9 +50,10 @@ namespace donut
 		void UnbindCubeMap(uint32_t parOffset);
 
 		// Texture injection function
-		void InjectTex(const TShader& parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
-		void InjectCubeMap(const TShader& parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
+		void InjectTex(ShaderPipelineObject parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
+		void InjectCubeMap(ShaderPipelineObject parProgram, uint32_t _texID, const STRING_TYPE& parName, uint32_t parOffset);
+
  	private:
- 		std::unordered_set<TShader,TShaderHasher> FPrograms;
+ 		std::vector<ShaderPipelineObject> _programs;
  	};
  }

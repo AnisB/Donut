@@ -8,6 +8,7 @@
 #include "graphics/shaderdata.h"
 #include "gpu_backend/gpu_backend.h"
 #include "resource/texture.h"
+#include "resource/skybox.h"
 #include "core/box3.h"
 
 namespace donut {
@@ -59,24 +60,23 @@ namespace gl {
 	namespace texture2D
 	{
 		// Texture creation / destruction
-		void create(TTextureInfo& _tex, int width, int height);
-		void destroy(TTextureInfo& _tex);
-		void create(TTexture& source);
-		void destroy(TTexture& source);
+		TextureObject create(TTextureNature::Type nature, int width, int height);
+		TextureObject create(const TTexture& source);
+		void destroy(TextureObject tex);
 	}
 	
 	// TextureCUBE API
 	namespace textureCUBE
 	{
-		void create(TSkyboxTexture& target_texture);
-		void destroy(TSkyboxTexture& target_texture);
+		CubemapObject create(const TSkybox& source_skybox);
+		void destroy(CubemapObject cubemap);
 	}
 
 	// Geometry API
 	namespace geometry
 	{
 		// The possible function to create a geometry
-		GeometryObject create_vnt(float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces);
+		GeometryObject create_vnt(const float* _dataArray, int _numVert, const unsigned* _indexArray, int num_faces);
 		void destroy_vnt(GeometryObject object);
 
 		// Function to draw a given geometry

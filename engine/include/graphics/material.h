@@ -1,8 +1,9 @@
 #pragma once
 
 // Library includes
-#include "graphics/shaderdata.h"
-#include "graphics/shader.h"
+#include "graphics/uniformhandler.h"
+#include "gpu_backend/gpu_backend.h"
+
 // STL inlcudes
 #include <string>
 #include <vector>
@@ -11,11 +12,9 @@ namespace donut
 {
     struct TMaterial
     {
-        TShader                         shader;
-        std::vector<TBuildIn>           builtIns;
-        std::vector<TUniformHandler>    uniforms;
+        ShaderPipelineObject            shader;
+        std::vector<TUniform>			uniforms;
 		std::vector<TTextureInfo>       textures;
-		std::vector<TBRDFInfo>			brfds;
         std::vector<TCubeMapInfo>       cubeMaps;
         uint8_t                         flags;
     };

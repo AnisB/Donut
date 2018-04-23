@@ -1,6 +1,6 @@
 // Library include
 #include "render/frustum_culler.h"
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 
 // Bento includes
 #include <bento_math/matrix4.h>

@@ -1,28 +1,12 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-
 // Bento includes
 #include <bento_base/security.h>
+#include <bento_tools/file_system.h>
 
 // Library includes
 #include "resource/pipelineloader.h"
-#include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
 
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 #include "resource/shaderfilehandler.h"
 
 // Bento includes
@@ -50,12 +34,12 @@ namespace donut
     {   
         const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 
-        std::vector<STRING_TYPE> pipelineFiles;
-		get_all_files_with_extension(root_asset_dir.c_str(), ".pipeline", pipelineFiles);
+        bento::Vector<bento::DynamicString> pipelineFiles(*bento::common_allocator());
+		bento::file_system::collect_files_with_extension(root_asset_dir.c_str(), "pipeline", pipelineFiles);
         for(auto& pipeline : pipelineFiles)
         {
             TPipelineDescriptor newPipeline;
-            ParsePipelineFile(pipeline, newPipeline);
+            ParsePipelineFile(pipeline.c_str(), newPipeline);
             m_pipelines[newPipeline.name] = newPipeline;
         }
     }

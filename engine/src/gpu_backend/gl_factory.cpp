@@ -140,22 +140,22 @@ namespace gl {
 			case TTextureNature::COLOR:
 			{
 	#if LINUX | WIN32
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + _tex.offset, GL_TEXTURE_2D, _tex.texID, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + _tex.offset, GL_TEXTURE_2D, _tex.id, 0);
 	#endif
 
 	#ifdef MACOSX
-				glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT + _tex.offset, _tex.texID, 0);
+				glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0_EXT + _tex.offset, _tex.id, 0);
 	#endif
 			}
 			break;
 			case TTextureNature::DEPTH:
 			{
 	#if LINUX | WIN32
-				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _tex.texID, 0);
+				glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, _tex.id, 0);
 	#endif
 
 	#ifdef MACOSX
-				glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _tex.texID, 0);
+				glFramebufferTextureEXT(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, _tex.id, 0);
 	#endif
 			}
 			break;
@@ -211,13 +211,13 @@ namespace gl {
 		}
 	}
 
-	uint32_t format_to_gl(TTextureFormat::Type type)
+	uint32_t format_to_gl(texture::TFormat::Type type)
 	{
 		switch (type)
 		{
-		case donut::TTextureFormat::RGB:
+		case donut::texture::TFormat::RGB:
 			return GL_RGB;
-		case donut::TTextureFormat::RGBA:
+		case donut::texture::TFormat::RGBA:
 			return GL_RGBA;
 		default:
 			return GL_RGBA;
@@ -226,46 +226,42 @@ namespace gl {
 
 	namespace texture2D
 	{
-		void create(TTextureInfo& _tex, int width, int height)
+		TextureObject create(TTextureNature::Type nature, int width, int height)
 		{
+			uint32_t texture_id;
 			GL_API_CHECK();
-			glGenTextures(1, &_tex.texID);
-			glBindTexture(GL_TEXTURE_2D, _tex.texID);
-			if (_tex.type == TTextureNature::COLOR)
+			glGenTextures(1, &texture_id);
+			glBindTexture(GL_TEXTURE_2D, texture_id);
+			switch (nature)
 			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, 0);
-			}
-			else if (_tex.type == TTextureNature::DEPTH)
-			{
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-			}
+				case TTextureNature::COLOR:
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, 0);
+				}
+				break;
+				case TTextureNature::DEPTH:
+				{
+					glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+				}
+				break;
+			};
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			GL_API_CHECK();
+			return (TextureObject)texture_id;
 		}
 
-		void destroy(TTextureInfo& _tex)
+		TextureObject create(const TTexture& source)
 		{
+			uint32_t texture_id;
 			GL_API_CHECK();
-#if LINUX | WIN32
-			glDeleteTextures(1, &_tex.texID);
-#endif
-#ifdef MACOSX
-			glDeleteTexturesEXT(1, &_tex.texID);
-#endif
-			GL_API_CHECK();
-		}
-
-		void create(TTexture& source)
-		{
-			GL_API_CHECK();
-			glGenTextures(1, &source.tex_id);
-			glBindTexture(GL_TEXTURE_2D, source.tex_id);
-			uint32_t format = format_to_gl(source.format);
-			glTexImage2D(GL_TEXTURE_2D, 0, format, source.width, source.height, 0, format, GL_UNSIGNED_BYTE, source.data.data());
+			glGenTextures(1, &texture_id);
+			glBindTexture(GL_TEXTURE_2D, texture_id);
+			uint32_t format = format_to_gl((texture::TFormat::Type)source.format);
+			glTexImage2D(GL_TEXTURE_2D, 0, format, source.width, source.height, 0, format, GL_UNSIGNED_BYTE, source.data.begin());
 			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -273,30 +269,32 @@ namespace gl {
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 			glBindTexture(GL_TEXTURE_2D, 0);
 			GL_API_CHECK();
+			return (TextureObject)texture_id;
 		}
 
-		void destroy(TTexture& tex)
+		void destroy(TextureObject tex)
 		{
+			uint32_t texture_id = tex;
 			GL_API_CHECK();
 #if LINUX | WIN32
-			glDeleteTextures(1, &tex.tex_id);
+			glDeleteTextures(1, &texture_id);
 #endif
 #ifdef MACOSX
-			glDeleteTexturesEXT(1, &tex.tex_id);
+			glDeleteTexturesEXT(1, &texture_id);
 #endif
 			GL_API_CHECK();
 		}
-
 	}
 
 	namespace textureCUBE
 	{
-		void create(TSkyboxTexture& target_texture)
+		CubemapObject create(const TSkybox& source_skybox)
 		{
+			uint32_t cubemap_id;
 			GL_API_CHECK();
-			glGenTextures(1, &target_texture.tex_id);
+			glGenTextures(1, &cubemap_id);
 			GL_API_CHECK();
-			glBindTexture(GL_TEXTURE_CUBE_MAP, target_texture.tex_id);
+			glBindTexture(GL_TEXTURE_CUBE_MAP, cubemap_id);
 			GL_API_CHECK();
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 			GL_API_CHECK();
@@ -312,32 +310,34 @@ namespace gl {
 			GL_API_CHECK();
 			glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAX_LEVEL, 0);
 			GL_API_CHECK();
-			uint32_t format = format_to_gl(target_texture.faces[0].format);
-			uint32_t resolution = target_texture.faces[0].width;
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[0].data.data());
+			uint32_t format = format_to_gl((texture::TFormat::Type)source_skybox.format);
+			uint32_t resolution = source_skybox.width;
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[0].begin());
 			GL_API_CHECK();
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[1].data.data());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[1].begin());
 			GL_API_CHECK();
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[2].data.data());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[2].begin());
 			GL_API_CHECK();
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[3].data.data());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[3].begin());
 			GL_API_CHECK();
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[4].data.data());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[4].begin());
 			GL_API_CHECK();
-			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, target_texture.faces[5].data.data());
+			glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, resolution, resolution, 0, format, GL_UNSIGNED_BYTE, source_skybox.faces[5].begin());
 			GL_API_CHECK();
 			glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
 			GL_API_CHECK();
+			return (CubemapObject)cubemap_id;
 		}
 
-		void destroy(TSkyboxTexture& target_texture)
+		void destroy(CubemapObject cubemap)
 		{
+			uint32_t cubemap_id = cubemap;
 			GL_API_CHECK();
 #if LINUX | WIN32
-			glDeleteTextures(1, &target_texture.tex_id);
+			glDeleteTextures(1, &cubemap_id);
 #endif
 #ifdef MACOSX
-			glDeleteTexturesEXT(1, &target_texture.tex_id);
+			glDeleteTexturesEXT(1, &cubemap_id);
 #endif
 			GL_API_CHECK();
 		}
@@ -354,7 +354,7 @@ namespace gl {
 			TBox3 os_bb;
 		};
 
-		GeometryObject create_vnt(float* _dataArray, int _numVert, unsigned* _indexArray, int num_faces)
+		GeometryObject create_vnt(const float* _dataArray, int _numVert, const unsigned* _indexArray, int num_faces)
 		{
 			GL_API_CHECK();
 			GLGeometry* newModel = new GLGeometry();

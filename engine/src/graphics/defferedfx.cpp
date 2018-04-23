@@ -13,15 +13,10 @@ namespace donut
 
 	// Constructor
 	TDefferedFX::TDefferedFX()
-	: TVFX(TShader(DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
+	: TVFX(TShaderPipelineDescriptor(DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
 	, m_nbLights(0)
 	{
 
-	}
-	TDefferedFX::TDefferedFX(const TShader& _shader)
-	: TVFX(_shader)	
-	, m_nbLights(0)
-	{
 	}
 
 	// Destructor
@@ -39,14 +34,14 @@ namespace donut
 	void TDefferedFX::SetLights(std::vector<TLight>& _lights)
 	{
 		// Setting the internal data
-		m_nbLights = _lights.size();
+		m_nbLights = (uint32_t)_lights.size();
 		m_lights = &_lights[0];
 		
 		// Make sure we did not explode the number of lights
 		assert_msg(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
 	}
 
-	void TDefferedFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TDefferedFX::Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		// Enable the deffed shader 
 		ShaderManager::Instance().EnableShader(m_material.shader);
@@ -57,7 +52,7 @@ namespace donut
 		ShaderManager::Instance().Inject<int>(m_material.shader, m_nbLights, "nbLights");
 
 		// Inject the lights
-		for(int lightIndex = 0; lightIndex < m_nbLights; ++lightIndex)
+		for(uint32_t lightIndex = 0; lightIndex < m_nbLights; ++lightIndex)
 		{
 			m_lights[lightIndex].InjectData(m_material.shader, lightIndex);
 		}

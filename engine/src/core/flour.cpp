@@ -4,12 +4,22 @@
 #include "graphics/factory.h"
 #include "core/sugarinstance.h"
 #include "resource/flourloader.h"
-#include "resource/resourcemanager.h"
-#include "tools/fileloader.h"
+#include "resource/resource_manager.h"
 #include "butter/stream.h"
 
 namespace donut
 {
+	template<typename T>
+	void stringConvertArray(const STRING_TYPE& _param, std::vector<T>& _values)
+	{
+		std::vector<STRING_TYPE> stringValues;
+		split(_param, ' ', stringValues);
+		for (const auto& val : stringValues)
+		{
+			_values.push_back(convert_from_string<T>(val));
+		}
+	}
+
 	// Builda light from its descriptor
 	void build_from_descriptor(const TLightDescriptor& light_descriptor, TLight& new_light)
 	{
@@ -32,9 +42,9 @@ namespace donut
 	}
 
 	// Handle a skybox from its descriptor
-	TSkyboxTexture* HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
+	CUBEMAP_GUID HandleSkyboxNode(const TSkyboxDescriptor& _skybox)
 	{
-		return ResourceManager::Instance().FetchSkybox(_skybox.source);
+		return ResourceManager::Instance().fetch_cubemap_id(_skybox.source.c_str());
 	}
 
 	// Handle a node  from its descriptor

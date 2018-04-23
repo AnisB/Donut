@@ -1,7 +1,7 @@
 #pragma once
 
-// Library includes
-#include "graphics/uniformhandler.h"
+// Internal includes
+#include <gpu_backend/gpu_backend.h>
 
 // STL includes
 #include <string.h>
@@ -9,11 +9,21 @@
 
 namespace donut
 {
-    struct TBuildIn
-    {
-        TShaderData::Type dataType;
-        STRING_TYPE name;
-    };
+	namespace TShaderData
+	{
+		enum Type
+		{
+			INTEGER = 0,
+			FLOAT = 1,
+			VEC3 = 2,
+			VEC4 = 3,
+			MAT3 = 4,
+			MAT4 = 5,
+			TEXTURE2D = 6,
+			CUBEMAP = 7,
+			TYPE = 8
+		};
+	}
 
     // Should be moved to texture when it will be refactored
     namespace TTextureNature 
@@ -25,67 +35,30 @@ namespace donut
         };
     };
 
-
-	struct TBRDFInfo
-	{
-		int offset;
-		STRING_TYPE name;
-		STRING_TYPE file;
-		uint32_t texID;
-		TBRDFInfo()
-		{
-			offset = 0;
-			texID = 0;
-		}
-
-		TBRDFInfo(const TBRDFInfo& _texture)
-		{
-			offset = _texture.offset;
-			name = _texture.name;
-			file = _texture.file;
-			texID = _texture.texID;
-		}
-	};
-
-    struct TTextureInfo
+	struct TTextureInfo
     {
-        int offset;
-        STRING_TYPE name;
-        STRING_TYPE file;
-        uint32_t texID;
-        TTextureNature::Type type;
+        TextureObject id;
+		std::string name;
+		int offset;
+		TTextureNature::Type type;
+
         TTextureInfo()
         {
-            offset=0;
-            texID=0;
-        }
-        TTextureInfo(const TTextureInfo& _texture)
-        {
-            offset = _texture.offset;
-            name = _texture.name;
-            file = _texture.file;
-            texID = _texture.texID;
-            type = _texture.type;
+            offset = 0;
+			id = 0;
         }
     };
 
     struct TCubeMapInfo
     {
-        int offset;
-        STRING_TYPE name;
-        STRING_TYPE path;
-        uint32_t cmID;
-        TCubeMapInfo()
+		std::string name;
+        CubemapObject id;
+		int offset;
+
+		TCubeMapInfo()
         {
-            offset=0;
-            cmID=0;
-        }
-        TCubeMapInfo(const TCubeMapInfo& parCubeMapInfo)
-        {
-            offset=parCubeMapInfo.offset;
-            name=parCubeMapInfo.name;
-            path=parCubeMapInfo.path;
-            cmID=parCubeMapInfo.cmID;
+            offset = 0;
+			id = 0;
         }
     };
 }

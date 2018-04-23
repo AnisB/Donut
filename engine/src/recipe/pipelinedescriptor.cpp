@@ -1,10 +1,10 @@
 // Bento includes
 #include <bento_base/security.h>
+#include <bento_tools/file_system.h>
 
 // Library include
 #include "recipe/pipelinedescriptor.h"
 #include "tools/xmlhelpers.h"
-#include "tools/fileloader.h"
 
 // External includes
 #include "rapidxml.hpp"
@@ -92,11 +92,11 @@ namespace donut
         } 
     }
 
-    void ParsePipelineFile(const STRING_TYPE& _pipelineFileName, TPipelineDescriptor& _pipeline)
+    void ParsePipelineFile(const char* _pipelineFileName, TPipelineDescriptor& _pipeline)
     {
         // reading the text file
-        std::vector<char> buffer;
-        ReadFile(_pipelineFileName.c_str(), buffer);
+        bento::Vector<char> buffer(*bento::common_allocator());
+		bento::read_file(_pipelineFileName, buffer, bento::FileType::Text);
 
         _pipeline.file = _pipelineFileName;
         // compute the id
@@ -134,7 +134,8 @@ namespace donut
             {
                 // Fetch the canvas
                 rapidxml::xml_node<>* canvas = passNode->first_node(CANVAS_NODE_TOKEN);
-                 // Filling the canvas
+
+                // Filling the canvas
                 pass.canvas.tag = GetCanvasTag(canvas->first_attribute(CANVAS_TYPE_TOKEN)->value());
                 rapidxml::xml_attribute<>* canvasOutput = canvas->first_attribute(CANVAS_OUTPUT_TOKEN);
                 if(canvasOutput)
@@ -150,15 +151,14 @@ namespace donut
                 rapidxml::xml_node<>* shader = vfx->first_node(SHADER_NODE_TYPE_TOKEN);
                 if(shader)
                 {
-                    BuildShaderDescriptor(shader, pass.vfx.shader);
+					BuildShaderPipelineDescriptor(shader, pass.vfx.shader_pipeline);
                 }
 
                 // textures node
-				int shift = 0;
                 rapidxml::xml_node<>* textures = vfx->first_node(TEXTURES_NODE_TYPE_TOKEN);
                 if(textures)
                 {
-					shift = BuildTexturesDescriptor(textures, pass.vfx.textures, shift);
+					BuildTexturesDescriptor(textures, pass.vfx.data);
                 }
             }
             else
@@ -172,7 +172,7 @@ namespace donut
 
     bool HasChanged(const TPipelineDescriptor& _pipeline)
     {
-        RECIPE_GUID id = GetFileHash(_pipeline.file);
+        RECIPE_GUID id = GetFileHash(_pipeline.file.c_str());
         return id != _pipeline.id;
     }
 }

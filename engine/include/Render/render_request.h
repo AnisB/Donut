@@ -25,7 +25,7 @@ namespace donut
 	struct TRenderRequest
 	{
 		// Instance data
-		TOPPING_GUID topping;
+		MATERIAL_GUID material;
 		GEOMETRY_GUID geometry;
 
 		// Set of flags that need to be applied to this request
@@ -36,5 +36,5 @@ namespace donut
 	};
 
 	// Processed a render request (draw it to the screen)
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniformHandler>& _uniforms);
+	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniform>& _uniforms);
 }

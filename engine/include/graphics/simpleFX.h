@@ -26,13 +26,12 @@ namespace donut
 	{
 	public:
 		// Creation/Destruction
-		TSimpleFX(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment);
-		TSimpleFX(const TShader& _shader);
+		TSimpleFX(const TShaderPipelineDescriptor& shader_descr);
 		~TSimpleFX();
 		// Init
 		virtual void Init();
 		// Drawing it
-		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData);
 	};
 }
 

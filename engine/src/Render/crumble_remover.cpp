@@ -1,6 +1,6 @@
 // Library include
 #include "render/crumble_remover.h"
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 
 // Bento includes
 #include <bento_math/matrix4.h>

@@ -6,14 +6,10 @@
 namespace donut
 {
 	// Constructor
-	TSimpleFX::TSimpleFX(const STRING_TYPE& _vertex, const STRING_TYPE& _fragment)
-	: TVFX(TShader(_vertex, _fragment))
+	TSimpleFX::TSimpleFX(const TShaderPipelineDescriptor& shader_descr)
+	: TVFX(shader_descr)
 	{
 
-	}
-	TSimpleFX::TSimpleFX(const TShader& _shader)
-	: TVFX(_shader)
-	{
 	}
 
 	// Destructor
@@ -28,7 +24,7 @@ namespace donut
 		TVFX::Init();
 	}
 
-	void TSimpleFX::Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData)
+	void TSimpleFX::Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

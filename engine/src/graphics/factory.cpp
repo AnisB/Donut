@@ -4,7 +4,7 @@
 #include "core/mesh.h"
 #include "core/mesh.h"
 #include "resource/sugar_loader.h"
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 #include "resource/toppingloader.h"
 #include "core/box3.h"
 #include "gpu_backend/gl_factory.h"
@@ -15,7 +15,7 @@
 namespace donut
 {
 	// Cube Data
-	float cubeVertexL[216] = {
+	float cubeVertexL[192] = {
 		// Vertex Data
 	1.0f, -1.0f, -1.0f, // 0
 	-1.0f, -1.0f, -1.0f,// 3
@@ -110,7 +110,7 @@ namespace donut
 	1.0,1.0,	
 	};
 
-	unsigned int cubeFacesL[36] = 
+	uint32_t cubeFacesL[36] = 
 	{ 
 		0, 1, 2,
 		1, 2, 3,
@@ -186,28 +186,35 @@ namespace donut
 		1, 2, 3
 	};
 
-	TMesh* CreateCube(float _length, STRING_TYPE _materialName, bool inside = false)
+	TMesh* CreateCube(float _length, STRING_TYPE _materialName)
 	{
+		// Counter that tracks the created cubes in this session
 		static int cubeCounter = 0;
- 		float data[216];
- 		memcpy(&data ,&cubeVertexL, 216*sizeof(float));
- 		for(int i = 0; i<72; ++i)
+
+		// Creating the geometry
+		TEgg egg(*bento::common_allocator());
+		egg._vert_normal_uvs.resize(192);
+		egg._indexes.resize(12);
+		memcpy(egg._vert_normal_uvs.begin(), cubeVertexL, 192 * sizeof(float));
+		memcpy(egg._indexes.begin(), cubeFacesL, 36 * sizeof(uint32_t));
+
+		// Scale the cube by
+ 		for(int i = 0; i < 72; ++i)
  		{
- 			data[i] *= _length;
+			egg._vert_normal_uvs[i] *= _length;
  		}
 
-		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
-		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
+		// Grab the material
+		MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(_materialName.c_str(), _materialName.c_str());
 
 		// Generating the geometry name
  		STRING_TYPE meshName = "Cube_";
  		meshName += std::to_string(cubeCounter++);
  		
- 		// Creating the geometry
-		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 24, inside ? icubeFacesL: cubeFacesL, 12);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().create_runtime_geometry(meshName.c_str(), egg);
 		
 		// Create the mesh instance
-		TMesh* newMesh = new TMesh(topping, geometry);
+		TMesh* newMesh = new TMesh(material, geometry);
 
 		// return it
 		return newMesh;
@@ -217,29 +224,34 @@ namespace donut
 	{
 		// Create the geometry buffer
 		static int planeCounter = 0;
-		float data[32];
- 		memcpy(&data ,&planeVertexBuffer, 32*sizeof(float));
- 		for(int i = 0; i<4; ++i)
- 		{
- 			data[3*i]*=(float)_with;
- 		}
- 		for(int i = 0; i<4; ++i)
- 		{
- 			data[3*i+2]*=(float)_length;
- 		}
+
+		// Creating the geometry
+		TEgg plane_egg(*bento::common_allocator());
+		plane_egg._vert_normal_uvs.resize(32);
+		plane_egg._indexes.resize(2);
+		memcpy(plane_egg._vert_normal_uvs.begin(), cubeVertexL, 32 * sizeof(float));
+		memcpy(plane_egg._indexes.begin(), cubeFacesL, 6 * sizeof(uint32_t));
+
+		// Scale the plane
+		for (int i = 0; i<4; ++i)
+		{
+			plane_egg._vert_normal_uvs[3 * i] *= (float)_with;
+		}
+		for (int i = 0; i<4; ++i)
+		{
+			plane_egg._vert_normal_uvs[3 * i + 2] *= (float)_length;
+		}
 
  		// Generate the geometry name
  		STRING_TYPE meshName = "Plane_";
  		meshName += std::to_string(planeCounter++);
 
-		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(_materialName);
-		const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
-
 		// Create the target geometry
-		GEOMETRY_GUID geometry = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, mat->shader, data, 4, planeIndexBuffer, 2);
+		GEOMETRY_GUID geometry = ResourceManager::Instance().create_runtime_geometry(meshName.c_str(), plane_egg);
+		MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(_materialName.c_str(), _materialName.c_str());
 
 		// Create the mesh instance
-		TMesh* newMesh = new TMesh(topping, geometry);
+		TMesh* newMesh = new TMesh(material, geometry);
 
 		// return it
 		return newMesh;
@@ -266,14 +278,13 @@ namespace donut
 			const TRenderableDescriptor& renderableDescriptor = renderable;
 
 			// Fetch the material
-			TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial(renderableDescriptor._material);
-			const TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
-			
+			MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(renderableDescriptor._material.c_str(), renderableDescriptor._material.c_str());
+
 			// Fetch the geometry
-			GEOMETRY_GUID geometry = ResourceManager::Instance().FetchGeometry(mat->shader, renderableDescriptor._geometry);
+			GEOMETRY_GUID geometry = ResourceManager::Instance().fetch_geometry_id(renderableDescriptor._geometry.c_str());
 			
 			// Create the renderable mesh
-			TMesh* newMesh = new TMesh(topping, geometry);
+			TMesh* newMesh = new TMesh(material, geometry);
 
 			// Add the mesh to the sugar instance
 			newSugarInstance->AddMesh(newMesh);
@@ -283,39 +294,55 @@ namespace donut
 		return newSugarInstance;
 	}
 
-	GEOMETRY_GUID CreateFullScreenQuad(const TShader& _shader)
+	GEOMETRY_GUID CreateFullScreenQuad()
 	{
 		static int FSQCounter = 0;
-		TMaterial defaultMat;
- 		defaultMat.shader = _shader;
+		
+		// Create our geometry
+		TEgg fsq_egg(*bento::common_allocator());
+		fsq_egg._vert_normal_uvs.resize(32);
+		fsq_egg._indexes.resize(2);
+		memcpy(fsq_egg._vert_normal_uvs.begin(), FSQVertex, 32 * sizeof(float));
+		memcpy(fsq_egg._indexes.begin(), FSQIndex, 6 * sizeof(uint32_t));
+
+		// Generate a name for it
  		std::string meshName = "FSQ_";	
  		meshName += std::to_string(FSQCounter++);
-		ShaderManager::Instance().CreateShader(defaultMat.shader); 
-		GEOMETRY_GUID guid = ResourceManager::Instance().InstanciateRunTimeGeometry(meshName, defaultMat.shader, FSQVertex, 4, FSQIndex, 2);
-		GeometryObject geo = ResourceManager::Instance().RequestRuntimeGeometry(guid);
+
+		// Create it
+		GEOMETRY_GUID guid = ResourceManager::Instance().create_runtime_geometry(meshName.c_str(), fsq_egg);
+
+		// Change its bounding box so that it is infinite
+		GeometryObject geo = ResourceManager::Instance().request_runtime_geometry(guid);
 		TBox3 box;
 		box.max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		box.min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		gl::geometry::set_bbox(geo, box);
+
 		return guid;
 	}
 
-	TMesh* CreateSkyboxDrawable(TSkyboxTexture* skybox_tex)
+	TMesh* CreateSkyboxDrawable(CUBEMAP_GUID cubemap)
 	{	
+		static int skybox_counter = 0;
+
+		std::string skybox_name = "skybox_";
+		skybox_name += std::to_string(skybox_counter++);
+
 		// Create the geometry
-		TMesh* skybox = CreateCube(10.0f, "skybox", true);
+		TMesh* skybox = CreateCube(10.0f, "skybox");
 
 		// Request the shader
-		TOPPING_GUID topping = TToppingLoader::Instance().FetchMaterial("skybox");
-		TMaterial* mat = TToppingLoader::Instance().RequestRuntimeMaterial(topping);
+		MATERIAL_GUID material = ResourceManager::Instance().instanciate_material("skybox", skybox_name.c_str());
+		TMaterial& mat = ResourceManager::Instance().request_runtime_material(material);
 
 		// Add it to the material
  		TCubeMapInfo newCM;
-		newCM.cmID = skybox_tex->tex_id;
+		newCM.id = cubemap;
 		newCM.offset = 0;
 		newCM.name = "skybox";
-		mat->cubeMaps.push_back(newCM);
-		mat->flags = RenderFlags::NO_CULLING;
+		mat.cubeMaps.push_back(newCM);
+		mat.flags = RenderFlags::NO_CULLING;
 		
 		return skybox;
 	}

@@ -34,7 +34,7 @@ namespace donut
 		color.name = "canvas";
 		color.type = TTextureNature::COLOR;
 		color.offset = 0;
-		gl::texture2D::create(color, m_width, m_height);
+		color.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, color);
 
  		// Depth buffer
@@ -42,8 +42,9 @@ namespace donut
 		depth.name = "depth";
 		depth.type = TTextureNature::DEPTH;
 		depth.offset = 1;
-		gl::texture2D::create(depth, m_width, m_height);
+		depth.id = gl::texture2D::create(TTextureNature::DEPTH, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, depth);
+
 		// Making sure everything is OK
 		gl::framebuffer::check(m_frameBuffer);
 		gl::framebuffer::unbind(m_frameBuffer);

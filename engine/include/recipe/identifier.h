@@ -9,5 +9,5 @@ namespace donut
 	typedef uint64_t RECIPE_GUID;
 
 	// Generate the guid
-	RECIPE_GUID GetFileHash(const STRING_TYPE& _filename);	
+	RECIPE_GUID GetFileHash(const char* _filename);	
 }

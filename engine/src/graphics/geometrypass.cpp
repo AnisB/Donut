@@ -1,24 +1,8 @@
-/**
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- *
- **/
-
 // Libary includes
 #include "graphics/geometrypass.h"
 #include "graphics/factory.h"
 #include "core/mesh.h"
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 
 // External includes
 #include <map>
@@ -49,7 +33,7 @@
 		m_canvas->Init();
 
 		// Create the drawable for the skybox if there is some
-		if (m_flour->skybox != nullptr)
+		if (m_flour->skybox != UINT32_MAX)
 		{
 			m_skyboxDrawable = CreateSkyboxDrawable(m_flour->skybox);
 		}
@@ -75,7 +59,7 @@
 		m_dipatcher.ProcessRequests(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
 		// Fetch the uniform values from the camera
-		std::map<STRING_TYPE, TUniformHandler> values;
+		std::map<STRING_TYPE, TUniform> values;
 		m_camera->AppendUniforms(values);
 
 		// Process eache render request 

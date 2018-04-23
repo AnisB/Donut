@@ -14,7 +14,7 @@
 	{
 	public:
 	 	// Creating a mesh
-		TMesh(TOPPING_GUID _topping, GEOMETRY_GUID _geometry);
+		TMesh(MATERIAL_GUID material, GEOMETRY_GUID geometry);
 		
 		// Dstructor
 	 	virtual ~TMesh();
@@ -24,7 +24,7 @@
 		
 	protected:
 	 	// All the required attributes for drawing a mesh
-		TOPPING_GUID m_topping;
+		MATERIAL_GUID m_material;
 		GEOMETRY_GUID m_geometry;
 	 };
 }

@@ -1,18 +1,16 @@
+// Bento includes
+#include <bento_collection/dynamic_string.h>
+#include <bento_tools/file_system.h>
+
 // Library includes
 #include "resource/flourloader.h"
-
 #include "butter/stream.h"
-
 #include "core/sceneNode.h"
-
-#include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
-
 #include "graphics/light.h"
 #include "graphics/factory.h"
 #include "bento_base/log.h"
-
-#include "resource/resourcemanager.h"
+#include "resource/resource_manager.h"
 
 // External includes
 #include "rapidxml.hpp"
@@ -42,12 +40,13 @@ namespace donut
 	{
 		const STRING_TYPE& root_asset_dir = ResourceManager::Instance().RootAssetsFolder();
 
-        std::vector<STRING_TYPE> flourFiles;
-        get_all_files_with_extension(root_asset_dir.c_str(), ".flour", flourFiles);
+		bento::Vector<bento::DynamicString> flourFiles(*bento::common_allocator());
+		bento::file_system::collect_files_with_extension(root_asset_dir.c_str(), "flour", flourFiles);
+
         for(auto& flour : flourFiles)
         {
         	TFlourDescriptor flrDsr;
-        	ParseFlourFile(flour, flrDsr);
+        	ParseFlourFile(flour.c_str(), flrDsr);
         	m_flours[flrDsr.name] = flrDsr;
         }
 	}

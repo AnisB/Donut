@@ -34,7 +34,7 @@ namespace donut
 		albedo.name = "albedo";
 		albedo.type = TTextureNature::COLOR;
 		albedo.offset = 0;
-		gl::texture2D::create(albedo, m_width, m_height);
+		albedo.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, albedo);
 
  		// The normal buffer
@@ -42,7 +42,7 @@ namespace donut
 		normal.name = "normal";
 		normal.type = TTextureNature::COLOR;
 		normal.offset = 1;
-		gl::texture2D::create(normal, m_width, m_height);
+		normal.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, normal);
 
  		// The specular buffer
@@ -50,7 +50,7 @@ namespace donut
 		specular.name = "specular";
 		specular.type = TTextureNature::COLOR;
 		specular.offset = 2;
-		gl::texture2D::create(specular, m_width, m_height);
+		specular.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, specular);
 
  		// Position Buffer
@@ -58,7 +58,7 @@ namespace donut
 		position.name = "position";
 		position.type = TTextureNature::COLOR;
 		position.offset = 3;
-		gl::texture2D::create(position, m_width, m_height);
+		position.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, position);
 
  		// Depth buffer
@@ -66,7 +66,7 @@ namespace donut
 		depth.name = "depth";
 		depth.type = TTextureNature::DEPTH;
 		depth.offset = 4;
-		gl::texture2D::create(depth, m_width, m_height);
+		depth.id = gl::texture2D::create(TTextureNature::DEPTH, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, depth);
 
  		// Making sure everything is OK

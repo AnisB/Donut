@@ -6,7 +6,7 @@
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
 #include <resource/sugar_loader.h>
-#include <resource/resourcemanager.h>
+#include <resource/resource_manager.h>
 #include <resource/flourLoader.h>
 #include <graphics/factory.h>
 #include <core/scenenode.h>

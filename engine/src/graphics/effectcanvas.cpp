@@ -4,7 +4,7 @@
 
 namespace donut
 {
-	TEffectCanvas::TEffectCanvas(int _width, int _height, const STRING_TYPE& _outTexName)
+	TEffectCanvas::TEffectCanvas(int _width, int _height, const std::string& _outTexName)
 	: TCanvas(_width, _height)
 	, m_texName(_outTexName)
 	{
@@ -34,7 +34,7 @@ namespace donut
 		color.name = m_texName;
 		color.type = TTextureNature::COLOR;
 		color.offset = 0;
-		gl::texture2D::create(color, m_width, m_height);
+		color.id = gl::texture2D::create(TTextureNature::COLOR, m_width, m_height);
 		gl::framebuffer::bind_texture(m_frameBuffer, color);
 
  		// Making sure everything is OK

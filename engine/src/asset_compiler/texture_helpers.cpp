@@ -3,8 +3,8 @@
 #include <bento_base/log.h>
 
 // Engine includes
+#include "asset_compiler/texture_helpers.h"
 #include "gpu_backend/gl_factory.h"
-#include "resource/TextureHelpers.h"
 #include "tools/lodepng.h"
  
 
@@ -99,11 +99,11 @@ namespace donut
 		// Prepare the texture for writing
 		output_texture.width = w;
 		output_texture.height = h;
-		output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
-		output_texture.format = TTextureFormat::RGB;
+		output_texture.data_type = texture::TDataType::UNSIGNED_BYTE;
+		output_texture.format = texture::TFormat::RGB;
 		output_texture.data.resize(data_size);
 
-		unsigned char* data = output_texture.data.data(); // allocate 3 bytes per pixel
+		unsigned char* data = output_texture.data.begin(); // allocate 3 bytes per pixel
         fread(data, sizeof(unsigned char), data_size, f); // read the rest of the data at once
         fclose(f);
 
@@ -141,10 +141,10 @@ namespace donut
 		}
 
 		// Resize the texture 
-		texture::set_data(texture, width, height, TTextureFormat::RGB, TTextureDataType::UNSIGNED_BYTE);
+		texture::set_data(texture, width, height, texture::TFormat::RGB, texture::TDataType::UNSIGNED_BYTE);
 
 		// Copy the read data
-		memcpy(texture.data.data(), data, texture.data.size());
+		memcpy(texture.data.begin(), data, texture.data.size());
 
 		// Free the memory
 		stbi_image_free(data);
@@ -176,15 +176,15 @@ namespace donut
 
 			output_texture.width = width;
 			output_texture.height = height;
-			output_texture.data_type = TTextureDataType::UNSIGNED_BYTE;
+			output_texture.data_type = texture::TDataType::UNSIGNED_BYTE;
 
             switch(BitsPerPixel)
             {
                 case 24:
-					output_texture.format = TTextureFormat::RGB;
+					output_texture.format = texture::TFormat::RGB;
                 break;
                 case 32:
-					output_texture.format = TTextureFormat::RGBA;
+					output_texture.format = texture::TFormat::RGBA;
                 break;
                 default: 
                     hFile.close();
@@ -192,7 +192,7 @@ namespace donut
             }
 
 			output_texture.data.resize(data_size);
-            hFile.read(reinterpret_cast<char*>(output_texture.data.data()), data_size);
+            hFile.read(reinterpret_cast<char*>(output_texture.data.begin()), data_size);
         }
         else
         {
@@ -219,10 +219,10 @@ namespace donut
 		}
 
 		// Resize the texture 
-		texture::set_data(texture, width, height, TTextureFormat::RGBA, TTextureDataType::UNSIGNED_BYTE);
+		texture::set_data(texture, width, height, texture::TFormat::RGBA, texture::TDataType::UNSIGNED_BYTE);
 
 		// Copy the read data
-		memcpy(texture.data.data(), image, texture.data.size());
+		memcpy(texture.data.begin(), image, texture.data.size());
 
 		// Free the allocated buffer
 		free(image);
@@ -292,10 +292,10 @@ namespace donut
         return filename;
     }
 
-	void LoadSkybox(const char* path_source, TSkyboxTexture& output_skybox)
+	void LoadSkybox(const char* path_source, TSkybox& output_skybox)
 	{
 		// Read the combined texture
-		TTexture combined_texture;
+		TTexture combined_texture(*bento::common_allocator());
 		LoadTexture(path_source, combined_texture);
 
 		// We only support one type of cubemap for the moment
@@ -304,17 +304,12 @@ namespace donut
 			// Compute the face resolution
 			uint32_t cubemap_face_resolution = combined_texture.width / 4;
 
+			// Set the skybox data
+			skybox::set_data(output_skybox, cubemap_face_resolution, cubemap_face_resolution, (texture::TFormat::Type)combined_texture.format, (texture::TDataType::Type)combined_texture.data_type);
+
 			// Prepare the textures for writing
 			for (uint8_t face_idx = 0; face_idx < 6; ++face_idx)
 			{
-				// Set the data and allocate the memory space
-				TTexture& current_face = output_skybox.faces[face_idx];
-				current_face.width = cubemap_face_resolution;
-				current_face.height = cubemap_face_resolution;
-				current_face.format = combined_texture.format;
-				current_face.data_type = combined_texture.data_type;
-				current_face.data.resize(current_face.width * current_face.height * (uint8_t)current_face.format * (uint8_t)current_face.data_type);
-			
 				// Shift values that allow us to define for each face where to read the face data
 				uint32_t shift_w = 0;
 				uint32_t shift_h = 0;
@@ -355,7 +350,7 @@ namespace donut
 					for (uint32_t w_idx = 0; w_idx < cubemap_face_resolution; ++w_idx)
 					{
 						unsigned char* source_pixel = texture::pixel(combined_texture, w_idx + shift_w, h_idx + shift_h);
-						unsigned char* target_pixel = texture::pixel(current_face, w_idx, h_idx);
+						unsigned char* target_pixel = skybox::pixel(output_skybox, face_idx, w_idx, h_idx);
 						memcpy(target_pixel, source_pixel, texture::pixel_size(combined_texture));
 					}
 				}

@@ -1,9 +1,13 @@
 // Bento include
 #include <bento_base/security.h>
+#include <bento_collection/vector.h>
+#include <bento_tools/file_system.h>
+#include <bento_math/types.h>
+#include <bento_math/vector3.h>
+#include <bento_math/vector4.h>
 
 // Library include
-#include "recipe/toppingdescriptor.h"
-#include "tools/fileloader.h"
+#include "recipe/topping_descriptor.h"
 #include "tools/xmlhelpers.h"
 
 // External includes
@@ -43,49 +47,78 @@ namespace donut
     #define TEXTURE_FILE_LOCATION_TOKEN "location"
     
     // Returns the enumeration that matches a given string    
-    void DataTypeToUniform(const STRING_TYPE& _type, const STRING_TYPE& _name, const STRING_TYPE& _value, TUniformHandler& _handler)
+    void DataTypeToUniform(const STRING_TYPE& _type, const char* _name, const STRING_TYPE& _value, TUniform& _handler)
     {
         if(_type == TOKEN_VEC3)
         {
-            _handler.SetValue(TShaderData::VEC3, _name, bento::Vector3());
+            _handler.set_data(TShaderData::VEC3, _name, bento::Vector3());
         }
         else if(_type == TOKEN_VEC4)
         {
-            _handler.SetValue(TShaderData::VEC4, _name, bento::vector4(1.0, 1.0, 1.0, 1.0));
+            _handler.set_data(TShaderData::VEC4, _name, bento::vector4(1.0, 1.0, 1.0, 1.0));
         }
         else if(_type == TOKEN_MAT3)
         {
-            _handler.SetValue(TShaderData::MAT3, _name, bento::Matrix3());
+            _handler.set_data(TShaderData::MAT3, _name, bento::Matrix3());
         }
         else if(_type == TOKEN_MAT4)
         {
-            _handler.SetValue(TShaderData::MAT4, _name, bento::Matrix4());
+            _handler.set_data(TShaderData::MAT4, _name, bento::Matrix4());
         }
         else if(_type == TOKEN_FLOAT)
         {
-            _handler.SetValue(TShaderData::FLOAT, _name, convert_from_string<float>(_value));
+            _handler.set_data(TShaderData::FLOAT, _name, convert_from_string<float>(_value));
         }
         else if(_type == TOKEN_INT)
         {
-            _handler.SetValue(TShaderData::INTEGER, _name, convert_from_string<int>(_value));
+            _handler.set_data(TShaderData::INTEGER, _name, convert_from_string<int>(_value));
         }
         else
         {
-            assert_fail("Unsupported uniform type");
+            assert_fail_msg("Unsupported uniform type");
         }
     }
 
-    void ParseToppingFile(const STRING_TYPE& _fileLocation, TToppingDescriptor& _topping)
+	// Converts a string into a type
+	TShaderData::Type string_to_data_type(const char* type)
+	{
+		if (strcmp(type, TOKEN_VEC3) == 0)
+		{
+			return TShaderData::VEC3;
+		}
+		else if (strcmp(type, TOKEN_VEC4) == 0)
+		{
+			return TShaderData::VEC4;
+		}
+		else if (strcmp(type, TOKEN_MAT3) == 0)
+		{
+			return TShaderData::MAT3;
+		}
+		else if (strcmp(type, TOKEN_MAT4) == 0)
+		{
+			return TShaderData::MAT4;
+		}
+		else if (strcmp(type, TOKEN_FLOAT) == 0)
+		{
+			return TShaderData::FLOAT;
+		}
+		else if (strcmp(type, TOKEN_INT) == 0)
+		{
+			return TShaderData::INTEGER;
+		}
+	}
+
+    void ParseToppingFile(const char* file_path, TToppingDescriptor& _topping)
     {
         // reading the text file
-        std::vector<char> buffer;
-        ReadFile(_fileLocation.c_str(), buffer);
+		bento::Vector<char> buffer(*bento::common_allocator());
+		bento::read_file(file_path, buffer, bento::FileType::Text);
 
         // Set the file location
-        _topping.file = _fileLocation;
+        _topping.file = file_path;
 
         // compute the GUID
-        _topping.id = GetFileHash(_fileLocation);
+        _topping.id = GetFileHash(file_path);
 
         // Parsing it
         rapidxml::xml_document<> doc;
@@ -101,7 +134,7 @@ namespace donut
         // Fetching the shader data
         rapidxml::xml_node<>* shaderNode = topping_root->first_node(SHADER_NODE_TOKEN);
         assert(shaderNode);
-        BuildShaderDescriptor(shaderNode, _topping.data.shader);
+        BuildShaderPipelineDescriptor(shaderNode, _topping.shader_pipeline);
 
         // Fetching external shader data
         rapidxml::xml_node<>* extern_data = topping_root->first_node(EXTERNAL_DATA_NODE_TOKEN);
@@ -111,27 +144,25 @@ namespace donut
             // Handeling the floats
             for(rapidxml::xml_node<> *unif = extern_data->first_node(); unif; unif = unif->next_sibling())
             {
-                TUniformHandler uni;
-                STRING_TYPE type(unif->first_attribute(UNIFORM_TYPE_TOKEN)->value());
-                STRING_TYPE name(unif->first_attribute(UNIFORM_NAME_TOKEN)->value());
-                STRING_TYPE value(unif->first_attribute(UNIFORM_VALUE_TOKEN)->value());
-                DataTypeToUniform(type, name, value, uni);
-                _topping.data.uniforms.push_back(uni);
+				TShaderDataDescriptor shader_data;
+				shader_data._type =  string_to_data_type(unif->first_attribute(UNIFORM_TYPE_TOKEN)->value());
+				shader_data._slot = (unif->first_attribute(UNIFORM_NAME_TOKEN)->value());
+				shader_data._data = (unif->first_attribute(UNIFORM_VALUE_TOKEN)->value());
+                _topping.data.push_back(shader_data);
             }
         }
 
-		int shift = 0;
         // Fetching external shader data
         rapidxml::xml_node<>* textures = topping_root->first_node(TEXTURES_NODE_TOKEN);
 		if(textures)
         {
-			shift = BuildTexturesDescriptor(textures, _topping.data.textures, shift);
+			BuildTexturesDescriptor(textures, _topping.data);
         }
     }
 
     bool HasChanged(const TToppingDescriptor& _toppingDescriptor)
     {
-        RECIPE_GUID id = GetFileHash(_toppingDescriptor.file);
+        RECIPE_GUID id = GetFileHash(_toppingDescriptor.file.c_str());
         return id != _toppingDescriptor.id;
     }
 }

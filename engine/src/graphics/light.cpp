@@ -56,7 +56,7 @@ namespace donut
 		FDiff=parColor;
 	}
 
-	void TLight::InjectData(const TShader& _shader, size_t _lightIndex)
+	void TLight::InjectData(ShaderPipelineObject _shader, size_t _lightIndex)
 	{
 		STRING_TYPE shift = "[" + convert_to_string(_lightIndex) + "]";
 		ShaderManager::Instance().Inject<bento::Vector3>(_shader, FPosition, "lightSource"+shift+".position");

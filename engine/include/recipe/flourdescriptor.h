@@ -90,7 +90,7 @@ namespace donut
 	};
 
 	// Build a descriptor from a file 
-	void ParseFlourFile(const STRING_TYPE& _fileName, TFlourDescriptor& _output);
+	void ParseFlourFile(const char* file_name, TFlourDescriptor& _output);
     bool HasChanged(const TFlourDescriptor& _flourDescriptor);
 }
 

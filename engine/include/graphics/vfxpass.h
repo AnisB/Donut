@@ -1,23 +1,4 @@
-/**
-* This program is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License as
-* published by the Free Software Foundation, either version 3 of the
-* License, or (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program. If not, see <http://www.gnu.org/licenses/>.
-*
-**/
-
-
-#ifndef VFX_PASS_GRAPHICS
-#define VFX_PASS_GRAPHICS
-
+#pragma once
 
 // Library includes
 #include "graphics/pass.h"
@@ -56,8 +37,7 @@
 		Camera * m_camera;
 		TCanvas * m_canvas;
 		TVFX* m_vfx;
-		std::map<STRING_TYPE, TUniformHandler> m_values;
+		std::map<STRING_TYPE, TUniform> m_values;
 	};
 	// END CLASS DECLARATION
  }
- #endif // VFX_PASS_GRAPHICS

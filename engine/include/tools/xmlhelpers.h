@@ -1,21 +1,19 @@
-#ifndef DONUT_XML_PARSE_HELPER_H
-#define DONUT_XML_PARSE_HELPER_H
+#pragma once
 
 // Library includes
 #include "graphics/shader.h"
 #include "graphics/shaderdata.h"
+#include "recipe/topping_descriptor.h"
 #include "rapidxml.hpp"
 
 namespace donut
 {
 	// Build a shader from its xml node
-	void BuildShaderDescriptor(rapidxml::xml_node<>* _shaderNode, TShader& _shader);
+	void BuildShaderPipelineDescriptor(rapidxml::xml_node<>* _shaderNode, TShaderPipelineDescriptor& shader);
+
+	// Build uniform infos from a uniforms xml node
+	void BuildUniformsDescriptor(rapidxml::xml_node<>* uniforms_nodes, std::vector<TShaderDataDescriptor>& topping_data);
 
 	// Build texture infos from a textures xml node
-	int BuildTexturesDescriptor(rapidxml::xml_node<>* _texturesNode, std::vector<TTextureInfo>& _shader, int _initialShift);
-
-	// Build brdf infos from a brdf xml node
-	int BuildBRDFDescriptor(rapidxml::xml_node<>* _brdfsNode, std::vector<TBRDFInfo>& _brdfArray, int _initialShift);
+	void BuildTexturesDescriptor(rapidxml::xml_node<>* _texturesNode, std::vector<TShaderDataDescriptor>& topping_data);
 }
-
-#endif // DONUT_XML_PARSE_HELPER_H

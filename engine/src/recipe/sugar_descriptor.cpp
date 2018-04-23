@@ -1,6 +1,8 @@
+// Bento includes
+#include <bento_tools/file_system.h>
+
 // Library include
 #include "recipe/sugar_descriptor.h"
-#include "tools/fileloader.h"
 #include "tools/xmlhelpers.h"
 
 // External includes
@@ -63,17 +65,17 @@ namespace donut
 		}
 	}
 
-    void ParseSugarFile(const STRING_TYPE& _fileLocation, TSugarDescriptor& _sugar)
+    void ParseSugarFile(const char* file_location, TSugarDescriptor& _sugar)
     {
         // reading the text file
-        std::vector<char> buffer;
-        ReadFile(_fileLocation.c_str(), buffer);
+		bento::Vector<char> buffer(*bento::common_allocator());
+		bento::read_file(file_location, buffer, bento::FileType::Text);
 
         // Set the file location
-        _sugar._file = _fileLocation;
+        _sugar._file = file_location;
 
         // compute the GUID
-        _sugar._id = GetFileHash(_fileLocation);
+        _sugar._id = GetFileHash(file_location);
 
         // Parsing it
         rapidxml::xml_document<> doc;
@@ -95,7 +97,7 @@ namespace donut
 
     bool HasChanged(const TSugarDescriptor& _sugarDescriptor)
     {
-        RECIPE_GUID id = GetFileHash(_sugarDescriptor._file);
+        RECIPE_GUID id = GetFileHash(_sugarDescriptor._file.c_str());
         return id != _sugarDescriptor._id;
     }
 }

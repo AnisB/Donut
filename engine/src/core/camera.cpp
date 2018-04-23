@@ -19,6 +19,7 @@
 
 // Bento includes
 #include <bento_math/matrix3.h>
+#include <bento_math/matrix4.h>
 
 // STL inlcudes
 #include <math.h>
@@ -35,7 +36,7 @@ namespace donut
 	// projection data
 	, m_near(0.1f)
 	, m_far(1000.0f)
-	, m_focus((m_near+m_far)/(2.0*(m_far-m_near)))
+	, m_focus((m_near+m_far)/(2.0f*(m_far-m_near)))
 	// View data
 	, m_yaw(0.0f)
 	, m_pitch(0.0f)
@@ -71,7 +72,7 @@ namespace donut
 	}
 
 	// Apply a yaw using a given angle
-	void Camera::Yaw(double _angle)
+	void Camera::Yaw(float _angle)
 	{
 		// Incrementing the yaw angle
 		m_yaw = m_yaw + _angle;
@@ -79,7 +80,7 @@ namespace donut
 	}
 
 	// Apply a pitch using a given angle
-	void Camera::Pitch(double _angle)
+	void Camera::Pitch(float _angle)
 	{
 		m_pitch = m_pitch + _angle;
 		UpdateViewData();
@@ -103,21 +104,21 @@ namespace donut
 		m_projectionView = m_projection * m_viewMatrix;
 	}
 
-	void Camera::AppendUniforms(std::map<STRING_TYPE, TUniformHandler>& _uniforms)
+	void Camera::AppendUniforms(std::map<std::string, TUniform>& _uniforms)
 	{
 		// Injecting view matrix
-		_uniforms["view"].SetValue<bento::Matrix4>(TShaderData::MAT4, "view", m_viewMatrix);
+		_uniforms["view"].set_data(TShaderData::MAT4, "view", m_viewMatrix);
 		// Injecting inversed view matrix
-		_uniforms["view_inverse"].SetValue<bento::Matrix3>(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
+		_uniforms["view_inverse"].set_data(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
 		// Injecting projection matrix
-		_uniforms["projection"].SetValue<bento::Matrix4>(TShaderData::MAT4, "projection", m_projection);
+		_uniforms["projection"].set_data(TShaderData::MAT4, "projection", m_projection);
 		// Injecting projection matrix
-		_uniforms["viewprojection"].SetValue<bento::Matrix4>(TShaderData::MAT4, "viewprojection", m_projection*m_viewMatrix);
+		_uniforms["viewprojection"].set_data(TShaderData::MAT4, "viewprojection", m_projection * m_viewMatrix);
 		// Injecting zbuffer fcoef
-		_uniforms["fcoef"].SetValue<float>(TShaderData::FLOAT, "fcoef", m_fcoeff);
+		_uniforms["fcoef"].set_data(TShaderData::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance
-		_uniforms["camera_position"].SetValue<bento::Vector3>(TShaderData::VEC3, "camera_position", m_position);
+		_uniforms["camera_position"].set_data(TShaderData::VEC3, "camera_position", m_position);
 		// Injecting focus distance
-		_uniforms["focus"].SetValue<float>(TShaderData::FLOAT, "focus", m_focus);
+		_uniforms["focus"].set_data(TShaderData::FLOAT, "focus", m_focus);
 	}
 }

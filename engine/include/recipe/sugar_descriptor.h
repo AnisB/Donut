@@ -47,7 +47,7 @@ namespace donut
     };
 
     // Fill a sugar descriptor from a file
-	void ParseSugarFile(const STRING_TYPE& parFileName, TSugarDescriptor& _sugar);
+	void ParseSugarFile(const char* parFileName, TSugarDescriptor& _sugar);
 
 	// Check if the identification of a sugar is still coherent with the file
     bool HasChanged(const TSugarDescriptor& _sugarDescriptor);

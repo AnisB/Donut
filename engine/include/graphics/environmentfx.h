@@ -29,13 +29,13 @@ namespace donut
 	public:
 		// Creation/Destruction
 		TEnvironmentFX();
-		TEnvironmentFX(const TShader& _shader);
 		virtual ~TEnvironmentFX();
+
 		// Init
 		virtual void Init();
 		// Drawing it
 		void SetSH(TSphericalHarmonics* _SH) {m_SH = _SH;}
-		void Draw(std::map<STRING_TYPE, TUniformHandler>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData);
 
 	protected:
 		TSphericalHarmonics* m_SH;

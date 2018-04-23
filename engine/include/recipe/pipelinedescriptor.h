@@ -4,6 +4,7 @@
 // Libary includes
 #include "graphics/shaderdata.h"
 #include "identifier.h"
+#include "topping_descriptor.h"
 
 // External includes
 #include <vector>
@@ -53,8 +54,8 @@ namespace donut
     struct TPipelineVFX
     {
         TVFXTag::Type tag;
-        std::vector<TTextureInfo> textures;
-        TShader shader;
+		TShaderPipelineDescriptor shader_pipeline;
+		std::vector<TShaderDataDescriptor> data;
     };
 
     struct TPipelinePass
@@ -75,7 +76,7 @@ namespace donut
     };
 
     // Generate a pipeline descriptor from a file
-    void ParsePipelineFile(const STRING_TYPE& _pipelineFileName, TPipelineDescriptor& _pipeline);
+    void ParsePipelineFile(const char* _pipelineFileName, TPipelineDescriptor& _pipeline);
     bool HasChanged(const TPipelineDescriptor& _pipelineDescriptor);
 
 }

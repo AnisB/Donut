@@ -35,7 +35,7 @@
 		void SetSpecular(const bento::Vector4& _color);
 		void SetDiffuse(const bento::Vector4& _color);
 		void SetRay(float _ray) {FRayon = _ray;}
-		void InjectData(const TShader& _shader, size_t _lightIndex);
+		void InjectData(ShaderPipelineObject _shader, size_t _lightIndex);
 
 	protected:
 		bento::Vector3 FPosition;
