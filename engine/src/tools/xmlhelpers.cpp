@@ -24,35 +24,35 @@ namespace donut
         rapidxml::xml_node<>* vertex = _shaderNode->first_node(VERTEX_SHADER_NODE_TOKEN);
         if(vertex)
         {
-			shader_pipeline.shaders[0] = TShaderFileHandler::Instance().RegisterShaderFile(vertex->first_attribute(SHADER_LOCATION)->value());
+			shader_pipeline.shaders[0] = vertex->first_attribute(SHADER_LOCATION)->value();
         }
 
         // Fetch tesscontrol shader
         rapidxml::xml_node<>* tesscontrol = _shaderNode->first_node(TESS_CONTROL_SHADER_NODE_TOKEN);
         if(tesscontrol)
         {
-			shader_pipeline.shaders[1] = TShaderFileHandler::Instance().RegisterShaderFile(tesscontrol->first_attribute(SHADER_LOCATION)->value());
+			shader_pipeline.shaders[1] = tesscontrol->first_attribute(SHADER_LOCATION)->value();
         }
 
         // Fetch tesseval shader
         rapidxml::xml_node<>* tesseval = _shaderNode->first_node(TESS_EVAL_SHADER_NODE_TOKEN);
         if(tesseval)
         {
-			shader_pipeline.shaders[2] = TShaderFileHandler::Instance().RegisterShaderFile(tesseval->first_attribute(SHADER_LOCATION)->value());
+			shader_pipeline.shaders[2] = tesseval->first_attribute(SHADER_LOCATION)->value();
         }
 
         // Fetch geometry shader
         rapidxml::xml_node<>* geometry = _shaderNode->first_node(GEOMETRY_SHADER_NODE_TOKEN);
         if(geometry)
         {
-			shader_pipeline.shaders[3] = TShaderFileHandler::Instance().RegisterShaderFile(geometry->first_attribute(SHADER_LOCATION)->value());
+			shader_pipeline.shaders[3] = geometry->first_attribute(SHADER_LOCATION)->value();
         }
 
         // Fetch fragment shader
         rapidxml::xml_node<>* fragment = _shaderNode->first_node(FRAGMENT_SHADER_NODE_TOKEN);
         if(fragment)
         {
-			shader_pipeline.shaders[4] = TShaderFileHandler::Instance().RegisterShaderFile(fragment->first_attribute(SHADER_LOCATION)->value());
+			shader_pipeline.shaders[4] = fragment->first_attribute(SHADER_LOCATION)->value();
         }
 	}
 
