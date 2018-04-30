@@ -9,7 +9,7 @@ namespace donut
 
 	// Constructor
 	TEnvironmentFX::TEnvironmentFX()
-	: TVFX(TShaderPipelineDescriptor(ENVIRONMENT_VERTEX, ENVIRONMENT_FRAGMENT))
+	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), ENVIRONMENT_VERTEX, ENVIRONMENT_FRAGMENT))
 	{
 
 	}
@@ -26,7 +26,7 @@ namespace donut
 		TVFX::Init();
 	}
 
-	void TEnvironmentFX::Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData)
+	void TEnvironmentFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

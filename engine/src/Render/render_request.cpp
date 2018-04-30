@@ -1,13 +1,12 @@
 // Library includes
 #include "render/render_request.h"
 #include "resource/resource_manager.h"
-#include "resource/toppingloader.h"
 #include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
 	// Processed a render request
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<STRING_TYPE, TUniform>& _uniforms)
+	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniform>& _uniforms)
 	{
 		// Fetch the real data to process
 		GeometryObject geometry = ResourceManager::Instance().request_runtime_geometry(_request.geometry);

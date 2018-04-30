@@ -5,9 +5,7 @@
 #include <Input/helper.h>
 #include <Input/DefaultInputManager.h>
 #include <Input/InputManager.h>
-#include <resource/sugar_loader.h>
 #include <resource/resource_manager.h>
-#include <resource/flourLoader.h>
 #include <graphics/factory.h>
 #include <core/scenenode.h>
 #include <gpu_backend/gl_backend.h>
@@ -19,16 +17,16 @@
 
 int main(int argc, char** argv)
 {
-	STRING_TYPE sceneName;
+	std::string sceneName;
 	if (argc == 3)
 	{
 		sceneName = argv[2];
-		donut::ResourceManager::Instance().Init(argv[1]);
+		donut::ResourceManager::Instance().init(argv[1]);
 	}
 	else
 	{
 		sceneName = "TeapotArmy";
-		donut::ResourceManager::Instance().Init("assets");
+		donut::ResourceManager::Instance().init("assets");
 	}
 
 	// Creating the rendering window

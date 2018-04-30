@@ -1,12 +1,5 @@
 #pragma once
 
-// Library includes
-#include "resource/shaderfilehandler.h"
-#include "recipe/topping_descriptor.h"
-
-// STL includes
-#include <vector>
-
  namespace donut
  {
  	// Basic shader (this does mean that we do not replace the default gl pipeline)

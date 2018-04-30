@@ -59,7 +59,7 @@
 		m_dipatcher.ProcessRequests(requests, m_camera->GetViewMatrix(), m_camera->FrusumDescriptor());
 
 		// Fetch the uniform values from the camera
-		std::map<STRING_TYPE, TUniform> values;
+		std::map<std::string, TUniform> values;
 		m_camera->AppendUniforms(values);
 
 		// Process eache render request 

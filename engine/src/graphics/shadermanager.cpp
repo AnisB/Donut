@@ -83,12 +83,12 @@ namespace donut
  		GL_API_CHECK();
 	}
 
-	ShaderPipelineObject ShaderManager::create_shader(const TShaderPipelineDescriptor& pipeline_descriptor)
+	ShaderPipelineObject ShaderManager::create_shader(const char* vertex_shader, const char* tess_control_shader, 
+													const char* tess_eval_shader, const char* geometry_shader, 
+													const char* fragment_shader)
 	{
 		GL_API_CHECK();
 
-		// If it is not, we create it
-		TShaderFileHandler& shaderFileHandler = TShaderFileHandler::Instance();
 		uint32_t program_id = 0;
 
 		GLuint vertexShader = 0;
@@ -100,12 +100,10 @@ namespace donut
 		program_id = glCreateProgram();
 
 		char shaderFlags = 0;
-		if(pipeline_descriptor.shaders[0] != default_shader)
+		if(vertex_shader != nullptr)
 		{
 			vertexShader = glCreateShader(GL_VERTEX_SHADER);
-			bento::Vector<char> buffer(*bento::common_allocator());
-			bento::read_file(ResourceManager::Instance().RelativePath(pipeline_descriptor.shaders[0]).c_str(), buffer, bento::FileType::Text);
-			const char * vsFile_ptr = buffer.begin();
+			const char * vsFile_ptr = vertex_shader;
 			glShaderSource(vertexShader, 1, (const char **)&vsFile_ptr, NULL);
 			glCompileShader(vertexShader);
 			CheckShader(vertexShader);
@@ -113,12 +111,10 @@ namespace donut
 			shaderFlags &= VERTEX_FLAG;			
 
 		}
-		if(pipeline_descriptor.shaders[1] != default_shader)
+		if(tess_control_shader != nullptr)
 		{
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
-			bento::Vector<char> buffer(*bento::common_allocator());
-			bento::read_file(ResourceManager::Instance().RelativePath(pipeline_descriptor.shaders[1]).c_str(), buffer, bento::FileType::Text);
-			const char * tcsFile_ptr = buffer.begin();
+			const char * tcsFile_ptr = tess_control_shader;
 			glShaderSource(tessControlShader, 1, (const char **)&tcsFile_ptr, NULL);
 			glCompileShader(tessControlShader);
 			CheckShader(tessControlShader);
@@ -126,12 +122,10 @@ namespace donut
 			shaderFlags &= TESS_CONTROL_FLAG;
 		}
 
-		if(pipeline_descriptor.shaders[2]  != default_shader)
+		if(tess_eval_shader != nullptr)
 		{
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
-			bento::Vector<char> buffer(*bento::common_allocator());
-			bento::read_file(ResourceManager::Instance().RelativePath(pipeline_descriptor.shaders[2]).c_str(), buffer, bento::FileType::Text);
-			const char * tesFile_ptr = buffer.begin();
+			const char * tesFile_ptr = tess_eval_shader;
 			glShaderSource(tessEvalShader, 1, (const char **)&tesFile_ptr, NULL);
 			glCompileShader(tessEvalShader);
 			CheckShader(tessEvalShader);
@@ -139,24 +133,20 @@ namespace donut
 			shaderFlags &= TESS_EVAL_FLAG;	
 		}
 
-		if(pipeline_descriptor.shaders[3] != default_shader)
+		if(geometry_shader != nullptr)
 		{
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
-			bento::Vector<char> buffer(*bento::common_allocator());
-			bento::read_file(ResourceManager::Instance().RelativePath(pipeline_descriptor.shaders[3]).c_str(), buffer, bento::FileType::Text);
-			const char * gsFile_ptr = buffer.begin();
+			const char * gsFile_ptr = geometry_shader;
 			glShaderSource(geometryShader, 1, (const char **)&gsFile_ptr, NULL);
 			glCompileShader(geometryShader);
 			glAttachShader(program_id, geometryShader);
 			shaderFlags &= GEOMETRY_FLAG;			
 		}
 
-		if(pipeline_descriptor.shaders[4] != default_shader)
+		if(fragment_shader != nullptr)
 		{
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-			bento::Vector<char> buffer(*bento::common_allocator());
-			bento::read_file(ResourceManager::Instance().RelativePath(pipeline_descriptor.shaders[4]).c_str(), buffer, bento::FileType::Text);
-			const char * fsFile_ptr = buffer.begin();
+			const char * fsFile_ptr = fragment_shader;
 			glShaderSource(fragmentShader, 1, (const char **)&fsFile_ptr, NULL);
 			glCompileShader(fragmentShader);
 			CheckShader(fragmentShader);
@@ -253,78 +243,78 @@ namespace donut
 
 	// Injections
 	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector3& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector3& parValue, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniform3f(glGetUniformLocation(parProgram, parName.c_str()), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
+		glUniform3f(glGetUniformLocation(parProgram, parName), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 		GL_API_CHECK();
 	}
 	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector4& _value, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector4& _value, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniform4f(glGetUniformLocation(parProgram, parName.c_str()), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
+		glUniform4f(glGetUniformLocation(parProgram, parName), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
 		GL_API_CHECK();
 	}
 	
  	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const int& _value, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const int& _value, const char* parName)
 	{
 		GL_API_CHECK();
-		GLuint location = glGetUniformLocation(parProgram, parName.c_str());
+		GLuint location = glGetUniformLocation(parProgram, parName);
 	    glUniform1i(location, _value);
 		GL_API_CHECK();
 	}
 
  	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const float& _value, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const float& _value, const char* parName)
 	{
 		GL_API_CHECK();
-	    glUniform1f( glGetUniformLocation(parProgram, parName.c_str()), _value);
+	    glUniform1f( glGetUniformLocation(parProgram, parName), _value);
 		GL_API_CHECK();
 	}
 
 	template <>
-	void ShaderManager::InjectV(ShaderPipelineObject parProgram, const float* _values, int _nbValues, const STRING_TYPE& parName)
+	void ShaderManager::InjectV(ShaderPipelineObject parProgram, const float* _values, int _nbValues, const char* parName)
 	{
 		GL_API_CHECK();
-	    glUniform1fv( glGetUniformLocation(parProgram, parName.c_str()),_nbValues, _values);
+	    glUniform1fv( glGetUniformLocation(parProgram, parName),_nbValues, _values);
 		GL_API_CHECK();
 	}
 
  	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Matrix4& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Matrix4& parValue, const char* parName)
 	{
 		GL_API_CHECK();
 		float mat[16];
 		ToTable(parValue, &mat[0]);
-	    glUniformMatrix4fv(glGetUniformLocation(parProgram, parName.c_str()),1,true, mat);
+	    glUniformMatrix4fv(glGetUniformLocation(parProgram, parName),1,true, mat);
 		GL_API_CHECK();
 	}
 
  	template <>
-	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Matrix3& parValue, const STRING_TYPE& parName)
+	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Matrix3& parValue, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniformMatrix3fv(glGetUniformLocation(parProgram, parName.c_str()),1,true, parValue.m);
+		glUniformMatrix3fv(glGetUniformLocation(parProgram, parName),1,true, parValue.m);
 		GL_API_CHECK();
 	}
 
-	void ShaderManager::InjectTex(ShaderPipelineObject parProgram, GLuint _textureID, const STRING_TYPE& parName, GLuint _spot)
+	void ShaderManager::InjectTex(ShaderPipelineObject parProgram, GLuint _textureID, const char* parName, GLuint _spot)
 	{
 		GL_API_CHECK();
 		BindTex(_textureID, _spot);
-	    GLint texRef = glGetUniformLocation(parProgram, parName.c_str());
+	    GLint texRef = glGetUniformLocation(parProgram, parName);
 	    glUniform1i(texRef, 0 + _spot);
 	    //UnbindTex(_spot);
 		GL_API_CHECK();
 	}
 
-	void ShaderManager::InjectCubeMap(ShaderPipelineObject parProgram, GLuint _textureID, const STRING_TYPE& parName, GLuint _spot)
+	void ShaderManager::InjectCubeMap(ShaderPipelineObject parProgram, GLuint _textureID, const char* parName, GLuint _spot)
 	{
 		GL_API_CHECK();
 		BindCubeMap(_textureID, _spot);
-	    GLint texRef = glGetUniformLocation(parProgram, parName.c_str());
+	    GLint texRef = glGetUniformLocation(parProgram, parName);
 	    glUniform1i(texRef, 0+_spot);
 	    //UnbindCubeMap(_spot);
 		GL_API_CHECK();
@@ -338,11 +328,11 @@ namespace donut
 		}
 		for(auto& tex : _material.textures)
 		{
-			ShaderManager::Instance().InjectTex(_shader, tex.id, tex.name, tex.offset);
+			ShaderManager::Instance().InjectTex(_shader, tex.id, tex.name.c_str(), tex.offset);
 		}
 		for (auto& tex : _material.cubeMaps)
 		{
-			ShaderManager::Instance().InjectCubeMap(_shader, tex.id, tex.name, tex.offset);
+			ShaderManager::Instance().InjectCubeMap(_shader, tex.id, tex.name.c_str(), tex.offset);
 		}
 	}
 }

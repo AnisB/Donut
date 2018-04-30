@@ -24,16 +24,7 @@
  		ResourceManager();
  		~ResourceManager();
 
- 		void Init(const STRING_TYPE& _assertFolder);
- 	// Asset folder setting
- 		inline const STRING_TYPE& RootAssetsFolder() const
- 		{
- 			return m_rootAssetFolder;
- 		}
- 		inline STRING_TYPE RelativePath(const STRING_TYPE& _fileName)
- 		{
- 			return (m_rootAssetFolder + _fileName);
- 		}
+ 		void init(const char* database_path);
 
  		// Load data from the asset database
 		GEOMETRY_GUID fetch_geometry_id(const char* geometry_path);
@@ -50,22 +41,22 @@
 
 	protected:
 		// Asset folder path
-		STRING_TYPE m_rootAssetFolder;
+		bento::DynamicString m_rootAssetFolder;
 
 		// Texture data
-		std::map<STRING_TYPE, TEXTURE_GUID> m_textureIdentifiers;
+		std::map<std::string, TEXTURE_GUID> m_textureIdentifiers;
 		std::vector<TextureObject> m_textures;
 
 		// Cubemap data
-		std::map<STRING_TYPE, CUBEMAP_GUID> m_cubemapIdentifiers;
+		std::map<std::string, CUBEMAP_GUID> m_cubemapIdentifiers;
 		std::vector<CubemapObject> m_cubemaps;
 
 		// Geometry data
-		std::map<STRING_TYPE, GEOMETRY_GUID> m_geometryIdentifiers;
+		std::map<std::string, GEOMETRY_GUID> m_geometryIdentifiers;
 		std::vector<GeometryObject> m_geometries;
 
 		// Material data
-		std::map<STRING_TYPE, MATERIAL_GUID> m_materialIdentifiers;
+		std::map<std::string, MATERIAL_GUID> m_materialIdentifiers;
 		std::vector<TMaterial> m_materials;
 	};
 }

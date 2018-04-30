@@ -8,7 +8,7 @@
 namespace donut
 {
 	TUniform::TUniform()
-	: type(TShaderData::INTEGER)
+	: type(TShaderDataType::INTEGER)
 	, slot("INVALID")
 	{
 		memcpy(data, 0, data_size());
@@ -25,48 +25,49 @@ namespace donut
 	{
 		switch (type)
 		{
-		case TShaderData::INTEGER:
+		case TShaderDataType::INTEGER:
 			return 4;
 			break;
-		case donut::TShaderData::FLOAT:
+		case donut::TShaderDataType::FLOAT:
 			return 4;
 			break;
-		case donut::TShaderData::VEC3:
+		case donut::TShaderDataType::VEC3:
 			return 12;
 			break;
-		case donut::TShaderData::VEC4:
+		case donut::TShaderDataType::VEC4:
 			return 16;
 			break;
-		case donut::TShaderData::MAT3:
+		case donut::TShaderDataType::MAT3:
 			return 36;
 			break;
-		case donut::TShaderData::MAT4:
+		case donut::TShaderDataType::MAT4:
 			return 64;
 			break;
 		}
+		return 0;
 	}
 
 	void TUniform::inject(ShaderPipelineObject shader) const
 	{
 		switch (type)
 		{
-		case donut::TShaderData::INTEGER:
-			ShaderManager::Instance().Inject<int>(shader, reinterpret_cast<const int&>(data), slot);
+		case donut::TShaderDataType::INTEGER:
+			ShaderManager::Instance().Inject<int>(shader, reinterpret_cast<const int&>(data), slot.c_str());
 			break;
-		case donut::TShaderData::FLOAT:
-			ShaderManager::Instance().Inject<float>(shader, reinterpret_cast<const float&>(data), slot);
+		case donut::TShaderDataType::FLOAT:
+			ShaderManager::Instance().Inject<float>(shader, reinterpret_cast<const float&>(data), slot.c_str());
 			break;
-		case donut::TShaderData::VEC3:
-			ShaderManager::Instance().Inject<bento::Vector3>(shader, reinterpret_cast<const bento::Vector3&>(data), slot);
+		case donut::TShaderDataType::VEC3:
+			ShaderManager::Instance().Inject<bento::Vector3>(shader, reinterpret_cast<const bento::Vector3&>(data), slot.c_str());
 			break;
-		case donut::TShaderData::VEC4:
-			ShaderManager::Instance().Inject<bento::Vector4>(shader, reinterpret_cast<const bento::Vector4&>(data), slot);
+		case donut::TShaderDataType::VEC4:
+			ShaderManager::Instance().Inject<bento::Vector4>(shader, reinterpret_cast<const bento::Vector4&>(data), slot.c_str());
 			break;
-		case donut::TShaderData::MAT3:
-			ShaderManager::Instance().Inject<bento::Matrix3>(shader, reinterpret_cast<const bento::Matrix3&>(data), slot);
+		case donut::TShaderDataType::MAT3:
+			ShaderManager::Instance().Inject<bento::Matrix3>(shader, reinterpret_cast<const bento::Matrix3&>(data), slot.c_str());
 			break;
-		case donut::TShaderData::MAT4:
-			ShaderManager::Instance().Inject<bento::Matrix4>(shader, reinterpret_cast<const bento::Matrix4&>(data), slot);
+		case donut::TShaderDataType::MAT4:
+			ShaderManager::Instance().Inject<bento::Matrix4>(shader, reinterpret_cast<const bento::Matrix4&>(data), slot.c_str());
 			break;
 		}
 	}

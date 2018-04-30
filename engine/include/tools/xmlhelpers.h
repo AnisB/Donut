@@ -3,7 +3,7 @@
 // Library includes
 #include "graphics/shader.h"
 #include "graphics/shaderdata.h"
-#include "recipe/topping_descriptor.h"
+#include "resource/topping_descriptor.h"
 #include "rapidxml.hpp"
 
 namespace donut
@@ -15,5 +15,5 @@ namespace donut
 	void BuildUniformsDescriptor(rapidxml::xml_node<>* uniforms_nodes, std::vector<TShaderDataDescriptor>& topping_data);
 
 	// Build texture infos from a textures xml node
-	void BuildTexturesDescriptor(rapidxml::xml_node<>* _texturesNode, std::vector<TShaderDataDescriptor>& topping_data);
+	void BuildTexturesDescriptor(rapidxml::xml_node<>* _texturesNode, bento::Vector<TShaderDataDescriptor>& topping_data);
 }

@@ -4,7 +4,7 @@
 
 namespace donut
 {
-	TEffectCanvas::TEffectCanvas(int _width, int _height, const std::string& _outTexName)
+	TEffectCanvas::TEffectCanvas(int _width, int _height, const char* _outTexName)
 	: TCanvas(_width, _height)
 	, m_texName(_outTexName)
 	{

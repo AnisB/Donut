@@ -16,6 +16,7 @@
 
 
 #include "graphics/light.h"
+#include "base/stringhelper.h"
 
 // Bento includes
 #include <bento_math/vector4.h>
@@ -59,9 +60,9 @@ namespace donut
 	void TLight::InjectData(ShaderPipelineObject _shader, size_t _lightIndex)
 	{
 		STRING_TYPE shift = "[" + convert_to_string(_lightIndex) + "]";
-		ShaderManager::Instance().Inject<bento::Vector3>(_shader, FPosition, "lightSource"+shift+".position");
-		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FDiff , "lightSource"+shift+".diffuse");
-		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FSpec , "lightSource"+shift+".specular");
-		ShaderManager::Instance().Inject<float>(_shader, FRayon , "lightSource"+shift+".ray");	
+		ShaderManager::Instance().Inject<bento::Vector3>(_shader, FPosition, ("lightSource"+shift+".position").c_str());
+		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FDiff , ("lightSource"+shift+".diffuse").c_str());
+		ShaderManager::Instance().Inject<bento::Vector4>(_shader, FSpec , ("lightSource"+shift+".specular").c_str());
+		ShaderManager::Instance().Inject<float>(_shader, FRayon , ("lightSource"+shift+".ray").c_str());	
 	}
  }

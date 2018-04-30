@@ -1,10 +1,5 @@
 #include "asset_compiler/texture_helpers.h"
-#include "asset_compiler/egg_helpers.h"
 #include "resource/resource_manager.h"
-#include "resource/sugar_loader.h"
-#include "resource/toppingloader.h"
-#include "resource/pipelineloader.h"
-#include "resource/flourloader.h"
 #include "gpu_backend/gl_factory.h"
 
 #include <fstream>
@@ -17,23 +12,18 @@
  namespace donut
  {
  	ResourceManager::ResourceManager()
- 	: m_rootAssetFolder("./assets/")
+ 	: m_rootAssetFolder(*bento::common_allocator(), "./assets/")
  	{
-
  	}
 
  	ResourceManager::~ResourceManager()
  	{
-
  	}
 
-	void ResourceManager::Init(const STRING_TYPE& _assertFolder)
+	void ResourceManager::init(const char* _assertFolder)
 	{
-		m_rootAssetFolder = _assertFolder + "/";
-		TSugarLoader::Instance().Init();
-		TPipelineLoader::Instance().Init();
-		TFlourLoader::Instance().Init();
-		TToppingLoader::Instance().Init();
+		m_rootAssetFolder = _assertFolder;
+		m_rootAssetFolder += "/";
 	}
 
 	GEOMETRY_GUID ResourceManager::fetch_geometry_id(const char* geometry_path)
@@ -47,7 +37,8 @@
 
 		// Load the file into memory
 		TEgg tmp_egg(*bento::common_allocator());
-		bool read_result = read_egg(RelativePath(geometry_path).c_str(), tmp_egg);
+		bool read_result = false;
+		//bool read_result = read_egg(RelativePath(geometry_path).c_str(), tmp_egg);
 		assert_msg(read_result, "Geomtry file couldn't be read");
 
 		// Instanciate the runtime geometry
@@ -70,9 +61,10 @@
  		}
  		else
  		{
+			/*
 			// Load the texture from its path (ftm)
 			TTexture tmp_texture(*bento::common_allocator());
-			LoadTexture((RootAssetsFolder() + texture_path).c_str(), tmp_texture);
+			read_texture((RootAssetsFolder() + texture_path).c_str(), tmp_texture);
 			
 			// Create the entries in the resource manager
 			uint32_t new_texture_id = (uint32_t)m_textures.size();
@@ -83,6 +75,7 @@
 			m_textures[new_texture_id] = gl::texture2D::create(tmp_texture);
 
  			return (TEXTURE_GUID)new_texture_id;
+			*/
  		}
  	}
 
@@ -95,8 +88,9 @@
 		}
  		else
  		{
+			/*
 			TSkybox tmp_skybox(*bento::common_allocator());
-			LoadSkybox((RootAssetsFolder() + skybox_path).c_str(), tmp_skybox);
+			read_skybox((RootAssetsFolder() + skybox_path).c_str(), tmp_skybox);
 
 			// Create the entries in the resource manager
 			uint32_t new_cubemap_id = (uint32_t)m_cubemaps.size();
@@ -106,6 +100,7 @@
 			// Create a gpu texture
 			m_cubemaps[new_cubemap_id] = gl::textureCUBE::create(tmp_skybox);
  			return (CUBEMAP_GUID)new_cubemap_id;
+			*/
  		}
  	}
 
@@ -118,6 +113,7 @@
 		}
 		else
 		{
+			/*
 			// Create a new material slot
 			uint32_t new_mat_id = (uint32_t)m_materials.size();
 			m_materials.resize(new_mat_id + 1);
@@ -161,6 +157,7 @@
 			new_material.shader = ShaderManager::Instance().create_shader(descriptor.shader_pipeline);
 
 			return (MATERIAL_GUID)new_mat_id;
+			*/
 		}
 	}
 

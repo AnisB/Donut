@@ -14,12 +14,17 @@ namespace donut
 
 	}
 
-	void TSphericalHarmonics::SetCoeffs(const std::vector<float>& _redCoeffs, const std::vector<float>& _greenCoeffs, const std::vector<float>& _blueCoeffs)
+	void TSphericalHarmonics::SetCoeffs(const float* _redCoeffs, const float* _greenCoeffs, const float* _blueCoeffs)
 	{
-		m_degree = _redCoeffs.size();
-		m_red = _redCoeffs;
-		m_blue = _blueCoeffs;
-		m_green = _greenCoeffs;
+		m_red.resize(9);
+		m_green.resize(9);
+		m_blue.resize(9);
+		for (uint32_t coef_idx = 0; coef_idx < 9; ++coef_idx)
+		{
+			m_red[coef_idx] = _redCoeffs[coef_idx];
+			m_green[coef_idx] = _greenCoeffs[coef_idx];
+			m_blue[coef_idx] = _blueCoeffs[coef_idx];
+		}
 	}
 
 	void TSphericalHarmonics::InjectData(ShaderPipelineObject _shader)

@@ -54,9 +54,11 @@ namespace donut
 		// Returns a pointer to the start of a pixel
 		unsigned char* pixel(TTexture& target_texture, uint32_t p_width, uint32_t p_height);
 		const unsigned char* pixel(const TTexture& target_texture, uint32_t p_width, uint32_t p_height);
-
-		// Serialization functions
-		void pack_bytes(bento::Vector<char>& buffer, const TTexture& tex);
-		bool unpack_bytes(const char*& stream, TTexture& tex);
 	}
+}
+
+namespace bento
+{
+	void pack_type(bento::Vector<char>& buffer, const donut::TTexture& tex);
+	bool unpack_type(const char*& stream, donut::TTexture& tex);
 }

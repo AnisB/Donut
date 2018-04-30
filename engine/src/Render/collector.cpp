@@ -2,7 +2,6 @@
 #include "render/collector.h"
 #include "graphics/material.h"
 #include "resource/resource_manager.h"
-#include "resource/toppingloader.h"
 
 namespace donut
 {

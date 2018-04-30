@@ -1,7 +1,6 @@
 // Library includes
 #include "core/Mesh.h"
 #include "resource/resource_manager.h"
-#include "resource/sugar_loader.h"
 
 // External includes
 #include <string.h>

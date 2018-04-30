@@ -1,221 +1,221 @@
 <?xml version="1.0"?>
 <flour name="TeapotArmy">
-	<root>		
+	<node>		
 		 <!--Ligne 1-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 0 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 0 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 2-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -30 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -30 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 3-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -60 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -60 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -60 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 4-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -90 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -90 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -90 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 5-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -120 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -120 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -120 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 6-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -150 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -150 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -150 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!--Ligne 7-->
-		<scenenode TM="1 0 0 0 0 1 0 0 0 0 1 -180 0 0 0 1">
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 60 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 60 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 90 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 90 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 120 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 120 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 150 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 150 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 180 0 1 0 0 0 0 1 -180 0 0 0 1">""
+		</node>
+		<node TM="1 0 0 180 0 1 0 0 0 0 1 -180 0 0 0 1">""
 			<model sugar="mirror_teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 210 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 210 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
-		<scenenode TM="1 0 0 240 0 1 0 0 0 0 1 -180 0 0 0 1">
+		</node>
+		<node TM="1 0 0 240 0 1 0 0 0 0 1 -180 0 0 0 1">
 			<model sugar="Teapot"/>
-		</scenenode>
+		</node>
 		<!-- Ground-->
-		<scenenode TM="18 0 0 -50 0 18 0 -7 0 0 14 -230 0 0 0 1">
+		<node TM="18 0 0 -50 0 18 0 -7 0 0 14 -230 0 0 0 1">
 			<model sugar="parquet"/>
-		</scenenode>
+		</node>
 
 		<!-- Fake lights placements-->
-		<scenenode TM="1 0 0 30 0 1 0 50 0 0 1 -30 0 0 0 1">
+		<node TM="1 0 0 30 0 1 0 50 0 0 1 -30 0 0 0 1">
 			<model sugar="LightBulb"/>
-		</scenenode>
-		<scenenode TM="1 0 0 200 0 1 0 50 0 0 1 -30 0 0 0 1">
+		</node>
+		<node TM="1 0 0 200 0 1 0 50 0 0 1 -30 0 0 0 1">
 			<model sugar="LightBulb"/>
-		</scenenode>
-		<scenenode TM="1 0 0 30 0 1 0 50 0 0 1 -200 0 0 0 1">
+		</node>
+		<node TM="1 0 0 30 0 1 0 50 0 0 1 -200 0 0 0 1">
 			<model sugar="LightBulb"/>
-		</scenenode>
-		<scenenode TM="1 0 0 200 0 1 0 50 0 0 1 -200 0 0 0 1">
+		</node>
+		<node TM="1 0 0 200 0 1 0 50 0 0 1 -200 0 0 0 1">
 			<model sugar="LightBulb"/>
-		</scenenode>
-	</root>
+		</node>
+	</node>
 	<pipeline name="complete"/>
 	<illumination>
 		<light pos="30 50 -30" diff="1 1 1 1" spec="0 0 0 1" ray="150"/>

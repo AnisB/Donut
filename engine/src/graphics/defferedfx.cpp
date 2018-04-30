@@ -13,7 +13,7 @@ namespace donut
 
 	// Constructor
 	TDefferedFX::TDefferedFX()
-	: TVFX(TShaderPipelineDescriptor(DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
+	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
 	, m_nbLights(0)
 	{
 
@@ -41,7 +41,7 @@ namespace donut
 		assert_msg(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
 	}
 
-	void TDefferedFX::Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData)
+	void TDefferedFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		// Enable the deffed shader 
 		ShaderManager::Instance().EnableShader(m_material.shader);

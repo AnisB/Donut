@@ -30,5 +30,4 @@ namespace bento
 		unpack_vector_bytes(stream, egg._indexes);
 		return true;
 	}
-
 }

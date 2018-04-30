@@ -31,7 +31,7 @@ namespace donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		void Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData);
 	};
 }
 

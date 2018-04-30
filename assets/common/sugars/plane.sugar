@@ -2,7 +2,7 @@
 <sugar name="Plane">
 	<renderables>
 		<renderable id="0">
-		   <geometry type="egg" location="common/eggs/plane.egg"/>
+		   <geometry location="common/geometries/plane.obj"/>
 		   <material name="white"/>
 		</renderable>
 	</renderables>

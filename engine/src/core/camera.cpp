@@ -107,18 +107,18 @@ namespace donut
 	void Camera::AppendUniforms(std::map<std::string, TUniform>& _uniforms)
 	{
 		// Injecting view matrix
-		_uniforms["view"].set_data(TShaderData::MAT4, "view", m_viewMatrix);
+		_uniforms["view"].set_data(TShaderDataType::MAT4, "view", m_viewMatrix);
 		// Injecting inversed view matrix
-		_uniforms["view_inverse"].set_data(TShaderData::MAT3, "view_inverse", m_viewMatrix_inverse);
+		_uniforms["view_inverse"].set_data(TShaderDataType::MAT3, "view_inverse", m_viewMatrix_inverse);
 		// Injecting projection matrix
-		_uniforms["projection"].set_data(TShaderData::MAT4, "projection", m_projection);
+		_uniforms["projection"].set_data(TShaderDataType::MAT4, "projection", m_projection);
 		// Injecting projection matrix
-		_uniforms["viewprojection"].set_data(TShaderData::MAT4, "viewprojection", m_projection * m_viewMatrix);
+		_uniforms["viewprojection"].set_data(TShaderDataType::MAT4, "viewprojection", m_projection * m_viewMatrix);
 		// Injecting zbuffer fcoef
-		_uniforms["fcoef"].set_data(TShaderData::FLOAT, "fcoef", m_fcoeff);
+		_uniforms["fcoef"].set_data(TShaderDataType::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance
-		_uniforms["camera_position"].set_data(TShaderData::VEC3, "camera_position", m_position);
+		_uniforms["camera_position"].set_data(TShaderDataType::VEC3, "camera_position", m_position);
 		// Injecting focus distance
-		_uniforms["focus"].set_data(TShaderData::FLOAT, "focus", m_focus);
+		_uniforms["focus"].set_data(TShaderDataType::FLOAT, "focus", m_focus);
 	}
 }

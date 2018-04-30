@@ -2,7 +2,7 @@
 <sugar name="LightBulb">
 	<renderables>
 		<renderable id="0">
-			<geometry type="egg" location="common/eggs/halobulb.egg"/>
+			<geometry location="common/geometries/halobulb.obj"/>
 			<material name="white"/>
 		</renderable>
 	</renderables>

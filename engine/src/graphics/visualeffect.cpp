@@ -10,7 +10,7 @@ namespace donut
 	TVFX::TVFX(const TShaderPipelineDescriptor& descriptor)
 	: m_fsq(0)
 	{
-		m_material.shader = ShaderManager::Instance().create_shader(descriptor);
+		m_material.shader = ShaderManager::Instance().create_shader(nullptr, nullptr, nullptr, nullptr, nullptr);
 	}
 
 	// Destructor
@@ -26,7 +26,7 @@ namespace donut
 		m_fsq = ResourceManager::Instance().request_runtime_geometry(fsqIndx);
 	}
 
-	void TVFX::BindBufferOutput(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previous)
+	void TVFX::BindBufferOutput(std::map<std::string, TUniform>& _values, const TBufferOutput& _previous)
 	{
 		// Injecting frame size
  		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.width, "width");
@@ -36,7 +36,7 @@ namespace donut
 
  		for(auto& buffer : _previous.buffers)
  		{
- 			ShaderManager::Instance().InjectTex(m_material.shader, buffer.id, buffer.name, buffer.offset + m_material.textures.size() );
+ 			ShaderManager::Instance().InjectTex(m_material.shader, buffer.id, buffer.name.c_str(), buffer.offset + m_material.textures.size() );
  		}
 
 		for(const auto& uniform : _values)
@@ -46,7 +46,7 @@ namespace donut
  		}
 	}
 
-	void TVFX::AddTexture(TEXTURE_GUID texture_id, const STRING_TYPE& _nameInMaterial)
+	void TVFX::AddTexture(TEXTURE_GUID texture_id, const std::string& _nameInMaterial)
  	{
 		TTextureInfo newTex;
 		newTex.id = texture_id;
@@ -55,7 +55,7 @@ namespace donut
 		m_material.textures.push_back(newTex);
  	}
 
- 	void TVFX::AddCubeMap(CUBEMAP_GUID skybox_id, const STRING_TYPE& _nameInMaterial)
+ 	void TVFX::AddCubeMap(CUBEMAP_GUID skybox_id, const std::string& _nameInMaterial)
  	{
 		TCubeMapInfo newCM;
 		newCM.id = skybox_id;

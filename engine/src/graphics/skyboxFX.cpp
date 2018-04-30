@@ -41,7 +41,7 @@ namespace donut
 		m_camera = _camera;
 	}
 
-	void TSkyboxFX::Draw(std::map<STRING_TYPE, TUniform>& _values, const TBufferOutput& _previousData)
+	void TSkyboxFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		ShaderManager::Instance().EnableShader(m_material.shader);
 		BindBufferOutput(_values, _previousData);

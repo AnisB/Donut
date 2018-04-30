@@ -14,9 +14,7 @@ namespace donut
 	public:
 		TSphericalHarmonics();
 		~TSphericalHarmonics();
-		void SetCoeffs(const std::vector<float>& _redCoeffs, 
-						const std::vector<float>& _greenCoeffs,
-						const std::vector<float>& _blueCoeffs);
+		void SetCoeffs(const float* _redCoeffs, const float* _greenCoeffs, const float* _blueCoeffs);
 
 		void InjectData(ShaderPipelineObject _shader);
 	protected:

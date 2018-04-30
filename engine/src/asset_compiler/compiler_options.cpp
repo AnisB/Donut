@@ -24,6 +24,7 @@ namespace asset_compiler {
 				}
 				compiler_options._source_dir = args[current_arg_idx + 1];
 				current_arg_idx += 2;
+				valid_input = true;
 			}
 			else if(args[current_arg_idx] == "--output-dir")
 			{
@@ -34,6 +35,7 @@ namespace asset_compiler {
 				}
 				compiler_options._output_dir = args[current_arg_idx + 1];
 				current_arg_idx += 2;
+				valid_output = true;
 			}
 			else
 			{

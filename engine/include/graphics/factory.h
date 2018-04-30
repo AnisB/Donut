@@ -18,5 +18,5 @@ namespace donut
 	TMesh* CreateSphere(double _radius, std::string _materialName = "DEFAULT");
 	TMesh* CreatePlane(double _with, double _length, std::string _materialName = "DEFAULT");
 		// Create a sugar instance
-	TSugarInstance* CreateSugarInstance(const std::string& _sugarName);
+	inline TSugarInstance* CreateSugarInstance(const std::string& _sugarName) { return nullptr; }
 }

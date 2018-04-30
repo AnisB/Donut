@@ -9,21 +9,18 @@
 
 namespace donut
 {
-	namespace TShaderData
+	enum class TShaderDataType
 	{
-		enum Type
-		{
-			INTEGER = 0,
-			FLOAT = 1,
-			VEC3 = 2,
-			VEC4 = 3,
-			MAT3 = 4,
-			MAT4 = 5,
-			TEXTURE2D = 6,
-			CUBEMAP = 7,
-			TYPE = 8
-		};
-	}
+		INTEGER = 0,
+		FLOAT = 1,
+		VEC3 = 2,
+		VEC4 = 3,
+		MAT3 = 4,
+		MAT4 = 5,
+		TEXTURE2D = 6,
+		CUBEMAP = 7,
+		TYPE = 8
+	};
 
     // Should be moved to texture when it will be refactored
     namespace TTextureNature 

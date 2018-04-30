@@ -5,9 +5,6 @@
  
 namespace donut
 {
-	// Fill a texture from a file source
-	void LoadTexture(const char* path_source, TTexture& output_texture);
-
-	// Skybox helpers
-	void LoadSkybox(const char* path_source, TSkybox& output_skybox);
+	bool read_texture(const char* path_source, TTexture& output_texture);
+	bool read_skybox(const char* path_source, TSkybox& output_skybox);
 }

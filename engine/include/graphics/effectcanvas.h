@@ -9,7 +9,7 @@ namespace donut
 	{
 	public:
 		// Creation
-		TEffectCanvas(int _width, int _height, const std::string& _outputName);
+		TEffectCanvas(int _width, int _height, const char* _outputName);
 		virtual ~TEffectCanvas();
 
 		// Inheritance exigences

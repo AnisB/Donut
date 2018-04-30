@@ -28,10 +28,10 @@ namespace donut
 		};
 	}
 
-	TextureExtension::Type GetImgType(const STRING_TYPE & parImg)
+	TextureExtension::Type GetImgType(const std::string & parImg)
  	{
  		size_t stringLength = parImg.size();
- 		const STRING_TYPE& extension = parImg.substr(parImg.find_last_of(".") + 1, stringLength - 1);
+ 		const std::string& extension = parImg.substr(parImg.find_last_of(".") + 1, stringLength - 1);
     	if(extension == "png")
     	{
     	    return TextureExtension::PNG;
@@ -54,7 +54,7 @@ namespace donut
 	    }
 	}
 
-    STRING_TYPE ImgTypeToString(TextureExtension::Type parType)
+	std::string ImgTypeToString(TextureExtension::Type parType)
     {
         switch(parType)
         {
@@ -72,12 +72,12 @@ namespace donut
         };
     }
 
-    void read_bmp(const char * path_name, TTexture& output_texture )
+    bool read_bmp(const char * path_name, TTexture& output_texture )
     {
 		if (path_name == nullptr)
 		{
 			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Invalid texture path");
-			return;
+			return false;
 		}
 
 #if __posix__
@@ -124,9 +124,10 @@ namespace donut
 			memcpy(data + i * w * 3, tampon, w * 3);
 		}
 		delete [] tampon;
+		return true;
     }
 
-	void read_jpg(const char* texture_path, TTexture& texture)
+	bool read_jpg(const char* texture_path, TTexture& texture)
 	{
 		// Components per pixel.
 		int cpp;
@@ -137,7 +138,7 @@ namespace donut
 
 		if (data == nullptr) 
 		{
-			return;
+			return false;
 		}
 
 		// Resize the texture 
@@ -148,17 +149,18 @@ namespace donut
 
 		// Free the memory
 		stbi_image_free(data);
+
+		return true;
 	}
 
-
-    void read_tga(const char* file_name, TTexture& output_texture)
+    bool read_tga(const char* file_name, TTexture& output_texture)
     {
         std::fstream hFile(file_name, std::ios::in | std::ios::binary);
 
         if (!hFile.is_open())
         {
             assert_fail_msg("File not found");
-            return;
+            return false;
         }
         
         std::uint8_t Header[18] = {0};
@@ -198,12 +200,13 @@ namespace donut
         {
             hFile.close();
             assert_fail_msg("Invalid File Format. Required: 24 or 32 Bit TGA File.");
-            return;
+            return false;
         }
         hFile.close();
+		return true;
     }
 
-	void read_png(const char* texture_path, TTexture& texture)
+	bool read_png(const char* texture_path, TTexture& texture)
 	{
 		unsigned char *image = nullptr;
 		unsigned int width;
@@ -215,7 +218,7 @@ namespace donut
 		{
 			if (image)
 				free(image);
-			return ;
+			return false;
 		}
 
 		// Resize the texture 
@@ -226,30 +229,32 @@ namespace donut
 
 		// Free the allocated buffer
 		free(image);
+
+		return true;
 	}
 
-	void LoadTexture(const char* path_source, TTexture& output_texture)
+	bool read_texture(const char* path_source, TTexture& output_texture)
  	{
 		TextureExtension::Type typeImg = GetImgType(path_source);
 
 	    switch (typeImg)
 	    {
 	    	case TextureExtension::PNG:
-                read_png(path_source, output_texture);
+                return read_png(path_source, output_texture);
 	    	    break;
 	    	case TextureExtension::JPG:
-	    	    read_jpg(path_source, output_texture);
-
+	    	    return read_jpg(path_source, output_texture);
 	    	    break;
 	    	case TextureExtension::BMP:
-	    	    read_bmp(path_source, output_texture);
+	    	    return read_bmp(path_source, output_texture);
 	    	    break;
 	    	case TextureExtension::TGA:
-	    	    read_tga(path_source, output_texture);
+	    	    return read_tga(path_source, output_texture);
 	    	    break;
     	    default:
     	        assert_fail_msg("Unhandled type");
 	    };
+		return false;
 	}
 
     namespace TSkyboxComponent
@@ -264,7 +269,8 @@ namespace donut
             NZ
         };
     }
-    STRING_TYPE SkyboxComponentToString(TSkyboxComponent::Type parType)
+    
+	std::string SkyboxComponentToString(TSkyboxComponent::Type parType)
     {
         switch(parType)
         {
@@ -284,19 +290,20 @@ namespace donut
         return "";
     }
     
-    STRING_TYPE ConcatFileName(const STRING_TYPE& parFolderName,TSkyboxComponent::Type parType, TextureExtension::Type parImgType )
+	std::string ConcatFileName(const std::string& parFolderName,TSkyboxComponent::Type parType, TextureExtension::Type parImgType )
     {
-        STRING_TYPE filename(parFolderName);
+		std::string filename(parFolderName);
         filename += SkyboxComponentToString(parType);
         filename += ImgTypeToString(parImgType);
         return filename;
     }
 
-	void LoadSkybox(const char* path_source, TSkybox& output_skybox)
+	bool read_skybox(const char* path_source, TSkybox& output_skybox)
 	{
 		// Read the combined texture
 		TTexture combined_texture(*bento::common_allocator());
-		LoadTexture(path_source, combined_texture);
+		bool res = read_texture(path_source, combined_texture);
+		if (!res) return false;
 
 		// We only support one type of cubemap for the moment
 		if ((combined_texture.width * 3) == (combined_texture.height * 4))
@@ -355,10 +362,12 @@ namespace donut
 					}
 				}
 			}
+			return true;
 		}
 		else
 		{
 			bento::default_logger()->log(bento::LogLevel::error, "RESOURCE", "Unsupported cubemap format");
+			return false;
 		}
     }
 }

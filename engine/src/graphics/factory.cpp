@@ -3,9 +3,7 @@
 #include "core/sugarinstance.h"
 #include "core/mesh.h"
 #include "core/mesh.h"
-#include "resource/sugar_loader.h"
 #include "resource/resource_manager.h"
-#include "resource/toppingloader.h"
 #include "core/box3.h"
 #include "gpu_backend/gl_factory.h"
 
@@ -186,7 +184,7 @@ namespace donut
 		1, 2, 3
 	};
 
-	TMesh* CreateCube(float _length, STRING_TYPE _materialName)
+	TMesh* CreateCube(float _length, const std::string& _materialName)
 	{
 		// Counter that tracks the created cubes in this session
 		static int cubeCounter = 0;
@@ -208,7 +206,7 @@ namespace donut
 		MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(_materialName.c_str(), _materialName.c_str());
 
 		// Generating the geometry name
- 		STRING_TYPE meshName = "Cube_";
+ 		std::string meshName = "Cube_";
  		meshName += std::to_string(cubeCounter++);
  		
 		GEOMETRY_GUID geometry = ResourceManager::Instance().create_runtime_geometry(meshName.c_str(), egg);
@@ -220,7 +218,7 @@ namespace donut
 		return newMesh;
 	}
 
-    TMesh* CreatePlane(double _with, double _length, STRING_TYPE _materialName)
+    TMesh* CreatePlane(double _with, double _length, const std::string& _materialName)
 	{
 		// Create the geometry buffer
 		static int planeCounter = 0;
@@ -243,7 +241,7 @@ namespace donut
 		}
 
  		// Generate the geometry name
- 		STRING_TYPE meshName = "Plane_";
+ 		std::string meshName = "Plane_";
  		meshName += std::to_string(planeCounter++);
 
 		// Create the target geometry
@@ -263,6 +261,7 @@ namespace donut
 		return nullptr;
 	}
 
+	/*
 	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName)
 	{
 		// Fetch the sugar descriptor
@@ -293,6 +292,7 @@ namespace donut
 		// Return the instance
 		return newSugarInstance;
 	}
+	*/
 
 	GEOMETRY_GUID CreateFullScreenQuad()
 	{

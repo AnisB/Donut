@@ -3,7 +3,7 @@
 
 // Library includes
 #include "graphics/pipeline.h"
-#include "resource/pipelineloader.h"
+#include "resource/pipeline_descriptor.h"
 // Canvas
 #include "graphics/emptycanvas.h"
 #include "graphics/simplecanvas.h"
@@ -63,7 +63,7 @@ namespace donut
 
 
 		// Fetch the pipeline that was specified
-		const TPipelineDescriptor& pipelineDesc = TPipelineLoader::Instance().FetchPipeline(_scene->pipelineName);
+		TPipelineDescriptor pipelineDesc(*bento::common_allocator());
 
 		for(auto& pass : pipelineDesc.passes)
 		{
@@ -81,7 +81,7 @@ namespace donut
 					break;
 					case TCanvasTag::EFFECT:
 					{
-						canvas = new TEffectCanvas(_width, _height, canvasDesc.output);
+						canvas = new TEffectCanvas(_width, _height, canvasDesc.output.c_str());
 					}
 					break;
 					case TCanvasTag::GBUFFER:
@@ -112,7 +112,7 @@ namespace donut
 					break;
 					case TCanvasTag::EFFECT:
 					{
-						canvas = new TEffectCanvas(_width, _height, canvasDesc.output);
+						canvas = new TEffectCanvas(_width, _height, canvasDesc.output.c_str());
 					}
 					break;
 					case TCanvasTag::GBUFFER:
@@ -168,11 +168,11 @@ namespace donut
 				assert(vfx);
 				for(auto& shader_data : vfxDescriptor.data)
 				{
-					switch (shader_data._type)
+					switch (shader_data.type)
 					{
-						case TShaderData::TEXTURE2D:
+						case (uint8_t)TShaderDataType::TEXTURE2D:
 						{
-							vfx->AddTexture(ResourceManager::Instance().fetch_texture_id(shader_data._data.c_str()), shader_data._slot);
+							vfx->AddTexture(ResourceManager::Instance().fetch_texture_id(shader_data.data.c_str()), shader_data.slot.c_str());
 						}
 						break;
 					}
