@@ -29,14 +29,19 @@ int main(int argc, char** argv)
 
 	// Build the compiler options from the args
 	donut::TCompilerOptions compiler_option(current_allocator);
-	bool valid_options = donut::asset_compiler::build_from_args(compiler_option, arg_list);
+	compiler_option._source_dir = "";
+	compiler_option._output_dir = "C:/TEMP/";
+	donut::asset_compiler::build_from_args(compiler_option, arg_list);
 
 	// Check the validity of the options
-	if(!valid_options)
+	if(compiler_option._source_dir == "")
 	{
 		bento::default_logger()->log(bento::LogLevel::info, "ASSERT_COMPILER", "Invalid compiler options");
 		return -1;
 	}
+
+	// Length of the source dir string (plus the slash)
+	uint32_t source_dir_length = compiler_option._source_dir.size() + 1;
 
 	// Database that will hold all the compiled assets
 	donut::TAssetDatabase database(current_allocator);
@@ -64,7 +69,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, target_texture);
-			database.insert_asset(tex_path.c_str(), tex_path.c_str(), donut::ResourceType::texture, data);
+			database.insert_asset(tex_path.c_str() + source_dir_length, tex_path.c_str() + source_dir_length, donut::ResourceType::texture, data);
 		}
 		else
 		{
@@ -91,7 +96,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, shader_source);
-			database.insert_asset(shader_path.c_str(), shader_path.c_str(), donut::ResourceType::shader, data);
+			database.insert_asset(shader_path.c_str() + source_dir_length, shader_path.c_str() + source_dir_length, donut::ResourceType::shader, data);
 		}
 		else
 		{
@@ -118,7 +123,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, sugar_descriptor);
-			database.insert_asset(sugar_descriptor._name.c_str(), sugar_path.c_str(), donut::ResourceType::sugar, data);
+			database.insert_asset(sugar_descriptor._name.c_str(), sugar_path.c_str() + source_dir_length, donut::ResourceType::sugar, data);
 		}
 		else
 		{
@@ -145,7 +150,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, stopping_descriptor);
-			database.insert_asset(stopping_descriptor.name.c_str(), topping_path.c_str(), donut::ResourceType::topping, data);
+			database.insert_asset(stopping_descriptor.name.c_str(), topping_path.c_str() + source_dir_length, donut::ResourceType::topping, data);
 		}
 		else
 		{
@@ -172,7 +177,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, pipeline_descriptor);
-			database.insert_asset(pipeline_descriptor.name.c_str(), pipeline_path.c_str(), donut::ResourceType::pipeline, data);
+			database.insert_asset(pipeline_descriptor.name.c_str(), pipeline_path.c_str() + source_dir_length, donut::ResourceType::pipeline, data);
 		}
 		else
 		{
@@ -199,7 +204,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, flour_descriptor);
-			database.insert_asset(flour_descriptor.name.c_str(), flour_path.c_str(), donut::ResourceType::flour, data);
+			database.insert_asset(flour_descriptor.name.c_str(), flour_path.c_str() + source_dir_length, donut::ResourceType::flour, data);
 		}
 		else
 		{
@@ -226,7 +231,7 @@ int main(int argc, char** argv)
 			// Insert the texture to the database
 			bento::Vector<char> data(current_allocator);
 			bento::pack_type(data, egg);
-			database.insert_asset(geo_path.c_str(), geo_path.c_str(), donut::ResourceType::egg, data);
+			database.insert_asset(geo_path.c_str() + source_dir_length, geo_path.c_str() + source_dir_length, donut::ResourceType::egg, data);
 		}
 		else
 		{
@@ -234,8 +239,12 @@ int main(int argc, char** argv)
 		}
 	}
 
-	// Write the database to the target_file
-	donut::write_database(compiler_option._output_dir.c_str(), database);
+	// Write the database and the debug file to the target_file
+	bento::DynamicString output_database_path(current_allocator);
+	output_database_path += compiler_option._output_dir;
+	output_database_path += "/asset_database";
+	donut::write_database(output_database_path.c_str(), database);
+	donut::write_database_debug(output_database_path.c_str(), database);
 
 	return 0;
 }

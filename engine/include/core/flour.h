@@ -21,35 +21,30 @@ namespace donut
 	struct TFlour
 	{
 		// Consrtuctor
-		TFlour(const std::string& _fileName)
-		: root(nullptr)
-		, sh(nullptr)
-		, filename(_fileName)
+		TFlour(bento::IAllocator& alloc)
+		: sh(nullptr)
 		, pipelineName("minimal")
 		, skybox(UINT32_MAX)
+		, nodes(alloc)
 		{
 
 		}
 		//Destructor
 		~TFlour()
 		{
-			if(root)
-				delete root;
-
 			if(sh)
 				delete sh;
 		}
 
 		// Generic data
-		std::string filename;
 		std::string pipelineName;
 		
-		TNode* root;
+		bento::Vector<TNode> nodes;
 		std::vector<TLight> lights;
 		TSphericalHarmonics* sh;
 		CUBEMAP_GUID skybox;
 	};
 
 	// Flour builder
-	TFlour* GenerateFlour(const std::string& _flourName);
+	TFlour* GenerateFlour(const char* flour_name);
 }

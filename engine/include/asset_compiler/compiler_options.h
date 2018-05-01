@@ -20,6 +20,6 @@ namespace donut
 
 	namespace asset_compiler
 	{
-		bool build_from_args(TCompilerOptions& compiler_options, const bento::Vector<bento::DynamicString>& args);
+		void build_from_args(TCompilerOptions& compiler_options, const bento::Vector<bento::DynamicString>& args);
 	}
 }

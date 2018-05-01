@@ -29,6 +29,7 @@ namespace donut
 	TNode::TNode(bento::IAllocator& _alloc)
 	: m_transform()
 	, m_sons(_alloc)
+	, m_drawables(_alloc)
 	, m_parent(nullptr)
 	{
 		// Make sure the root is centered at origin
@@ -37,11 +38,6 @@ namespace donut
 
 	TNode::~TNode()
 	{
-		// Delete all the children
-		for(auto child : m_sons)
-		{
-			delete child;
-		}
 	}
 
 	// Attach a child
@@ -57,10 +53,23 @@ namespace donut
 	// Parse this node and its subnodes
 	void TNode::Evaluate(TCollector& _requestCollector, const bento::Matrix4& _parentTransform)
 	{
-		// For each subnode, parse
-		for(auto son : m_sons)
+		// For each drawable attached to this node
+		const bento::Matrix4& currentTransform = _parentTransform * m_transform;
+
+		// Evaluate the drawables
+		for (auto& drawable : m_drawables)
 		{
-			son->Evaluate(_requestCollector, _parentTransform * m_transform);
+			drawable->Evaluate(_requestCollector, currentTransform);
 		}
+
+		for (auto& son : m_sons)
+		{
+			son->Evaluate(_requestCollector, currentTransform);
+		}
+	}
+
+	void TNode::AppendDrawable(TDrawable* _drawable)
+	{
+		m_drawables.push_back(_drawable);
 	}
 }

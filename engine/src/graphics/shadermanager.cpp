@@ -1,5 +1,6 @@
 // Bento includes
 #include <bento_base/security.h>
+#include <bento_base/log.h>
 #include <bento_collection/vector.h>
 #include <bento_tools/file_system.h>
 
@@ -40,6 +41,7 @@ namespace donut
 	    	// OK lets get the error message
 	        char* errorMessage = new char[infoLogLength];
 	        glGetShaderInfoLog(_shaderID, infoLogLength, NULL, errorMessage);
+			bento::default_logger()->log(bento::LogLevel::error, "SHADER_COMPILER", errorMessage);
 			delete [] errorMessage;
 	    }
 	}
@@ -60,6 +62,7 @@ namespace donut
 	    	// Ok, lets get the error message
 	        char* errorMessage = new char[infoLogLength];
 	        glGetProgramInfoLog(_programID, infoLogLength, NULL, errorMessage);
+			bento::default_logger()->log(bento::LogLevel::error, "SHADER_COMPILER", errorMessage);
 			delete [] errorMessage;
 			return false;
 	    }
@@ -77,7 +80,7 @@ namespace donut
 		// Here we should delete all the shaders that where created
 		for(auto& shader : _programs)
 		{
-			glDeleteProgram(shader);
+			glDeleteProgram((GLuint)shader);
 		}
 
  		GL_API_CHECK();
@@ -111,7 +114,7 @@ namespace donut
 			shaderFlags &= VERTEX_FLAG;			
 
 		}
-		if(tess_control_shader != nullptr)
+		if (tess_control_shader != nullptr)
 		{
 			tessControlShader = glCreateShader(GL_TESS_CONTROL_SHADER);
 			const char * tcsFile_ptr = tess_control_shader;
@@ -122,7 +125,7 @@ namespace donut
 			shaderFlags &= TESS_CONTROL_FLAG;
 		}
 
-		if(tess_eval_shader != nullptr)
+		if (tess_eval_shader != nullptr)
 		{
 			tessEvalShader = glCreateShader(GL_TESS_EVALUATION_SHADER);
 			const char * tesFile_ptr = tess_eval_shader;
@@ -133,7 +136,7 @@ namespace donut
 			shaderFlags &= TESS_EVAL_FLAG;	
 		}
 
-		if(geometry_shader != nullptr)
+		if (geometry_shader != nullptr)
 		{
 			geometryShader = glCreateShader(GL_GEOMETRY_SHADER);
 			const char * gsFile_ptr = geometry_shader;
@@ -143,7 +146,7 @@ namespace donut
 			shaderFlags &= GEOMETRY_FLAG;			
 		}
 
-		if(fragment_shader != nullptr)
+		if (fragment_shader != nullptr)
 		{
 			fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 			const char * fsFile_ptr = fragment_shader;
@@ -198,7 +201,7 @@ namespace donut
 	void ShaderManager::EnableShader(ShaderPipelineObject _program)
 	{
 		GL_API_CHECK();
-		glUseProgram(_program);
+		glUseProgram((GLuint)_program);
 		GL_API_CHECK();
 	}
 
@@ -246,14 +249,14 @@ namespace donut
 	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector3& parValue, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniform3f(glGetUniformLocation(parProgram, parName), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
+		glUniform3f(glGetUniformLocation((GLuint)parProgram, parName), (GLfloat)parValue.x, (GLfloat)parValue.y, (GLfloat)parValue.z);
 		GL_API_CHECK();
 	}
 	template <>
 	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Vector4& _value, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniform4f(glGetUniformLocation(parProgram, parName), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
+		glUniform4f(glGetUniformLocation((GLuint)parProgram, parName), (GLfloat)_value.x, (GLfloat)_value.y, (GLfloat)_value.z, (GLfloat)_value.w);
 		GL_API_CHECK();
 	}
 	
@@ -261,7 +264,7 @@ namespace donut
 	void ShaderManager::Inject(ShaderPipelineObject parProgram, const int& _value, const char* parName)
 	{
 		GL_API_CHECK();
-		GLuint location = glGetUniformLocation(parProgram, parName);
+		GLuint location = glGetUniformLocation((GLuint)parProgram, parName);
 	    glUniform1i(location, _value);
 		GL_API_CHECK();
 	}
@@ -270,7 +273,7 @@ namespace donut
 	void ShaderManager::Inject(ShaderPipelineObject parProgram, const float& _value, const char* parName)
 	{
 		GL_API_CHECK();
-	    glUniform1f( glGetUniformLocation(parProgram, parName), _value);
+	    glUniform1f( glGetUniformLocation((GLuint)parProgram, parName), _value);
 		GL_API_CHECK();
 	}
 
@@ -278,7 +281,7 @@ namespace donut
 	void ShaderManager::InjectV(ShaderPipelineObject parProgram, const float* _values, int _nbValues, const char* parName)
 	{
 		GL_API_CHECK();
-	    glUniform1fv( glGetUniformLocation(parProgram, parName),_nbValues, _values);
+	    glUniform1fv( glGetUniformLocation((GLuint)parProgram, parName),_nbValues, _values);
 		GL_API_CHECK();
 	}
 
@@ -288,7 +291,7 @@ namespace donut
 		GL_API_CHECK();
 		float mat[16];
 		ToTable(parValue, &mat[0]);
-	    glUniformMatrix4fv(glGetUniformLocation(parProgram, parName),1,true, mat);
+	    glUniformMatrix4fv(glGetUniformLocation((GLuint)parProgram, parName),1,true, mat);
 		GL_API_CHECK();
 	}
 
@@ -296,7 +299,7 @@ namespace donut
 	void ShaderManager::Inject(ShaderPipelineObject parProgram, const bento::Matrix3& parValue, const char* parName)
 	{
 		GL_API_CHECK();
-		glUniformMatrix3fv(glGetUniformLocation(parProgram, parName),1,true, parValue.m);
+		glUniformMatrix3fv(glGetUniformLocation((GLuint)parProgram, parName),1,true, parValue.m);
 		GL_API_CHECK();
 	}
 
@@ -304,9 +307,8 @@ namespace donut
 	{
 		GL_API_CHECK();
 		BindTex(_textureID, _spot);
-	    GLint texRef = glGetUniformLocation(parProgram, parName);
+	    GLint texRef = glGetUniformLocation((GLuint)parProgram, parName);
 	    glUniform1i(texRef, 0 + _spot);
-	    //UnbindTex(_spot);
 		GL_API_CHECK();
 	}
 
@@ -316,7 +318,6 @@ namespace donut
 		BindCubeMap(_textureID, _spot);
 	    GLint texRef = glGetUniformLocation(parProgram, parName);
 	    glUniform1i(texRef, 0+_spot);
-	    //UnbindCubeMap(_spot);
 		GL_API_CHECK();
 	}
 

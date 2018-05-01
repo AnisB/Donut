@@ -48,9 +48,4 @@ namespace donut
             son->Evaluate(_requestCollector, currentTransform);
 		}
 	}
-
-	void TSceneNode::AppendDrawable(TDrawable* _drawable)
-	{
-		m_drawables.push_back(_drawable);
-	}
 }

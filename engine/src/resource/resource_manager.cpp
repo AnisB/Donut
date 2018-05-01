@@ -1,6 +1,8 @@
 #include "asset_compiler/texture_helpers.h"
 #include "resource/resource_manager.h"
 #include "gpu_backend/gl_factory.h"
+#include "asset_compiler/asset_database_helpers.h"
+#include "resource/shader_source.h"
 
 #include <fstream>
 #include <sstream> 
@@ -12,7 +14,7 @@
  namespace donut
  {
  	ResourceManager::ResourceManager()
- 	: m_rootAssetFolder(*bento::common_allocator(), "./assets/")
+ 	: m_asset_database(*bento::common_allocator())
  	{
  	}
 
@@ -20,10 +22,9 @@
  	{
  	}
 
-	void ResourceManager::init(const char* _assertFolder)
+	bool ResourceManager::init(const char* _assertFolder)
 	{
-		m_rootAssetFolder = _assertFolder;
-		m_rootAssetFolder += "/";
+		return read_database(_assertFolder, m_asset_database);
 	}
 
 	GEOMETRY_GUID ResourceManager::fetch_geometry_id(const char* geometry_path)
@@ -35,11 +36,10 @@
 			return it->second;
 		}
 
-		// Load the file into memory
+		// Request asset from database and assert on it
 		TEgg tmp_egg(*bento::common_allocator());
-		bool read_result = false;
-		//bool read_result = read_egg(RelativePath(geometry_path).c_str(), tmp_egg);
-		assert_msg(read_result, "Geomtry file couldn't be read");
+		bool request_res = request_asset<TEgg>(geometry_path, tmp_egg);
+		assert_msg(request_res, "Geometry file couldn't be read");
 
 		// Instanciate the runtime geometry
 		GeometryObject geo_obj = gl::geometry::create_vnt(tmp_egg._vert_normal_uvs.begin(), tmp_egg._vert_normal_uvs.size() / 8, (uint32_t*)tmp_egg._indexes.begin(), tmp_egg._indexes.size());
@@ -61,11 +61,11 @@
  		}
  		else
  		{
-			/*
-			// Load the texture from its path (ftm)
+			// Request asset from database and assert on it
 			TTexture tmp_texture(*bento::common_allocator());
-			read_texture((RootAssetsFolder() + texture_path).c_str(), tmp_texture);
-			
+			bool request_res = request_asset<TTexture>(texture_path, tmp_texture);
+			assert_msg(request_res, "Texture file couldn't be read");
+
 			// Create the entries in the resource manager
 			uint32_t new_texture_id = (uint32_t)m_textures.size();
 			m_textures.resize(new_texture_id + 1);
@@ -75,7 +75,6 @@
 			m_textures[new_texture_id] = gl::texture2D::create(tmp_texture);
 
  			return (TEXTURE_GUID)new_texture_id;
-			*/
  		}
  	}
 
@@ -88,9 +87,14 @@
 		}
  		else
  		{
-			/*
+			// Request asset from database and assert on it
+			TTexture tmp_texture(*bento::common_allocator());
+			bool request_res = request_asset<TTexture>(skybox_path, tmp_texture);
+			assert_msg(request_res, "Texture file couldn't be read");
+
+			// Build the skybox from the texture
 			TSkybox tmp_skybox(*bento::common_allocator());
-			read_skybox((RootAssetsFolder() + skybox_path).c_str(), tmp_skybox);
+			skybox::build_from_atlas(tmp_skybox, tmp_texture);
 
 			// Create the entries in the resource manager
 			uint32_t new_cubemap_id = (uint32_t)m_cubemaps.size();
@@ -100,7 +104,6 @@
 			// Create a gpu texture
 			m_cubemaps[new_cubemap_id] = gl::textureCUBE::create(tmp_skybox);
  			return (CUBEMAP_GUID)new_cubemap_id;
-			*/
  		}
  	}
 
@@ -113,39 +116,40 @@
 		}
 		else
 		{
-			/*
+			// Request asset from database and assert on it
+			TToppingDescriptor tmp_descriptor(*bento::common_allocator());
+			bool request_res = request_asset<TToppingDescriptor>(topping_id, tmp_descriptor);
+			assert_msg(request_res, "Topping asset couldn't be read");
+
 			// Create a new material slot
 			uint32_t new_mat_id = (uint32_t)m_materials.size();
 			m_materials.resize(new_mat_id + 1);
 			TMaterial& new_material = m_materials[new_mat_id];
 			m_materialIdentifiers[material_name] = new_mat_id;
 
-			// Fetch the descriptor
-			const TToppingDescriptor& descriptor = TToppingLoader::Instance().request_topping(topping_id);
-
 			// offset to assign the textures to the 
 			int offset = 0;
-			for (auto& tex : descriptor.data)
+			for (auto& tex : tmp_descriptor.data)
 			{
-				switch (tex._type)
+				switch (tex.type)
 				{
-					case TShaderData::TEXTURE2D:
+					case (uint8_t)TShaderDataType::TEXTURE2D:
 					{
-						TEXTURE_GUID texture = ResourceManager::Instance().fetch_texture_id(tex._data.c_str());
+						TEXTURE_GUID texture = ResourceManager::Instance().fetch_texture_id(tex.data.c_str());
 						TTextureInfo tex_info;
 						tex_info.id = texture;
-						tex_info.name = tex._slot;
+						tex_info.name = tex.slot.c_str();
 						tex_info.offset = offset++;
 						tex_info.type = TTextureNature::COLOR;
 						new_material.textures.push_back(tex_info);
 					}
 					break;
-					case TShaderData::CUBEMAP:
+					case (uint8_t)TShaderDataType::CUBEMAP:
 					{
-						CUBEMAP_GUID cubemap = ResourceManager::Instance().fetch_cubemap_id(tex._data.c_str());
+						CUBEMAP_GUID cubemap = ResourceManager::Instance().fetch_cubemap_id(tex.data.c_str());
 						TCubeMapInfo cubemap_info;
 						cubemap_info.id = cubemap;
-						cubemap_info.name = tex._slot;
+						cubemap_info.name = tex.slot.c_str();
 						cubemap_info.offset = offset++;
 						new_material.cubeMaps.push_back(cubemap_info);
 					}
@@ -153,11 +157,45 @@
 				}
 			}
 
+			// Request all the shaders
+			TShaderSource vertex_shader_source(*bento::common_allocator());
+			if (tmp_descriptor.shader_pipeline.vertex != default_shader)
+			{
+				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.vertex.c_str(), vertex_shader_source);
+			}
+
+			TShaderSource tess_control_shader_source(*bento::common_allocator());
+			if (tmp_descriptor.shader_pipeline.tess_control != default_shader)
+			{
+				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.tess_control.c_str(), tess_control_shader_source);
+			}
+
+			TShaderSource tess_eval_shader_source(*bento::common_allocator());
+			if (tmp_descriptor.shader_pipeline.tess_eval != default_shader)
+			{
+				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.tess_eval.c_str(), tess_eval_shader_source);
+			}
+
+			TShaderSource geometry_shader_source(*bento::common_allocator());
+			if (tmp_descriptor.shader_pipeline.geometry != default_shader)
+			{
+				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.geometry.c_str(), geometry_shader_source);
+			}
+
+			TShaderSource fragment_shader_source(*bento::common_allocator());
+			if (tmp_descriptor.shader_pipeline.fragment != default_shader)
+			{
+				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.fragment.c_str(), fragment_shader_source);
+			}
+
 			// Load the shader into memory
-			new_material.shader = ShaderManager::Instance().create_shader(descriptor.shader_pipeline);
+			new_material.shader = ShaderManager::Instance().create_shader(vertex_shader_source.data.size() > 1 ? vertex_shader_source.data.begin(): nullptr, 
+																			tess_control_shader_source.data.size() > 1 ? tess_control_shader_source.data.begin(): nullptr,
+																			tess_eval_shader_source.data.size() > 1 ? tess_eval_shader_source.data.begin(): nullptr,
+																			geometry_shader_source.data.size() > 1 ? geometry_shader_source.data.begin(): nullptr, 
+																			fragment_shader_source.data.size() > 1 ? fragment_shader_source.data.begin(): nullptr);
 
 			return (MATERIAL_GUID)new_mat_id;
-			*/
 		}
 	}
 

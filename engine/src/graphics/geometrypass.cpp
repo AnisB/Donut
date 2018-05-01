@@ -50,7 +50,7 @@
 			m_skyboxDrawable->Evaluate(m_collector, m_reference);
 		}
 
-		m_flour->root->Evaluate(m_collector, m_reference);
+		m_flour->nodes[0].Evaluate(m_collector, m_reference);
 
 		// Fetch the requests
 		auto& requests = m_collector.Requests();

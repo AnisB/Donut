@@ -4,6 +4,7 @@
 #include "core/mesh.h"
 #include "core/mesh.h"
 #include "resource/resource_manager.h"
+#include "resource/sugar_descriptor.h"
 #include "core/box3.h"
 #include "gpu_backend/gl_factory.h"
 
@@ -261,26 +262,27 @@ namespace donut
 		return nullptr;
 	}
 
-	/*
-	TSugarInstance* CreateSugarInstance(const STRING_TYPE& _sugarName)
+	TSugarInstance* CreateSugarInstance(const char* sugar_name)
 	{
 		// Fetch the sugar descriptor
-		const TSugarDescriptor& sugar = TSugarLoader::Instance().FetchSugar(_sugarName);
+		TSugarDescriptor sugar_descr(*bento::common_allocator());
+		bool request_result = ResourceManager::Instance().request_asset<TSugarDescriptor>(sugar_name, sugar_descr);
+		if (!request_result) return nullptr;
 
 		// Create a sugar instance
 		TSugarInstance* newSugarInstance = new TSugarInstance();
 
 		// For each renderable in the renderables array
-		for(auto& renderable : sugar._renderables)
+		for(auto& renderable : sugar_descr._renderables)
 		{
 			// Fetch the renderable descriptor
 			const TRenderableDescriptor& renderableDescriptor = renderable;
 
 			// Fetch the material
-			MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(renderableDescriptor._material.c_str(), renderableDescriptor._material.c_str());
+			MATERIAL_GUID material = ResourceManager::Instance().instanciate_material(renderableDescriptor.material.c_str(), renderableDescriptor.material.c_str());
 
 			// Fetch the geometry
-			GEOMETRY_GUID geometry = ResourceManager::Instance().fetch_geometry_id(renderableDescriptor._geometry.c_str());
+			GEOMETRY_GUID geometry = ResourceManager::Instance().fetch_geometry_id(renderableDescriptor.geometry.c_str());
 			
 			// Create the renderable mesh
 			TMesh* newMesh = new TMesh(material, geometry);
@@ -292,7 +294,6 @@ namespace donut
 		// Return the instance
 		return newSugarInstance;
 	}
-	*/
 
 	GEOMETRY_GUID CreateFullScreenQuad()
 	{

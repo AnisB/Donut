@@ -21,4 +21,6 @@ namespace donut
 	typedef uint32_t TEXTURE_GUID;
 	typedef uint32_t CUBEMAP_GUID;
 	typedef uint32_t MATERIAL_GUID;
+
+	const char* resource_type_to_string(ResourceType type);
 }

@@ -7,23 +7,19 @@ namespace donut
 {
 	struct TSkybox
 	{
-		uint32_t						width;
-		uint32_t						height;
+		uint32_t							width;
+		uint32_t							height;
 		uint8_t							format;
-		uint8_t	    					data_type;
+		uint8_t	    						data_type;
 		bento::Vector<unsigned char>  	faces[6];
 
 		TSkybox(bento::IAllocator& allocator)
 		: width(0)
 		, height(0)
-		, faces()
+		, faces {allocator, allocator, allocator, allocator, allocator, allocator}
 		, format(0)
 		, data_type(0)
 		{
-			for (uint32_t face_idx = 0; face_idx < 6; ++face_idx)
-			{
-				faces[face_idx]._allocator = &allocator;
-			}
 		}
 	};
 

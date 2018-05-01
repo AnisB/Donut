@@ -2,7 +2,7 @@
 <sugar name="mirror_teapot">
 	<renderables>
 		<renderable id="0">
-			<geometry type="egg" location="common/eggs/teapot.egg"/>
+			<geometry location="common/geometries/teapot.obj"/>
 			<material name="mirror"/>
 		</renderable>
 	</renderables>

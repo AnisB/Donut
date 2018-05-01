@@ -5,6 +5,7 @@
 #include "graphics/material.h"
 #include "gpu_backend/gpu_backend.h"
 #include "resource/skybox.h"
+#include "resource/asset_database.h"
 
 #include "base/singleton.h"
 #include "texture.h"
@@ -24,9 +25,9 @@
  		ResourceManager();
  		~ResourceManager();
 
- 		void init(const char* database_path);
+ 		bool init(const char* database_path);
 
- 		// Load data from the asset database
+ 		// Create / Fetch runtime data
 		GEOMETRY_GUID fetch_geometry_id(const char* geometry_path);
 		TEXTURE_GUID fetch_texture_id(const char* texture_path);
 		CUBEMAP_GUID fetch_cubemap_id(const char* skybox_path);
@@ -39,9 +40,22 @@
 		GeometryObject request_runtime_geometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
 		TMaterial& request_runtime_material(MATERIAL_GUID material_idx) { return m_materials[material_idx]; }
 
-	protected:
-		// Asset folder path
-		bento::DynamicString m_rootAssetFolder;
+		// Access a resource from the asset database
+		template<typename T>
+		bool request_asset(const char* asset_name, T& output_asset)
+		{
+			// Request the data from the database
+			const TAsset* requested_asset = m_asset_database.request_asset(asset_name);
+			if (requested_asset == nullptr) return false;
+
+			// Deserialize the texture
+			const char* raw_data = requested_asset->data.begin();
+			return bento::unpack_type(raw_data, output_asset);
+		}
+
+	private:
+		// Asset database
+		TAssetDatabase m_asset_database;
 
 		// Texture data
 		std::map<std::string, TEXTURE_GUID> m_textureIdentifiers;

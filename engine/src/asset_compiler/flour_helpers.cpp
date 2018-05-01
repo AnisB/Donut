@@ -1,6 +1,7 @@
 // Bento include
 #include <bento_collection/vector.h>
 #include <bento_tools/file_system.h>
+#include <bento_math/matrix4.h>
 
 // Library include
 #include "base/stringhelper.h"
@@ -16,7 +17,6 @@ namespace donut
     // XML file token
     #define FLOUR_NODE_TOKEN "flour"
     #define FLOUR_NAME_TOKEN "name"
-    #define ROOT_TOKEN "root"
     #define NODE_TOKEN "node"
     #define SCENE_NODE_TOKEN "scenenode"
     #define MODEL_TOKEN "model"
@@ -54,6 +54,10 @@ namespace donut
         {
 			node_array[new_node_idx].tm = convert_from_string<bento::Matrix4>(tmAtt->value());
         }
+		else
+		{
+			 bento::SetIdentity(node_array[new_node_idx].tm);
+		}
 
         // Creating the node children
         for(rapidxml::xml_node<> *currentNode = _node->first_node(NODE_TOKEN); currentNode; currentNode = currentNode->next_sibling(NODE_TOKEN))
@@ -175,7 +179,7 @@ namespace donut
 		}
 
         // Processing the geometry hierachy
-        rapidxml::xml_node<> *root = flour->first_node(ROOT_TOKEN);
+        rapidxml::xml_node<> *root = flour->first_node(NODE_TOKEN);
         if(root)
         {
             HandleNode(root, _output.nodes);

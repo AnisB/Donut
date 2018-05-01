@@ -17,17 +17,13 @@
 
 int main(int argc, char** argv)
 {
-	std::string sceneName;
-	if (argc == 3)
+	if (argc != 3)
 	{
-		sceneName = argv[2];
-		donut::ResourceManager::Instance().init(argv[1]);
+	  return -1;
 	}
-	else
-	{
-		sceneName = "TeapotArmy";
-		donut::ResourceManager::Instance().init("assets");
-	}
+
+	bool init_res = donut::ResourceManager::Instance().init(argv[1]);
+	if (!init_res) return -1;
 
 	// Creating the rendering window
 	donut::TRenderer * window = new donut::TRenderer();
@@ -36,7 +32,7 @@ int main(int argc, char** argv)
 	newContext.window_name = "testFlourLoad";
 	window->CreateRenderWindow(newContext);
 
-	donut::TFlour* flour = donut::GenerateFlour(sceneName);
+	donut::TFlour* flour = donut::GenerateFlour(argv[2]);
 	donut::TPipeline* renderingPipeline;
 	renderingPipeline = donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
 	window->SetPipeline(renderingPipeline);
