@@ -324,7 +324,11 @@ namespace donut
 	void ShaderManager::InjectV(ShaderPipelineObject parProgram, const float* _values, int _nbValues, const char* parName)
 	{
 		GL_API_CHECK();
-	    glUniform1fv( glGetUniformLocation((GLuint)parProgram, parName),_nbValues, _values);
+		GLuint loc = glGetUniformLocation((GLuint)parProgram, parName);
+		if (loc != UINT32_MAX)
+		{
+			glUniform1fv(glGetUniformLocation((GLuint)parProgram, parName), _nbValues, _values);
+		}
 		GL_API_CHECK();
 	}
 
@@ -370,13 +374,15 @@ namespace donut
 		{
 			uni.inject(_shader);
 		}
+
 		for(auto& tex : _material.textures)
 		{
-			ShaderManager::Instance().InjectTex(_shader, tex.id, tex.name.c_str(), tex.offset);
+			ShaderManager::Instance().InjectTex(_shader, ResourceManager::Instance().request_runtime_texture(tex.id), tex.name.c_str(), tex.offset);
 		}
+
 		for (auto& tex : _material.cubeMaps)
 		{
-			ShaderManager::Instance().InjectCubeMap(_shader, tex.id, tex.name.c_str(), tex.offset);
+			ShaderManager::Instance().InjectCubeMap(_shader, ResourceManager::Instance().request_runtime_cubemap(tex.id), tex.name.c_str(), tex.offset);
 		}
 	}
 }

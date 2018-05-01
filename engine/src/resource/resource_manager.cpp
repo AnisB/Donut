@@ -48,6 +48,7 @@
 		uint32_t new_geometry_idx = (uint32_t)m_geometries.size();
 		m_geometries.resize(new_geometry_idx + 1);
 		m_geometryIdentifiers[geometry_path] = new_geometry_idx;
+		m_geometries[new_geometry_idx] = geo_obj;
 
 		return (GEOMETRY_GUID)new_geometry_idx;
 	}

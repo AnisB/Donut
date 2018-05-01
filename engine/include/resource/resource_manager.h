@@ -39,6 +39,8 @@
 		// Access rendering data using their id (used by the rendering thread)
 		GeometryObject request_runtime_geometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
 		TMaterial& request_runtime_material(MATERIAL_GUID material_idx) { return m_materials[material_idx]; }
+		TextureObject request_runtime_texture(TEXTURE_GUID texture_guid) { return m_textures[texture_guid]; }
+		CubemapObject request_runtime_cubemap(CUBEMAP_GUID cubemap_guid) { return m_cubemaps[cubemap_guid]; }
 
 		// Access a resource from the asset database
 		template<typename T>

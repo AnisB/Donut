@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	donut::Camera* camera = renderingPipeline->camera;
 	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::input_manager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght,1.0,2000.0);
+	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght, 1.0, 2000.0);
 	
 	while(window->IsRendering())
 	{
