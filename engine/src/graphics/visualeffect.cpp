@@ -10,7 +10,7 @@ namespace donut
 	TVFX::TVFX(const TShaderPipelineDescriptor& descriptor)
 	: m_fsq(0)
 	{
-		m_material.shader = ShaderManager::Instance().create_shader(nullptr, nullptr, nullptr, nullptr, nullptr);
+		m_material.shader = ShaderManager::Instance().create_shader(descriptor);
 	}
 
 	// Destructor

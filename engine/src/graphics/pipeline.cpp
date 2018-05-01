@@ -64,6 +64,8 @@ namespace donut
 
 		// Fetch the pipeline that was specified
 		TPipelineDescriptor pipelineDesc(*bento::common_allocator());
+		bool res = ResourceManager::Instance().request_asset<TPipelineDescriptor>(_scene->pipelineName.c_str(), pipelineDesc);
+		if (!res) return nullptr;
 
 		for(auto& pass : pipelineDesc.passes)
 		{

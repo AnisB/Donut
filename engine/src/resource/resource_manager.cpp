@@ -157,43 +157,8 @@
 				}
 			}
 
-			// Request all the shaders
-			TShaderSource vertex_shader_source(*bento::common_allocator());
-			if (tmp_descriptor.shader_pipeline.vertex != default_shader)
-			{
-				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.vertex.c_str(), vertex_shader_source);
-			}
-
-			TShaderSource tess_control_shader_source(*bento::common_allocator());
-			if (tmp_descriptor.shader_pipeline.tess_control != default_shader)
-			{
-				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.tess_control.c_str(), tess_control_shader_source);
-			}
-
-			TShaderSource tess_eval_shader_source(*bento::common_allocator());
-			if (tmp_descriptor.shader_pipeline.tess_eval != default_shader)
-			{
-				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.tess_eval.c_str(), tess_eval_shader_source);
-			}
-
-			TShaderSource geometry_shader_source(*bento::common_allocator());
-			if (tmp_descriptor.shader_pipeline.geometry != default_shader)
-			{
-				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.geometry.c_str(), geometry_shader_source);
-			}
-
-			TShaderSource fragment_shader_source(*bento::common_allocator());
-			if (tmp_descriptor.shader_pipeline.fragment != default_shader)
-			{
-				request_asset<TShaderSource>(tmp_descriptor.shader_pipeline.fragment.c_str(), fragment_shader_source);
-			}
-
 			// Load the shader into memory
-			new_material.shader = ShaderManager::Instance().create_shader(vertex_shader_source.data.size() > 1 ? vertex_shader_source.data.begin(): nullptr, 
-																			tess_control_shader_source.data.size() > 1 ? tess_control_shader_source.data.begin(): nullptr,
-																			tess_eval_shader_source.data.size() > 1 ? tess_eval_shader_source.data.begin(): nullptr,
-																			geometry_shader_source.data.size() > 1 ? geometry_shader_source.data.begin(): nullptr, 
-																			fragment_shader_source.data.size() > 1 ? fragment_shader_source.data.begin(): nullptr);
+			new_material.shader = ShaderManager::Instance().create_shader(tmp_descriptor.shader_pipeline);
 
 			return (MATERIAL_GUID)new_mat_id;
 		}

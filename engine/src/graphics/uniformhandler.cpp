@@ -11,7 +11,7 @@ namespace donut
 	: type(TShaderDataType::INTEGER)
 	, slot("INVALID")
 	{
-		memcpy(data, 0, data_size());
+		memset(data, 0, data_size());
 	}
 
 	TUniform::TUniform(const TUniform& uniform)

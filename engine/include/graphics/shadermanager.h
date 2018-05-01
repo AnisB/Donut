@@ -26,6 +26,7 @@ namespace donut
 		virtual ~ShaderManager();
 
  		// Creates a shader in GPU memory
+		ShaderPipelineObject create_shader(const TShaderPipelineDescriptor& shader_pipeline);
 		ShaderPipelineObject create_shader(const char* vertex_shader, const char* tess_control_shader, const char* tess_eval_shader, const char* geometry_shader, const char* fragment_shader);
 
  		// Enables and disables a shader
