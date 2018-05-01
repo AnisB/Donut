@@ -84,9 +84,9 @@ namespace donut
 					// Push the normals if any otherwise use the geometric one
 					if (!attrib.normals.empty())
 					{
-						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].vertex_index + 0]);
-						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].vertex_index + 1]);
-						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].vertex_index + 2]);
+						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].normal_index + 0]);
+						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].normal_index + 1]);
+						output_egg._vert_normal_uvs.push_back(attrib.normals[3 * idxi[i].normal_index + 2]);
 					}
 					else
 					{
@@ -98,8 +98,8 @@ namespace donut
 					// Push the texcorrds if any, otherwise use 0.0f
 					if (!attrib.texcoords.empty())
 					{
-						output_egg._vert_normal_uvs.push_back(attrib.texcoords[2 * idxi[i].vertex_index + 0]);
-						output_egg._vert_normal_uvs.push_back(attrib.texcoords[2 * idxi[i].vertex_index + 1]);
+						output_egg._vert_normal_uvs.push_back(attrib.texcoords[2 * idxi[i].texcoord_index + 0]);
+						output_egg._vert_normal_uvs.push_back(attrib.texcoords[2 * idxi[i].texcoord_index + 1]);
 					}
 					else
 					{

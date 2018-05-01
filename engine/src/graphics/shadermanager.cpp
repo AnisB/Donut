@@ -231,13 +231,13 @@ namespace donut
 				glDeleteShader(fragmentShader);
 			}
 			GL_API_CHECK();
-			return true;
+			return program_id;
 		}
 		else
 		{
 			assert_fail_msg("Shader creation failed.");
 			GL_API_CHECK();
-			return false;
+			return 0;
 		}
 	}
 
