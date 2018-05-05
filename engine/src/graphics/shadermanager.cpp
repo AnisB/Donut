@@ -363,7 +363,7 @@ namespace donut
 	{
 		GL_API_CHECK();
 		BindCubeMap(_textureID, _spot);
-	    GLint texRef = glGetUniformLocation(parProgram, parName);
+	    GLint texRef = glGetUniformLocation((GLuint)parProgram, parName);
 	    glUniform1i(texRef, 0+_spot);
 		GL_API_CHECK();
 	}

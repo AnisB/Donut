@@ -22,11 +22,6 @@
  	{
  	}
 
-	bool ResourceManager::init(const char* _assertFolder)
-	{
-		return read_database(_assertFolder, m_asset_database);
-	}
-
 	GEOMETRY_GUID ResourceManager::fetch_geometry_id(const char* geometry_path)
 	{
 		// Try to get the resource

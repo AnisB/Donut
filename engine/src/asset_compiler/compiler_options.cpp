@@ -33,6 +33,16 @@ namespace asset_compiler {
 				compiler_options._output_dir = args[current_arg_idx + 1];
 				current_arg_idx += 2;
 			}
+			else if(args[current_arg_idx] == "--target-flour")
+			{
+				if(current_arg_idx == num_args - 1)
+				{
+					bento::default_logger()->log(bento::LogLevel::error, "ASSET_COMPILER", "please provide a target flour");
+					continue;
+				}
+				compiler_options._target_flour = args[current_arg_idx + 1];
+				current_arg_idx += 2;
+			}
 			else
 			{
 				bento::default_logger()->log(bento::LogLevel::error, "ASSET_COMPILER", "unrecognized compiler option");

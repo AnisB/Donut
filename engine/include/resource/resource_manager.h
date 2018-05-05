@@ -25,8 +25,6 @@
  		ResourceManager();
  		~ResourceManager();
 
- 		bool init(const char* database_path);
-
  		// Create / Fetch runtime data
 		GEOMETRY_GUID fetch_geometry_id(const char* geometry_path);
 		TEXTURE_GUID fetch_texture_id(const char* texture_path);
@@ -54,6 +52,9 @@
 			const char* raw_data = requested_asset->data.begin();
 			return bento::unpack_type(raw_data, output_asset);
 		}
+
+		// Access the asset database of the resource manager
+		TAssetDatabase& asset_database() { return m_asset_database; }
 
 	private:
 		// Asset database
