@@ -30,10 +30,10 @@ namespace donut
     #define GREEN_COEFF_SPHERICAL_HARMONICS "green"
     #define BLUE_COEFF_SPHERICAL_HARMONICS "blue"
     #define LIGHT_TOKEN "light"
-    #define LIGHT_POS_TOKEN "pos"
-    #define LIGHT_DIFF_TOKEN "diff"
-    #define LIGHT_SPEC_TOKEN "spec"
-    #define LIGHT_RAY_TOKEN "ray"
+    #define LIGHT_POSITIONS_TOKEN "position"
+    #define LIGHT_COLOR_TOKEN "color"
+    #define LIGHT_RADIUS_TOKEN "radius"
+    #define LIGHT_POWER_TOKEN "power"
     // Skybox data
     #define SKYBOX_TOKEN "skybox"
     #define SKYBOX_SOURCE_TOKEN "source"
@@ -79,28 +79,22 @@ namespace donut
 
 	void HandleLightNode(rapidxml::xml_node<> *_light, TLightDescriptor& _desc)
     {
-		rapidxml::xml_attribute<> *pos = _light->first_attribute(LIGHT_POS_TOKEN);
+		rapidxml::xml_attribute<> *pos = _light->first_attribute(LIGHT_POSITIONS_TOKEN);
 		if(pos)
 		{
 			_desc.pos = convert_from_string<bento::Vector3>(pos->value());
 		}
 
-		rapidxml::xml_attribute<> *diff = _light->first_attribute(LIGHT_DIFF_TOKEN);
-		if(diff)
+		rapidxml::xml_attribute<> *color = _light->first_attribute(LIGHT_COLOR_TOKEN);
+		if(color)
 		{
-			_desc.diff = convert_from_string<bento::Vector4>(diff->value());
+			_desc.color = convert_from_string<bento::Vector4>(color->value());
 		}
 
-		rapidxml::xml_attribute<> *spec = _light->first_attribute(LIGHT_SPEC_TOKEN);
-		if(spec)
+		rapidxml::xml_attribute<> *radius = _light->first_attribute(LIGHT_RADIUS_TOKEN);
+		if(radius)
 		{
-			_desc.spec = convert_from_string<bento::Vector4>(spec->value());
-		}
-
-		rapidxml::xml_attribute<> *ray = _light->first_attribute(LIGHT_RAY_TOKEN);
-		if(ray)
-		{
-			_desc.ray = convert_from_string<float>(spec->value());
+			_desc.radius = convert_from_string<float>(radius->value());
 		}
 	}
 

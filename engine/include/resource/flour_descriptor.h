@@ -18,9 +18,9 @@ namespace donut
 	struct TLightDescriptor
 	{
 		bento::Vector3  pos;
-		bento::Vector4  diff;
-		bento::Vector4  spec;
-		float 			ray;
+		bento::Vector4  color;
+		float 			radius;
+		float 			power;
 	};
 	
 	struct TNodeDescriptor
@@ -34,7 +34,7 @@ namespace donut
 		}
 
 		bento::Matrix4 						tm;
-		bento::Vector<uint32_t> 			children;
+		bento::Vector<uint32_t> 				children;
 		bento::Vector<bento::DynamicString> models;
 	};
 

@@ -49,12 +49,12 @@ namespace donut
 		// Inject the necessary data
 		BindBufferOutput(_values, _previousData);
 
-		ShaderManager::Instance().Inject<int>(m_material.shader, m_nbLights, "nbLights");
+		ShaderManager::Instance().Inject<int>(m_material.shader, m_nbLights, "num_lights");
 
 		// Inject the lights
 		for(uint32_t lightIndex = 0; lightIndex < m_nbLights; ++lightIndex)
 		{
-			m_lights[lightIndex].InjectData(m_material.shader, lightIndex);
+			inject_light(m_lights[lightIndex], m_material.shader, lightIndex);
 		}
 
 		// Draw the frame

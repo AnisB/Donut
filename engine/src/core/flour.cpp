@@ -24,10 +24,10 @@ namespace donut
 	// Builda light from its descriptor
 	void build_from_descriptor(const TLightDescriptor& light_descriptor, TLight& new_light)
 	{
-		new_light.SetPosition(light_descriptor.pos);
-		new_light.SetDiffuse(light_descriptor.diff);
-		new_light.SetSpecular(light_descriptor.spec);
-		new_light.SetRay(light_descriptor.ray);
+		new_light.position = light_descriptor.pos;
+		new_light.color = light_descriptor.color;
+		new_light.radius = light_descriptor.radius;
+		new_light.power = light_descriptor.power;
 	}
 
 	// Handle a spherical harmonic from its descriptor

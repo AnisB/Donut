@@ -25,22 +25,13 @@
  
  namespace donut
  {
-	class TLight
+	struct TLight
 	{
-	public:
-		TLight();
-		~TLight();
-		void Translate(const bento::Vector3& _vector);
-		void SetPosition(const bento::Vector3& _vector);
-		void SetSpecular(const bento::Vector4& _color);
-		void SetDiffuse(const bento::Vector4& _color);
-		void SetRay(float _ray) {FRayon = _ray;}
-		void InjectData(ShaderPipelineObject _shader, size_t _lightIndex);
-
-	protected:
-		bento::Vector3 FPosition;
-		bento::Vector4 FDiff;
-		bento::Vector4 FSpec;
-		float FRayon;
+		bento::Vector3 position;
+		bento::Vector4 color;
+		float radius;
+		float power;
 	};
+
+	void inject_light(const TLight& light, ShaderPipelineObject shader, size_t light_slot);
  }
