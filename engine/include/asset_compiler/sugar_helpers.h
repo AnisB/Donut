@@ -1,7 +1,7 @@
 #pragma once
 
 // Internal includes
-#include <resource/sugar_descriptor.h>
+#include "resource/sugar_descriptor.h"
 
 namespace donut
 {

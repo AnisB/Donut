@@ -12,4 +12,4 @@ void main()
     frag_color[1] = vec4(0.0,0.0, 1.0, 1.0);
     frag_color[2] = vec4(0.0,0.0,0.0, 1.0);
     frag_color[3] = vec4(0.0,0.0, 0.0f, 0.0f);
-   }
+}

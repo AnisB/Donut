@@ -1,7 +1,7 @@
 #pragma once
 
 // Internal includes
-#include <resource/flour_descriptor.h>
+#include "resource/flour_descriptor.h"
 
 namespace donut
 {

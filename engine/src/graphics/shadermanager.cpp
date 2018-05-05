@@ -327,7 +327,7 @@ namespace donut
 		GLuint loc = glGetUniformLocation((GLuint)parProgram, parName);
 		if (loc != UINT32_MAX)
 		{
-			glUniform1fv(glGetUniformLocation((GLuint)parProgram, parName), _nbValues, _values);
+			glUniform1fv(loc, _nbValues, _values);
 		}
 		GL_API_CHECK();
 	}

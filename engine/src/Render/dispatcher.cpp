@@ -10,7 +10,7 @@ namespace donut
 	TDispatcher::TDispatcher()
 	{
 		// Nothing to do here
-		m_processors.push_back(new TFrustumCuller());
+		//m_processors.push_back(new TFrustumCuller());
 		//m_processors.push_back(new TCrumbleRemover());
 	}
 

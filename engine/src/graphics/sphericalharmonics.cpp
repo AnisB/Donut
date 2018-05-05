@@ -29,8 +29,8 @@ namespace donut
 
 	void TSphericalHarmonics::InjectData(ShaderPipelineObject _shader)
 	{
-		ShaderManager::Instance().InjectV<float>(_shader, &m_red[0], m_degree, "redCoeff");
-		ShaderManager::Instance().InjectV<float>(_shader, &m_green[0], m_degree, "greenCoeff");
-		ShaderManager::Instance().InjectV<float>(_shader, &m_blue[0], m_degree, "blueCoeff");
+		ShaderManager::Instance().InjectV<float>(_shader, &m_red[0], 9, "redCoeff");
+		ShaderManager::Instance().InjectV<float>(_shader, &m_green[0], 9, "greenCoeff");
+		ShaderManager::Instance().InjectV<float>(_shader, &m_blue[0], 9, "blueCoeff");
 	}
 }
