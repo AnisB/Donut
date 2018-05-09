@@ -9,9 +9,9 @@ namespace donut
 	{
 		uint32_t							width;
 		uint32_t							height;
-		uint8_t							format;
-		uint8_t	    						data_type;
-		bento::Vector<unsigned char>  	faces[6];
+		uint8_t								format;
+		uint8_t								data_type;
+		bento::Vector<unsigned char>		faces[6];
 
 		TSkybox(bento::IAllocator& allocator)
 		: width(0)

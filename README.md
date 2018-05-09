@@ -1,30 +1,64 @@
-Donut
-=====
+# Donut
 
-A 3D game engine - OpenGL Based
+## Description
+A sandbox 3D rendering engine. I use it to build and test rendering and architecture ideas. It has been alive for a while now (couple years) and I try to contribute to it when I have some free time. 
 
-Description here => http://anisb.github.io/projects.html#-Donut
+I have no ambitions to sell or ship games with it, it is simply my toy.
 
-The teapot army scene:
+## Features
+Here is the (non-exhaustive) list of features that I developped or am planning to add to it:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/ssr.png)
+- 	Use bento (library that provides a set of development basis: allocators, collections, serialization, scalar and SIMD math library)
+-	Define assets and versioning (~~DONE~~)
+-	Asset compilation, serialization and access to an asset database (~~DONE~~)
+- 	Write a backend around opengl (~~DONE~~)
+-	Scriptable rendering pipeline (~~DONE~~)
+- 	Support various texture formats (PNG, BMP, JPG, TGA) (~~DONE~~)
+- 	Support the wavefront formats	(WAVEFRONT)  (~~DONE~~)
+- 	Implement various postfxs (DOF: ~~DONE~~, SSR: ~~DONE~~, SSAO: ~~DONE~~)
+- 	Frustrum Culling (~~DONE~~)
+- 	Implement a Render Request feature so that the update and render thread are independent (~~DONE~~)
+-	Various Skybox Formats (~~DONE~~/to be finished)
+-	Blender scene exporter (~~DONE~~/to be finished)
+-	UV unwrapinng (*TBD*)
+-	PBR rendering pipeline (*TBD*)
+- 	Lightmap baking (*TBD*)
+- 	Write a backend around vulakn (*TBD*)
+- 	AO baking (*TBD*)
+-	Reflection probe baking (*TBD*)
+-	Instance batching (*TBD*)
+-	Supporting Android and opengles (*TBD*)
+-	Integrating NYX for occlusion culling (an other project that handles cross-platform occlusion culling)(*TBD*)
+-	Atlasing (*TBD*)
+-	Support the FBX format (*TBD*)
+-	Implement a spacial antialiasing post effect (*TBD*)
 
-Sample sugar file:
+## Compilation:
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/sugar.PNG)
+Compile the engine and the various programs for windows and vc14 and vc15:
 
-Sample topping file:
+```
+ruby make.rb
+```
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/topping.png)
+## Naming
+Given that the engine is named donut, all the base components are ingredients of a donut:
+-	**Egg**: The compiled version of the geometries
+-	**Flour**: Levels
+-	**Topping**: The compiled version of a material resource
+-	**Sugar**: A set of renderables with their geometries and their matching materials.
 
-Sample scene file:
+For the moment I removed Linux and MacOSX support, but I plan to add them back.
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/scene.PNG)
+## Usage
+Two programs are available:
 
-Pipeline recipe:
+- Asset Compiler: A program that takes a source directory and will output an asset_database that holds the all serialized assets and allows us to instanciate the assets and the levels in game later when needed.
+- Flour Loader: A program that will either run an asset compilation and then load a given level or load the level from a pre-compiled asset_database.
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/pipeline.PNG)
+## Content
+Given that I do not have Max License, I only support scenes from Blender. The export script is in *exporter/blender*
 
-Render queue dispatcher:
+I removed all the images and samples that were in the documentation, they were outdated.
 
-![alt tag](https://raw.githubusercontent.com/AnisB/Donut/master/documentation/dispatcher.png)
+I'll soon post some pictures to illustrate what it does.
