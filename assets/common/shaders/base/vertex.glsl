@@ -1,9 +1,9 @@
+#version 410 
+
 uniform mat4 view; 
+uniform mat4 model; 
 uniform mat4 projection;
 uniform mat4 modelviewprojection;
-
-//Logarithmic depth buffer
-uniform float fcoef;
 
 // Input Data
 in layout(location=0) vec3 position;
@@ -14,7 +14,6 @@ in layout(location=2) vec2 tex_coord;
 out vec2 texCoordV;
 out vec3 fnormalV;
 out vec4 ecPosV;
-out float flogzG;
 
 void main()
 {	

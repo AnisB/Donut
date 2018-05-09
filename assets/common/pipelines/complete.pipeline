@@ -1,3 +1,4 @@
+<?xml version="1.0"?>
 <pipeline name="complete">
 
 	<!-- First g buffer pass -->
@@ -88,7 +89,7 @@
 
 	<!-- Compose the SSR -->
 	<pass type="vfx">
-		<canvas type="effect" output="final"/>
+		<canvas type="effect" output="dof_input"/>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssr/compose_vertex.glsl"/>
@@ -99,11 +100,22 @@
 
 	<!-- Depth of field pass -->
 	<pass type="vfx">
-		<canvas type="empty"/>
+		<canvas type="effect" output="srgb_input"/>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/dof/vertex.glsl"/>
 				<fragment location="common/shaders/ssfx/dof/fragment.glsl"/>
+			</shader>
+		</vfx>
+	</pass>
+
+	<!-- Apply an srgb response-->
+	<pass type="vfx">
+		<canvas type="empty"/>
+		<vfx type="simplefx">
+			<shader>
+				<vertex location="common/shaders/ssfx/srgb/vertex.glsl"/>
+				<fragment location="common/shaders/ssfx/srgb/fragment.glsl"/>
 			</shader>
 		</vfx>
 	</pass>

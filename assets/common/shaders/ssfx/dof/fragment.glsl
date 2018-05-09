@@ -7,7 +7,7 @@ in vec2 texCoord;
 out vec4 frag_color;
 
 // Input uniforms
-uniform sampler2D final;
+uniform sampler2D dof_input;
 uniform sampler2D depth;
 
 uniform float near_plane;
@@ -39,15 +39,15 @@ vec4 blurr(vec2 texPos)
 {
   vec4 sum = vec4(0.0);
   float intensity = blur_intensity();
-  sum += texture(final, vec2(texCoord.x - 4.0*blurSize*intensity, texCoord.y)) * 0.05;
-  sum += texture(final, vec2(texCoord.x - 3.0*blurSize*intensity, texCoord.y)) * 0.09;
-  sum += texture(final, vec2(texCoord.x - 2.0*blurSize*intensity, texCoord.y)) * 0.12;
-  sum += texture(final, vec2(texCoord.x - blurSize*intensity, texCoord.y)) * 0.15;
-  sum += texture(final, vec2(texCoord.x, texCoord.y)) * 0.16;
-  sum += texture(final, vec2(texCoord.x + blurSize*intensity, texCoord.y)) * 0.15;
-  sum += texture(final, vec2(texCoord.x + 2.0*blurSize*intensity, texCoord.y)) * 0.12;
-  sum += texture(final, vec2(texCoord.x + 3.0*blurSize*intensity, texCoord.y)) * 0.09;
-  sum += texture(final, vec2(texCoord.x + 4.0*blurSize*intensity, texCoord.y)) * 0.05;
+  sum += texture(dof_input, vec2(texCoord.x - 4.0*blurSize*intensity, texCoord.y)) * 0.05;
+  sum += texture(dof_input, vec2(texCoord.x - 3.0*blurSize*intensity, texCoord.y)) * 0.09;
+  sum += texture(dof_input, vec2(texCoord.x - 2.0*blurSize*intensity, texCoord.y)) * 0.12;
+  sum += texture(dof_input, vec2(texCoord.x - blurSize*intensity, texCoord.y)) * 0.15;
+  sum += texture(dof_input, vec2(texCoord.x, texCoord.y)) * 0.16;
+  sum += texture(dof_input, vec2(texCoord.x + blurSize*intensity, texCoord.y)) * 0.15;
+  sum += texture(dof_input, vec2(texCoord.x + 2.0*blurSize*intensity, texCoord.y)) * 0.12;
+  sum += texture(dof_input, vec2(texCoord.x + 3.0*blurSize*intensity, texCoord.y)) * 0.09;
+  sum += texture(dof_input, vec2(texCoord.x + 4.0*blurSize*intensity, texCoord.y)) * 0.05;
   return sum;
 }
 

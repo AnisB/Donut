@@ -11,6 +11,8 @@ import shutil
 import xml.dom.minidom as minidom
 import mathutils
 
+_texture_mapping = dict()
+
 # Function that makes xml trees pretty for printing
 def make_pretty_xml(elem):
     rough_string = element_tree.tostring(elem, encoding="us-ascii")
@@ -124,7 +126,9 @@ def export_geometry(mesh_data, output_file_name, matrix, dupli_offset):
         for tex_coord in mesh_data.uv_layers[0].data:
             fout.write("vt %.4f %.4f\n" % tex_coord.uv[:])
     else:
-        for v in mesh_data.vertices:
+        for loop in mesh_data.polygons:
+            fout.write("vt %.4f %.4f\n" % (0, 0))
+            fout.write("vt %.4f %.4f\n" % (0, 0))
             fout.write("vt %.4f %.4f\n" % (0, 0))
     fout.write("\n")         
     
@@ -132,8 +136,10 @@ def export_geometry(mesh_data, output_file_name, matrix, dupli_offset):
     face_idx = 0
     for p in mesh_data.polygons:
         fout.write("f ")
+        vert_idx = 0
         for i in p.vertices:
-            fout.write("%d/%d " % (i + 1, i + 1))
+            fout.write("%d/%d " % (i + 1, 3 * face_idx + vert_idx + 1))
+            vert_idx = vert_idx + 1
         face_idx = face_idx + 1
         fout.write("\n")
 
@@ -154,19 +160,35 @@ def export_sugar(sugar_name, geometry_relative_path, material_name, project_dir)
 def export_material(material_name, material, output_topping_path):
     print("Exporting topping: " + material_name)
 
+    # Lets define if this material uses any texture
+    uses_texture = False
+
+    mat_texture_list = []
+
+    if material and material.use_nodes:
+        for n in material.node_tree.nodes:
+            if n.type == 'TEX_IMAGE':
+                uses_texture = True
+                mat_texture_list.append(_texture_mapping[n.image.filepath]);
+
     # Building the topping xml file
     topping_node = element_tree.Element("topping", name=material_name)
     # Create the shaders
     shader_node = element_tree.SubElement(topping_node, "shader")
-    vertex_node = element_tree.SubElement(shader_node, "vertex", location="common/shaders/uniform_color/vertex.glsl")
-    fragment_node = element_tree.SubElement(shader_node, "fragment", location="common/shaders/uniform_color/fragment.glsl")
-    extern_data_node = element_tree.SubElement(topping_node, "extern_data")
-
-    color_str = "1 1 1 1"
-    if material != None:
-        color_str = vector_to_string(material.diffuse_color)
-
-    color_node = element_tree.SubElement(extern_data_node, "data", type="vec4", name="uniform_color", value=color_str)
+    if uses_texture:
+        vertex_node = element_tree.SubElement(shader_node, "vertex", location="common/shaders/base/vertex.glsl")
+        geometry_node = element_tree.SubElement(shader_node, "geometry", location="common/shaders/base/geometry.glsl")
+        fragment_node = element_tree.SubElement(shader_node, "fragment", location="common/shaders/base/fragment.glsl")
+        textures_node = element_tree.SubElement(topping_node, "textures")
+        color_node = element_tree.SubElement(textures_node, "texture2D", name="textureCmp", location=mat_texture_list[0])
+    else:
+        vertex_node = element_tree.SubElement(shader_node, "vertex", location="common/shaders/uniform_color/vertex.glsl")
+        fragment_node = element_tree.SubElement(shader_node, "fragment", location="common/shaders/uniform_color/fragment.glsl")
+        extern_data_node = element_tree.SubElement(topping_node, "extern_data")
+        color_str = "1 1 1 1"
+        if material != None:
+            color_str = vector_to_string(material.diffuse_color)
+        color_node = element_tree.SubElement(extern_data_node, "data", type="vec4", name="uniform_color", value=color_str)
 
     fout = open(output_topping_path, 'w')
     fout.write(make_pretty_xml(topping_node))
@@ -247,6 +269,10 @@ def export_groups(target_path, project_name):
         for obj in group.objects:
             # If the object is a mesh, process it as a mesh
             if (obj.type == "MESH"):
+
+                # triangulate the object first
+                triangulate_object(obj)
+
                 # Generate the name for the matching assets
                 geometry_name = obj.name.lower()
                 material_name = obj.name.lower() + "_material"
@@ -271,6 +297,21 @@ def export_groups(target_path, project_name):
         fout = open(sugar_path, 'w')
         fout.write(make_pretty_xml(sugar_node))
 
+def export_textures(target_path, project_name):
+    # Go through the images
+    for image_var in bpy.data.images:
+        # Get the absolute path of the image
+        image_absolute_path = image_var.filepath_from_user()
+        # If the file exists
+        if os.path.isfile(image_absolute_path):
+            # Get the basename of the file
+            base_name = os.path.basename(image_absolute_path)
+            output_image_path = target_path + project_name + "/textures/" + base_name
+            shutil.copyfile(os.path.realpath(bpy.path.abspath(image_absolute_path)), output_image_path)
+
+            # Add it to the mapping
+            _texture_mapping[image_var.filepath] = project_name + "/textures/" + base_name
+
 def create_project_structure(project_dir):
     print("Project will be exported to " + project_dir)
  
@@ -286,6 +327,7 @@ def create_project_structure(project_dir):
     os.makedirs(project_dir + "/geometries")
     os.makedirs(project_dir + "/sugars")
     os.makedirs(project_dir + "/toppings")
+    os.makedirs(project_dir + "/textures")
 
 def export_donut_project(target_path, project_name):
     # Build the projet directory
@@ -293,6 +335,9 @@ def export_donut_project(target_path, project_name):
 
     # First of all we need to create the donut project (file hierarchy)
     create_project_structure(project_dir)
+
+    # Copy all the texture files used by this project
+    export_textures(target_path, project_name)
 
     # Lets go through all the groups and flatten each one of them as a sugar
     export_groups(target_path, project_name)

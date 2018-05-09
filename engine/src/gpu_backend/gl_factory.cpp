@@ -261,6 +261,10 @@ namespace gl {
 			glGenTextures(1, &texture_id);
 			glBindTexture(GL_TEXTURE_2D, texture_id);
 			uint32_t format = format_to_gl((texture::TFormat::Type)source.format);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+			glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+			glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
 			glTexImage2D(GL_TEXTURE_2D, 0, format, source.width, source.height, 0, format, GL_UNSIGNED_BYTE, source.data.begin());
 			glGenerateMipmap(GL_TEXTURE_2D);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -354,8 +358,16 @@ namespace gl {
 			TBox3 os_bb;
 		};
 
-		GeometryObject create_vnt(const float* _dataArray, int _numVert, const unsigned* _indexArray, int num_faces)
+		GeometryObject create_vnt(const float* data_array, int num_verts, const unsigned* _indexArray, int num_faces)
 		{
+			// Given that we are rendering using an opengl api we need to reverse the y coord of the meshes
+			bento::Vector<float> data_array_gl(*bento::common_allocator(), num_verts * 8);
+			memcpy(data_array_gl.begin(), data_array, num_verts * 8 * sizeof(float));
+			for (uint32_t vert_idx = 0; vert_idx < num_verts; ++vert_idx)
+			{
+				data_array_gl[8 * vert_idx + 7] = 1.0f - data_array_gl[8 * vert_idx + 7];
+			}
+
 			GL_API_CHECK();
 			GLGeometry* newModel = new GLGeometry();
 			glGenVertexArrays(1, &newModel->vertexArray);
@@ -363,7 +375,7 @@ namespace gl {
 
 			glGenBuffers(1, &newModel->vertexBuffer);
 			glBindBuffer(GL_ARRAY_BUFFER, newModel->vertexBuffer);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*_numVert * 8, _dataArray, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float)*num_verts * 8, data_array_gl.begin(), GL_STATIC_DRAW);
 
 			glGenBuffers(1, &newModel->indexBuffer);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, newModel->indexBuffer);
@@ -389,7 +401,10 @@ namespace gl {
 			newModel->nbVertices = num_faces * 3;
 
 			// Build the OS AABB
-			box::include_points(newModel->os_bb, (const bento::Vector3*)_dataArray, _numVert);
+			for (uint32_t vert_idx = 0; vert_idx < num_verts; ++vert_idx)
+			{
+				box::include_point(newModel->os_bb, *(const bento::Vector3*)&data_array_gl[8 * vert_idx]);
+			}
 
 			GL_API_CHECK();
 

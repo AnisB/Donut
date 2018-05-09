@@ -2,11 +2,10 @@
 
 // Texture sampler
 uniform sampler2D textureCmp;
-// Zbuffer data
-uniform float fcoef;
 
 // reflection data
 uniform float reflection = 0.0;
+
 // Output Gbuffer
 out vec4 frag_color[4];
 
@@ -14,8 +13,6 @@ out vec4 frag_color[4];
 in vec2 texCoord;
 in vec3 fnormal;
 in vec4 ecPos;
-in float flogz;
-
 
 void main()
 {

@@ -135,9 +135,8 @@ namespace donut
 
         // Fetching external shader data
         rapidxml::xml_node<>* extern_data = topping_root->first_node(EXTERNAL_DATA_NODE_TOKEN);
+		if(extern_data != nullptr)
         {
-            assert(extern_data);
-
             // Handeling the floats
             for(rapidxml::xml_node<> *unif = extern_data->first_node(); unif; unif = unif->next_sibling())
             {

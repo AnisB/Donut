@@ -17,6 +17,7 @@ Here is the (non-exhaustive) list of features that I developped or am planning t
 - 	Support the wavefront formats	(WAVEFRONT)  (~~DONE~~)
 - 	Implement various postfxs (DOF: ~~DONE~~, SSR: ~~DONE~~, SSAO: ~~DONE~~)
 - 	Frustrum Culling (~~DONE~~)
+- 	Apply a SRGB correction at the end of the rendering (~~DONE~~)
 - 	Implement a Render Request feature so that the update and render thread are independent (~~DONE~~)
 -	Various Skybox Formats (~~DONE~~/to be finished)
 -	Blender scene exporter (~~DONE~~/to be finished)
@@ -32,6 +33,8 @@ Here is the (non-exhaustive) list of features that I developped or am planning t
 -	Atlasing (*TBD*)
 -	Support the FBX format (*TBD*)
 -	Implement a spacial antialiasing post effect (*TBD*)
+- 	Support sub-resolutions in the rendering passes (*TBD*)
+- 	Use the normal matrix for the normals(*TBD*)
 
 ## Compilation:
 
@@ -53,8 +56,8 @@ For the moment I removed Linux and MacOSX support, but I plan to add them back.
 ## Usage
 Two programs are available:
 
-- Asset Compiler: A program that takes a source directory and will output an asset_database that holds the all serialized assets and allows us to instanciate the assets and the levels in game later when needed.
-- Flour Loader: A program that will either run an asset compilation and then load a given level or load the level from a pre-compiled asset_database.
+- **Asset Compiler**: A program that takes a source directory and will output an asset_database that holds the all serialized assets and allows us to instanciate the assets and the levels in game later when needed.
+- **Flour Loader**: A program that will either run an asset compilation and then load a given level or load the level from a pre-compiled asset_database.
 
 ## Content
 Given that I do not have Max License, I only support scenes from Blender. The export script is in *exporter/blender*
