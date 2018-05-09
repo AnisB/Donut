@@ -15,20 +15,16 @@ in layout(location=1) vec3 normal;
 in layout(location=2) vec2 tex_coord;
 
 // Output data
-out vec2 texCoordV;
-out vec3 fnormalV;
-out vec4 ecPosV;
-out float flogzG;
+out vec2 f_tex_coord;
+out vec3 f_normal;
+out vec4 f_eye_pos;
+out float f_logz;
 
 void main()
 {	
 	// Output data
     gl_Position = modelviewprojection*vec4(position,1.0);
-   	texCoordV = tex_coord;
-    fnormalV = normalize(view*model*vec4(normal,0.0)).xyz;
-	ecPosV = view*model*vec4(position,1.0);
-
-    // Logarithmic depth buffer
-    gl_Position.z = log2(max(1e-6, 1.0 + gl_Position.w)) * fcoef - 1.0;
-    flogzG = 1.0 + gl_Position.w;
+   	f_tex_coord = tex_coord;
+    f_normal = normalize(view*model*vec4(normal,0.0)).xyz;
+	f_eye_pos = view*model*vec4(position,1.0);
 }

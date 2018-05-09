@@ -35,10 +35,16 @@ namespace donut
 	{
 		// Setting the internal data
 		m_nbLights = (uint32_t)_lights.size();
-		m_lights = &_lights[0];
-		
-		// Make sure we did not explode the number of lights
-		assert_msg(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
+		if (!m_nbLights)
+		{
+			m_lights = nullptr;
+		}
+		else
+		{
+			m_lights = &_lights[0];
+			// Make sure we did not explode the number of lights
+			assert_msg(MAX_NB_LIGHTS >= m_nbLights, "Too many lights");
+		}
 	}
 
 	void TDefferedFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)

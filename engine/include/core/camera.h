@@ -63,7 +63,6 @@ namespace donut
 			// Projection Data
 			float m_near;
 			float m_far;
-			float m_fcoeff;
 			float m_focus;
 
 			// View data

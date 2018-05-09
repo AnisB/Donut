@@ -2,7 +2,6 @@
 <topping name="white">
    <shader>
       <vertex location="common/shaders/uniform_color/vertex.glsl"/>
-      <geometry location="common/shaders/uniform_color/geometry.glsl"/>
       <fragment location="common/shaders/uniform_color/fragment.glsl"/>
    </shader>
    <built_in_data>

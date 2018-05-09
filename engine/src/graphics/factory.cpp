@@ -274,7 +274,7 @@ namespace donut
 		// Fetch the sugar descriptor
 		TSugarDescriptor sugar_descr(*bento::common_allocator());
 		bool request_result = ResourceManager::Instance().request_asset<TSugarDescriptor>(sugar_name, sugar_descr);
-		if (!request_result) return nullptr;
+		assert_msg(request_result, "Sugar not found");
 
 		// Create a sugar instance
 		TSugarInstance* newSugarInstance = new TSugarInstance();

@@ -1,7 +1,3 @@
-#version 410
-
-// Scenes matrices
-uniform mat4 model; 
 uniform mat4 view; 
 uniform mat4 projection;
 uniform mat4 modelviewprojection;
@@ -27,8 +23,4 @@ void main()
    	texCoordV = tex_coord;
     fnormalV = normalize(view*model*vec4(normal,0.0)).xyz;
 	ecPosV = view*model*vec4(position,1.0);
-
-    // Logarithmic depth buffer
-    gl_Position.z = log2(max(1e-6, 1.0 + gl_Position.w)) * fcoef - 1.0;
-    flogzG = 1.0 + gl_Position.w;
 }

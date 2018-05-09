@@ -156,10 +156,13 @@ namespace donut
 					break;
 					case TVFXTag::SKYBOX:
 					{
-						TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader_pipeline);
-						skyboxFX->SetSkybox(_scene->skybox);
-						skyboxFX->SetCamera(camera);
-						vfx = skyboxFX;
+						if(_scene->skybox != UINT32_MAX)
+						{
+							TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader_pipeline);
+							skyboxFX->SetSkybox(_scene->skybox);
+							skyboxFX->SetCamera(camera);
+							vfx = skyboxFX;
+						}
 					}
 					break;
 					default:
@@ -167,22 +170,24 @@ namespace donut
 					break;
 				}
 
-				assert(vfx);
-				for(auto& shader_data : vfxDescriptor.data)
+				if (vfx != nullptr)
 				{
-					switch (shader_data.type)
+					for (auto& shader_data : vfxDescriptor.data)
 					{
+						switch (shader_data.type)
+						{
 						case (uint8_t)TShaderDataType::TEXTURE2D:
 						{
 							vfx->AddTexture(ResourceManager::Instance().fetch_texture_id(shader_data.data.c_str()), shader_data.slot.c_str());
 						}
 						break;
+						}
 					}
-				}
 
-				TVFXPass* vfxPass = new TVFXPass(canvas, vfx);
-				vfxPass->SetCamera(camera);
-				pipeline->passes.push_back(vfxPass);
+					TVFXPass* vfxPass = new TVFXPass(canvas, vfx);
+					vfxPass->SetCamera(camera);
+					pipeline->passes.push_back(vfxPass);
+				}
 			}
 			else
 			{

@@ -43,6 +43,7 @@ namespace donut
 	        char* errorMessage = new char[infoLogLength];
 	        glGetShaderInfoLog(_shaderID, infoLogLength, NULL, errorMessage);
 			bento::default_logger()->log(bento::LogLevel::error, "SHADER_COMPILER", errorMessage);
+			assert_fail_msg("Shader compilation failed.");
 			delete [] errorMessage;
 	    }
 	}

@@ -59,8 +59,7 @@ namespace donut
 		// Setting the data
 		m_near = _near;
 		m_far = _far;
-		m_fcoeff = 2.0f / log2(m_far + 1.0f);
-		m_focus = 100.0f / (m_far - m_near);
+		m_focus = 1.0f;
 
 		// Compute the perspective matrix
 		AsPerspective(m_projection, _fovy, _apsect, _near, _far);
@@ -106,6 +105,8 @@ namespace donut
 
 	void Camera::AppendUniforms(std::map<std::string, TUniform>& _uniforms)
 	{
+		_uniforms["near_plane"].set_data(TShaderDataType::FLOAT, "near_plane", m_near);
+		_uniforms["far_plane"].set_data(TShaderDataType::FLOAT, "far_plane", m_far);
 		// Injecting view matrix
 		_uniforms["view"].set_data(TShaderDataType::MAT4, "view", m_viewMatrix);
 		// Injecting inversed view matrix
@@ -114,8 +115,6 @@ namespace donut
 		_uniforms["projection"].set_data(TShaderDataType::MAT4, "projection", m_projection);
 		// Injecting projection matrix
 		_uniforms["viewprojection"].set_data(TShaderDataType::MAT4, "viewprojection", m_projection * m_viewMatrix);
-		// Injecting zbuffer fcoef
-		_uniforms["fcoef"].set_data(TShaderDataType::FLOAT, "fcoef", m_fcoeff);
 		// Injecting focus distance
 		_uniforms["camera_position"].set_data(TShaderDataType::VEC3, "camera_position", m_position);
 		// Injecting focus distance

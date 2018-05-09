@@ -19,8 +19,6 @@ in float flogz;
 
 void main()
 {
-	// logarithmic zbuffer
-	gl_FragDepth = 0.5 * log2(flogz) * fcoef;
 	// Outputing in the Zbuffer
     frag_color[0] = texture(textureCmp,texCoord); // Albedo
     frag_color[1] = vec4(fnormal,1.0); // Camera space normal

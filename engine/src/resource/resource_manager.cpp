@@ -3,6 +3,8 @@
 #include "gpu_backend/gl_factory.h"
 #include "asset_compiler/asset_database_helpers.h"
 #include "resource/shader_source.h"
+#include	 "butter/stream.h"
+#include "base/stringhelper.h"
 
 #include <fstream>
 #include <sstream> 
@@ -129,6 +131,15 @@
 			{
 				switch (tex.type)
 				{
+					case (uint8_t)TShaderDataType::VEC4:
+					{
+						TUniform uniform;
+						uniform.type = TShaderDataType::VEC4;
+						uniform.slot = tex.slot.c_str();
+						reinterpret_cast<bento::Vector4&>(uniform.data) = convert_from_string<bento::Vector4>(tex.data.c_str());
+						new_material.uniforms.push_back(uniform);
+					}
+					break;
 					case (uint8_t)TShaderDataType::TEXTURE2D:
 					{
 						TEXTURE_GUID texture = ResourceManager::Instance().fetch_texture_id(tex.data.c_str());

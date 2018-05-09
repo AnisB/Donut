@@ -7,10 +7,10 @@ in vec2 texCoord;
 out vec4 frag_color;
 
 // Useful consts
-const float sample_radius = 2.0;
-const vec2 dirs[4] = vec2[](vec2(1,0),vec2(-1,0), vec2(0,1),vec2(0,-1));
-const float randomShift = 8.0;
-const int nbIterations = 4;
+const float sample_radius = 0.1f;
+const vec2 dirs[8] = vec2[](vec2(1,0),vec2(-1,0), vec2(0,1),vec2(0,-1), vec2(0.70710678118, 0.70710678118), vec2(-0.70710678118, 0.70710678118), vec2(-0.70710678118, -0.70710678118), vec2(0.70710678118, -0.70710678118));
+const float randomShift = 16.0;
+const int nbIterations = 8;
 const float scale = 0.1;
 
 // Uniform data
@@ -61,6 +61,6 @@ void main()
     ao += doAmbientOcclusion(texCoord,coord2, p, n);
   }
   ao = ao / nbIterations;
-  ao = pow(1.0 - ao, 2.0f);
+  ao = 1.0 - ao;
   frag_color = p4.w == 1.0f ? vec4(ao,ao,ao,1.0) : vec4(1.0);
 }
