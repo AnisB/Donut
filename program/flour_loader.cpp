@@ -34,29 +34,39 @@ int main(int argc, char** argv)
 	}
 
 	// Compile and store directly into the resource manager
-	bool result = donut::asset_compiler::compile(options, donut::ResourceManager::Instance().asset_database());
-
+	bool compilationResult = donut::asset_compiler::compile(options, donut::ResourceManager::Instance().asset_database());
 	// Quit if the compilation failed
-	if (!result) return -1;
+	if (!compilationResult) return -1;
+
+	// Initialize and request the target GPU backend API
 
 	// Creating the rendering window
 	donut::TRenderer window;
 
-	// Context info
+	// Build the settings for this program
 	donut::TGraphicSettings newContext = donut::gl::default_settings();
 	newContext.window_name = "flour_loader";
-	window.CreateRenderWindow(newContext);
+
+	// Initialize and fetch the target gpu api
+	donut::initialize_gpu_backend(newContext.backend);
+	const donut::GPUBackendAPI* targetBackend = donut::gpu_api(newContext.backend);
+	window.CreateRenderWindow(newContext, targetBackend);
 
 	donut::TFlour* flour = donut::GenerateFlour(options._target_flour.c_str());
+	assert_msg(flour != nullptr, "Could not fetch flour");
+
 	donut::TPipeline* renderingPipeline;
-	renderingPipeline = donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght);
+	renderingPipeline = donut::GenerateGraphicPipeline(flour, newContext.width, newContext.lenght, targetBackend);
+	assert_msg(flour != nullptr, "Could not create renderingPipeline");
+
 	window.SetPipeline(renderingPipeline);
 	window.Init();
 	
 	donut::Camera* camera = renderingPipeline->camera;
 	donut::TDefaultInputManager* inManager = static_cast<donut::TDefaultInputManager*>(donut::input_manager());
 	inManager->FCamera = camera;
-	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght, 0.1f, 1000.0f);
+	inManager->init(targetBackend);
+	camera->DefinePerspective(45.0, newContext.width/(double)newContext.lenght, 0.01f, 1000.0f);
 	
 	while(window.IsRendering())
 	{

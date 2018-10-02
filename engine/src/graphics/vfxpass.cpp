@@ -3,9 +3,9 @@
 
  namespace donut
  {
- 	//CLASS IMPLEMENTATION
-	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx)
-	: m_canvas(_canvas)
+	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx, const char* name, bento::IAllocator& allocator)
+	: TPass(name, allocator)
+	, m_canvas(_canvas)
 	, m_vfx(_vfx)
 	, m_values()
 	{
@@ -17,7 +17,7 @@
 
 	void TVFXPass::Init()
 	{
-		m_canvas->Init();
+		m_canvas->init();
 		m_vfx->Init();
 	}
 
@@ -30,18 +30,16 @@
 
 	void TVFXPass::Bind()
 	{
-		m_canvas->Enable();
+		m_canvas->enable();
 	}
 
 	const TBufferOutput* TVFXPass::GetOutput()
 	{
-		return &(m_canvas->Result());
+		return &(m_canvas->result());
 	}
 
 	void TVFXPass::Unbind()
 	{
-		m_canvas->Disable();
+		m_canvas->disable();
 	}
-
-	// END CLASS IMPLEMENTATION
  }

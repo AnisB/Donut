@@ -1,11 +1,23 @@
+<?xml version="1.0"?>
 <pipeline name="normal">
 	<!-- First g buffer pass -->
 	<pass type="geometry">
-		<canvas type="gbuffer"/>
+		<canvas>
+			<depth_test_on/>
+			<outputs>
+				<color name="albedo"/>
+				<color name="normal"/>
+				<color name="specular"/>
+				<color name="eye_pos"/>
+				<depth name="depth"/>
+			</outputs>
+		</canvas>
 	</pass>
 	<!-- Deffered lighting pass -->
 	<pass type="vfx">
-		<canvas type="empty"/>
+		<canvas>
+			<depth_test_off/>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/normal/vertex.glsl"/>

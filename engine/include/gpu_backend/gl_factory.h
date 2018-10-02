@@ -18,60 +18,6 @@ namespace gl {
 	void clear_state();
 	bool check_state();
 
-	// Window API
-	namespace window
-	{
-		void show(RenderWindow window);
-		void hide(RenderWindow window);
-		bool is_active(RenderWindow window);
-		void swap(RenderWindow window);
-	}
-
-	// Frame buffer API
-	namespace framebuffer
-	{
-		// Frame buffer creation / destruction
-		FramebufferObject create();
-		void destroy(FramebufferObject frame_buffer);
-
-		// Function to check a previously created frame buffer
-		bool check(FramebufferObject framebuffer);
-
-		// Function to bind and unbind a frame buffer
-		void bind(FramebufferObject framebuffer);
-		void unbind(FramebufferObject framebuffer);
-
-		// Bind a given texture
-		void bind_texture(FramebufferObject framebuffer, const TTextureInfo& _tex);
-
-		// Depth test function
-		void enable_depth_test(FramebufferObject framebuffer);
-		void disable_depth_test(FramebufferObject framebuffer);
-
-		// Framebuffer manipulation functions
-		void clear(FramebufferObject frame_buffer);
-		void set_clear_color(FramebufferObject frame_buffer, const bento::Vector4& _color);
-
-		// Set the number of render targets for this render target
-		void set_num_render_targets(FramebufferObject frmabuffer, uint8_t num_render_targets);
-	}
-
-	// Texture2D API
-	namespace texture2D
-	{
-		// Texture creation / destruction
-		TextureObject create(TTextureNature::Type nature, int width, int height);
-		TextureObject create(const TTexture& source);
-		void destroy(TextureObject tex);
-	}
-	
-	// TextureCUBE API
-	namespace textureCUBE
-	{
-		CubemapObject create(const TSkybox& source_skybox);
-		void destroy(CubemapObject cubemap);
-	}
-
 	// Geometry API
 	namespace geometry
 	{
@@ -87,7 +33,7 @@ namespace gl {
 		void bbox(GeometryObject geometry, TBox3& outbbox);
 	}
 
-	#if 1
+	#if 0
 		#define GL_API_CHECK() {assert_msg(gl::check_state(), FUNCTION_NAME);}
 	#else
 		#define GL_API_CHECK() {}

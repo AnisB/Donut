@@ -2,19 +2,38 @@
 <pipeline name="complete">
 
 	<!-- First g buffer pass -->
-	<pass type="geometry">
-		<canvas type="gbuffer"/>
+	<pass type="geometry" name="GBuffer">
+		<canvas>
+			<depth_test_on/>
+			<outputs>
+				<color name="albedo"/>
+				<color name="world_normal"/>
+				<color name="specular"/>
+				<color name="world_position"/>
+				<depth name="depth"/>
+			</outputs>
+		</canvas>
 	</pass>
 
 	<!-- Deffered lighting pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="deffered"/>
+	<pass type="vfx" name="Deferred Lighting">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="deffered"/>
+			</outputs>
+		</canvas>
 		<vfx type="deffered"/>
 	</pass>
 
 	<!-- SSAO PASS -->
-	<pass type="vfx">
-		<canvas type="effect" output="ssao_prefiltered"/>
+	<pass type="vfx" name="SSAO">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="ssao_prefiltered"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssao/vertex.glsl"/>
@@ -27,8 +46,13 @@
 	</pass>
 
 	<!-- SSAO FILTERING PASS -->
-	<pass type="vfx">
-		<canvas type="effect" output="ssao_filtered"/>
+	<pass type="vfx" name="SSAO Blur">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="ssao_filtered"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/blur/vertex.glsl"/>
@@ -38,14 +62,24 @@
 	</pass>
 
 	<!-- Environement lighting pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="envmap"/>
+	<pass type="vfx" name="Env Lighting">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="envmap"/>
+			</outputs>
+		</canvas>
 		<vfx type="environement"/>
 	</pass>
 
 	<!-- Compositing lighting pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="composed"/>
+	<pass type="vfx" name="Composition">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="composed"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/cmp/vertex.glsl"/>
@@ -55,8 +89,13 @@
 	</pass>
 
 	<!-- Reflection pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="reflection"/>
+	<pass type="vfx" name="SSR">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="reflection"/>
+			</outputs>
+		</canvas>
 		<vfx type="skybox">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssr/raymarch_vertex.glsl"/>
@@ -66,8 +105,13 @@
 	</pass>
 
 	<!-- Blurring the reflection buffer pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="reflection_smoothV"/>
+	<pass type="vfx" name="SSR BlurV">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="reflection_smoothV"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssr/smoothV_vertex.glsl"/>
@@ -77,8 +121,13 @@
 	</pass>
 
 	<!-- Blurring the reflection buffer pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="reflection_smoothH"/>
+	<pass type="vfx" name="SSR BlurH">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="reflection_smoothH"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssr/smoothH_vertex.glsl"/>
@@ -88,8 +137,13 @@
 	</pass>
 
 	<!-- Compose the SSR -->
-	<pass type="vfx">
-		<canvas type="effect" output="dof_input"/>
+	<pass type="vfx" name="SSR compose" >
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="dof_input"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/ssr/compose_vertex.glsl"/>
@@ -99,8 +153,13 @@
 	</pass>
 
 	<!-- Depth of field pass -->
-	<pass type="vfx">
-		<canvas type="effect" output="srgb_input"/>
+	<pass type="vfx" name="DOF">
+		<canvas>
+			<depth_test_off/>
+			<outputs>
+				<color name="srgb_input"/>
+			</outputs>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/dof/vertex.glsl"/>
@@ -110,8 +169,10 @@
 	</pass>
 
 	<!-- Apply an srgb response-->
-	<pass type="vfx">
-		<canvas type="empty"/>
+	<pass type="vfx" name="Final">
+		<canvas>
+			<depth_test_off/>
+		</canvas>
 		<vfx type="simplefx">
 			<shader>
 				<vertex location="common/shaders/ssfx/srgb/vertex.glsl"/>

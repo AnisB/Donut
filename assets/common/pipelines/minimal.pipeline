@@ -1,5 +1,8 @@
+<?xml version="1.0"?>
 <pipeline name="minimal">
-	<pass type="geometry">
-		<canvas type="empty"/>
+	<pass type="geometry" name="Albedo">
+		<canvas>
+			<depth_test_on/>
+		</canvas>
 	</pass>
 </pipeline>   

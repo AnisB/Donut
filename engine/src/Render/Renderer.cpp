@@ -27,18 +27,17 @@
 		_is_running = false;
  	}
 
- 	bool TRenderer::CreateRenderWindow(const TGraphicSettings& parContext)
+ 	bool TRenderer::CreateRenderWindow(const TGraphicSettings& parContext, const GPUBackendAPI* gpuBackend)
  	{
  		if(!FInitDone)
  		{
-			// Fetch the GL rendering backend
-			build_rendering_backend(RenderingBackEnd::OPENGL, m_gpuBackendApi);
+			m_gpuBackendApi = gpuBackend;
 
 			// Init the render backend
-			m_gpuBackendApi.init_render_system();
+			m_gpuBackendApi->render_system_api.init_render_system();
 			// Create a window
-			_render_environement = m_gpuBackendApi.create_render_environment(parContext);
-			FWindow = m_gpuBackendApi.render_window(_render_environement);
+			_render_environement = m_gpuBackendApi->render_system_api.create_render_environment(parContext);
+			FWindow = m_gpuBackendApi->render_system_api.render_window(_render_environement);
 			_is_running = true;
 			FInitDone = true;
  		}
@@ -53,8 +52,8 @@
  	{
 		if (FInitDone)
 		{
-			m_gpuBackendApi.destroy_render_environment((uint64_t)FWindow);
-			m_gpuBackendApi.shutdown_render_system();
+			m_gpuBackendApi->render_system_api.destroy_render_environment((uint64_t)FWindow);
+			m_gpuBackendApi->render_system_api.shutdown_render_system();
 			FInitDone = false;
 		}
  	}	
@@ -62,20 +61,20 @@
  	void TRenderer::HideRenderWindow()
  	{
  		assert(FWindow != NULL);
-		gl::window::hide(FWindow);
+		m_gpuBackendApi->window_api.hide(FWindow);
 	}
 
  	void TRenderer::ShowRenderWindow()
  	{
 		assert(FWindow != NULL);
-		gl::window::show(FWindow);
+		m_gpuBackendApi->window_api.show(FWindow);
 	}
 
  	bool TRenderer::Init()
  	{
  		bool isOk = true;
 
-		gl::framebuffer::set_clear_color(0, bento::v4_ZERO);
+		m_gpuBackendApi->frame_buffer_api.set_clear_color(0, bento::v4_ZERO);
  			
 		uint64_t nbPasses = m_pipeline->passes.size();
         for(size_t pass = 0; pass < nbPasses; ++pass)
@@ -101,29 +100,31 @@
  	void TRenderer::Draw()
  	{ 	 
 		// We clear the global buffer
- 		gl::framebuffer::clear(0);
+		m_gpuBackendApi->frame_buffer_api.clear(0);
 
 		uint32_t nbPasses = (uint32_t)m_pipeline->passes.size();
         for(uint32_t pass = 0; pass < nbPasses; ++pass)
         {
         	TPass * currentPass = m_pipeline->passes[pass];
+			m_gpuBackendApi->render_section_api.start_render_section(currentPass->name());
 			currentPass->Bind();
 			currentPass->Draw(m_pipeline->pipelineData);
 			currentPass->Unbind();
-        }
+			m_gpuBackendApi->render_section_api.end_render_section();
+		}
 		// Swap front and back buffer
-		gl::window::swap(FWindow);
+		m_gpuBackendApi->window_api.swap(FWindow);
     }
 
 	bool TRenderer::IsRendering()
 	{
-		return (_is_running && gl::window::is_active(FWindow));
+		return (_is_running && m_gpuBackendApi->window_api.is_active(FWindow));
 
 	}
 
 	void TRenderer::collect_inputs()
 	{
-		m_gpuBackendApi.collect_inputs(_render_environement);
+		m_gpuBackendApi->render_system_api.collect_inputs(_render_environement);
 	}
 
 	void TRenderer::SetRendering(bool parVal)

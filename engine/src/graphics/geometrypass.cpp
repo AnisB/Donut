@@ -11,8 +11,9 @@
  {
 
  	//CLASS IMPLEMENTATION
-	TGeometryPass::TGeometryPass(TCanvas* _canvas, TFlour* _flour)
-	: m_canvas(_canvas)
+	TGeometryPass::TGeometryPass(TCanvas* _canvas, TFlour* _flour, const char* name, bento::IAllocator& allocator)
+	: TPass(name, allocator)
+	, m_canvas(_canvas)
 	, m_flour(_flour)
 	, m_reference()
 	, m_camera(nullptr)
@@ -30,7 +31,7 @@
 	void TGeometryPass::Init()
 	{
 		// Init the canvas
-		m_canvas->Init();
+		m_canvas->init();
 
 		// Create the drawable for the skybox if there is some
 		if (m_flour->skybox != UINT32_MAX)
@@ -72,17 +73,17 @@
 
 	void TGeometryPass::Bind()
 	{
-		m_canvas->Enable();
+		m_canvas->enable();
 	}
 	
 	const TBufferOutput* TGeometryPass::GetOutput()
 	{
-		return &(m_canvas->Result());
+		return &(m_canvas->result());
 	}
 
 	void TGeometryPass::Unbind()
 	{
-		m_canvas->Disable();
+		m_canvas->disable();
 	}
 
 	// END CLASS IMPLEMENTATION

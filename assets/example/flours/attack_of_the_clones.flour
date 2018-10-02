@@ -1,0 +1,372 @@
+<?xml version="1.0"?>
+<flour name="attack_of_the_clones">
+	<node>		
+		 <!--Ligne 1-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 0 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+
+		 <!--Ligne 2-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 1 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>	
+
+		 <!--Ligne 3-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 2 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>		
+
+		 <!--Ligne 4-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 3 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>		
+
+		 <!--Ligne 5-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 4 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>	
+
+		 <!--Ligne 6-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 5 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>	
+
+		 <!--Ligne 7-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 6 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+
+		 <!--Ligne 8-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 7 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+
+		 <!--Ligne 9-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 8 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+
+		 <!--Ligne 10-->
+		<node TM="1 0 0 0 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 1 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 2 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 3 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 4 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 5 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 6 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 7 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 8 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 9 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+		<node TM="1 0 0 10 0 1 0 0 0 0 1 9 0 0 0 1">
+			<model sugar="stormtropper_sugar"/>
+		</node>
+
+		<!-- Ground-->
+		<node TM="12 0 0 -1 0 12 0 0 0 0 12 -1 0 0 0 1">
+			<model sugar="parquet_sugar"/>
+		</node>
+	</node>
+	<pipeline name="complete"/>
+	<illumination>
+		<light position="2 3 2" color="1 1 1 1" radius="5"/>
+		<light position="8 3 2" color="0 0 0.5 1" radius="5"/>
+		<light position="2 3 8" color="0 0.5 0 1" radius="5"/>
+		<light position="8 3 8" color="0.9 0.5 0.3 1" radius="5"/>
+	</illumination>
+
+	<skybox source="example/skybox/mountain.jpg"/>
+
+	<!-- <envSH red="0.79 0.39 -0.34 -0.29 -0.11 -0.26 -0.16 0.56 0.21" green="0.44 0.35 -0.18 -0.06 -0.05 -0.22 -0.09 0.21 -0.05" blue="0.54 0.60 -0.27 0.01 -0.12 -0.47 -0.15 0.14 -0.30" />-->
+
+	<envSH red="0.38 0.29 0.04 -0.10 -0.06 0.01 -0.09 -0.06 0.02" green="0.43 0.36 0.03 -0.10 -0.06 -0.01 -0.13 -0.05 -0.00" blue="0.45 0.41 0.01 -0.09 -0.04 -0.05 -0.15 -0.04 -0.05" />
+</flour>   

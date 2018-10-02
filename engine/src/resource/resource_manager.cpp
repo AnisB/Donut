@@ -1,11 +1,13 @@
 #include "asset_compiler/texture_helpers.h"
 #include "resource/resource_manager.h"
 #include "gpu_backend/gl_factory.h"
+#include "gpu_backend/gl_backend.h"
 #include "asset_compiler/asset_database_helpers.h"
 #include "resource/shader_source.h"
-#include	 "butter/stream.h"
+#include "butter/stream.h"
 #include "base/stringhelper.h"
 
+// External includes
 #include <fstream>
 #include <sstream> 
 #include <vector> 
@@ -70,7 +72,12 @@
 			m_textureIdentifiers[texture_path] = new_texture_id;
 
 			// Create a gpu texture
-			m_textures[new_texture_id] = gl::texture2D::create(tmp_texture);
+			TextureObject newTextureObject = gl::texture2D::create_color_texture(tmp_texture);
+			// Set a debug name for it
+			gl::texture2D::set_debug_name(newTextureObject, texture_path);
+
+			// Register it
+			m_textures[new_texture_id] = newTextureObject;
 
  			return (TEXTURE_GUID)new_texture_id;
  		}

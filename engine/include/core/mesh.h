@@ -21,6 +21,8 @@
 
 		// Evaluate the mesh
 		virtual void Evaluate(TCollector& _collector, const bento::Matrix4& _tm);
+
+		MATERIAL_GUID material() const { return m_material; }
 		
 	protected:
 	 	// All the required attributes for drawing a mesh

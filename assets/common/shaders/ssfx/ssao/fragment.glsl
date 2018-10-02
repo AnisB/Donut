@@ -7,17 +7,17 @@ in vec2 texCoord;
 out vec4 frag_color;
 
 // Useful consts
-const float sample_radius = 0.1f;
+const float sample_radius = 0.01f;
 const vec2 dirs[8] = vec2[](vec2(1,0),vec2(-1,0), vec2(0,1),vec2(0,-1), vec2(0.70710678118, 0.70710678118), vec2(-0.70710678118, 0.70710678118), vec2(-0.70710678118, -0.70710678118), vec2(0.70710678118, -0.70710678118));
 const float randomShift = 16.0;
-const int nbIterations = 8;
+const int nbIterations = 16;
 const float scale = 0.1;
 
 // Uniform data
 uniform sampler2D albedo;
-uniform sampler2D normal;
+uniform sampler2D world_normal;
 uniform sampler2D specular;
-uniform sampler2D position;
+uniform sampler2D world_position;
 uniform sampler2D depth;
 uniform sampler2D random;
 uniform int width;
@@ -25,7 +25,7 @@ uniform int lenght;
 
 float doAmbientOcclusion(vec2 tcoord, vec2 uv, vec3 p, vec3 cnorm)
 {
-  vec3 diff = texture(position, tcoord + uv).xyz - p;
+  vec3 diff = texture(world_position, tcoord + uv).xyz - p;
   float lengthDiff = length(diff);
   vec3 v = diff/ lengthDiff;
   float d = lengthDiff * scale;
@@ -37,11 +37,11 @@ void main()
   // If its too far, just forget about it
   // Maybe should not be done?
   float d = texture(depth, texCoord).r;
-  vec4 p4 = texture(position, texCoord);
+  vec4 p4 = texture(world_position, texCoord);
 
   vec3 p = p4.xyz;
   // Fetching the data
-  vec3 n = texture(normal, texCoord).xyz;
+  vec3 n = texture(world_normal, texCoord).xyz;
   vec2 rand = texture(random, texCoord * randomShift).xy;
 
   // We get the radius value

@@ -6,16 +6,15 @@
 
 namespace donut
 {
-	namespace TCanvasTag
-    {
-        enum Type
-        {
-            UNKNOWN = 0,
-            EMPTY = 1,
-            EFFECT = 2,
-            GBUFFER = 3,
-        };
-    }
+	namespace TPassTag
+	{
+		enum Type
+		{
+			GEOMETRY = 0,
+			VFX = 1,
+			UNKNOWN = -1
+		};
+	}
 
     namespace TVFXTag
     {
@@ -29,27 +28,27 @@ namespace donut
         };
     }
 
-    namespace TPassTag
-    {
-        enum Type
-        {
-            GEOMETRY = 0,
-            VFX = 1,
-            UNKNOWN = -1
-        };
-    }
+	struct TCanvasOutput
+	{
+		ALLOCATOR_BASED;
+		TCanvasOutput(bento::IAllocator& alloc)
+		: slot(alloc)
+		{
+		}
+		TTextureNature::Type nature;
+		bento::DynamicString slot;
+	};
 
-    // Descriptor for a rendering pipeline
+	// Descriptor for a rendering pipeline
     struct TPipelineCanvas
     {
 		ALLOCATOR_BASED;
 		TPipelineCanvas(bento::IAllocator& alloc)
-		: output(alloc)
-		, tag((uint8_t)TCanvasTag::UNKNOWN)
+		: outputs(alloc)
 		{
 		}
-        uint8_t tag;
-        bento::DynamicString output;
+		bool depthTest;
+		bento::Vector<TCanvasOutput> outputs;
     };
 
     struct TPipelineVFX
@@ -74,9 +73,11 @@ namespace donut
 		: tag((uint8_t)TPassTag::UNKNOWN)
 		, canvas(alloc)
 		, vfx(alloc)
+		, name(alloc)
 		{
 		}
-        uint8_t tag;
+		bento::DynamicString name;
+		uint8_t tag;
         TPipelineCanvas  canvas;
         TPipelineVFX  vfx;
     };

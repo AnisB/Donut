@@ -35,7 +35,7 @@
 		~TRenderer();
 
 		// Initialisation/Destruction and context settings
-		bool CreateRenderWindow(const TGraphicSettings& parContext);
+		bool CreateRenderWindow(const TGraphicSettings& graphicsSettings, const GPUBackendAPI* targetBackend);
 		void DestroyRenderWindow();
 
 		// Hiding and showing back the renderwindow
@@ -66,14 +66,13 @@
 
 		bool FIsFullScreen;
 		bento::IVector2 FWindowSize;
-		GPUBackendAPI m_gpuBackendApi;
+		const GPUBackendAPI* m_gpuBackendApi;
 
 		// Is Rendering member
 		std::atomic_bool _is_running;
 
 		TPipeline* m_pipeline;
 	};
-	// END CLASS DECLARATION
 
 	void *CreateRenderingThread(void* parGraphicRenderer);
  }

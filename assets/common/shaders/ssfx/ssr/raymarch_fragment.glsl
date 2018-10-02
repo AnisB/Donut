@@ -9,18 +9,20 @@ out vec4 frag_color;
 // Input uniforms
 uniform sampler2D composed;
 uniform sampler2D specular;
-uniform sampler2D normal;
-uniform sampler2D position;
+uniform sampler2D world_normal;
+uniform sampler2D world_position;
 uniform samplerCube skybox;
-uniform mat3 view_inverse;
+
+uniform mat4 view;
 uniform mat4 projection;
 uniform float near_plane;
+uniform vec3 camera_position;
 
 // Reflection parameters
 int max_steps = 300;
-float maxDistance = 500.0; 
-float pixel_stride = 1.0;
-float zThickness = 1.1;
+float maxDistance = 10.0; 
+float pixel_stride = 1.1;
+float zThickness = 0.1;
 
 // Moves from xy data [-1,1] to [0,1]
 const mat4 toTextureSpace = mat4(0.5f, 0.0f, 0.0f, 0.0f,
@@ -55,14 +57,14 @@ vec2 normalizeTexCoord(vec2 _pix)
 vec2 linearDepthTexelFetch(vec2 hitPixel)
 {
 	// Fetch the target position of the 
-	vec4 position = texture(position, hitPixel);
+	vec4 ws_position = texture(world_position, hitPixel);
 
 	// Compute the real projection of the point
-	vec4 posProj = projection * position;
+	vec4 posProj = projection * view * ws_position;
 
 	// Compute the thickness of the pixel
-	position.z += zThickness;
-	vec4 posProjLimit = projection * position;
+	ws_position.z += zThickness;
+	vec4 posProjLimit = posProj;
 
 	// If the pixel if viable, return the couple real/thickness
 	return (hitPixel.x < 0 || hitPixel.x > 1.0 || hitPixel.y <0 || hitPixel.y > 1.0) ? vec2(0.0) : vec2(posProj.z / posProj.w, posProjLimit.z/posProjLimit.w);
@@ -72,27 +74,32 @@ void main()
 { 
 	// Fetch reflection percentage
     float reflection = texture(specular, texCoord).z;
-
     // Fetch the original color of the pixel
     vec4 originalColor = texture(composed, texCoord.xy);
 
     // Fetch the world space position
-    vec3 vs_origin = texture(position, texCoord).xyz;
+    vec3 ws_origin = texture(world_position, texCoord).xyz;
 
     // Fetch the textel's normal
-    vec3 vs_normal = texture(normal, texCoord).xyz;
+    vec3 ws_normal = texture(world_normal, texCoord).xyz;
+
+    // Compute the view direction
+    vec3 view_dir = normalize(ws_origin - camera_position);
 
     // This is the direction we will be looking through
-    vec3 vs_direction = reflect(normalize(vs_origin), vs_normal);
+    vec3 ws_direction = reflect(view_dir, ws_normal);
 
 	// Farest contribution point possible
-	float maxZ = (vs_origin.z + vs_direction.z * maxDistance);
+	float maxZ = (ws_origin.z + ws_direction.z * maxDistance);
 
 	// We clip the ray length to the near plane
-	float rayLength = maxZ > -near_plane ? (-near_plane - vs_origin.z) / vs_direction.z : maxDistance;
+	float rayLength = maxZ > -near_plane ? (-near_plane - ws_origin.z) / ws_direction.z : maxDistance;
 
 	// Compute the real end point
-	vec3 vs_endPoint = vs_origin + vs_direction * rayLength;
+	vec3 ws_endPoint = ws_origin + ws_direction * rayLength;
+
+	vec3 vs_origin = (view * vec4(ws_origin, 1.0f)).xyz;
+	vec3 vs_endPoint = (view * vec4(ws_endPoint, 1.0f)).xyz;
 
 	// Project the star and end point into homogeneous space
 	vec4 H0 = toTextureSpace * projection * vec4(vs_origin, 1.0f);
@@ -198,5 +205,5 @@ void main()
 	}
 	
 	// return the target color
-	frag_color = (intersection ? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, view_inverse * vs_direction)) * reflection;
+	frag_color = (intersection ? texture(composed, normalizeTexCoord(hitPixel)) : texture(skybox, ws_direction)) * reflection;
 }

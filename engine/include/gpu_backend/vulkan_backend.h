@@ -1,5 +1,4 @@
-#ifndef VULKAN_BACKEND_H
-#define VULKAN_BACKEND_H
+#pragma once
 
 #ifdef VULKAN_SUPPORTED
 // Library includes
@@ -21,5 +20,4 @@ namespace donut
 		RenderWindow render_window(RenderEnvironment render_environement);
 	}
 }
-#endif // VULKAN_SUPPORTED
 #endif // VULKAN_BACKEND_H

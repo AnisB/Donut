@@ -9,5 +9,5 @@ out vec2 texCoord;
 void main()
 {
     gl_Position = vec4(position,1.0);
-    texCoord = tex_coord;
+    texCoord = vec2(tex_coord.x, 1.0f - tex_coord.y);
 }

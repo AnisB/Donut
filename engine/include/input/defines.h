@@ -38,7 +38,10 @@ namespace donut
 	 		LEFT=263,
 			DOWN=264,
 			UP=265,
+
 			// Other
+			PAGE_UP = 266,
+			PAGE_DOWN = 267,
 			ESCAPE = 256
 		};
 	}

@@ -1,7 +1,7 @@
 #pragma once
 
 // Internal includes
-#include <gpu_backend/gpu_backend.h>
+#include <gpu_backend/gpu_types.h>
 
 // STL includes
 #include <string.h>

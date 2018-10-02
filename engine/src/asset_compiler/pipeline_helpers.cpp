@@ -20,12 +20,17 @@ namespace donut
 
     // STEP TOKENS
     #define PASS_NODE_TOKEN "pass"
+    #define PASS_NAME_TOKEN "name"
     #define PASS_TYPE_TOKEN "type"
 
     // CANVAS TOKENS
     #define CANVAS_NODE_TOKEN "canvas"
-    #define CANVAS_TYPE_TOKEN "type"
-    #define CANVAS_OUTPUT_TOKEN "output"
+    #define CANVAS_DEPTH_TEST_ON_TOKEN "depth_test_on"
+    #define CANVAS_DEPTH_TEST_OFF_TOKEN "depth_test_off"
+    #define CANVAS_OUTPUTS_TOKEN "outputs"
+    #define CANVAS_COLOR_OUTPUT_TOKEN "color"
+    #define CANVAS_DEPTH_OUTPUT_TOKEN "depth"
+    #define CANVAS_OUTPUT_NAME_TOKEN "name"
 
     // PASS TOKENS
     #define VFX_NODE_TOKEN "vfx"
@@ -57,27 +62,6 @@ namespace donut
         } 
     }
 
-    TCanvasTag::Type GetCanvasTag(const std::string& _tag)
-    {
-        if(_tag == "empty")
-        {
-            return TCanvasTag::EMPTY;
-        }
-        else if(_tag == "effect")
-        {
-            return TCanvasTag::EFFECT;
-
-        }
-        else if(_tag == "gbuffer")
-        {
-            return TCanvasTag::GBUFFER;
-        }
-        else
-        {
-            return TCanvasTag::UNKNOWN;
-        } 
-    }
-
     TPassTag::Type GetPassTag(const std::string& _tag)
     {
         if(_tag == "geometry")
@@ -93,6 +77,37 @@ namespace donut
             return TPassTag::UNKNOWN;
         } 
     }
+
+	void fill_canvas(rapidxml::xml_node<>* canvas, TPipelineCanvas& targetCanvas)
+	{
+		// The default behavior is the depth test being on (if nothing defined)
+		rapidxml::xml_node<>* depth_test_on = canvas->first_node(CANVAS_DEPTH_TEST_ON_TOKEN);
+		rapidxml::xml_node<>* depth_test_off = canvas->first_node(CANVAS_DEPTH_TEST_OFF_TOKEN);
+		targetCanvas.depthTest = depth_test_on ? true : depth_test_off == nullptr;
+
+		rapidxml::xml_node<>* outputs = canvas->first_node(CANVAS_OUTPUTS_TOKEN);
+		if (outputs != nullptr)
+		{
+			for (rapidxml::xml_node<>* passNode = outputs->first_node(CANVAS_COLOR_OUTPUT_TOKEN); passNode; passNode = passNode->next_sibling(CANVAS_COLOR_OUTPUT_TOKEN))
+			{
+				uint32_t element_idx = targetCanvas.outputs.size();
+				targetCanvas.outputs.resize(element_idx + 1);
+				TCanvasOutput& output = targetCanvas.outputs[element_idx];
+				output.slot = passNode->first_attribute(CANVAS_OUTPUT_NAME_TOKEN)->value();
+				output.nature = TTextureNature::COLOR;
+			}
+
+			rapidxml::xml_node<>* depth_output = outputs->first_node(CANVAS_DEPTH_OUTPUT_TOKEN);
+			if (depth_output)
+			{
+				uint32_t element_idx = targetCanvas.outputs.size();
+				targetCanvas.outputs.resize(element_idx + 1);
+				TCanvasOutput& output = targetCanvas.outputs[element_idx];
+				output.slot = depth_output->first_attribute(CANVAS_OUTPUT_NAME_TOKEN)->value();
+				output.nature = TTextureNature::DEPTH;
+			}
+		}
+	}
 
     bool read_pipeline(const char* _pipelineFileName, TPipelineDescriptor& _pipeline)
     {
@@ -112,39 +127,29 @@ namespace donut
         _pipeline.name = pipeline_root->first_attribute(PIPELINE_NAME_TOKEN)->value();
 
 
-        for(rapidxml::xml_node<>* passNode = pipeline_root->first_node(PASS_NODE_TOKEN); passNode; passNode = passNode->next_sibling())
+        for(rapidxml::xml_node<>* passNode = pipeline_root->first_node(PASS_NODE_TOKEN); passNode; passNode = passNode->next_sibling(PASS_NODE_TOKEN))
         {
 			uint32_t element_idx = _pipeline.passes.size();
 			_pipeline.passes.resize(element_idx + 1);
             TPipelinePass& pass = _pipeline.passes[element_idx];
-            
+
+			// Grab the pass' type
 			pass.tag = GetPassTag(passNode->first_attribute(PASS_TYPE_TOKEN)->value());
-            if(pass.tag == TPassTag::GEOMETRY)
-            {
-                // Fetch the canvas
-                rapidxml::xml_node<>* canvas = passNode->first_node(CANVAS_NODE_TOKEN);
-                 // Filling the canvas
-                pass.canvas.tag = GetCanvasTag(canvas->first_attribute(CANVAS_TYPE_TOKEN)->value());
-                rapidxml::xml_attribute<>* canvasOutput = canvas->first_attribute(CANVAS_OUTPUT_TOKEN);
-                if(canvasOutput)
-                {
-                    pass.canvas.output = canvas->first_attribute(CANVAS_OUTPUT_TOKEN)->value();
-                }
-            }
-            else if (pass.tag == TPassTag::VFX)
-            {
-                // Fetch the canvas
-                rapidxml::xml_node<>* canvas = passNode->first_node(CANVAS_NODE_TOKEN);
 
-                // Filling the canvas
-                pass.canvas.tag = GetCanvasTag(canvas->first_attribute(CANVAS_TYPE_TOKEN)->value());
-                rapidxml::xml_attribute<>* canvasOutput = canvas->first_attribute(CANVAS_OUTPUT_TOKEN);
-                if(canvasOutput)
-                {
-                    pass.canvas.output = canvas->first_attribute(CANVAS_OUTPUT_TOKEN)->value();
-                }
+			// Grab the pass' name
+			rapidxml::xml_attribute<>* pass_name = passNode->first_attribute(PASS_NAME_TOKEN);
+			pass.name = pass_name ? pass_name->value() : "UNKNOWN";
 
-                // Fillinf the pass
+			// Fill the canvas
+			rapidxml::xml_node<>* canvas = passNode->first_node(CANVAS_NODE_TOKEN);
+			if (canvas != nullptr)
+			{
+				fill_canvas(canvas, pass.canvas);
+			}
+            
+            if (pass.tag == TPassTag::VFX)
+            {
+                // Filling the pass
                 rapidxml::xml_node<>* vfx = passNode->first_node(VFX_NODE_TOKEN);
                 pass.vfx.tag = GetVFXTag(vfx->first_attribute(VFX_TYPE_TOKEN)->value());
 
@@ -162,7 +167,7 @@ namespace donut
 					BuildTexturesDescriptor(textures, pass.vfx.data);
                 }
             }
-            else
+            else if(pass.tag != TPassTag::GEOMETRY)
             {
                 assert_fail_msg("Unkown pass type");
             }

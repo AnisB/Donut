@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<sugar name="Teapot">
-	<renderables>
-		<renderable id="0">
-			<geometry location="common/geometries/teapot.obj"/>
-			<material name="rockwall_base"/>
-		</renderable>
-	</renderables>
-</sugar>

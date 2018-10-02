@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<topping name="parquet_topping">
+<topping name="stormtrooper_topping">
    <shader>
       <vertex location="common/shaders/base/vertex.glsl"/>
       <fragment location="common/shaders/base/fragment.glsl"/>
@@ -10,6 +10,7 @@
       <data type="float" name="reflection" value="0.5"/>
    </extern_data>
    <textures>
-      <texture2D name="textureCmp" location="example/textures/farmhouse.jpg"/>
+      <texture2D name="color_tex" location="example/textures/stormtrooper_D.png"/>
+      <texture2D name="rm_tex" location="example/textures/stormtrooper_S.png"/>
    </textures>
 </topping>

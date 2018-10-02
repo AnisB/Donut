@@ -338,11 +338,10 @@ namespace donut
 		skybox_name += std::to_string(skybox_counter++);
 
 		// Create the geometry
-		TMesh* skybox = CreateCube(10.0f, "skybox");
+		TMesh* skybox = CreateCube(1.0f, "skybox");
 
 		// Request the shader
-		MATERIAL_GUID material = ResourceManager::Instance().instanciate_material("skybox", skybox_name.c_str());
-		TMaterial& mat = ResourceManager::Instance().request_runtime_material(material);
+		TMaterial& mat = ResourceManager::Instance().request_runtime_material(skybox->material());
 
 		// Add it to the material
  		TCubeMapInfo newCM;

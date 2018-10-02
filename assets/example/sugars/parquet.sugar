@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<sugar name="parquet">
+<sugar name="parquet_sugar">
 	<renderables>
 		<renderable id="0">
 			<geometry location="common/geometries/plane.obj"/>
-			<material name="farmhouse_base"/>
+			<material name="parquet_topping"/>
 		</renderable>
 	</renderables>
 </sugar>

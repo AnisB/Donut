@@ -15,7 +15,7 @@
 	{
 	public:
 		// Constructor destructor
-		TVFXPass(TCanvas* _canvas, TVFX* _vfx);
+		TVFXPass(TCanvas* _canvas, TVFX* _vfx, const char* name, bento::IAllocator& allocator);
 		~TVFXPass();
 		
 		// Setting the pass content

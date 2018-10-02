@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<sugar name="stormtropper_sugar">
+	<renderables>
+		<renderable id="0">
+			<geometry location="example/geometries/stormtrooper.obj"/>
+			<material name="stormtrooper_topping"/>
+		</renderable>
+	</renderables>
+</sugar>

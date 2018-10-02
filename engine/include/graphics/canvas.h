@@ -11,39 +11,44 @@
 
 namespace donut
 {
-	// Foward declaration
-	struct TGeometry;
-
-
+	// This structure holds the set of buffers that a given canvas can produce
 	struct TBufferOutput
 	{
 		int width;
 		int height;
+		bool depthTest;
 		std::vector<TTextureInfo> buffers;
 	};
 
-	// Class
 	class TCanvas
 	{
 	public:
-		// Creation
-		TCanvas(int _width, int _height);
+		// Cst & Dst
+		TCanvas(const GPUBackendAPI* gpuBackend);
 		virtual ~TCanvas();
-		// Init, could be in the constructor, but whatever
-		virtual void Init() =  0;
-		// Enabling the canvas before drawing it
-		virtual void Enable() = 0;
-		// Disabling the canvas after drawing it
-		virtual void Disable() = 0;
-		// Returns the output of this canvas
-		const TBufferOutput& Result();
+
+		// Setup the canvas
+		virtual void setup(const TBufferOutput& bufferOutputData);
+
+		virtual void init();
+		virtual void enable();
+		virtual void disable();
+
+		const TBufferOutput& result();
 	protected:
-		int m_width;
-		int m_height;
-		// GPU buffer index
-		FramebufferObject m_frameBuffer;
-		// What you will get from this canvas after drawing into it
-		TBufferOutput m_output;
+		// Pointer to the native API
+		const GPUBackendAPI* _gpuBackend;
+
+		// Flag that defines if we render in a custom frame buffer
+		bool _customFrameBuffer;
+
+		// Additional data for the binding
+		uint32_t _numColorBuffers;
+
+		// The ouput data of the canvas
+		TBufferOutput _output;
+
+		// Target frame buffer
+		FramebufferObject _frameBuffer;
 	};
-	// END CLASS DECLARATION
 }

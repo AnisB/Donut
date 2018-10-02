@@ -4,7 +4,7 @@
 
 namespace bento
 {
-	const uint32_t PIPELINE_DATA_VERSION = 1;
+	const uint32_t PIPELINE_DATA_VERSION = 2;
 
 	void pack_type(bento::Vector<char>& buffer, const donut::TPipelineVFX& pipeline_vfx)
 	{
@@ -20,20 +20,33 @@ namespace bento
 		unpack_vector_types(stream, pipeline_vfx.data);
 	}
 
+	void pack_type(bento::Vector<char>& buffer, const donut::TCanvasOutput& canvasOutput)
+	{
+		pack_type(buffer, canvasOutput.slot);
+		pack_bytes(buffer, canvasOutput.nature);
+	}
+
+	void unpack_type(const char*& stream, donut::TCanvasOutput& canvasOutput)
+	{
+		unpack_type(stream, canvasOutput.slot);
+		unpack_bytes(stream, canvasOutput.nature);
+	}
+
 	void pack_type(bento::Vector<char>& buffer, const donut::TPipelineCanvas& pipeline_canvas)
 	{
-		pack_bytes(buffer, pipeline_canvas.tag);
-		pack_type(buffer, pipeline_canvas.output);
+		pack_bytes(buffer, pipeline_canvas.depthTest);
+		pack_vector_types(buffer, pipeline_canvas.outputs);
 	}
 
 	void unpack_type(const char*& stream, donut::TPipelineCanvas& pipeline_canvas)
 	{
-		unpack_bytes(stream, pipeline_canvas.tag);
-		unpack_type(stream, pipeline_canvas.output);
+		unpack_bytes(stream, pipeline_canvas.depthTest);
+		unpack_vector_types(stream, pipeline_canvas.outputs);
 	}
 
 	void pack_type(bento::Vector<char>& buffer, const donut::TPipelinePass& pipeline_pass)
 	{
+		pack_type(buffer, pipeline_pass.name);
 		pack_bytes(buffer, pipeline_pass.tag);
 		pack_type(buffer, pipeline_pass.canvas);
 		pack_type(buffer, pipeline_pass.vfx);
@@ -41,6 +54,7 @@ namespace bento
 
 	void unpack_type(const char*& stream, donut::TPipelinePass& pipeline_pass)
 	{
+		unpack_type(stream, pipeline_pass.name);
 		unpack_bytes(stream, pipeline_pass.tag);
 		unpack_type(stream, pipeline_pass.canvas);
 		unpack_type(stream, pipeline_pass.vfx);

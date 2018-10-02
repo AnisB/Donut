@@ -43,7 +43,7 @@ namespace donut
 	};
 
 	// Pipeline builder
-	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height);
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, const donut::GPUBackendAPI* gpuBackend);
 }
 
 #endif // GRAPHIC_PIPELINE_FACTORY_DONUT

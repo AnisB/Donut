@@ -5,10 +5,8 @@
 #include "graphics/pipeline.h"
 #include "resource/pipeline_descriptor.h"
 // Canvas
-#include "graphics/emptycanvas.h"
-#include "graphics/simplecanvas.h"
-#include "graphics/effectcanvas.h"
-#include "graphics/gbuffercanvas.h"
+#include "graphics/canvas.h"
+
 // FX
 #include "graphics/vfxpass.h"
 #include "graphics/simplefx.h"
@@ -51,7 +49,7 @@ namespace donut
 		}
 	}
 
-	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height)
+	TPipeline* GenerateGraphicPipeline(TFlour* _scene, int _width, int _height, const donut::GPUBackendAPI* gpuBackend)
 	{
 		// Creating the pipeline
 		TPipeline* pipeline = new TPipeline();
@@ -61,7 +59,6 @@ namespace donut
 		Camera* camera =  pipeline->camera;
 		TBufferOutput& buffers =  pipeline->pipelineData;
 
-
 		// Fetch the pipeline that was specified
 		TPipelineDescriptor pipelineDesc(*bento::common_allocator());
 		bool res = ResourceManager::Instance().request_asset<TPipelineDescriptor>(_scene->pipelineName.c_str(), pipelineDesc);
@@ -69,64 +66,34 @@ namespace donut
 
 		for(auto& pass : pipelineDesc.passes)
 		{
+			// Create a canvas and fill it based on its type
+			TCanvas* canvas = new TCanvas(gpuBackend);
+			const TPipelineCanvas& canvasDesc = pass.canvas;
+			uint32_t numOutputs = canvasDesc.outputs.size();
+			TBufferOutput canvasOutput;
+			canvasOutput.width = _width;
+			canvasOutput.height = _height;
+			canvasOutput.depthTest = canvasDesc.depthTest;
+			canvasOutput.buffers.resize(numOutputs);
+			for (uint32_t outputIdx = 0; outputIdx < numOutputs; ++outputIdx)
+			{
+				canvasOutput.buffers[outputIdx].name = canvasDesc.outputs[outputIdx].slot.c_str();
+				canvasOutput.buffers[outputIdx].type = canvasDesc.outputs[outputIdx].nature;
+				canvasOutput.buffers[outputIdx].offset = outputIdx;
+			}
+			// Setup the pipeline
+			canvas->setup(canvasOutput);
+
 			// Fetching the pointers
 			if(pass.tag == TPassTag::GEOMETRY)
 			{
-				const TPipelineCanvas& canvasDesc = pass.canvas;
-				TCanvas* canvas = nullptr;
-				switch(canvasDesc.tag)
-				{
-					case TCanvasTag::EMPTY:
-					{
-						canvas = new TEmptyCanvas(_width, _height);
-					}
-					break;
-					case TCanvasTag::EFFECT:
-					{
-						canvas = new TEffectCanvas(_width, _height, canvasDesc.output.c_str());
-					}
-					break;
-					case TCanvasTag::GBUFFER:
-					{
-						canvas = new TGBufferCanvas(_width, _height);
-					}
-					break;
-					default:
-						assert_fail_msg("Unexisting canvas type");
-					break;
-				}
-
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene);
+				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene, pass.name.c_str(), *bento::common_allocator());
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
 
 			}
 			else if (pass.tag == TPassTag::VFX)
 			{
-				const TPipelineCanvas& canvasDesc = pass.canvas;
-				TCanvas* canvas = nullptr;
-				switch(canvasDesc.tag)
-				{
-					case TCanvasTag::EMPTY:
-					{
-						canvas = new TEmptyCanvas(_width, _height);
-					}
-					break;
-					case TCanvasTag::EFFECT:
-					{
-						canvas = new TEffectCanvas(_width, _height, canvasDesc.output.c_str());
-					}
-					break;
-					case TCanvasTag::GBUFFER:
-					{
-						canvas = new TGBufferCanvas(_width, _height);
-					}
-					break;
-					default:
-						assert_fail_msg("Unexisting canvas type");
-					break;
-				}
-
 				const TPipelineVFX& vfxDescriptor = pass.vfx;
 				TVFX* vfx = nullptr;
 				switch(vfxDescriptor.tag)
@@ -184,7 +151,7 @@ namespace donut
 						}
 					}
 
-					TVFXPass* vfxPass = new TVFXPass(canvas, vfx);
+					TVFXPass* vfxPass = new TVFXPass(canvas, vfx, pass.name.c_str(), *bento::common_allocator());
 					vfxPass->SetCamera(camera);
 					pipeline->passes.push_back(vfxPass);
 				}

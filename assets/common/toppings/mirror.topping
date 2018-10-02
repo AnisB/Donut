@@ -2,7 +2,6 @@
 <topping name="mirror">
    <shader>
       <vertex location="common/shaders/mirror/vertex.glsl"/>
-      <geometry location="common/shaders/mirror/geometry.glsl"/>
       <fragment location="common/shaders/mirror/fragment.glsl"/>
    </shader>
    <built_in_data>

@@ -1,6 +1,8 @@
 #pragma once
 
+// Internal includes
 #include "defines.h"
+#include "gpu_backend/gpu_backend.h"
 
 namespace donut
 {
@@ -9,6 +11,8 @@ namespace donut
 	public:
 		TInputManager();
 		virtual ~TInputManager();
+
+		virtual void init(const GPUBackendAPI* backendAPI) = 0;
 
 		virtual void KeyPressed(TKeyCode::Type parKey) = 0;
 		virtual void KeyReleased(TKeyCode::Type parKey) = 0;

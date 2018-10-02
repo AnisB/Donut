@@ -15,5 +15,5 @@ void main()
 	// Mirror position
     gl_Position = vec4(position,1.0);
     // Texcoord
-    texCoordV = tex_coord;
+    texCoordV = vec2(tex_coord.x, 1.0f - tex_coord.y);
 }
