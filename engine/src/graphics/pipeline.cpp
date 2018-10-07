@@ -66,9 +66,10 @@ namespace donut
 
 		for(auto& pass : pipelineDesc.passes)
 		{
-			// Create a canvas and fill it based on its type
-			TCanvas* canvas = new TCanvas(gpuBackend);
+			// Fetch the canvas descriptor
 			const TPipelineCanvas& canvasDesc = pass.canvas;
+
+			// Build the canvas buffer output
 			uint32_t numOutputs = canvasDesc.outputs.size();
 			TBufferOutput canvasOutput;
 			canvasOutput.width = _width;
@@ -81,13 +82,15 @@ namespace donut
 				canvasOutput.buffers[outputIdx].type = canvasDesc.outputs[outputIdx].nature;
 				canvasOutput.buffers[outputIdx].offset = outputIdx;
 			}
-			// Setup the pipeline
+
+			// Create a canvas and fill it based on its type
+			TCanvas* canvas = new TCanvas(gpuBackend);
 			canvas->setup(canvasOutput);
 
 			// Fetching the pointers
 			if(pass.tag == TPassTag::GEOMETRY)
 			{
-				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene, pass.name.c_str(), *bento::common_allocator());
+				TGeometryPass* geometryPass = new TGeometryPass(canvas, _scene, pass.name.c_str(), *bento::common_allocator(), gpuBackend);
 				geometryPass->SetCamera(camera);
 				pipeline->passes.push_back(geometryPass);
 
@@ -100,7 +103,7 @@ namespace donut
 				{
 					case TVFXTag::SIMPLEFX:
 					{
-						TSimpleFX* sfx = new TSimpleFX(vfxDescriptor.shader_pipeline);
+						TSimpleFX* sfx = new TSimpleFX(vfxDescriptor.shader_pipeline, gpuBackend);
 						vfx = sfx;
 					}
 					break;
@@ -108,7 +111,7 @@ namespace donut
 					{
 						if(_scene->sh)
 						{
-							TEnvironmentFX* envFX = new TEnvironmentFX();
+							TEnvironmentFX* envFX = new TEnvironmentFX(gpuBackend);
 							envFX->SetSH(_scene->sh);
 							vfx = envFX;
 						}
@@ -116,7 +119,7 @@ namespace donut
 					break;
 					case TVFXTag::DEFFERED:
 					{
-						TDefferedFX* deffered = new TDefferedFX();
+						TDefferedFX* deffered = new TDefferedFX(gpuBackend);
 						deffered->SetLights(_scene->lights);
 						vfx = deffered;
 					}
@@ -125,7 +128,7 @@ namespace donut
 					{
 						if(_scene->skybox != UINT32_MAX)
 						{
-							TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader_pipeline);
+							TSkyboxFX* skyboxFX = new TSkyboxFX(vfxDescriptor.shader_pipeline, gpuBackend);
 							skyboxFX->SetSkybox(_scene->skybox);
 							skyboxFX->SetCamera(camera);
 							vfx = skyboxFX;
@@ -151,7 +154,7 @@ namespace donut
 						}
 					}
 
-					TVFXPass* vfxPass = new TVFXPass(canvas, vfx, pass.name.c_str(), *bento::common_allocator());
+					TVFXPass* vfxPass = new TVFXPass(canvas, vfx, pass.name.c_str(), *bento::common_allocator(), gpuBackend);
 					vfxPass->SetCamera(camera);
 					pipeline->passes.push_back(vfxPass);
 				}

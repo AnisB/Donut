@@ -8,8 +8,9 @@ int main(int argc, char** argv)
 
 	// Collect the arguments
 	bento::Vector<bento::DynamicString> arg_array(current_alloc);
-	arg_array.resize(argc);
-	for (uint32_t arg_idx = 0; arg_idx < argc; ++arg_idx)
+	uint32_t num_args = (uint32_t)argc;
+	arg_array.resize(num_args);
+	for (uint32_t arg_idx = 0; arg_idx < num_args; ++arg_idx)
 	{
 		arg_array[arg_idx] = argv[arg_idx];
 	}

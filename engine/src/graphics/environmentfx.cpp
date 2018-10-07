@@ -1,6 +1,5 @@
 // Library includes
 #include "graphics/environmentfx.h"
-#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
@@ -8,8 +7,8 @@ namespace donut
 	const char* ENVIRONMENT_FRAGMENT = "common/shaders/ssfx/sh/fragment.glsl";
 
 	// Constructor
-	TEnvironmentFX::TEnvironmentFX()
-	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), ENVIRONMENT_VERTEX, ENVIRONMENT_FRAGMENT))
+	TEnvironmentFX::TEnvironmentFX(const GPUBackendAPI* gpuBackendAPI)
+	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), ENVIRONMENT_VERTEX, ENVIRONMENT_FRAGMENT), gpuBackendAPI)
 	{
 
 	}
@@ -28,10 +27,10 @@ namespace donut
 
 	void TEnvironmentFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
-		ShaderManager::Instance().EnableShader(m_material.shader);
+		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);
 		BindBufferOutput(_values, _previousData);
-		m_SH->InjectData(m_material.shader);
-		gl::geometry::draw(m_fsq);
- 		ShaderManager::Instance().DisableShader();
+		m_SH->InjectData(m_material.shader, _gpuBackendAPI);
+		_gpuBackendAPI->geometry_api.draw(m_fsq);
+		_gpuBackendAPI->shader_api.unbind_shader(m_material.shader);
 	}
 }

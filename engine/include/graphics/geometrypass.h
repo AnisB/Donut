@@ -39,7 +39,7 @@
 	{
 	public:
 		// Constructor destructor
-		TGeometryPass(TCanvas* _canvas, TFlour* _flour, const char* name, bento::IAllocator& allocator);
+		TGeometryPass(TCanvas* _canvas, TFlour* _flour, const char* name, bento::IAllocator& allocator, const GPUBackendAPI* gpuBackend);
 		virtual ~TGeometryPass();
 		
 		void SetCamera(Camera* _camera) { m_camera = _camera; }

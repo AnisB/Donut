@@ -4,7 +4,6 @@
 // Engine includes
 #include "render/renderer.h"
 #include "Input/helper.h"
-#include "gpu_backend/gl_factory.h"
 
 // External includes 
 #include <stdlib.h>

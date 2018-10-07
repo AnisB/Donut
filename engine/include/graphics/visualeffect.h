@@ -15,7 +15,7 @@ namespace donut
 	{
 	public:
 		// Creation/Destruction
-		TVFX(const TShaderPipelineDescriptor& descriptor);
+		TVFX(const TShaderPipelineDescriptor& descriptor, const GPUBackendAPI* backendAPI);
 		virtual ~TVFX();
 		// Init
 		virtual void Init();
@@ -27,6 +27,7 @@ namespace donut
 	protected:
 		void BindBufferOutput(std::map<std::string, TUniform>& _values, const TBufferOutput& _previous);
 	protected:
+		const GPUBackendAPI* _gpuBackendAPI;
 		// Material
 		TMaterial m_material;
 		// Geometry

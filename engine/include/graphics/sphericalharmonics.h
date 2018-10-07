@@ -16,7 +16,7 @@ namespace donut
 		~TSphericalHarmonics();
 		void SetCoeffs(const float* _redCoeffs, const float* _greenCoeffs, const float* _blueCoeffs);
 
-		void InjectData(ShaderPipelineObject _shader);
+		void InjectData(ShaderPipelineObject _shader, const GPUBackendAPI* backendAPI);
 	protected:
 		std::vector<float> m_red;
 		std::vector<float> m_green;

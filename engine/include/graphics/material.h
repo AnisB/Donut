@@ -18,4 +18,7 @@ namespace donut
         std::vector<TCubeMapInfo>       cubeMaps;
         uint8_t                         flags;
     };
+
+
+    void inject_material(ShaderPipelineObject program, const TMaterial& material, const GPUBackendAPI* backendAPI);
 }

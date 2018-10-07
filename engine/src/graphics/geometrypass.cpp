@@ -11,8 +11,8 @@
  {
 
  	//CLASS IMPLEMENTATION
-	TGeometryPass::TGeometryPass(TCanvas* _canvas, TFlour* _flour, const char* name, bento::IAllocator& allocator)
-	: TPass(name, allocator)
+	TGeometryPass::TGeometryPass(TCanvas* _canvas, TFlour* _flour, const char* name, bento::IAllocator& allocator, const GPUBackendAPI* gpuBackend)
+	: TPass(name, allocator, gpuBackend)
 	, m_canvas(_canvas)
 	, m_flour(_flour)
 	, m_reference()
@@ -67,7 +67,7 @@
 		for(auto& request : requests)
 		{
 			// Process the render request
-			ProcessRenderRequest(request, values);
+			ProcessRenderRequest(request, values, _gpuBackendAPI);
 		}
 	}
 

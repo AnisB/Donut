@@ -15,9 +15,10 @@
 	{
 	public:
 		// Constructor destructor
-		TPass(const char* passName, bento::IAllocator& allocator)
+		TPass(const char* passName, bento::IAllocator& allocator, const GPUBackendAPI* gpuBackend)
 		: _allocator(allocator)
 		, _name(allocator, passName)
+		, _gpuBackendAPI(gpuBackend)
 		{
 		}
 		virtual ~TPass() {}
@@ -40,5 +41,8 @@
 		// Allocator for this pass
 		bento::IAllocator& _allocator;
 		bento::DynamicString _name;
+
+		// Reference to the target backend gpu api to use
+		const GPUBackendAPI* _gpuBackendAPI;
 	};
  }

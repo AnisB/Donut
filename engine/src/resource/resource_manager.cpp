@@ -1,7 +1,5 @@
 #include "asset_compiler/texture_helpers.h"
 #include "resource/resource_manager.h"
-#include "gpu_backend/gl_factory.h"
-#include "gpu_backend/gl_backend.h"
 #include "asset_compiler/asset_database_helpers.h"
 #include "resource/shader_source.h"
 #include "butter/stream.h"
@@ -26,6 +24,11 @@
  	{
  	}
 
+	void ResourceManager::initialize(const GPUBackendAPI* backendAPI)
+	{
+		_gpuBackendAPI = backendAPI;
+	}
+
 	GEOMETRY_GUID ResourceManager::fetch_geometry_id(const char* geometry_path)
 	{
 		// Try to get the resource
@@ -41,7 +44,7 @@
 		assert_msg(request_res, "Geometry file couldn't be read");
 
 		// Instanciate the runtime geometry
-		GeometryObject geo_obj = gl::geometry::create_vnt(tmp_egg._vert_normal_uvs.begin(), tmp_egg._vert_normal_uvs.size() / 8, (uint32_t*)tmp_egg._indexes.begin(), tmp_egg._indexes.size());
+		GeometryObject geo_obj = _gpuBackendAPI->geometry_api.create_vnt(tmp_egg._vert_normal_uvs.begin(), tmp_egg._vert_normal_uvs.size() / 8, (uint32_t*)tmp_egg._indexes.begin(), tmp_egg._indexes.size());
 
 		// Create the entries in the resource manager
 		uint32_t new_geometry_idx = (uint32_t)m_geometries.size();
@@ -72,9 +75,9 @@
 			m_textureIdentifiers[texture_path] = new_texture_id;
 
 			// Create a gpu texture
-			TextureObject newTextureObject = gl::texture2D::create_color_texture(tmp_texture);
+			TextureObject newTextureObject = _gpuBackendAPI->texture2D_api.create(tmp_texture);
 			// Set a debug name for it
-			gl::texture2D::set_debug_name(newTextureObject, texture_path);
+			_gpuBackendAPI->texture2D_api.set_debug_name(newTextureObject, texture_path);
 
 			// Register it
 			m_textures[new_texture_id] = newTextureObject;
@@ -82,6 +85,24 @@
  			return (TEXTURE_GUID)new_texture_id;
  		}
  	}
+
+	TEXTURE_GUID ResourceManager::create_runtime_texture(const char* runtime_name, const TTexture& input_texture)
+	{
+		// Create the entries in the resource manager
+		uint32_t new_texture_id = (uint32_t)m_textures.size();
+		m_textures.resize(new_texture_id + 1);
+		m_textureIdentifiers[runtime_name] = new_texture_id;
+
+		// Create a gpu texture
+		TextureObject newTextureObject = _gpuBackendAPI->texture2D_api.create(input_texture);
+		// Set a debug name for it
+		_gpuBackendAPI->texture2D_api.set_debug_name(newTextureObject, runtime_name);
+
+		// Register it
+		m_textures[new_texture_id] = newTextureObject;
+
+		return (TEXTURE_GUID)new_texture_id;
+	}
 
 	CUBEMAP_GUID ResourceManager::fetch_cubemap_id(const char* skybox_path)
  	{
@@ -107,7 +128,7 @@
 			m_cubemapIdentifiers[skybox_path] = new_cubemap_id;
 
 			// Create a gpu texture
-			m_cubemaps[new_cubemap_id] = gl::textureCUBE::create(tmp_skybox);
+			m_cubemaps[new_cubemap_id] = _gpuBackendAPI->textureCUBE_api.create(tmp_skybox);
  			return (CUBEMAP_GUID)new_cubemap_id;
  		}
  	}
@@ -172,7 +193,7 @@
 			}
 
 			// Load the shader into memory
-			new_material.shader = ShaderManager::Instance().create_shader(tmp_descriptor.shader_pipeline);
+			new_material.shader = _gpuBackendAPI->shader_api.create_shader(tmp_descriptor.shader_pipeline);
 
 			return (MATERIAL_GUID)new_mat_id;
 		}
@@ -180,7 +201,7 @@
 
 	GEOMETRY_GUID ResourceManager::create_runtime_geometry(const char* runtime_name, const TEgg& input_geometry)
 	{
-		GeometryObject geo_obj = gl::geometry::create_vnt(input_geometry._vert_normal_uvs.begin(), input_geometry._vert_normal_uvs.size() / 8, (uint32_t*)input_geometry._indexes.begin(), input_geometry._indexes.size());
+		GeometryObject geo_obj = _gpuBackendAPI->geometry_api.create_vnt(input_geometry._vert_normal_uvs.begin(), input_geometry._vert_normal_uvs.size() / 8, (uint32_t*)input_geometry._indexes.begin(), input_geometry._indexes.size());
 
 		uint32_t new_geometry_idx = (uint32_t)m_geometries.size();
 		m_geometries.resize(new_geometry_idx + 1);

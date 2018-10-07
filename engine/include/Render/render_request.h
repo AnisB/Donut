@@ -3,6 +3,7 @@
 // Library includes
 #include "resource/types.h"
 #include "graphics/uniformhandler.h"
+#include "gpu_backend/gpu_backend.h"
 
 // Bento includes
 #include <bento_math/types.h>
@@ -36,5 +37,5 @@ namespace donut
 	};
 
 	// Processed a render request (draw it to the screen)
-	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniform>& _uniforms);
+	void ProcessRenderRequest(const TRenderRequest& _request, std::map<std::string, TUniform>& _uniform, const GPUBackendAPI* gpuBackends);
 }

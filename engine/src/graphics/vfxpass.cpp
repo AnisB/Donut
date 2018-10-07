@@ -3,8 +3,8 @@
 
  namespace donut
  {
-	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx, const char* name, bento::IAllocator& allocator)
-	: TPass(name, allocator)
+	TVFXPass::TVFXPass(TCanvas* _canvas, TVFX* _vfx, const char* name, bento::IAllocator& allocator, const GPUBackendAPI* backendAPI)
+	: TPass(name, allocator, backendAPI)
 	, m_canvas(_canvas)
 	, m_vfx(_vfx)
 	, m_values()

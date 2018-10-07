@@ -1,6 +1,5 @@
 // Library includes
 #include "graphics/sphericalharmonics.h"
-#include "graphics/shadermanager.h"
 
 namespace donut
 {
@@ -27,10 +26,10 @@ namespace donut
 		}
 	}
 
-	void TSphericalHarmonics::InjectData(ShaderPipelineObject _shader)
+	void TSphericalHarmonics::InjectData(ShaderPipelineObject _shader, const GPUBackendAPI* backendAPI)
 	{
-		ShaderManager::Instance().InjectV<float>(_shader, &m_red[0], 9, "redCoeff");
-		ShaderManager::Instance().InjectV<float>(_shader, &m_green[0], 9, "greenCoeff");
-		ShaderManager::Instance().InjectV<float>(_shader, &m_blue[0], 9, "blueCoeff");
+		backendAPI->shader_api.inject_array(_shader, &m_red[0], 9, "redCoeff");
+		backendAPI->shader_api.inject_array(_shader, &m_green[0], 9, "greenCoeff");
+		backendAPI->shader_api.inject_array(_shader, &m_blue[0], 9, "blueCoeff");
 	}
 }

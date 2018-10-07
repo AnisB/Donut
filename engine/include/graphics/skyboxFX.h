@@ -11,7 +11,7 @@ namespace donut
 	{
 	public:
 		// Creation/Destruction
-		TSkyboxFX(const TShaderPipelineDescriptor& _shader);
+		TSkyboxFX(const TShaderPipelineDescriptor& _shader, const GPUBackendAPI* backendAPI);
 		~TSkyboxFX();
 		// Init
 		virtual void Init();

@@ -6,7 +6,7 @@
 #include "resource/resource_manager.h"
 #include "resource/sugar_descriptor.h"
 #include "core/box3.h"
-#include "gpu_backend/gl_factory.h"
+#include "gpu_backend/gl_backend.h"
 
 // External includes
 #include <float.h>

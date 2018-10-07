@@ -3,7 +3,6 @@
 
 // Library includes
 #include "graphics/uniformhandler.h"
-#include "graphics/shadermanager.h"
 
 namespace donut
 {
@@ -47,27 +46,27 @@ namespace donut
 		return 0;
 	}
 
-	void TUniform::inject(ShaderPipelineObject shader) const
+	void TUniform::inject(ShaderPipelineObject shader, const GPUBackendAPI* backendAPI) const
 	{
 		switch (type)
 		{
 		case donut::TShaderDataType::INTEGER:
-			ShaderManager::Instance().Inject<int>(shader, reinterpret_cast<const int&>(data), slot.c_str());
+			backendAPI->shader_api.inject_int(shader, reinterpret_cast<const int&>(data), slot.c_str());
 			break;
 		case donut::TShaderDataType::FLOAT:
-			ShaderManager::Instance().Inject<float>(shader, reinterpret_cast<const float&>(data), slot.c_str());
+			backendAPI->shader_api.inject_float(shader, reinterpret_cast<const float&>(data), slot.c_str());
 			break;
 		case donut::TShaderDataType::VEC3:
-			ShaderManager::Instance().Inject<bento::Vector3>(shader, reinterpret_cast<const bento::Vector3&>(data), slot.c_str());
+			backendAPI->shader_api.inject_vec3(shader, reinterpret_cast<const bento::Vector3&>(data), slot.c_str());
 			break;
 		case donut::TShaderDataType::VEC4:
-			ShaderManager::Instance().Inject<bento::Vector4>(shader, reinterpret_cast<const bento::Vector4&>(data), slot.c_str());
+			backendAPI->shader_api.inject_vec4(shader, reinterpret_cast<const bento::Vector4&>(data), slot.c_str());
 			break;
 		case donut::TShaderDataType::MAT3:
-			ShaderManager::Instance().Inject<bento::Matrix3>(shader, reinterpret_cast<const bento::Matrix3&>(data), slot.c_str());
+			backendAPI->shader_api.inject_mat3(shader, reinterpret_cast<const bento::Matrix3&>(data), slot.c_str());
 			break;
 		case donut::TShaderDataType::MAT4:
-			ShaderManager::Instance().Inject<bento::Matrix4>(shader, reinterpret_cast<const bento::Matrix4&>(data), slot.c_str());
+			backendAPI->shader_api.inject_mat4(shader, reinterpret_cast<const bento::Matrix4&>(data), slot.c_str());
 			break;
 		}
 	}

@@ -7,6 +7,9 @@ namespace donut
 {
 	namespace gl
 	{
+		void clear_state();
+		bool check_state();
+
 		namespace GLData
 		{
 			enum Type
@@ -67,8 +70,7 @@ namespace donut
 		namespace texture2D
 		{
 			// Create and destroy textures
-			TextureObject create(TTextureNature::Type nature, int width, int height);
-			TextureObject create_color_texture(const TTexture& source);
+			TextureObject create(const TTexture& source);
 			void destroy(TextureObject tex);
 
 			// Set the debug name of the texture
@@ -81,10 +83,51 @@ namespace donut
 			void destroy(CubemapObject cubemap);
 		}
 
+		namespace geometry
+		{
+			GeometryObject create_vnt(const float* dataArray, uint32_t numVert, const unsigned* indexArray, uint32_t numFaces);
+			void destroy_vnt(GeometryObject object);
+
+			void draw(GeometryObject geometry_object);
+
+			void set_bbox(GeometryObject geometry, const TBox3& outbbox);
+			void bbox(GeometryObject geometry, TBox3& outbbox);
+		}
+
+		namespace shader
+		{
+			ShaderPipelineObject create_shader(const TShaderPipelineDescriptor& shader_pipeline);
+			ShaderPipelineObject create_shader_from_source(const char* vertex_shader_source, const char* tess_control_shader_source,
+													const char* tess_eval_shader_source, const char* geometry_shader_source, 
+													const char* fragment_shader_source);
+			void destroy_shader(ShaderPipelineObject program);
+
+	 		void bind_shader(ShaderPipelineObject program);
+	 		void unbind_shader(ShaderPipelineObject program);
+
+	 		void inject_int(ShaderPipelineObject program, int value, const char* slot);
+	 		void inject_float(ShaderPipelineObject program, float value, const char* slot);
+	 		void inject_vec3(ShaderPipelineObject program, const bento::Vector3& value, const char* slot);
+	 		void inject_vec4(ShaderPipelineObject program, const bento::Vector4& value, const char* slot);
+	 		void inject_mat3(ShaderPipelineObject program, const bento::Matrix3& value, const char* slot);
+	 		void inject_mat4(ShaderPipelineObject program, const bento::Matrix4& value, const char* slot);
+
+			void inject_array(ShaderPipelineObject program, const float* value_array, uint32_t numValues, const char* slot);
+
+			void inject_texture(ShaderPipelineObject program, TextureObject texture_object, uint32_t offset, const char* slot);
+			void inject_cubemap(ShaderPipelineObject program, CubemapObject cubemap_object, uint32_t offset, const char* slot);
+		}
+
 		namespace render_section
 		{
 			void start_render_section(const char* sectionName);
 			void end_render_section();
 		}
+
+	#if 1
+		#define GL_API_CHECK() {assert_msg(gl::check_state(), FUNCTION_NAME);}
+	#else
+		#define GL_API_CHECK() {}
+	#endif
 	}
 }

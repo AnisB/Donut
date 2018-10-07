@@ -1,14 +1,12 @@
 // Library includes
 #include "graphics/skyboxfx.h"
-#include "graphics/shadermanager.h"
 #include "resource/resource_manager.h"
-#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
 	// Constructor
-	TSkyboxFX::TSkyboxFX(const TShaderPipelineDescriptor& _shader)
-	: TVFX(_shader)
+	TSkyboxFX::TSkyboxFX(const TShaderPipelineDescriptor& _shader, const GPUBackendAPI* backendAPI)
+	: TVFX(_shader, backendAPI)
 	{
 	}
 
@@ -43,12 +41,12 @@ namespace donut
 
 	void TSkyboxFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
-		ShaderManager::Instance().EnableShader(m_material.shader);
+		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);
 		BindBufferOutput(_values, _previousData);
-		ShaderManager::Instance().Inject<bento::Matrix3>(m_material.shader, m_camera->GetInverseViewMatrix(), "view_inverse");
-		ShaderManager::Instance().Inject<bento::Matrix4>(m_material.shader, m_camera->GetProjectionMatrix(), "projection");
-		ShaderManager::Instance().Inject(m_material.shader, 1.0f, "near_plane");
-		gl::geometry::draw(m_fsq);
- 		ShaderManager::Instance().DisableShader();
+		_gpuBackendAPI->shader_api.inject_mat3(m_material.shader, m_camera->GetInverseViewMatrix(), "view_inverse");
+		_gpuBackendAPI->shader_api.inject_mat4(m_material.shader, m_camera->GetProjectionMatrix(), "projection");
+		_gpuBackendAPI->shader_api.inject_float(m_material.shader, 1.0f, "near_plane");
+		_gpuBackendAPI->geometry_api.draw(m_fsq);
+		_gpuBackendAPI->shader_api.unbind_shader(m_material.shader);
 	}
 }

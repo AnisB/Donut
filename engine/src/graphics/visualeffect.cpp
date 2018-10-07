@@ -1,16 +1,16 @@
 // Library includes
 #include "graphics/visualeffect.h"
-#include "graphics/shadermanager.h"
 #include "resource/resource_manager.h"
 #include "graphics/factory.h"
 
 namespace donut
 {
 	// Constructor
-	TVFX::TVFX(const TShaderPipelineDescriptor& descriptor)
+	TVFX::TVFX(const TShaderPipelineDescriptor& descriptor, const GPUBackendAPI* backendAPI)
 	: m_fsq(0)
+	, _gpuBackendAPI(backendAPI)
 	{
-		m_material.shader = ShaderManager::Instance().create_shader(descriptor);
+		m_material.shader = _gpuBackendAPI->shader_api.create_shader(descriptor);
 	}
 
 	// Destructor
@@ -29,20 +29,22 @@ namespace donut
 	void TVFX::BindBufferOutput(std::map<std::string, TUniform>& _values, const TBufferOutput& _previous)
 	{
 		// Injecting frame size
- 		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.width, "width");
- 		ShaderManager::Instance().Inject<int>(m_material.shader, _previous.height, "height");
+		_gpuBackendAPI->shader_api.inject_int(m_material.shader, _previous.width, "width");
+		_gpuBackendAPI->shader_api.inject_int(m_material.shader, _previous.height, "height");
+
  		// Injecting buffers
- 		ShaderManager::Instance().InjectMaterial(m_material.shader, m_material);
+		inject_material(m_material.shader, m_material, _gpuBackendAPI);
 
  		for(auto& buffer : _previous.buffers)
  		{
- 			ShaderManager::Instance().InjectTex(m_material.shader, buffer.id, buffer.name.c_str(), buffer.offset + m_material.textures.size() );
+			TextureObject textureObject = ResourceManager::Instance().request_runtime_texture(buffer.id);
+			_gpuBackendAPI->shader_api.inject_texture(m_material.shader, textureObject, buffer.offset + m_material.textures.size(), buffer.name.c_str());
  		}
 
 		for(const auto& uniform : _values)
  		{
  			const TUniform& handler = uniform.second;
- 			handler.inject(m_material.shader);
+ 			handler.inject(m_material.shader, _gpuBackendAPI);
  		}
 	}
 

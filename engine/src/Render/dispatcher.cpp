@@ -3,7 +3,10 @@
 #include "render/frustum_culler.h"
 #include "render/crumble_remover.h"
 #include "resource/resource_manager.h"
-#include "gpu_backend/gl_factory.h"
+#include "gpu_backend/gl_backend.h"
+
+// Bento includes
+#include "bento_math/matrix4.h"
 
 namespace donut
 {

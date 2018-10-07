@@ -1,6 +1,7 @@
 // Library includes
 #include "graphics/canvas.h"
 #include "graphics/shaderdata.h"
+#include "resource/resource_manager.h"
 
 namespace donut
 {
@@ -48,7 +49,15 @@ namespace donut
 
 				// Set its offset
 				textureInfo.offset = rtIdx;
-				textureInfo.id = _gpuBackend->texture2D_api.create(textureInfo.type, _output.width, _output.height);
+
+				// Create the descriptor
+				TTexture texture(*bento::common_allocator());
+				texture.width = _output.width;
+				texture.height = _output.height;
+				texture.format = textureInfo.type == TTextureNature::COLOR ? texture::TFormat::RGBA : texture::TFormat::DEPTH;
+				texture.data_type = texture::TDataType::FLOAT;
+				// Instanciate and keep track of the texture's id
+				textureInfo.id = ResourceManager::Instance().create_runtime_texture(textureInfo.name.c_str(), texture);
 				_gpuBackend->texture2D_api.set_debug_name(textureInfo.id, textureInfo.name.c_str());
 
 				// Bind this texture to the frame buffer

@@ -1,7 +1,6 @@
 #pragma once
 
 // Library includes
-#include "graphics/shaderManager.h"
 #include "graphics/material.h"
 #include "gpu_backend/gpu_backend.h"
 #include "resource/skybox.h"
@@ -25,6 +24,9 @@
  		ResourceManager();
  		~ResourceManager();
 
+		// Initialize the resource manager with the target backend api that it should use
+		void initialize(const GPUBackendAPI* backendAPI);
+
  		// Create / Fetch runtime data
 		GEOMETRY_GUID fetch_geometry_id(const char* geometry_path);
 		TEXTURE_GUID fetch_texture_id(const char* texture_path);
@@ -33,6 +35,9 @@
 
 		// Create temporary geometry from an egg structure
 		GEOMETRY_GUID create_runtime_geometry(const char* runtime_name, const TEgg& input_geometry);
+
+		// Create temporary texture from a texture structure
+		TEXTURE_GUID create_runtime_texture(const char* runtime_name, const TTexture& input_texture);
 
 		// Access rendering data using their id (used by the rendering thread)
 		GeometryObject request_runtime_geometry(GEOMETRY_GUID _geometryIndex) { return m_geometries[_geometryIndex]; }
@@ -59,6 +64,9 @@
 	private:
 		// Asset database
 		TAssetDatabase m_asset_database;
+
+		// The GPU Backend API used for the instanciation
+		const GPUBackendAPI* _gpuBackendAPI;
 
 		// Texture data
 		std::map<std::string, TEXTURE_GUID> m_textureIdentifiers;

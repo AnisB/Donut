@@ -5,6 +5,8 @@
 
 // Libray includes
 #include "graphics/shaderdata.h"
+#include "gpu_backend/gpu_types.h"
+#include "gpu_backend/gpu_backend.h"
 
 // STL includes
 #include <string>
@@ -31,7 +33,7 @@ namespace donut
 		}
 
 		uint8_t data_size() const;
-		void inject(ShaderPipelineObject _shader) const;
+		void inject(ShaderPipelineObject _shader, const GPUBackendAPI* backendAPI) const;
 
 	    TShaderDataType	type;
 		std::string			slot;

@@ -49,7 +49,6 @@ namespace donut
 
 				// Texture 2D API
 				currentGPUAPI.texture2D_api.create = gl::texture2D::create;
-				currentGPUAPI.texture2D_api.create_color_texture = gl::texture2D::create_color_texture;
 				currentGPUAPI.texture2D_api.destroy = gl::texture2D::destroy;
 				currentGPUAPI.texture2D_api.set_debug_name = gl::texture2D::set_debug_name;
 
@@ -57,9 +56,40 @@ namespace donut
 				currentGPUAPI.textureCUBE_api.create = gl::textureCUBE::create;
 				currentGPUAPI.textureCUBE_api.destroy = gl::textureCUBE::destroy;
 
+				// Geometry API
+				currentGPUAPI.geometry_api.create_vnt = gl::geometry::create_vnt;
+				currentGPUAPI.geometry_api.destroy_vnt = gl::geometry::destroy_vnt;
+				currentGPUAPI.geometry_api.draw = gl::geometry::draw;
+				currentGPUAPI.geometry_api.set_bbox = gl::geometry::set_bbox;
+				currentGPUAPI.geometry_api.bbox = gl::geometry::bbox;
+
 				// Render Section API
 				currentGPUAPI.render_section_api.start_render_section = gl::render_section::start_render_section;
 				currentGPUAPI.render_section_api.end_render_section = gl::render_section::end_render_section;
+
+				// Shader API
+				currentGPUAPI.shader_api.create_shader = gl::shader::create_shader;
+				currentGPUAPI.shader_api.create_shader_from_source = gl::shader::create_shader_from_source;
+				currentGPUAPI.shader_api.destroy_shader = gl::shader::destroy_shader;
+
+				currentGPUAPI.shader_api.bind_shader = gl::shader::bind_shader;
+				currentGPUAPI.shader_api.unbind_shader = gl::shader::unbind_shader;
+
+				currentGPUAPI.shader_api.inject_int = gl::shader::inject_int;
+				currentGPUAPI.shader_api.inject_float = gl::shader::inject_float;
+				currentGPUAPI.shader_api.inject_vec3 = gl::shader::inject_vec3;
+				currentGPUAPI.shader_api.inject_vec4 = gl::shader::inject_vec4;
+				currentGPUAPI.shader_api.inject_mat3 = gl::shader::inject_mat3;
+				currentGPUAPI.shader_api.inject_mat4 = gl::shader::inject_mat4;
+
+				currentGPUAPI.shader_api.inject_array = gl::shader::inject_array;
+
+				currentGPUAPI.shader_api.inject_texture = gl::shader::inject_texture;
+
+				currentGPUAPI.shader_api.inject_cubemap = gl::shader::inject_cubemap;
+
+				// Make sure the default graphics settings are set
+				currentGPUAPI.default_settings = gl::default_settings();
 			}
 			break;
 		#if defined(VULKAN_SUPPORTED)

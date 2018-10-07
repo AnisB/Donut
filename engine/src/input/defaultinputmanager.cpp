@@ -1,5 +1,4 @@
 #include "input/DefaultInputManager.h"
-#include "gpu_backend/gl_backend.h"
 
 // Bento includes
 #include <bento_math/const.h>
@@ -16,7 +15,7 @@ namespace donut
 	TDefaultInputManager::TDefaultInputManager()
 	: m_initDone(false)
 	, _gpuBackend(nullptr)
-	, _cameraSpeed(1.0f)
+	, _cameraSpeed(4.0f)
 	{
 		FKeys[TKeyCode::W] = false;
 		FKeys[TKeyCode::S] = false;

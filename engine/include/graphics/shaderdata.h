@@ -1,7 +1,7 @@
 #pragma once
 
 // Internal includes
-#include <gpu_backend/gpu_types.h>
+#include <resource/types.h>
 
 // STL includes
 #include <string.h>
@@ -34,7 +34,7 @@ namespace donut
 
 	struct TTextureInfo
     {
-        TextureObject id;
+        TEXTURE_GUID id;
 		std::string name;
 		int offset;
 		TTextureNature::Type type;
@@ -49,7 +49,7 @@ namespace donut
     struct TCubeMapInfo
     {
 		std::string name;
-        CubemapObject id;
+        CUBEMAP_GUID id;
 		int offset;
 
 		TCubeMapInfo()

@@ -1,10 +1,10 @@
 
 // Bento includes
 #include <bento_base/log.h>
+#include <bento_base/security.h>
 
 // Engine includes
 #include "asset_compiler/texture_helpers.h"
-#include "gpu_backend/gl_factory.h"
 #include "tools/lodepng.h"
  
 

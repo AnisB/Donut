@@ -29,6 +29,7 @@ namespace donut
 		{
 			enum Type
 			{
+				DEPTH = 1,
 				RGB = 3,
 				RGBA = 4,
 				NONE = 0
@@ -40,6 +41,7 @@ namespace donut
 			enum Type
 			{
 				UNSIGNED_BYTE = 1,
+				DEPTH = 2,
 				FLOAT = 8,
 				NONE = 0
 			};

@@ -10,7 +10,7 @@ namespace donut
 	{
 	public:
 		// Creation/Destruction
-		TEnvironmentFX();
+		TEnvironmentFX(const GPUBackendAPI* gpuBackendAPI);
 		virtual ~TEnvironmentFX();
 
 		// Init

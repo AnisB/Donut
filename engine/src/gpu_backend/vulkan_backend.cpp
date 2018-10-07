@@ -18,7 +18,7 @@
 #include <bento_collection/vector.h>
 
 // Library includes
-#include "gpu_backend/gl_backend.h"
+#include "gpu_backend/gpu_backend.h"
 
 namespace donut
 {

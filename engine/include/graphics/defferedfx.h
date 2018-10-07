@@ -10,7 +10,7 @@ namespace donut
 	{
 	public:
 		// Creation/Destruction
-		TDefferedFX();
+		TDefferedFX(const GPUBackendAPI* backendAPI);
 		virtual ~TDefferedFX();
 		// Init
 		virtual void Init();

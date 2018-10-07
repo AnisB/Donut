@@ -1,7 +1,6 @@
 
 // Library includes
 #include "graphics/defferedfx.h"
-#include "gpu_backend/gl_factory.h"
 
 namespace donut
 {
@@ -12,8 +11,8 @@ namespace donut
 	#define MAX_NB_LIGHTS 20
 
 	// Constructor
-	TDefferedFX::TDefferedFX()
-	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT))
+	TDefferedFX::TDefferedFX(const GPUBackendAPI* backendAPI)
+	: TVFX(TShaderPipelineDescriptor(*bento::common_allocator(), DEFFERED_VERTEX, DEFFERED_GEOMETRY, DEFFERED_FRAGMENT), backendAPI)
 	, m_nbLights(0)
 	{
 
@@ -50,23 +49,23 @@ namespace donut
 	void TDefferedFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
 	{
 		// Enable the deffed shader 
-		ShaderManager::Instance().EnableShader(m_material.shader);
+		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);
 
 		// Inject the necessary data
 		BindBufferOutput(_values, _previousData);
 
-		ShaderManager::Instance().Inject<int>(m_material.shader, m_nbLights, "num_lights");
+		_gpuBackendAPI->shader_api.inject_int(m_material.shader, m_nbLights, "num_lights");
 
 		// Inject the lights
 		for(uint32_t lightIndex = 0; lightIndex < m_nbLights; ++lightIndex)
 		{
-			inject_light(m_lights[lightIndex], m_material.shader, lightIndex);
+			inject_light(m_lights[lightIndex], m_material.shader, lightIndex, _gpuBackendAPI);
 		}
 
 		// Draw the frame
-		gl::geometry::draw(m_fsq);
+		_gpuBackendAPI->geometry_api.draw(m_fsq);
 
 	  	// Disable the shader
- 		ShaderManager::Instance().DisableShader();
+		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);
 	}
 }
