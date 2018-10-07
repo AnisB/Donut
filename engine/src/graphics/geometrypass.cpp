@@ -18,6 +18,7 @@
 	, m_reference()
 	, m_camera(nullptr)
 	, m_skyboxDrawable(nullptr)
+	, m_dipatcher(gpuBackend)
 	{
 		// Set identifity
 		SetIdentity(m_reference);
@@ -40,7 +41,7 @@
 		}
 	}
 
-	void TGeometryPass::Draw(const TBufferOutput& _previousData)
+	void TGeometryPass::Draw(const TFrameBufferOutput& _previousData)
 	{
 		// Reset the dispatcher
 		m_collector.Clear();
@@ -76,7 +77,7 @@
 		m_canvas->enable();
 	}
 	
-	const TBufferOutput* TGeometryPass::GetOutput()
+	const TFrameBufferOutput* TGeometryPass::GetOutput()
 	{
 		return &(m_canvas->result());
 	}

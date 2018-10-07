@@ -20,12 +20,12 @@ namespace donut
 		// Init
 		virtual void Init();
 		// Drawing it
-		virtual void Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData) = 0;
+		virtual void Draw(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previousData) = 0;
 		// Attaching a texture to a vfx
 	 	virtual void AddTexture(TEXTURE_GUID texture_id, const std::string& _nameInMaterial);
 	 	virtual void AddCubeMap(CUBEMAP_GUID cubemap_id, const std::string& _nameInMaterial);
 	protected:
-		void BindBufferOutput(std::map<std::string, TUniform>& _values, const TBufferOutput& _previous);
+		void BindBufferOutput(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previous);
 	protected:
 		const GPUBackendAPI* _gpuBackendAPI;
 		// Material

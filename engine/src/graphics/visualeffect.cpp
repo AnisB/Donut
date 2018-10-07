@@ -22,11 +22,11 @@ namespace donut
 	// Init
 	void TVFX::Init()
 	{
-		GEOMETRY_GUID fsqIndx = CreateFullScreenQuad();
+		GEOMETRY_GUID fsqIndx = CreateFullScreenQuad(_gpuBackendAPI);
 		m_fsq = ResourceManager::Instance().request_runtime_geometry(fsqIndx);
 	}
 
-	void TVFX::BindBufferOutput(std::map<std::string, TUniform>& _values, const TBufferOutput& _previous)
+	void TVFX::BindBufferOutput(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previous)
 	{
 		// Injecting frame size
 		_gpuBackendAPI->shader_api.inject_int(m_material.shader, _previous.width, "width");

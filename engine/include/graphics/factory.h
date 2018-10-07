@@ -8,7 +8,7 @@ namespace donut
 	// Foward declaration
 	class TSugarInstance;
 
-	GEOMETRY_GUID CreateFullScreenQuad();
+	GEOMETRY_GUID CreateFullScreenQuad(const GPUBackendAPI* backendAPI);
 
 	// Drawable factory
 	TMesh* CreateSkyboxDrawable(CUBEMAP_GUID cubemap);

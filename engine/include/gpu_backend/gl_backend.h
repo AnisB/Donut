@@ -48,7 +48,7 @@ namespace donut
 
 		namespace framebuffer
 		{
-			FramebufferObject create();
+			FramebufferObject create(RenderEnvironment renderEnvironment, const TFrameBufferOutput& frameBufferOuput);
 			void destroy(FramebufferObject frame_buffer);
 
 			bool check(FramebufferObject framebuffer);

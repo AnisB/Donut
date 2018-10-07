@@ -46,7 +46,7 @@ namespace donut
 		}
 	}
 
-	void TDefferedFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
+	void TDefferedFX::Draw(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previousData)
 	{
 		// Enable the deffed shader 
 		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);

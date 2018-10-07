@@ -16,7 +16,7 @@ namespace donut
 		virtual void Init();
 		// Drawing it
 		void SetLights(std::vector<TLight>& _lights);
-		void Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previousData);
 
 	protected:
 		TLight* m_lights;

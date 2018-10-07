@@ -17,7 +17,7 @@ namespace donut
 	{
 	}
 
-	void TCanvas::setup(const TBufferOutput& bufferOutputData)
+	void TCanvas::setup(const TFrameBufferOutput& bufferOutputData)
 	{
 		// Copy the descriptor
 		_output = bufferOutputData;
@@ -36,7 +36,7 @@ namespace donut
 			_customFrameBuffer = true;
 
 			// Creating the main frame buffer
-			_frameBuffer = _gpuBackend->frame_buffer_api.create();
+			_frameBuffer = _gpuBackend->frame_buffer_api.create(0, _output);
 			_gpuBackend->frame_buffer_api.bind(_frameBuffer);
 
 			// The total number of buffers
@@ -98,7 +98,7 @@ namespace donut
 		_gpuBackend->frame_buffer_api.unbind(targetFrameBuffer);
 	}
 
-	const TBufferOutput& TCanvas::result()
+	const TFrameBufferOutput& TCanvas::result()
 	{
 		return _output;
 	}

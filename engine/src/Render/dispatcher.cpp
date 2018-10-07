@@ -3,14 +3,14 @@
 #include "render/frustum_culler.h"
 #include "render/crumble_remover.h"
 #include "resource/resource_manager.h"
-#include "gpu_backend/gl_backend.h"
 
 // Bento includes
 #include "bento_math/matrix4.h"
 
 namespace donut
 {
-	TDispatcher::TDispatcher()
+	TDispatcher::TDispatcher(const GPUBackendAPI* backendAPI)
+	: _gpuBackend(backendAPI)
 	{
 		// Nothing to do here
 		//m_processors.push_back(new TFrustumCuller());
@@ -58,7 +58,7 @@ namespace donut
 
 			// Get the target box
 			TBox3& box = m_vs_bb[req];
-			gl::geometry::bbox(geom, box);
+			_gpuBackend->geometry_api.bbox(geom, box);
 
 			// Compute the camera space bounding box
 			box = box::transform(box, _view * currentRequest.transform);

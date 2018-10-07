@@ -32,10 +32,10 @@
 		virtual void Unbind() = 0;
 
 		// Render the VFX (using the canvas data)
-		virtual void Draw(const TBufferOutput& _previousData) = 0;
+		virtual void Draw(const TFrameBufferOutput& _previousData) = 0;
 
 		// Getting the pass output
-		virtual const TBufferOutput* GetOutput() = 0;
+		virtual const TFrameBufferOutput* GetOutput() = 0;
 
 	protected:
 		// Allocator for this pass

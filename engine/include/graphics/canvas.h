@@ -4,22 +4,10 @@
 #include "gpu_backend/gpu_backend.h"
 #include "graphics/shaderdata.h"
 #include "graphics/material.h"
-#include "resource/texture.h"
-
-// External includes
-#include <vector>
+#include "graphics/frame_buffer_output.h"
 
 namespace donut
 {
-	// This structure holds the set of buffers that a given canvas can produce
-	struct TBufferOutput
-	{
-		int width;
-		int height;
-		bool depthTest;
-		std::vector<TTextureInfo> buffers;
-	};
-
 	class TCanvas
 	{
 	public:
@@ -28,13 +16,13 @@ namespace donut
 		virtual ~TCanvas();
 
 		// Setup the canvas
-		virtual void setup(const TBufferOutput& bufferOutputData);
+		virtual void setup(const TFrameBufferOutput& bufferOutputData);
 
 		virtual void init();
 		virtual void enable();
 		virtual void disable();
 
-		const TBufferOutput& result();
+		const TFrameBufferOutput& result();
 	protected:
 		// Pointer to the native API
 		const GPUBackendAPI* _gpuBackend;
@@ -46,7 +34,7 @@ namespace donut
 		uint32_t _numColorBuffers;
 
 		// The ouput data of the canvas
-		TBufferOutput _output;
+		TFrameBufferOutput _output;
 
 		// Target frame buffer
 		FramebufferObject _frameBuffer;

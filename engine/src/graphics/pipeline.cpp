@@ -37,7 +37,7 @@ namespace donut
 	{
 		for(auto& pass : passes)
 		{
-			const TBufferOutput* bufferOutput =  pass->GetOutput();
+			const TFrameBufferOutput* bufferOutput =  pass->GetOutput();
 			for(auto& buffer : bufferOutput->buffers)
 			{
 				TTextureInfo newTex;
@@ -57,7 +57,7 @@ namespace donut
 		pipeline->pipelineData.width = _width;
 		pipeline->pipelineData.height = _height;
 		Camera* camera =  pipeline->camera;
-		TBufferOutput& buffers =  pipeline->pipelineData;
+		TFrameBufferOutput& buffers =  pipeline->pipelineData;
 
 		// Fetch the pipeline that was specified
 		TPipelineDescriptor pipelineDesc(*bento::common_allocator());
@@ -71,7 +71,7 @@ namespace donut
 
 			// Build the canvas buffer output
 			uint32_t numOutputs = canvasDesc.outputs.size();
-			TBufferOutput canvasOutput;
+			TFrameBufferOutput canvasOutput;
 			canvasOutput.width = _width;
 			canvasOutput.height = _height;
 			canvasOutput.depthTest = canvasDesc.depthTest;

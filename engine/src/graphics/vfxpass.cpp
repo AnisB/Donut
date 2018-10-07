@@ -21,7 +21,7 @@
 		m_vfx->Init();
 	}
 
-	void TVFXPass::Draw(const TBufferOutput& _previousData)
+	void TVFXPass::Draw(const TFrameBufferOutput& _previousData)
 	{
 		// Building common uniforms
 		m_camera->AppendUniforms(m_values);
@@ -33,7 +33,7 @@
 		m_canvas->enable();
 	}
 
-	const TBufferOutput* TVFXPass::GetOutput()
+	const TFrameBufferOutput* TVFXPass::GetOutput()
 	{
 		return &(m_canvas->result());
 	}

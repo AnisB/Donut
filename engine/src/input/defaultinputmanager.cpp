@@ -63,8 +63,8 @@ namespace donut
 			m_initDone = true;
 			return;
 		}
-		FCamera->Yaw(((float)parX-m_oldX) * PI_OVER_180 * 20.0f);
-		FCamera->Pitch(((float)parY-m_oldY) * PI_OVER_180 * 20.0f);
+		FCamera->Yaw(((float)parX-m_oldX) * PI_180 * 20.0f);
+		FCamera->Pitch(((float)parY-m_oldY) * PI_180 * 20.0f);
 		m_oldX = (float)parX;
 		m_oldY = (float)parY;
 	}

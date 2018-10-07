@@ -27,10 +27,10 @@
 		void Unbind();
 
 		// Render the VFX (using the canvas data)
-		void Draw(const TBufferOutput& _previousData);
+		void Draw(const TFrameBufferOutput& _previousData);
 
 		// Getting the pass output
-		const TBufferOutput* GetOutput();
+		const TFrameBufferOutput* GetOutput();
 
 	private:
 		// Rendering data

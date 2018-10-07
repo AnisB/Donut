@@ -17,7 +17,7 @@ namespace donut
 		virtual void Init();
 		// Drawing it
 		void SetSH(TSphericalHarmonics* _SH) {m_SH = _SH;}
-		void Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData);
+		void Draw(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previousData);
 
 	protected:
 		TSphericalHarmonics* m_SH;

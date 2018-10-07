@@ -6,7 +6,6 @@
 #include "resource/resource_manager.h"
 #include "resource/sugar_descriptor.h"
 #include "core/box3.h"
-#include "gpu_backend/gl_backend.h"
 
 // External includes
 #include <float.h>
@@ -302,7 +301,7 @@ namespace donut
 		return newSugarInstance;
 	}
 
-	GEOMETRY_GUID CreateFullScreenQuad()
+	GEOMETRY_GUID CreateFullScreenQuad(const GPUBackendAPI* backendAPI)
 	{
 		static int FSQCounter = 0;
 		
@@ -325,7 +324,7 @@ namespace donut
 		TBox3 box;
 		box.max = bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
 		box.min = -bento::vector3(FLT_MAX, FLT_MAX, FLT_MAX);
-		gl::geometry::set_bbox(geo, box);
+		backendAPI->geometry_api.set_bbox(geo, box);
 
 		return guid;
 	}

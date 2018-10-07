@@ -7,6 +7,7 @@
 #include "resource/skybox.h"
 #include "resource/topping_descriptor.h"
 #include "core/box3.h"
+#include "graphics/frame_buffer_output.h"
 
 // Bento includes
 #include "bento_math/types.h"
@@ -44,7 +45,7 @@ namespace donut
 
 	struct GPUFrameBufferAPI
 	{
-		FramebufferObject (*create)();
+		FramebufferObject (*create)(RenderEnvironment renderEnvironment, const TFrameBufferOutput& frameBufferOuput);
 		void (*destroy)(FramebufferObject frame_buffer);
 
 		// Function to check a previously created frame buffer

@@ -257,7 +257,7 @@ namespace donut
 
 		namespace framebuffer
 		{
-			FramebufferObject create()
+			FramebufferObject create(RenderEnvironment renderEnvironment, const TFrameBufferOutput& frameBufferOuput)
 			{
 				GL_API_CHECK();
 				GLuint frameBufferIndex;
@@ -427,36 +427,6 @@ namespace donut
 
 		namespace texture2D
 		{
-			TextureObject create(TTextureNature::Type nature, int width, int height)
-			{
-				uint32_t texture_id;
-				GL_API_CHECK();
-				glGenTextures(1, &texture_id);
-				glBindTexture(GL_TEXTURE_2D, texture_id);
-				switch (nature)
-				{
-				case TTextureNature::COLOR:
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width, height, 0, GL_RGBA, GL_FLOAT, 0);
-				}
-				break;
-				case TTextureNature::DEPTH:
-				{
-					glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-				}
-				break;
-				};
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-				glBindTexture(GL_TEXTURE_2D, 0);
-
-				GL_API_CHECK();
-				return (TextureObject)texture_id;
-			}
-
 			TextureObject create(const TTexture& source)
 			{
 				uint32_t texture_id;

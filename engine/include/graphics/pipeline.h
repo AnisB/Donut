@@ -39,7 +39,7 @@ namespace donut
 		// Attributes
 		Camera* camera;
 		std::vector<TPass*> passes;
-		TBufferOutput pipelineData;
+		TFrameBufferOutput pipelineData;
 	};
 
 	// Pipeline builder

@@ -22,7 +22,7 @@ namespace donut
 		TVFX::Init();
 	}
 
-	void TSimpleFX::Draw(std::map<std::string, TUniform>& _values, const TBufferOutput& _previousData)
+	void TSimpleFX::Draw(std::map<std::string, TUniform>& _values, const TFrameBufferOutput& _previousData)
 	{
 		_gpuBackendAPI->shader_api.bind_shader(m_material.shader);
 		BindBufferOutput(_values, _previousData);
