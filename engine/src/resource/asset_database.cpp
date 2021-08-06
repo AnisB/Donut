@@ -34,7 +34,7 @@ namespace donut
 
 		// Assign the data of to the asset
 		TAsset& asset = _assets[new_asset_idx];
-		asset.id = bento::murmur_hash_64(name, bento::strlen32(name), 0);
+		asset.id = bento::murmur_hash_64(name, bento::string::strlen32(name), 0);
 		asset.name = name;
 		asset.path = path;
 		asset.type = type;
@@ -43,7 +43,7 @@ namespace donut
 
 	const TAsset* TAssetDatabase::request_asset(const char* name) const
 	{
-		uint64_t id = bento::murmur_hash_64(name, bento::strlen32(name), 0);
+		uint64_t id = bento::murmur_hash_64(name, bento::string::strlen32(name), 0);
 		return request_asset(id);
 	}
 

@@ -480,7 +480,7 @@ namespace donut
 			void set_debug_name(TextureObject texture, const char* debug_name)
 			{
 				uint32_t texture_id = (uint32_t)texture;
-				glObjectLabel(GL_TEXTURE, texture_id, bento::strlen32(debug_name), debug_name);
+				glObjectLabel(GL_TEXTURE, texture_id, bento::string::strlen32(debug_name), debug_name);
 			}
 		}
 
@@ -546,7 +546,7 @@ namespace donut
 			void start_render_section(const char* sectionName)
 			{
 				GL_API_CHECK();
-				glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, bento::strlen32(sectionName), sectionName);
+				glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, bento::string::strlen32(sectionName), sectionName);
 				GL_API_CHECK();
 			}
 			void end_render_section()
